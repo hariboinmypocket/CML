@@ -26,6 +26,10 @@ mimedb_microbes_v2.csv
 Lit. Reviews/
 *.pdf
 
+# Presentation decks - working documents, not part of the pipeline
+*.pptx
+*.potx
+
 # Local scratch
 tmp/
 .DS_Store
