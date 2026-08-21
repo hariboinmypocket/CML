@@ -1,0 +1,3 @@
+run_id,scientific_name,taxonomic_rank,ncbi_tax_id,relative_abundance,detection_threshold
+SRR000000,Bacteroides ovatus,species,28116,0.042,0.0001
+

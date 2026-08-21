@@ -1,0 +1,655 @@
+taxon_id	scientific_name	taxonomic_rank	phylum	disease_id	disease_name	mesh_id	n_associations	n_studies	n_studies_enriched	n_studies_depleted	n_sources	mean_abs_effect_size	consensus_direction	agreement_ratio	has_conflict
+9313	Peptostreptococcus	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	17	16	16	1	1	3.261	enriched	0.941	1
+155	Parvimonas	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	16	15	15	0	1	3.35	enriched	1.000	0
+45	Fusobacterium	genus	Fusobacteria	20491	Colorectal Neoplasms	D015179	15	14	14	0	1	3.902	enriched	1.000	0
+176	Gemella	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	13	13	13	0	1	3.106	enriched	1.000	0
+7665	Fusicatenibacter	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	13	13	0	13	1	3.648	depleted	1.000	0
+7666	Faecalibacterium	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	11	11	2	9	1	4.696	depleted	0.818	1
+7666	Faecalibacterium	genus	Firmicutes	12713	Crohn Disease	D003424	14	10	0	10	1	4.645	depleted	1.000	0
+7664	Coprococcus	genus	Firmicutes	12713	Crohn Disease	D003424	15	10	1	10	1	3.847	depleted	0.909	1
+7658	Ruminococcus	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	10	10	1	9	1	4.158	depleted	0.900	1
+7658	Ruminococcus	genus	Firmicutes	12713	Crohn Disease	D003424	10	9	0	9	1	4.067	depleted	1.000	0
+7686	Roseburia	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	9	9	0	9	1	4.201	depleted	1.000	0
+9112	Porphyromonas	genus	Bacteroidetes	20491	Colorectal Neoplasms	D015179	9	9	9	0	1	4.014	enriched	1.000	0
+45	Fusobacterium	genus	Fusobacteria	12713	Crohn Disease	D003424	12	9	9	1	1	3.742	enriched	0.900	1
+57	Anaerostipes	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	9	9	1	8	1	3.533	depleted	0.889	1
+7669	Eubacterium	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	9	9	1	8	1	3.726	depleted	0.889	1
+7671	Lachnospira	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	8	8	0	8	1	4.008	depleted	1.000	0
+7665	Fusicatenibacter	genus	Firmicutes	12713	Crohn Disease	D003424	8	8	1	7	1	3.708	depleted	0.875	1
+7671	Lachnospira	genus	Firmicutes	12713	Crohn Disease	D003424	13	8	1	7	1	3.714	depleted	0.875	1
+7672	Collinsella	genus	Actinobacteria	12713	Crohn Disease	D003424	9	8	1	7	1	3.607	depleted	0.875	1
+7860	Hungatella	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	8	8	7	1	1	3.125	enriched	0.875	1
+47	Paraprevotella	genus	Bacteroidetes	12713	Crohn Disease	D003424	10	7	0	7	1	3.175	depleted	1.000	0
+7677	Oscillibacter	genus	Firmicutes	12713	Crohn Disease	D003424	9	7	0	7	1	3.971	depleted	1.000	0
+7960	Enterocloster	genus	Firmicutes	12713	Crohn Disease	D003424	11	7	7	0	1	4.047	enriched	1.000	0
+8100	Alloprevotella	genus	Bacteroidetes	20491	Colorectal Neoplasms	D015179	8	7	7	0	1	2.887	enriched	1.000	0
+8178	Solobacterium	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	7	7	7	0	1	3.042	enriched	1.000	0
+7876	Dorea	genus	Firmicutes	12713	Crohn Disease	D003424	8	7	1	7	1	3.59	depleted	0.875	1
+81	Methanobrevibacter	genus	Euryarchaeota	12713	Crohn Disease	D003424	9	7	1	6	1	2.998	depleted	0.857	1
+7665	Fusicatenibacter	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	7	7	1	6	1	3.711	depleted	0.857	1
+7870	Blautia	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	7	7	1	6	1	4.059	depleted	0.857	1
+13	Phascolarctobacterium	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	7	6	0	6	1	3.649	depleted	1.000	0
+7659	Segatella	genus	Bacteroidetes	12713	Crohn Disease	D003424	7	6	0	6	1	4.274	depleted	1.000	0
+7713	Agathobaculum	genus	Firmicutes	12713	Crohn Disease	D003424	7	6	0	6	1	3.085	depleted	1.000	0
+7713	Agathobaculum	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	6	6	0	6	1	3.316	depleted	1.000	0
+7720	Thomasclavelia	genus	Firmicutes	12713	Crohn Disease	D003424	8	6	6	0	1	3.531	enriched	1.000	0
+7739	Flavonifractor	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	7	6	6	0	1	3.561	enriched	1.000	0
+7752	Jutongia	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	6	6	0	6	1	2.695	depleted	1.000	0
+7877	Enterococcus	genus	Firmicutes	12713	Crohn Disease	D003424	7	6	6	0	1	3.916	enriched	1.000	0
+8011	Candidatus Cibiobacter	genus	Firmicutes	12713	Crohn Disease	D003424	8	6	0	6	1	3.773	depleted	1.000	0
+8011	Candidatus Cibiobacter	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	6	6	0	6	1	3.881	depleted	1.000	0
+8047	Gemmiger	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	7	6	0	6	1	3.523	depleted	1.000	0
+94	Butyricimonas	genus	Bacteroidetes	12711	Colitis, Ulcerative	D003093	9	6	1	6	1	2.997	depleted	0.857	1
+7682	Wujia	genus	Firmicutes	12713	Crohn Disease	D003424	7	6	1	6	1	3.555	depleted	0.857	1
+7685	Waltera	genus	NULL	12713	Crohn Disease	D003424	8	6	1	6	1	3.667	depleted	0.857	1
+7694	Monoglobus	genus	Firmicutes	12713	Crohn Disease	D003424	9	6	1	6	1	3.296	depleted	0.857	1
+7720	Thomasclavelia	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	8	6	6	1	1	3.524	enriched	0.857	1
+8047	Gemmiger	genus	Firmicutes	12713	Crohn Disease	D003424	7	6	1	6	1	3.533	depleted	0.857	1
+7664	Coprococcus	genus	Firmicutes	28066	COVID-19	D000086382	6	6	1	5	1	3.816	depleted	0.833	1
+7673	Prevotella	genus	Bacteroidetes	12713	Crohn Disease	D003424	7	6	1	5	1	4.152	depleted	0.833	1
+7682	Wujia	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	7	6	1	5	1	3.491	depleted	0.833	1
+7686	Roseburia	genus	Firmicutes	28066	COVID-19	D000086382	6	6	1	5	1	3.881	depleted	0.833	1
+7700	Faecalicatena	genus	Firmicutes	12713	Crohn Disease	D003424	6	6	1	5	1	2.758	depleted	0.833	1
+7700	Faecalicatena	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	6	6	1	5	1	2.92	depleted	0.833	1
+7810	Megamonas	genus	Firmicutes	12713	Crohn Disease	D003424	7	6	1	5	1	3.512	depleted	0.833	1
+7824	Romboutsia	genus	Firmicutes	12713	Crohn Disease	D003424	8	6	1	5	1	3.167	depleted	0.833	1
+7871	Butyricicoccus	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	6	6	1	5	1	3.548	depleted	0.833	1
+7901	Clostridium	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	6	6	1	5	1	4.035	depleted	0.833	1
+8037	Faecalibacillus	genus	Firmicutes	12713	Crohn Disease	D003424	6	6	1	5	1	3.096	depleted	0.833	1
+46	Peptoniphilus	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	8	5	5	0	1	2.788	enriched	1.000	0
+70	Adlercreutzia	genus	Actinobacteria	12713	Crohn Disease	D003424	7	5	0	5	1	3.083	depleted	1.000	0
+235	Bilophila	genus	Thermodesulfobacteria	20491	Colorectal Neoplasms	D015179	5	5	5	0	1	3.215	enriched	1.000	0
+480	Anaerococcus	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	5	5	5	0	1	2.747	enriched	1.000	0
+7665	Fusicatenibacter	genus	Firmicutes	28066	COVID-19	D000086382	5	5	0	5	1	4.037	depleted	1.000	0
+7671	Lachnospira	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	5	5	0	5	1	4.028	depleted	1.000	0
+7694	Monoglobus	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	5	5	0	5	1	3.429	depleted	1.000	0
+7752	Jutongia	genus	Firmicutes	12713	Crohn Disease	D003424	6	5	0	5	1	2.667	depleted	1.000	0
+7755	Eisenbergiella	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	5	5	5	0	1	3.212	enriched	1.000	0
+7792	Lachnoclostridium	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	5	5	5	0	1	3.085	enriched	1.000	0
+7824	Romboutsia	genus	Firmicutes	28066	COVID-19	D000086382	5	5	0	5	1	3.106	depleted	1.000	0
+7829	Escherichia	genus	Proteobacteria	12713	Crohn Disease	D003424	8	5	5	0	1	4.598	enriched	1.000	0
+7843	Desulfovibrio	genus	Thermodesulfobacteria	20491	Colorectal Neoplasms	D015179	6	5	5	0	1	3.342	enriched	1.000	0
+7860	Hungatella	genus	Firmicutes	12713	Crohn Disease	D003424	6	5	5	0	1	2.993	enriched	1.000	0
+7871	Butyricicoccus	genus	Firmicutes	12713	Crohn Disease	D003424	5	5	0	5	1	3.335	depleted	1.000	0
+7876	Dorea	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	5	5	0	5	1	3.585	depleted	1.000	0
+7877	Enterococcus	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	5	5	5	0	1	4.11	enriched	1.000	0
+8096	Agathobacter	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	5	5	0	5	1	4.181	depleted	1.000	0
+9195	Veillonellaceae	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	5	5	5	0	1	3.104	enriched	1.000	0
+9263	Faecalimonas	genus	Firmicutes	12713	Crohn Disease	D003424	8	5	5	0	1	3.36	enriched	1.000	0
+9313	Peptostreptococcus	genus	Firmicutes	12713	Crohn Disease	D003424	5	5	5	0	1	2.974	enriched	1.000	0
+7658	Ruminococcus	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	6	5	1	5	1	4.004	depleted	0.833	1
+7845	Anaerobutyricum	genus	Firmicutes	12713	Crohn Disease	D003424	6	5	1	5	1	3.063	depleted	0.833	1
+57	Anaerostipes	genus	Firmicutes	28066	COVID-19	D000086382	5	5	1	4	1	4.109	depleted	0.800	1
+106	Sutterella	genus	Proteobacteria	12713	Crohn Disease	D003424	7	5	1	4	1	3.642	depleted	0.800	1
+173	Holdemania	genus	Firmicutes	12713	Crohn Disease	D003424	5	5	1	4	1	2.755	depleted	0.800	1
+7666	Faecalibacterium	genus	Firmicutes	28066	COVID-19	D000086382	5	5	1	4	1	4.448	depleted	0.800	1
+7667	Alistipes	genus	Bacteroidetes	73716	Parkinson Disease	D010300	5	5	4	1	1	4.494	enriched	0.800	1
+7669	Eubacterium	genus	Firmicutes	12713	Crohn Disease	D003424	6	5	1	4	1	3.863	depleted	0.800	1
+7691	Parasutterella	genus	Proteobacteria	12713	Crohn Disease	D003424	5	5	1	4	1	3.131	depleted	0.800	1
+7691	Parasutterella	genus	Proteobacteria	20491	Colorectal Neoplasms	D015179	5	5	1	4	1	3.381	depleted	0.800	1
+7739	Flavonifractor	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	6	5	4	1	1	3.448	enriched	0.800	1
+7788	Limosilactobacillus	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	5	5	4	1	1	3.216	enriched	0.800	1
+7792	Lachnoclostridium	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	5	5	1	4	1	3.614	depleted	0.800	1
+7810	Megamonas	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	6	5	4	1	1	3.39	enriched	0.800	1
+7843	Desulfovibrio	genus	Thermodesulfobacteria	12711	Colitis, Ulcerative	D003093	6	5	1	4	1	2.867	depleted	0.800	1
+7845	Anaerobutyricum	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	5	5	1	4	1	3.177	depleted	0.800	1
+7851	Streptococcus	genus	Firmicutes	28066	COVID-19	D000086382	5	5	4	1	1	4.256	enriched	0.800	1
+8047	Gemmiger	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	5	5	1	4	1	4.089	depleted	0.800	1
+8086	Simiaoa	genus	Firmicutes	12713	Crohn Disease	D003424	5	5	1	4	1	3.537	depleted	0.800	1
+34	Granulicatella	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	4	4	4	0	1	3.063	enriched	1.000	0
+40	Megasphaera	genus	Firmicutes	45328	Diabetes Mellitus, Type 2	D003924	5	4	4	0	1	4.3	enriched	1.000	0
+70	Adlercreutzia	genus	Actinobacteria	20491	Colorectal Neoplasms	D015179	4	4	0	4	1	2.555	depleted	1.000	0
+176	Gemella	genus	Firmicutes	12713	Crohn Disease	D003424	4	4	4	0	1	3.236	enriched	1.000	0
+260	Leptotrichia	genus	Fusobacteria	20491	Colorectal Neoplasms	D015179	4	4	4	0	1	2.438	enriched	1.000	0
+1101	Eggerthella	genus	Actinobacteria	20491	Colorectal Neoplasms	D015179	4	4	4	0	1	3.247	enriched	1.000	0
+7669	Eubacterium	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	5	4	0	4	1	3.91	depleted	1.000	0
+7671	Lachnospira	genus	Firmicutes	28066	COVID-19	D000086382	4	4	0	4	1	3.624	depleted	1.000	0
+7685	Waltera	genus	NULL	20491	Colorectal Neoplasms	D015179	4	4	0	4	1	3.638	depleted	1.000	0
+7686	Roseburia	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	4	4	0	4	1	4.115	depleted	1.000	0
+7721	Barnesiella	genus	Bacteroidetes	56231	HIV Infections	D015658	4	4	0	4	1	3.212	depleted	1.000	0
+7750	Victivallis	genus	Lentisphaerae	12713	Crohn Disease	D003424	4	4	0	4	1	2.465	depleted	1.000	0
+7755	Eisenbergiella	genus	Firmicutes	12713	Crohn Disease	D003424	4	4	4	0	1	2.608	enriched	1.000	0
+7782	Actinomyces	genus	Actinobacteria	12713	Crohn Disease	D003424	5	4	4	0	1	2.957	enriched	1.000	0
+7782	Actinomyces	genus	Actinobacteria	20491	Colorectal Neoplasms	D015179	4	4	4	0	1	2.875	enriched	1.000	0
+7788	Limosilactobacillus	genus	Firmicutes	12713	Crohn Disease	D003424	5	4	4	0	1	3.519	enriched	1.000	0
+7796	Allisonella	genus	NULL	28066	COVID-19	D000086382	4	4	0	4	1	2.611	depleted	1.000	0
+7813	Lactobacillus	genus	Firmicutes	12713	Crohn Disease	D003424	7	4	4	0	1	3.783	enriched	1.000	0
+7857	Bifidobacterium	genus	Actinobacteria	28066	COVID-19	D000086382	4	4	0	4	1	4.527	depleted	1.000	0
+7857	Bifidobacterium	genus	Actinobacteria	73716	Parkinson Disease	D010300	4	4	4	0	1	4.125	enriched	1.000	0
+7872	Campylobacter	genus	Campylobacterota	20491	Colorectal Neoplasms	D015179	4	4	4	0	1	2.658	enriched	1.000	0
+7890	Veillonella	genus	Firmicutes	12713	Crohn Disease	D003424	5	4	4	0	1	4.149	enriched	1.000	0
+7960	Enterocloster	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	4	4	4	0	1	3.605	enriched	1.000	0
+8000	Anaerotignum	genus	Firmicutes	12713	Crohn Disease	D003424	6	4	0	4	1	2.976	depleted	1.000	0
+8086	Simiaoa	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	4	4	0	4	1	3.208	depleted	1.000	0
+8171	Lactococcus	genus	Firmicutes	28066	COVID-19	D000086382	4	4	0	4	1	2.711	depleted	1.000	0
+8271	Klebsiella	genus	Proteobacteria	28066	COVID-19	D000086382	4	4	0	4	1	3.803	depleted	1.000	0
+8304	Parabacteroides	genus	Bacteroidetes	20491	Colorectal Neoplasms	D015179	4	4	4	0	1	3.893	enriched	1.000	0
+7685	Waltera	genus	NULL	12711	Colitis, Ulcerative	D003093	5	4	1	4	1	3.414	depleted	0.800	1
+7713	Agathobaculum	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	5	4	1	4	1	3.028	depleted	0.800	1
+7790	Negativibacillus	genus	Firmicutes	12713	Crohn Disease	D003424	6	4	1	4	1	2.814	depleted	0.800	1
+7839	Vescimonas	genus	Firmicutes	12713	Crohn Disease	D003424	6	4	1	4	1	3.269	depleted	0.800	1
+7881	Intestinimonas	genus	Firmicutes	12713	Crohn Disease	D003424	5	4	1	4	1	2.569	depleted	0.800	1
+7960	Enterocloster	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	5	4	1	4	1	3.734	depleted	0.800	1
+35	Odoribacter	genus	Bacteroidetes	73716	Parkinson Disease	D010300	3	3	3	0	1	3.423	enriched	1.000	0
+40	Megasphaera	genus	Firmicutes	44996	Diabetes Mellitus, Type 1	D003922	3	3	0	3	1	3.723	depleted	1.000	0
+46	Peptoniphilus	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	3	3	3	0	1	3.07	enriched	1.000	0
+47	Paraprevotella	genus	Bacteroidetes	48916	Fatigue Syndrome, Chronic	D015673	3	3	0	3	1	3.684	depleted	1.000	0
+70	Adlercreutzia	genus	Actinobacteria	28066	COVID-19	D000086382	3	3	0	3	1	3.062	depleted	1.000	0
+82	Turicibacter	genus	Firmicutes	56231	HIV Infections	D015658	3	3	0	3	1	3.038	depleted	1.000	0
+106	Sutterella	genus	Proteobacteria	12711	Colitis, Ulcerative	D003093	5	3	0	3	1	3.74	depleted	1.000	0
+106	Sutterella	genus	Proteobacteria	62143	Renal Insufficiency, Chronic	D051436	3	3	0	3	1	3.461	depleted	1.000	0
+155	Parvimonas	genus	Firmicutes	12713	Crohn Disease	D003424	4	3	3	0	1	3.259	enriched	1.000	0
+173	Holdemania	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	3	3	3	0	1	2.627	enriched	1.000	0
+217	Dialister	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	3	3	0	3	1	3.221	depleted	1.000	0
+217	Dialister	genus	Firmicutes	69131	Myasthenia Gravis	D009157	3	3	0	3	1	4.253	depleted	1.000	0
+480	Anaerococcus	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	3	3	3	0	1	2.649	enriched	1.000	0
+886	Cloacibacillus	genus	Synergistetes	20491	Colorectal Neoplasms	D015179	3	3	3	0	1	2.854	enriched	1.000	0
+1101	Eggerthella	genus	Actinobacteria	12713	Crohn Disease	D003424	3	3	3	0	1	3.433	enriched	1.000	0
+7657	Bacteroides	genus	Bacteroidetes	48916	Fatigue Syndrome, Chronic	D015673	3	3	3	0	1	4.857	enriched	1.000	0
+7664	Coprococcus	genus	Firmicutes	18168	Inflammatory Bowel Diseases	D015212	3	3	0	3	1	4.036	depleted	1.000	0
+7664	Coprococcus	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	3	3	0	3	1	3.63	depleted	1.000	0
+7664	Coprococcus	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	3	3	0	3	1	3.565	depleted	1.000	0
+7664	Coprococcus	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	3	3	0	3	1	3.653	depleted	1.000	0
+7665	Fusicatenibacter	genus	Firmicutes	18168	Inflammatory Bowel Diseases	D015212	3	3	0	3	1	4	depleted	1.000	0
+7666	Faecalibacterium	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	3	3	0	3	1	4.296	depleted	1.000	0
+7666	Faecalibacterium	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	3	3	0	3	1	4.46	depleted	1.000	0
+7667	Alistipes	genus	Bacteroidetes	56231	HIV Infections	D015658	3	3	0	3	1	3.388	depleted	1.000	0
+7671	Lachnospira	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	3	3	0	3	1	4.205	depleted	1.000	0
+7672	Collinsella	genus	Actinobacteria	28066	COVID-19	D000086382	3	3	0	3	1	4.282	depleted	1.000	0
+7673	Prevotella	genus	Bacteroidetes	48916	Fatigue Syndrome, Chronic	D015673	3	3	0	3	1	4.233	depleted	1.000	0
+7673	Prevotella	genus	Bacteroidetes	62116	Kidney Failure, Chronic	D007676	3	3	0	3	1	4.341	depleted	1.000	0
+7673	Prevotella	genus	Bacteroidetes	73716	Parkinson Disease	D010300	3	3	0	3	1	4.09	depleted	1.000	0
+7686	Roseburia	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	3	3	0	3	1	3.861	depleted	1.000	0
+7689	Holdemanella	genus	Firmicutes	28066	COVID-19	D000086382	3	3	0	3	1	3.544	depleted	1.000	0
+7689	Holdemanella	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	3	3	0	3	1	2.684	depleted	1.000	0
+7691	Parasutterella	genus	Proteobacteria	62143	Renal Insufficiency, Chronic	D051436	3	3	0	3	1	3.695	depleted	1.000	0
+7693	Mediterraneibacter	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	3	3	3	0	1	4.32	enriched	1.000	0
+7713	Agathobaculum	genus	Firmicutes	28066	COVID-19	D000086382	3	3	0	3	1	3.719	depleted	1.000	0
+7713	Agathobaculum	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	3	3	0	3	1	2.976	depleted	1.000	0
+7720	Thomasclavelia	genus	Firmicutes	28066	COVID-19	D000086382	3	3	3	0	1	3.825	enriched	1.000	0
+7720	Thomasclavelia	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	3	3	3	0	1	3.243	enriched	1.000	0
+7720	Thomasclavelia	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	3	3	3	0	1	3.941	enriched	1.000	0
+7721	Barnesiella	genus	Bacteroidetes	73716	Parkinson Disease	D010300	3	3	3	0	1	3.569	enriched	1.000	0
+7725	Coprobacter	genus	Bacteroidetes	28066	COVID-19	D000086382	3	3	0	3	1	2.712	depleted	1.000	0
+7737	Lentihominibacter	genus	Firmicutes	12713	Crohn Disease	D003424	4	3	0	3	1	2.748	depleted	1.000	0
+7739	Flavonifractor	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	3	3	3	0	1	3.275	enriched	1.000	0
+7739	Flavonifractor	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	3	3	3	0	1	3.551	enriched	1.000	0
+7739	Flavonifractor	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	3	3	3	0	1	3.637	enriched	1.000	0
+7741	Mitsuokella	genus	Firmicutes	12713	Crohn Disease	D003424	3	3	0	3	1	3.071	depleted	1.000	0
+7741	Mitsuokella	genus	Firmicutes	28066	COVID-19	D000086382	3	3	0	3	1	3.527	depleted	1.000	0
+7741	Mitsuokella	genus	Firmicutes	45328	Diabetes Mellitus, Type 2	D003924	3	3	3	0	1	3.481	enriched	1.000	0
+7745	Kineothrix	genus	Firmicutes	12713	Crohn Disease	D003424	3	3	0	3	1	2.865	depleted	1.000	0
+7745	Kineothrix	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	3	3	0	3	1	3.111	depleted	1.000	0
+7750	Victivallis	genus	Lentisphaerae	12711	Colitis, Ulcerative	D003093	3	3	0	3	1	2.454	depleted	1.000	0
+7755	Eisenbergiella	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	3	3	3	0	1	3.037	enriched	1.000	0
+7755	Eisenbergiella	genus	Firmicutes	68391	Multiple Sclerosis	D009103	3	3	3	0	1	3.244	enriched	1.000	0
+7758	Faecalitalea	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	5	3	3	0	1	3.195	enriched	1.000	0
+7771	Hydrogenoanaerobacterium	genus	Firmicutes	12713	Crohn Disease	D003424	4	3	0	3	1	2.274	depleted	1.000	0
+7772	Senegalimassilia	genus	Actinobacteria	12713	Crohn Disease	D003424	4	3	0	3	1	2.581	depleted	1.000	0
+7782	Actinomyces	genus	Actinobacteria	45328	Diabetes Mellitus, Type 2	D003924	3	3	3	0	1	2.984	enriched	1.000	0
+7782	Actinomyces	genus	Actinobacteria	62143	Renal Insufficiency, Chronic	D051436	4	3	3	0	1	2.656	enriched	1.000	0
+7790	Negativibacillus	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	4	3	3	0	1	2.985	enriched	1.000	0
+7792	Lachnoclostridium	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	3	3	3	0	1	2.868	enriched	1.000	0
+7796	Allisonella	genus	NULL	12711	Colitis, Ulcerative	D003093	3	3	0	3	1	2.367	depleted	1.000	0
+7796	Allisonella	genus	NULL	12713	Crohn Disease	D003424	4	3	3	0	1	2.458	enriched	1.000	0
+7813	Lactobacillus	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	3	3	3	0	1	3.269	enriched	1.000	0
+7824	Romboutsia	genus	Firmicutes	45328	Diabetes Mellitus, Type 2	D003924	3	3	0	3	1	4.207	depleted	1.000	0
+7824	Romboutsia	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	4	3	0	3	1	3.07	depleted	1.000	0
+7828	Ruthenibacterium	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	3	3	3	0	1	3.418	enriched	1.000	0
+7842	Tyzzerella	genus	Firmicutes	12713	Crohn Disease	D003424	4	3	3	0	1	3.199	enriched	1.000	0
+7851	Streptococcus	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	4	3	3	0	1	3.402	enriched	1.000	0
+7855	Catenibacterium	genus	Firmicutes	12713	Crohn Disease	D003424	3	3	3	0	1	3.023	enriched	1.000	0
+7860	Hungatella	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	3	3	3	0	1	3.222	enriched	1.000	0
+7860	Hungatella	genus	Firmicutes	68391	Multiple Sclerosis	D009103	3	3	3	0	1	2.936	enriched	1.000	0
+7860	Hungatella	genus	Firmicutes	73716	Parkinson Disease	D010300	3	3	3	0	1	3.035	enriched	1.000	0
+7870	Blautia	genus	Firmicutes	28066	COVID-19	D000086382	3	3	0	3	1	4.66	depleted	1.000	0
+7870	Blautia	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	3	3	3	0	1	4.028	enriched	1.000	0
+7876	Dorea	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	3	3	0	3	1	3.05	depleted	1.000	0
+7876	Dorea	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	3	3	0	3	1	3.492	depleted	1.000	0
+7876	Dorea	genus	Firmicutes	310607	Sjogren's Syndrome	D012859	3	3	0	3	1	NULL	depleted	1.000	0
+7881	Intestinimonas	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	3	3	3	0	1	3.206	enriched	1.000	0
+7889	Subdoligranulum	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	4	3	0	3	1	4.384	depleted	1.000	0
+7889	Subdoligranulum	genus	Firmicutes	12713	Crohn Disease	D003424	4	3	0	3	1	4.42	depleted	1.000	0
+7889	Subdoligranulum	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	3	3	0	3	1	4.313	depleted	1.000	0
+7890	Veillonella	genus	Firmicutes	18168	Inflammatory Bowel Diseases	D015212	3	3	3	0	1	4.064	enriched	1.000	0
+7890	Veillonella	genus	Firmicutes	310607	Sjogren's Syndrome	D012859	3	3	3	0	1	NULL	enriched	1.000	0
+7960	Enterocloster	genus	Firmicutes	28066	COVID-19	D000086382	3	3	3	0	1	3.921	enriched	1.000	0
+8011	Candidatus Cibiobacter	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	3	3	0	3	1	3.269	depleted	1.000	0
+8037	Faecalibacillus	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	3	3	0	3	1	2.497	depleted	1.000	0
+8042	Frisingicoccus	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	4	3	3	0	1	2.546	enriched	1.000	0
+8058	Lacrimispora	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	3	3	0	3	1	3.326	depleted	1.000	0
+8086	Simiaoa	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	3	3	0	3	1	3.302	depleted	1.000	0
+8096	Agathobacter	genus	Firmicutes	12713	Crohn Disease	D003424	3	3	0	3	1	4.24	depleted	1.000	0
+8153	Sellimonas	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	3	3	3	0	1	2.754	enriched	1.000	0
+8271	Klebsiella	genus	Proteobacteria	12713	Crohn Disease	D003424	4	3	3	0	1	3.533	enriched	1.000	0
+8271	Klebsiella	genus	Proteobacteria	62143	Renal Insufficiency, Chronic	D051436	3	3	3	0	1	3.523	enriched	1.000	0
+8292	Staphylococcus	genus	Firmicutes	12713	Crohn Disease	D003424	4	3	3	0	1	3.86	enriched	1.000	0
+8292	Staphylococcus	genus	Firmicutes	28066	COVID-19	D000086382	3	3	3	0	1	3.13	enriched	1.000	0
+8304	Parabacteroides	genus	Bacteroidetes	28066	COVID-19	D000086382	3	3	3	0	1	4.516	enriched	1.000	0
+8304	Parabacteroides	genus	Bacteroidetes	73716	Parkinson Disease	D010300	3	3	3	0	1	4.051	enriched	1.000	0
+9069	Dysosmobacter	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	3	3	3	0	1	3.635	enriched	1.000	0
+9838	Morganella	genus	Proteobacteria	12713	Crohn Disease	D003424	4	3	3	0	1	2.984	enriched	1.000	0
+9850	Selenomonas	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	3	3	3	0	1	2.545	enriched	1.000	0
+10179	Ellagibacter	genus	Actinobacteria	12713	Crohn Disease	D003424	4	3	0	3	1	2.497	depleted	1.000	0
+11577	Pediococcus	genus	Firmicutes	12713	Crohn Disease	D003424	3	3	3	0	1	2.819	enriched	1.000	0
+13	Phascolarctobacterium	genus	Firmicutes	56231	HIV Infections	D015658	2	2	0	2	1	4.335	depleted	1.000	0
+33	Butyrivibrio	genus	Firmicutes	12713	Crohn Disease	D003424	3	2	0	2	1	2.984	depleted	1.000	0
+34	Granulicatella	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	2	2	2	0	1	2.943	enriched	1.000	0
+35	Odoribacter	genus	Bacteroidetes	1	Irritable Bowel Syndrome	D043183	2	2	0	2	1	2.953	depleted	1.000	0
+35	Odoribacter	genus	Bacteroidetes	3086	Arthritis, Rheumatoid	D001172	2	2	0	2	1	3.662	depleted	1.000	0
+35	Odoribacter	genus	Bacteroidetes	28066	COVID-19	D000086382	2	2	0	2	1	2.997	depleted	1.000	0
+35	Odoribacter	genus	Bacteroidetes	44996	Diabetes Mellitus, Type 1	D003922	2	2	2	0	1	3.39	enriched	1.000	0
+35	Odoribacter	genus	Bacteroidetes	46796	Diarrhea	D003967	2	2	0	2	1	3.079	depleted	1.000	0
+36	Acidaminococcus	genus	Firmicutes	12713	Crohn Disease	D003424	3	2	2	0	1	3.634	enriched	1.000	0
+36	Acidaminococcus	genus	Firmicutes	45328	Diabetes Mellitus, Type 2	D003924	2	2	2	0	1	3.987	enriched	1.000	0
+36	Acidaminococcus	genus	Firmicutes	56231	HIV Infections	D015658	2	2	2	0	1	3.484	enriched	1.000	0
+40	Megasphaera	genus	Firmicutes	4876	Autism Spectrum Disorder	D000067877	2	2	2	0	1	2.966	enriched	1.000	0
+40	Megasphaera	genus	Firmicutes	28066	COVID-19	D000086382	2	2	0	2	1	4.104	depleted	1.000	0
+40	Megasphaera	genus	Firmicutes	56231	HIV Infections	D015658	2	2	2	0	1	3.721	enriched	1.000	0
+40	Megasphaera	genus	Firmicutes	77286	Purpura, Thrombocytopenic, Idiopathic	D016553	2	2	2	0	1	3.534	enriched	1.000	0
+45	Fusobacterium	genus	Fusobacteria	11071	Cholestasis	D002779	2	2	2	0	1	2.541	enriched	1.000	0
+45	Fusobacterium	genus	Fusobacteria	45328	Diabetes Mellitus, Type 2	D003924	2	2	2	0	1	3.833	enriched	1.000	0
+45	Fusobacterium	genus	Fusobacteria	56231	HIV Infections	D015658	2	2	2	0	1	4.072	enriched	1.000	0
+45	Fusobacterium	genus	Fusobacteria	310196	Pre-Eclampsia	D011225	2	2	2	0	1	NULL	enriched	1.000	0
+46	Peptoniphilus	genus	Firmicutes	28066	COVID-19	D000086382	2	2	2	0	1	3.571	enriched	1.000	0
+47	Paraprevotella	genus	Bacteroidetes	46796	Diarrhea	D003967	2	2	0	2	1	3.643	depleted	1.000	0
+51	Slackia	genus	Actinobacteria	76226	Prostatic Neoplasms	D011471	2	2	0	2	1	3.077	depleted	1.000	0
+57	Anaerostipes	genus	Firmicutes	11071	Cholestasis	D002779	2	2	0	2	1	3.564	depleted	1.000	0
+57	Anaerostipes	genus	Firmicutes	11373	Non-alcoholic Fatty Liver Disease	D065626	2	2	0	2	1	3.419	depleted	1.000	0
+57	Anaerostipes	genus	Firmicutes	45328	Diabetes Mellitus, Type 2	D003924	3	2	0	2	1	3.771	depleted	1.000	0
+57	Anaerostipes	genus	Firmicutes	56231	HIV Infections	D015658	2	2	0	2	1	3.665	depleted	1.000	0
+57	Anaerostipes	genus	Firmicutes	69716	Neuroblastoma	D009447	2	2	0	2	1	3.605	depleted	1.000	0
+70	Adlercreutzia	genus	Actinobacteria	18168	Inflammatory Bowel Diseases	D015212	2	2	0	2	1	3.456	depleted	1.000	0
+70	Adlercreutzia	genus	Actinobacteria	69716	Neuroblastoma	D009447	2	2	0	2	1	2.64	depleted	1.000	0
+70	Adlercreutzia	genus	Actinobacteria	76226	Prostatic Neoplasms	D011471	2	2	0	2	1	3.009	depleted	1.000	0
+81	Methanobrevibacter	genus	Euryarchaeota	46796	Diarrhea	D003967	2	2	0	2	1	3.393	depleted	1.000	0
+82	Turicibacter	genus	Firmicutes	6511	Breast Neoplasms	D001943	2	2	0	2	1	2.328	depleted	1.000	0
+82	Turicibacter	genus	Firmicutes	11373	Non-alcoholic Fatty Liver Disease	D065626	2	2	0	2	1	2.961	depleted	1.000	0
+82	Turicibacter	genus	Firmicutes	28066	COVID-19	D000086382	2	2	0	2	1	2.514	depleted	1.000	0
+82	Turicibacter	genus	Firmicutes	45328	Diabetes Mellitus, Type 2	D003924	2	2	2	0	1	3.395	enriched	1.000	0
+82	Turicibacter	genus	Firmicutes	48371	Dwarfism	D004392	2	2	2	0	1	3.243	enriched	1.000	0
+82	Turicibacter	genus	Firmicutes	75391	Peutz-Jeghers Syndrome	D010580	2	2	0	2	1	2.415	depleted	1.000	0
+89	Anaerofustis	genus	Firmicutes	48371	Dwarfism	D004392	2	2	2	0	1	2.438	enriched	1.000	0
+94	Butyricimonas	genus	Bacteroidetes	4406	Asthma	D001249	2	2	0	2	1	2.818	depleted	1.000	0
+94	Butyricimonas	genus	Bacteroidetes	46796	Diarrhea	D003967	2	2	0	2	1	3.288	depleted	1.000	0
+106	Sutterella	genus	Proteobacteria	20491	Colorectal Neoplasms	D015179	2	2	0	2	1	3.571	depleted	1.000	0
+106	Sutterella	genus	Proteobacteria	45328	Diabetes Mellitus, Type 2	D003924	2	2	2	0	1	3.732	enriched	1.000	0
+106	Sutterella	genus	Proteobacteria	46796	Diarrhea	D003967	2	2	0	2	1	3.463	depleted	1.000	0
+106	Sutterella	genus	Proteobacteria	69131	Myasthenia Gravis	D009157	2	2	2	0	1	3.899	enriched	1.000	0
+106	Sutterella	genus	Proteobacteria	71481	Neuromyelitis Optica	D009471	2	2	0	2	1	3.864	depleted	1.000	0
+136	Sarcina	genus	Firmicutes	4876	Autism Spectrum Disorder	D000067877	2	2	2	0	1	3.165	enriched	1.000	0
+145	Anaerotruncus	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	2.639	enriched	1.000	0
+145	Anaerotruncus	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	2	2	2	0	1	2.431	enriched	1.000	0
+145	Anaerotruncus	genus	Firmicutes	73716	Parkinson Disease	D010300	2	2	2	0	1	2.619	enriched	1.000	0
+173	Holdemania	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	2	2	0	2	1	2.407	depleted	1.000	0
+173	Holdemania	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	2	2	2	0	1	2.412	enriched	1.000	0
+173	Holdemania	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	2.589	enriched	1.000	0
+173	Holdemania	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	2	2	2	0	1	2.548	enriched	1.000	0
+176	Gemella	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	2	2	2	0	1	2.567	enriched	1.000	0
+176	Gemella	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	2	2	2	0	1	2.567	enriched	1.000	0
+184	Ralstonia	genus	Proteobacteria	20491	Colorectal Neoplasms	D015179	3	2	2	0	1	2.807	enriched	1.000	0
+217	Dialister	genus	Firmicutes	1526	Alzheimer Disease	D000544	2	2	0	2	1	3.954	depleted	1.000	0
+217	Dialister	genus	Firmicutes	7766	Carcinoma, Hepatocellular	D006528	2	2	0	2	1	3.217	depleted	1.000	0
+217	Dialister	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	2	2	0	2	1	3.714	depleted	1.000	0
+217	Dialister	genus	Firmicutes	69716	Neuroblastoma	D009447	2	2	0	2	1	3.749	depleted	1.000	0
+232	Succinivibrio	genus	Proteobacteria	56231	HIV Infections	D015658	2	2	2	0	1	3.386	enriched	1.000	0
+235	Bilophila	genus	Thermodesulfobacteria	18168	Inflammatory Bowel Diseases	D015212	2	2	0	2	1	2.864	depleted	1.000	0
+235	Bilophila	genus	Thermodesulfobacteria	46796	Diarrhea	D003967	2	2	2	0	1	3.171	enriched	1.000	0
+235	Bilophila	genus	Thermodesulfobacteria	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	2.979	enriched	1.000	0
+235	Bilophila	genus	Thermodesulfobacteria	73716	Parkinson Disease	D010300	2	2	2	0	1	3.325	enriched	1.000	0
+339	Eikenella	genus	Proteobacteria	12713	Crohn Disease	D003424	3	2	2	0	1	3.21	enriched	1.000	0
+372	Filifactor	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	2	2	2	0	1	2.204	enriched	1.000	0
+408	Proteus	genus	Chordata	12713	Crohn Disease	D003424	2	2	2	0	1	3.623	enriched	1.000	0
+475	Aquabacterium	genus	Proteobacteria	12713	Crohn Disease	D003424	2	2	2	0	1	2.708	enriched	1.000	0
+490	Scardovia	genus	Actinobacteria	12713	Crohn Disease	D003424	2	2	2	0	1	2.09	enriched	1.000	0
+580	Christensenella	genus	Firmicutes	28066	COVID-19	D000086382	2	2	2	0	1	2.391	enriched	1.000	0
+580	Christensenella	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	2.247	enriched	1.000	0
+1101	Eggerthella	genus	Actinobacteria	1	Irritable Bowel Syndrome	D043183	2	2	2	0	1	2.95	enriched	1.000	0
+1101	Eggerthella	genus	Actinobacteria	12711	Colitis, Ulcerative	D003093	2	2	2	0	1	3.314	enriched	1.000	0
+1101	Eggerthella	genus	Actinobacteria	48371	Dwarfism	D004392	2	2	2	0	1	3.234	enriched	1.000	0
+1101	Eggerthella	genus	Actinobacteria	48916	Fatigue Syndrome, Chronic	D015673	2	2	2	0	1	2.429	enriched	1.000	0
+1101	Eggerthella	genus	Actinobacteria	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	3.261	enriched	1.000	0
+1101	Eggerthella	genus	Actinobacteria	62143	Renal Insufficiency, Chronic	D051436	2	2	2	0	1	2.733	enriched	1.000	0
+1101	Eggerthella	genus	Actinobacteria	68391	Multiple Sclerosis	D009103	2	2	2	0	1	3.223	enriched	1.000	0
+1644	Pseudomonas	genus	Proteobacteria	20491	Colorectal Neoplasms	D015179	2	2	2	0	1	2.703	enriched	1.000	0
+1644	Pseudomonas	genus	Proteobacteria	28066	COVID-19	D000086382	2	2	2	0	1	3.067	enriched	1.000	0
+7657	Bacteroides	genus	Bacteroidetes	56231	HIV Infections	D015658	2	2	0	2	1	4.229	depleted	1.000	0
+7657	Bacteroides	genus	Bacteroidetes	68391	Multiple Sclerosis	D009103	2	2	2	0	1	4.932	enriched	1.000	0
+7657	Bacteroides	genus	Bacteroidetes	69716	Neuroblastoma	D009447	2	2	0	2	1	4.309	depleted	1.000	0
+7657	Bacteroides	genus	Bacteroidetes	75696	Polycystic Ovary Syndrome	D011085	2	2	2	0	1	4.912	enriched	1.000	0
+7657	Bacteroides	genus	Bacteroidetes	76576	Psoriasis	D011565	2	2	0	2	1	4.03	depleted	1.000	0
+7657	Bacteroides	genus	Bacteroidetes	310394	Gout	D006073	2	2	2	0	1	NULL	enriched	1.000	0
+7658	Ruminococcus	genus	Firmicutes	9181	Celiac Disease	D002446	2	2	0	2	1	4.25	depleted	1.000	0
+7658	Ruminococcus	genus	Firmicutes	45328	Diabetes Mellitus, Type 2	D003924	2	2	0	2	1	4.203	depleted	1.000	0
+7658	Ruminococcus	genus	Firmicutes	46796	Diarrhea	D003967	2	2	0	2	1	4.146	depleted	1.000	0
+7658	Ruminococcus	genus	Firmicutes	55276	Hepatitis C	D006526	2	2	0	2	1	3.609	depleted	1.000	0
+7658	Ruminococcus	genus	Firmicutes	65768	Spinal Cord Injuries	D013119	2	2	0	2	1	3.908	depleted	1.000	0
+7658	Ruminococcus	genus	Firmicutes	67066	Lupus Erythematosus, Systemic	D008180	2	2	0	2	1	4.284	depleted	1.000	0
+7659	Segatella	genus	Bacteroidetes	20491	Colorectal Neoplasms	D015179	2	2	0	2	1	4.896	depleted	1.000	0
+7659	Segatella	genus	Bacteroidetes	28066	COVID-19	D000086382	2	2	0	2	1	4.483	depleted	1.000	0
+7659	Segatella	genus	Bacteroidetes	62116	Kidney Failure, Chronic	D007676	3	2	0	2	1	4.693	depleted	1.000	0
+7663	Akkermansia	genus	Verrucomicrobia	1526	Alzheimer Disease	D000544	2	2	0	2	1	3.802	depleted	1.000	0
+7663	Akkermansia	genus	Verrucomicrobia	46796	Diarrhea	D003967	2	2	0	2	1	4.349	depleted	1.000	0
+7663	Akkermansia	genus	Verrucomicrobia	62143	Renal Insufficiency, Chronic	D051436	2	2	2	0	1	3.86	enriched	1.000	0
+7664	Coprococcus	genus	Firmicutes	44846	Diabetes Mellitus	D003920	2	2	2	0	1	4.107	enriched	1.000	0
+7664	Coprococcus	genus	Firmicutes	46796	Diarrhea	D003967	2	2	0	2	1	4.077	depleted	1.000	0
+7664	Coprococcus	genus	Firmicutes	65768	Spinal Cord Injuries	D013119	2	2	0	2	1	3.577	depleted	1.000	0
+7665	Fusicatenibacter	genus	Firmicutes	4876	Autism Spectrum Disorder	D000067877	2	2	0	2	1	3.725	depleted	1.000	0
+7665	Fusicatenibacter	genus	Firmicutes	7766	Carcinoma, Hepatocellular	D006528	4	2	0	2	1	3.578	depleted	1.000	0
+7665	Fusicatenibacter	genus	Firmicutes	43846	Depressive Disorder, Major	D003865	2	2	0	2	1	3.898	depleted	1.000	0
+7665	Fusicatenibacter	genus	Firmicutes	45328	Diabetes Mellitus, Type 2	D003924	2	2	0	2	1	4.06	depleted	1.000	0
+7665	Fusicatenibacter	genus	Firmicutes	46796	Diarrhea	D003967	2	2	0	2	1	4.072	depleted	1.000	0
+7665	Fusicatenibacter	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	2	2	0	2	1	3.981	depleted	1.000	0
+7665	Fusicatenibacter	genus	Firmicutes	65768	Spinal Cord Injuries	D013119	2	2	0	2	1	3.948	depleted	1.000	0
+7665	Fusicatenibacter	genus	Firmicutes	76226	Prostatic Neoplasms	D011471	2	2	0	2	1	3.975	depleted	1.000	0
+7666	Faecalibacterium	genus	Firmicutes	43846	Depressive Disorder, Major	D003865	2	2	0	2	1	4.762	depleted	1.000	0
+7666	Faecalibacterium	genus	Firmicutes	45838	Diabetic Retinopathy	D003930	2	2	0	2	1	4.364	depleted	1.000	0
+7666	Faecalibacterium	genus	Firmicutes	46796	Diarrhea	D003967	2	2	0	2	1	4.415	depleted	1.000	0
+7666	Faecalibacterium	genus	Firmicutes	56231	HIV Infections	D015658	2	2	0	2	1	4.693	depleted	1.000	0
+7666	Faecalibacterium	genus	Firmicutes	67066	Lupus Erythematosus, Systemic	D008180	2	2	0	2	1	4.766	depleted	1.000	0
+7666	Faecalibacterium	genus	Firmicutes	69716	Neuroblastoma	D009447	2	2	0	2	1	4.626	depleted	1.000	0
+7666	Faecalibacterium	genus	Firmicutes	309776	Anxiety Disorders	D001008	2	2	0	2	1	NULL	depleted	1.000	0
+7666	Faecalibacterium	genus	Firmicutes	309812	Bipolar Disorder	D001714	2	2	0	2	1	NULL	depleted	1.000	0
+7666	Faecalibacterium	genus	Firmicutes	310196	Pre-Eclampsia	D011225	2	2	0	2	1	NULL	depleted	1.000	0
+7667	Alistipes	genus	Bacteroidetes	1	Irritable Bowel Syndrome	D043183	2	2	0	2	1	4.404	depleted	1.000	0
+7667	Alistipes	genus	Bacteroidetes	2536	Anorexia Nervosa	D000856	2	2	2	0	1	4.394	enriched	1.000	0
+7667	Alistipes	genus	Bacteroidetes	44996	Diabetes Mellitus, Type 1	D003922	2	2	2	0	1	4.434	enriched	1.000	0
+7667	Alistipes	genus	Bacteroidetes	45838	Diabetic Retinopathy	D003930	2	2	2	0	1	3.968	enriched	1.000	0
+7667	Alistipes	genus	Bacteroidetes	46796	Diarrhea	D003967	2	2	0	2	1	4.652	depleted	1.000	0
+7667	Alistipes	genus	Bacteroidetes	69716	Neuroblastoma	D009447	2	2	0	2	1	4.51	depleted	1.000	0
+7669	Eubacterium	genus	Firmicutes	1	Irritable Bowel Syndrome	D043183	2	2	0	2	1	3.446	depleted	1.000	0
+7669	Eubacterium	genus	Firmicutes	18168	Inflammatory Bowel Diseases	D015212	2	2	0	2	1	4.013	depleted	1.000	0
+7669	Eubacterium	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	2	2	0	2	1	3.186	depleted	1.000	0
+7669	Eubacterium	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	0	2	1	3.93	depleted	1.000	0
+7671	Lachnospira	genus	Firmicutes	4876	Autism Spectrum Disorder	D000067877	2	2	0	2	1	3.658	depleted	1.000	0
+7671	Lachnospira	genus	Firmicutes	7766	Carcinoma, Hepatocellular	D006528	3	2	0	2	1	3.941	depleted	1.000	0
+7671	Lachnospira	genus	Firmicutes	18168	Inflammatory Bowel Diseases	D015212	2	2	0	2	1	3.864	depleted	1.000	0
+7671	Lachnospira	genus	Firmicutes	45328	Diabetes Mellitus, Type 2	D003924	3	2	0	2	1	3.963	depleted	1.000	0
+7671	Lachnospira	genus	Firmicutes	69131	Myasthenia Gravis	D009157	2	2	0	2	1	3.738	depleted	1.000	0
+7671	Lachnospira	genus	Firmicutes	69716	Neuroblastoma	D009447	2	2	0	2	1	4.17	depleted	1.000	0
+7671	Lachnospira	genus	Firmicutes	76576	Psoriasis	D011565	2	2	0	2	1	3.719	depleted	1.000	0
+7671	Lachnospira	genus	Firmicutes	80106	Rhinitis, Allergic	D065631	2	2	2	0	1	4.021	enriched	1.000	0
+7671	Lachnospira	genus	Firmicutes	310607	Sjogren's Syndrome	D012859	2	2	0	2	1	NULL	depleted	1.000	0
+7672	Collinsella	genus	Actinobacteria	4406	Asthma	D001249	2	2	0	2	1	3.9	depleted	1.000	0
+7672	Collinsella	genus	Actinobacteria	4876	Autism Spectrum Disorder	D000067877	2	2	2	0	1	3.498	enriched	1.000	0
+7672	Collinsella	genus	Actinobacteria	45328	Diabetes Mellitus, Type 2	D003924	2	2	2	0	1	3.636	enriched	1.000	0
+7672	Collinsella	genus	Actinobacteria	46796	Diarrhea	D003967	2	2	0	2	1	3.32	depleted	1.000	0
+7672	Collinsella	genus	Actinobacteria	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	3.417	enriched	1.000	0
+7672	Collinsella	genus	Actinobacteria	62143	Renal Insufficiency, Chronic	D051436	2	2	2	0	1	3.608	enriched	1.000	0
+7673	Prevotella	genus	Bacteroidetes	20491	Colorectal Neoplasms	D015179	2	2	2	0	1	4.452	enriched	1.000	0
+7673	Prevotella	genus	Bacteroidetes	46141	Diabetes, Gestational	D016640	2	2	0	2	1	4.184	depleted	1.000	0
+7673	Prevotella	genus	Bacteroidetes	46796	Diarrhea	D003967	2	2	0	2	1	4.109	depleted	1.000	0
+7676	Oliverpabstia	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	2	2	0	2	1	2.58	depleted	1.000	0
+7676	Oliverpabstia	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	2	2	0	2	1	2.529	depleted	1.000	0
+7676	Oliverpabstia	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	3	2	2	0	1	3.056	enriched	1.000	0
+7677	Oscillibacter	genus	Firmicutes	1	Irritable Bowel Syndrome	D043183	2	2	0	2	1	3.672	depleted	1.000	0
+7677	Oscillibacter	genus	Firmicutes	28066	COVID-19	D000086382	2	2	0	2	1	3.6	depleted	1.000	0
+7677	Oscillibacter	genus	Firmicutes	46796	Diarrhea	D003967	2	2	0	2	1	3.9	depleted	1.000	0
+7677	Oscillibacter	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	2	2	0	2	1	3.951	depleted	1.000	0
+7677	Oscillibacter	genus	Firmicutes	73716	Parkinson Disease	D010300	2	2	2	0	1	3.596	enriched	1.000	0
+7677	Oscillibacter	genus	Firmicutes	76576	Psoriasis	D011565	2	2	0	2	1	3.793	depleted	1.000	0
+7682	Wujia	genus	Firmicutes	3086	Arthritis, Rheumatoid	D001172	2	2	0	2	1	3.135	depleted	1.000	0
+7682	Wujia	genus	Firmicutes	28066	COVID-19	D000086382	2	2	0	2	1	3.941	depleted	1.000	0
+7682	Wujia	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	2	2	0	2	1	3.531	depleted	1.000	0
+7685	Waltera	genus	NULL	1	Irritable Bowel Syndrome	D043183	2	2	0	2	1	3.727	depleted	1.000	0
+7686	Roseburia	genus	Firmicutes	1	Irritable Bowel Syndrome	D043183	2	2	0	2	1	3.142	depleted	1.000	0
+7686	Roseburia	genus	Firmicutes	4876	Autism Spectrum Disorder	D000067877	2	2	0	2	1	3.627	depleted	1.000	0
+7686	Roseburia	genus	Firmicutes	46796	Diarrhea	D003967	2	2	0	2	1	4.015	depleted	1.000	0
+7686	Roseburia	genus	Firmicutes	56231	HIV Infections	D015658	2	2	0	2	1	4.032	depleted	1.000	0
+7686	Roseburia	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	0	2	1	4.185	depleted	1.000	0
+7686	Roseburia	genus	Firmicutes	69716	Neuroblastoma	D009447	2	2	0	2	1	4.093	depleted	1.000	0
+7686	Roseburia	genus	Firmicutes	73716	Parkinson Disease	D010300	2	2	0	2	1	4.167	depleted	1.000	0
+7689	Holdemanella	genus	Firmicutes	46796	Diarrhea	D003967	2	2	0	2	1	3.623	depleted	1.000	0
+7689	Holdemanella	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	2	2	0	2	1	3.042	depleted	1.000	0
+7689	Holdemanella	genus	Firmicutes	69131	Myasthenia Gravis	D009157	2	2	2	0	1	4.017	enriched	1.000	0
+7689	Holdemanella	genus	Firmicutes	75696	Polycystic Ovary Syndrome	D011085	2	2	0	2	1	3.563	depleted	1.000	0
+7691	Parasutterella	genus	Proteobacteria	6511	Breast Neoplasms	D001943	2	2	2	0	1	3.341	enriched	1.000	0
+7691	Parasutterella	genus	Proteobacteria	28066	COVID-19	D000086382	2	2	0	2	1	3.929	depleted	1.000	0
+7691	Parasutterella	genus	Proteobacteria	48371	Dwarfism	D004392	2	2	0	2	1	3.488	depleted	1.000	0
+7691	Parasutterella	genus	Proteobacteria	62116	Kidney Failure, Chronic	D007676	2	2	0	2	1	3.217	depleted	1.000	0
+7693	Mediterraneibacter	genus	Firmicutes	7798	Liver Cirrhosis	D008103	2	2	2	0	1	4.09	enriched	1.000	0
+7693	Mediterraneibacter	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	2	2	2	0	1	3.519	enriched	1.000	0
+7693	Mediterraneibacter	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	3	2	2	0	1	4.318	enriched	1.000	0
+7693	Mediterraneibacter	genus	Firmicutes	68391	Multiple Sclerosis	D009103	2	2	2	0	1	4.29	enriched	1.000	0
+7694	Monoglobus	genus	Firmicutes	3086	Arthritis, Rheumatoid	D001172	2	2	0	2	1	3.724	depleted	1.000	0
+7694	Monoglobus	genus	Firmicutes	28066	COVID-19	D000086382	2	2	0	2	1	3.166	depleted	1.000	0
+7694	Monoglobus	genus	Firmicutes	56231	HIV Infections	D015658	2	2	0	2	1	3.713	depleted	1.000	0
+7694	Monoglobus	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	3	2	2	0	1	2.634	enriched	1.000	0
+7700	Faecalicatena	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	2	2	0	2	1	2.773	depleted	1.000	0
+7711	Intestinibacter	genus	Firmicutes	28066	COVID-19	D000086382	2	2	0	2	1	3.349	depleted	1.000	0
+7711	Intestinibacter	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	0	2	1	2.928	depleted	1.000	0
+7711	Intestinibacter	genus	Firmicutes	68391	Multiple Sclerosis	D009103	2	2	2	0	1	3.336	enriched	1.000	0
+7711	Intestinibacter	genus	Firmicutes	75391	Peutz-Jeghers Syndrome	D010580	2	2	0	2	1	2.927	depleted	1.000	0
+7713	Agathobaculum	genus	Firmicutes	3086	Arthritis, Rheumatoid	D001172	2	2	2	0	1	3.458	enriched	1.000	0
+7713	Agathobaculum	genus	Firmicutes	4876	Autism Spectrum Disorder	D000067877	2	2	0	2	1	2.97	depleted	1.000	0
+7713	Agathobaculum	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	0	2	1	2.921	depleted	1.000	0
+7720	Thomasclavelia	genus	Firmicutes	2536	Anorexia Nervosa	D000856	2	2	2	0	1	2.967	enriched	1.000	0
+7720	Thomasclavelia	genus	Firmicutes	4876	Autism Spectrum Disorder	D000067877	2	2	2	0	1	3.46	enriched	1.000	0
+7720	Thomasclavelia	genus	Firmicutes	6511	Breast Neoplasms	D001943	2	2	2	0	1	3.554	enriched	1.000	0
+7720	Thomasclavelia	genus	Firmicutes	7798	Liver Cirrhosis	D008103	2	2	2	0	1	3.451	enriched	1.000	0
+7720	Thomasclavelia	genus	Firmicutes	65768	Spinal Cord Injuries	D013119	2	2	2	0	1	3.447	enriched	1.000	0
+7720	Thomasclavelia	genus	Firmicutes	67066	Lupus Erythematosus, Systemic	D008180	2	2	2	0	1	3.842	enriched	1.000	0
+7720	Thomasclavelia	genus	Firmicutes	73716	Parkinson Disease	D010300	2	2	2	0	1	3.059	enriched	1.000	0
+7721	Barnesiella	genus	Bacteroidetes	18168	Inflammatory Bowel Diseases	D015212	2	2	0	2	1	3.882	depleted	1.000	0
+7721	Barnesiella	genus	Bacteroidetes	46796	Diarrhea	D003967	2	2	0	2	1	3.968	depleted	1.000	0
+7721	Barnesiella	genus	Bacteroidetes	62143	Renal Insufficiency, Chronic	D051436	2	2	0	2	1	3.712	depleted	1.000	0
+7721	Barnesiella	genus	Bacteroidetes	68391	Multiple Sclerosis	D009103	2	2	0	2	1	3.697	depleted	1.000	0
+7725	Coprobacter	genus	Bacteroidetes	62143	Renal Insufficiency, Chronic	D051436	2	2	0	2	1	3.027	depleted	1.000	0
+7725	Coprobacter	genus	Bacteroidetes	69716	Neuroblastoma	D009447	2	2	0	2	1	2.567	depleted	1.000	0
+7734	Allofournierella	genus	Firmicutes	6511	Breast Neoplasms	D001943	2	2	2	0	1	2.549	enriched	1.000	0
+7734	Allofournierella	genus	Firmicutes	56231	HIV Infections	D015658	2	2	0	2	1	2.875	depleted	1.000	0
+7734	Allofournierella	genus	Firmicutes	69716	Neuroblastoma	D009447	2	2	2	0	1	2.67	enriched	1.000	0
+7737	Lentihominibacter	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	2	2	0	2	1	3.2	depleted	1.000	0
+7737	Lentihominibacter	genus	Firmicutes	28066	COVID-19	D000086382	2	2	0	2	1	2.84	depleted	1.000	0
+7738	Lawsonibacter	genus	Firmicutes	28066	COVID-19	D000086382	2	2	0	2	1	2.582	depleted	1.000	0
+7738	Lawsonibacter	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	2.483	enriched	1.000	0
+7739	Flavonifractor	genus	Firmicutes	11373	Non-alcoholic Fatty Liver Disease	D065626	3	2	0	2	1	3.068	depleted	1.000	0
+7739	Flavonifractor	genus	Firmicutes	66816	Lung Neoplasms	D008175	2	2	2	0	1	3.565	enriched	1.000	0
+7741	Mitsuokella	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	2	2	0	2	1	3.188	depleted	1.000	0
+7750	Victivallis	genus	Lentisphaerae	44996	Diabetes Mellitus, Type 1	D003922	2	2	0	2	1	2.32	depleted	1.000	0
+7755	Eisenbergiella	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	2	2	2	0	1	3.146	enriched	1.000	0
+7755	Eisenbergiella	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	2	2	2	0	1	3.278	enriched	1.000	0
+7755	Eisenbergiella	genus	Firmicutes	65768	Spinal Cord Injuries	D013119	2	2	2	0	1	3.085	enriched	1.000	0
+7755	Eisenbergiella	genus	Firmicutes	73716	Parkinson Disease	D010300	2	2	2	0	1	3.283	enriched	1.000	0
+7757	Enterorhabdus	genus	Actinobacteria	3086	Arthritis, Rheumatoid	D001172	2	2	0	2	1	2.837	depleted	1.000	0
+7764	Terrisporobacter	genus	Firmicutes	1526	Alzheimer Disease	D000544	2	2	0	2	1	3.035	depleted	1.000	0
+7764	Terrisporobacter	genus	Firmicutes	28066	COVID-19	D000086382	2	2	0	2	1	3.226	depleted	1.000	0
+7767	Parolsenella	genus	Actinobacteria	45328	Diabetes Mellitus, Type 2	D003924	2	2	2	0	1	2.955	enriched	1.000	0
+7771	Hydrogenoanaerobacterium	genus	Firmicutes	2536	Anorexia Nervosa	D000856	2	2	2	0	1	2.478	enriched	1.000	0
+7771	Hydrogenoanaerobacterium	genus	Firmicutes	46796	Diarrhea	D003967	2	2	0	2	1	2.591	depleted	1.000	0
+7772	Senegalimassilia	genus	Actinobacteria	20491	Colorectal Neoplasms	D015179	2	2	0	2	1	3.073	depleted	1.000	0
+7772	Senegalimassilia	genus	Actinobacteria	45328	Diabetes Mellitus, Type 2	D003924	2	2	2	0	1	3.697	enriched	1.000	0
+7779	Coprobacillus	genus	Firmicutes	7798	Liver Cirrhosis	D008103	2	2	2	0	1	2.731	enriched	1.000	0
+7779	Coprobacillus	genus	Firmicutes	65768	Spinal Cord Injuries	D013119	2	2	2	0	1	2.492	enriched	1.000	0
+7782	Actinomyces	genus	Actinobacteria	7766	Carcinoma, Hepatocellular	D006528	3	2	2	0	1	3.122	enriched	1.000	0
+7788	Limosilactobacillus	genus	Firmicutes	7766	Carcinoma, Hepatocellular	D006528	3	2	2	0	1	3.901	enriched	1.000	0
+7788	Limosilactobacillus	genus	Firmicutes	53356	Hand, Foot and Mouth Disease	D006232	2	2	2	0	1	3.736	enriched	1.000	0
+7788	Limosilactobacillus	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	3.55	enriched	1.000	0
+7788	Limosilactobacillus	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	2	2	2	0	1	3.062	enriched	1.000	0
+7789	Pseudoflavonifractor	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	3.021	enriched	1.000	0
+7792	Lachnoclostridium	genus	Firmicutes	1	Irritable Bowel Syndrome	D043183	2	2	2	0	1	3.038	enriched	1.000	0
+7792	Lachnoclostridium	genus	Firmicutes	4876	Autism Spectrum Disorder	D000067877	2	2	2	0	1	3.111	enriched	1.000	0
+7795	Gordonibacter	genus	Actinobacteria	1	Irritable Bowel Syndrome	D043183	2	2	2	0	1	2.574	enriched	1.000	0
+7795	Gordonibacter	genus	Actinobacteria	12711	Colitis, Ulcerative	D003093	2	2	0	2	1	2.959	depleted	1.000	0
+7795	Gordonibacter	genus	Actinobacteria	12713	Crohn Disease	D003424	2	2	0	2	1	2.959	depleted	1.000	0
+7795	Gordonibacter	genus	Actinobacteria	28066	COVID-19	D000086382	2	2	0	2	1	2.456	depleted	1.000	0
+7795	Gordonibacter	genus	Actinobacteria	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	2.047	enriched	1.000	0
+7795	Gordonibacter	genus	Actinobacteria	76226	Prostatic Neoplasms	D011471	2	2	0	2	1	2.749	depleted	1.000	0
+7796	Allisonella	genus	NULL	67066	Lupus Erythematosus, Systemic	D008180	2	2	0	2	1	2.9	depleted	1.000	0
+7798	Tannerellaceae	genus	Bacteroidetes	7798	Liver Cirrhosis	D008103	4	2	2	0	1	3.156	enriched	1.000	0
+7803	Ligilactobacillus	genus	Firmicutes	3086	Arthritis, Rheumatoid	D001172	2	2	0	2	1	3.209	depleted	1.000	0
+7803	Ligilactobacillus	genus	Firmicutes	7766	Carcinoma, Hepatocellular	D006528	2	2	2	0	1	3.718	enriched	1.000	0
+7803	Ligilactobacillus	genus	Firmicutes	7798	Liver Cirrhosis	D008103	2	2	2	0	1	2.798	enriched	1.000	0
+7803	Ligilactobacillus	genus	Firmicutes	12713	Crohn Disease	D003424	2	2	2	0	1	3.453	enriched	1.000	0
+7803	Ligilactobacillus	genus	Firmicutes	28066	COVID-19	D000086382	2	2	2	0	1	4.23	enriched	1.000	0
+7803	Ligilactobacillus	genus	Firmicutes	45328	Diabetes Mellitus, Type 2	D003924	2	2	2	0	1	4.054	enriched	1.000	0
+7803	Ligilactobacillus	genus	Firmicutes	65768	Spinal Cord Injuries	D013119	2	2	2	0	1	2.868	enriched	1.000	0
+7808	Muribaculaceae	genus	Bacteroidetes	53356	Hand, Foot and Mouth Disease	D006232	2	2	0	2	1	4.195	depleted	1.000	0
+7808	Muribaculaceae	genus	Bacteroidetes	67066	Lupus Erythematosus, Systemic	D008180	2	2	0	2	1	3.146	depleted	1.000	0
+7810	Megamonas	genus	Firmicutes	45328	Diabetes Mellitus, Type 2	D003924	2	2	2	0	1	4.167	enriched	1.000	0
+7810	Megamonas	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	2	2	0	2	1	4.12	depleted	1.000	0
+7813	Lactobacillus	genus	Firmicutes	56231	HIV Infections	D015658	2	2	2	0	1	3.307	enriched	1.000	0
+7813	Lactobacillus	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	3.551	enriched	1.000	0
+7813	Lactobacillus	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	2	2	2	0	1	3.894	enriched	1.000	0
+7824	Romboutsia	genus	Firmicutes	6511	Breast Neoplasms	D001943	2	2	0	2	1	3.08	depleted	1.000	0
+7824	Romboutsia	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	2	2	2	0	1	3.206	enriched	1.000	0
+7824	Romboutsia	genus	Firmicutes	43846	Depressive Disorder, Major	D003865	2	2	0	2	1	2.932	depleted	1.000	0
+7824	Romboutsia	genus	Firmicutes	69716	Neuroblastoma	D009447	2	2	0	2	1	2.784	depleted	1.000	0
+7824	Romboutsia	genus	Firmicutes	75391	Peutz-Jeghers Syndrome	D010580	2	2	0	2	1	3.514	depleted	1.000	0
+7828	Ruthenibacterium	genus	Firmicutes	28066	COVID-19	D000086382	2	2	2	0	1	3.648	enriched	1.000	0
+7828	Ruthenibacterium	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	3.733	enriched	1.000	0
+7828	Ruthenibacterium	genus	Firmicutes	73716	Parkinson Disease	D010300	2	2	2	0	1	3.478	enriched	1.000	0
+7829	Escherichia	genus	Proteobacteria	1	Irritable Bowel Syndrome	D043183	2	2	2	0	1	3.418	enriched	1.000	0
+7833	Evtepia	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	2	2	0	2	1	2.385	depleted	1.000	0
+7833	Evtepia	genus	Firmicutes	69716	Neuroblastoma	D009447	2	2	0	2	1	2.88	depleted	1.000	0
+7833	Evtepia	genus	Firmicutes	73716	Parkinson Disease	D010300	2	2	2	0	1	2.804	enriched	1.000	0
+7837	Longicatena	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	2	2	2	0	1	2.989	enriched	1.000	0
+7837	Longicatena	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	2.911	enriched	1.000	0
+7839	Vescimonas	genus	Firmicutes	28066	COVID-19	D000086382	2	2	0	2	1	3.414	depleted	1.000	0
+7842	Tyzzerella	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	2	2	0	2	1	2.901	depleted	1.000	0
+7843	Desulfovibrio	genus	Thermodesulfobacteria	46796	Diarrhea	D003967	2	2	0	2	1	3.369	depleted	1.000	0
+7843	Desulfovibrio	genus	Thermodesulfobacteria	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	2.92	enriched	1.000	0
+7845	Anaerobutyricum	genus	Firmicutes	18168	Inflammatory Bowel Diseases	D015212	2	2	0	2	1	4.098	depleted	1.000	0
+7845	Anaerobutyricum	genus	Firmicutes	28066	COVID-19	D000086382	2	2	0	2	1	3.447	depleted	1.000	0
+7851	Streptococcus	genus	Firmicutes	7766	Carcinoma, Hepatocellular	D006528	2	2	2	0	1	4.721	enriched	1.000	0
+7851	Streptococcus	genus	Firmicutes	7798	Liver Cirrhosis	D008103	2	2	2	0	1	3.206	enriched	1.000	0
+7851	Streptococcus	genus	Firmicutes	44846	Diabetes Mellitus	D003920	2	2	2	0	1	4.332	enriched	1.000	0
+7851	Streptococcus	genus	Firmicutes	46141	Diabetes, Gestational	D016640	2	2	0	2	1	2.95	depleted	1.000	0
+7851	Streptococcus	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	2	2	2	0	1	5.121	enriched	1.000	0
+7851	Streptococcus	genus	Firmicutes	77286	Purpura, Thrombocytopenic, Idiopathic	D016553	2	2	2	0	1	4.101	enriched	1.000	0
+7855	Catenibacterium	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	3	2	0	2	1	2.636	depleted	1.000	0
+7855	Catenibacterium	genus	Firmicutes	56231	HIV Infections	D015658	2	2	2	0	1	4.288	enriched	1.000	0
+7857	Bifidobacterium	genus	Actinobacteria	4876	Autism Spectrum Disorder	D000067877	2	2	2	0	1	4.372	enriched	1.000	0
+7857	Bifidobacterium	genus	Actinobacteria	45328	Diabetes Mellitus, Type 2	D003924	2	2	2	0	1	4.373	enriched	1.000	0
+7857	Bifidobacterium	genus	Actinobacteria	55276	Hepatitis C	D006526	2	2	0	2	1	4.362	depleted	1.000	0
+7857	Bifidobacterium	genus	Actinobacteria	310607	Sjogren's Syndrome	D012859	2	2	0	2	1	NULL	depleted	1.000	0
+7858	Colidextribacter	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	2	2	0	2	1	2.119	depleted	1.000	0
+7858	Colidextribacter	genus	Firmicutes	72061	Obesity	D009765	2	2	0	2	1	2.348	depleted	1.000	0
+7860	Hungatella	genus	Firmicutes	7798	Liver Cirrhosis	D008103	2	2	2	0	1	3.213	enriched	1.000	0
+7860	Hungatella	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	2	2	2	0	1	2.478	enriched	1.000	0
+7860	Hungatella	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	2	2	2	0	1	3.248	enriched	1.000	0
+7862	Marvinbryantia	genus	Firmicutes	28066	COVID-19	D000086382	2	2	0	2	1	2.685	depleted	1.000	0
+7862	Marvinbryantia	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	2.598	enriched	1.000	0
+7862	Marvinbryantia	genus	Firmicutes	65768	Spinal Cord Injuries	D013119	2	2	0	2	1	2.771	depleted	1.000	0
+7869	Atopobium	genus	Actinobacteria	7798	Liver Cirrhosis	D008103	2	2	2	0	1	2.745	enriched	1.000	0
+7869	Atopobium	genus	Actinobacteria	56231	HIV Infections	D015658	2	2	2	0	1	2.276	enriched	1.000	0
+7870	Blautia	genus	Firmicutes	1526	Alzheimer Disease	D000544	2	2	2	0	1	4.271	enriched	1.000	0
+7870	Blautia	genus	Firmicutes	73716	Parkinson Disease	D010300	2	2	0	2	1	3.794	depleted	1.000	0
+7870	Blautia	genus	Firmicutes	76226	Prostatic Neoplasms	D011471	2	2	0	2	1	4.105	depleted	1.000	0
+7870	Blautia	genus	Firmicutes	310607	Sjogren's Syndrome	D012859	2	2	0	2	1	NULL	depleted	1.000	0
+7871	Butyricicoccus	genus	Firmicutes	4876	Autism Spectrum Disorder	D000067877	2	2	0	2	1	3.699	depleted	1.000	0
+7871	Butyricicoccus	genus	Firmicutes	45328	Diabetes Mellitus, Type 2	D003924	2	2	0	2	1	3.691	depleted	1.000	0
+7872	Campylobacter	genus	Campylobacterota	12711	Colitis, Ulcerative	D003093	2	2	0	2	1	2.768	depleted	1.000	0
+7876	Dorea	genus	Firmicutes	6511	Breast Neoplasms	D001943	2	2	0	2	1	3.105	depleted	1.000	0
+7876	Dorea	genus	Firmicutes	46796	Diarrhea	D003967	2	2	0	2	1	3.851	depleted	1.000	0
+7876	Dorea	genus	Firmicutes	65768	Spinal Cord Injuries	D013119	2	2	0	2	1	4.026	depleted	1.000	0
+7876	Dorea	genus	Firmicutes	66816	Lung Neoplasms	D008175	2	2	0	2	1	3.804	depleted	1.000	0
+7877	Enterococcus	genus	Firmicutes	3086	Arthritis, Rheumatoid	D001172	2	2	0	2	1	3.606	depleted	1.000	0
+7877	Enterococcus	genus	Firmicutes	53356	Hand, Foot and Mouth Disease	D006232	2	2	2	0	1	4.158	enriched	1.000	0
+7881	Intestinimonas	genus	Firmicutes	2536	Anorexia Nervosa	D000856	2	2	2	0	1	2.673	enriched	1.000	0
+7881	Intestinimonas	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	3.029	enriched	1.000	0
+7881	Intestinimonas	genus	Firmicutes	73716	Parkinson Disease	D010300	2	2	2	0	1	2.796	enriched	1.000	0
+7882	Lacticaseibacillus	genus	Firmicutes	2536	Anorexia Nervosa	D000856	2	2	2	0	1	2.753	enriched	1.000	0
+7882	Lacticaseibacillus	genus	Firmicutes	12713	Crohn Disease	D003424	2	2	2	0	1	3.089	enriched	1.000	0
+7888	Rothia	genus	Actinobacteria	12713	Crohn Disease	D003424	3	2	2	0	1	2.832	enriched	1.000	0
+7889	Subdoligranulum	genus	Firmicutes	9181	Celiac Disease	D002446	2	2	0	2	1	4.257	depleted	1.000	0
+7889	Subdoligranulum	genus	Firmicutes	11373	Non-alcoholic Fatty Liver Disease	D065626	2	2	0	2	1	4.3	depleted	1.000	0
+7889	Subdoligranulum	genus	Firmicutes	56231	HIV Infections	D015658	2	2	0	2	1	4.236	depleted	1.000	0
+7889	Subdoligranulum	genus	Firmicutes	65768	Spinal Cord Injuries	D013119	2	2	0	2	1	4.496	depleted	1.000	0
+7890	Veillonella	genus	Firmicutes	28066	COVID-19	D000086382	2	2	0	2	1	3.549	depleted	1.000	0
+7890	Veillonella	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	2	2	2	0	1	2.903	enriched	1.000	0
+7890	Veillonella	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	2	2	2	0	1	3.6	enriched	1.000	0
+7890	Veillonella	genus	Firmicutes	77286	Purpura, Thrombocytopenic, Idiopathic	D016553	2	2	2	0	1	3.5	enriched	1.000	0
+7891	Weissella	genus	Firmicutes	28066	COVID-19	D000086382	2	2	0	2	1	3.041	depleted	1.000	0
+7891	Weissella	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	2	2	2	0	1	2.645	enriched	1.000	0
+7892	Caproiciproducens	genus	Firmicutes	12713	Crohn Disease	D003424	2	2	0	2	1	2.96	depleted	1.000	0
+7901	Clostridium	genus	Firmicutes	6511	Breast Neoplasms	D001943	2	2	0	2	1	3.253	depleted	1.000	0
+7901	Clostridium	genus	Firmicutes	11373	Non-alcoholic Fatty Liver Disease	D065626	2	2	0	2	1	3.653	depleted	1.000	0
+7901	Clostridium	genus	Firmicutes	28066	COVID-19	D000086382	2	2	0	2	1	3.93	depleted	1.000	0
+7901	Clostridium	genus	Firmicutes	43846	Depressive Disorder, Major	D003865	2	2	0	2	1	3.759	depleted	1.000	0
+7901	Clostridium	genus	Firmicutes	44846	Diabetes Mellitus	D003920	2	2	0	2	1	4.039	depleted	1.000	0
+7901	Clostridium	genus	Firmicutes	62143	Renal Insufficiency, Chronic	D051436	2	2	2	0	1	3.862	enriched	1.000	0
+7948	Blastocystis	genus	NULL	20491	Colorectal Neoplasms	D015179	2	2	0	2	1	2.8	depleted	1.000	0
+7948	Blastocystis	genus	NULL	48916	Fatigue Syndrome, Chronic	D015673	2	2	0	2	1	2.508	depleted	1.000	0
+7960	Enterocloster	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	2	2	2	0	1	3.45	enriched	1.000	0
+7960	Enterocloster	genus	Firmicutes	51326	Fibromyalgia	D005356	2	2	2	0	1	3.102	enriched	1.000	0
+7960	Enterocloster	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	3.591	enriched	1.000	0
+7972	Latilactobacillus	genus	Firmicutes	28066	COVID-19	D000086382	2	2	0	2	1	2.584	depleted	1.000	0
+7977	Pseudoruminococcus	genus	NULL	12713	Crohn Disease	D003424	2	2	0	2	1	2.837	depleted	1.000	0
+8000	Anaerotignum	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	2	2	2	0	1	3.505	enriched	1.000	0
+8000	Anaerotignum	genus	Firmicutes	69716	Neuroblastoma	D009447	2	2	0	2	1	2.754	depleted	1.000	0
+8011	Candidatus Cibiobacter	genus	Firmicutes	28066	COVID-19	D000086382	2	2	0	2	1	4.088	depleted	1.000	0
+8011	Candidatus Cibiobacter	genus	Firmicutes	73716	Parkinson Disease	D010300	2	2	2	0	1	3.39	enriched	1.000	0
+8037	Faecalibacillus	genus	Firmicutes	28066	COVID-19	D000086382	2	2	0	2	1	3.639	depleted	1.000	0
+8037	Faecalibacillus	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	0	2	1	3.589	depleted	1.000	0
+8037	Faecalibacillus	genus	Firmicutes	69716	Neuroblastoma	D009447	2	2	0	2	1	3.214	depleted	1.000	0
+8042	Frisingicoccus	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	3	2	2	0	1	2.67	enriched	1.000	0
+8047	Gemmiger	genus	Firmicutes	28066	COVID-19	D000086382	2	2	0	2	1	4.286	depleted	1.000	0
+8047	Gemmiger	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	3.474	enriched	1.000	0
+8047	Gemmiger	genus	Firmicutes	69716	Neuroblastoma	D009447	2	2	0	2	1	3.685	depleted	1.000	0
+8047	Gemmiger	genus	Firmicutes	310241	Migraine Disorders	D008881	2	2	2	0	1	NULL	enriched	1.000	0
+8058	Lacrimispora	genus	Firmicutes	4876	Autism Spectrum Disorder	D000067877	2	2	0	2	1	3.128	depleted	1.000	0
+8058	Lacrimispora	genus	Firmicutes	69716	Neuroblastoma	D009447	2	2	0	2	1	2.954	depleted	1.000	0
+8086	Simiaoa	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	2	2	0	2	1	3.854	depleted	1.000	0
+8086	Simiaoa	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	3.363	enriched	1.000	0
+8096	Agathobacter	genus	Firmicutes	2536	Anorexia Nervosa	D000856	2	2	0	2	1	4.041	depleted	1.000	0
+8096	Agathobacter	genus	Firmicutes	45328	Diabetes Mellitus, Type 2	D003924	2	2	0	2	1	4.659	depleted	1.000	0
+8100	Alloprevotella	genus	Bacteroidetes	28066	COVID-19	D000086382	2	2	0	2	1	4.179	depleted	1.000	0
+8113	Sanguibacteroides	genus	Bacteroidetes	20491	Colorectal Neoplasms	D015179	2	2	2	0	1	2.309	enriched	1.000	0
+8123	Asteroleplasma	genus	Tenericutes	28066	COVID-19	D000086382	2	2	0	2	1	3.137	depleted	1.000	0
+8153	Sellimonas	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	2	2	2	0	1	2.755	enriched	1.000	0
+8153	Sellimonas	genus	Firmicutes	65768	Spinal Cord Injuries	D013119	2	2	2	0	1	3.342	enriched	1.000	0
+8160	Corynebacterium	genus	Actinobacteria	28066	COVID-19	D000086382	2	2	2	0	1	3.586	enriched	1.000	0
+8165	Haemophilus	genus	Proteobacteria	28066	COVID-19	D000086382	2	2	0	2	1	2.283	depleted	1.000	0
+8178	Solobacterium	genus	Firmicutes	45328	Diabetes Mellitus, Type 2	D003924	2	2	2	0	1	3.223	enriched	1.000	0
+8245	Acinetobacter	genus	Proteobacteria	12713	Crohn Disease	D003424	3	2	2	0	1	3.818	enriched	1.000	0
+8245	Acinetobacter	genus	Proteobacteria	62143	Renal Insufficiency, Chronic	D051436	2	2	2	0	1	3.056	enriched	1.000	0
+8254	Candidatus Saccharimonas	genus	Candidatus Saccharimonadota	53356	Hand, Foot and Mouth Disease	D006232	2	2	0	2	1	2.853	depleted	1.000	0
+8260	Enterobacter	genus	Proteobacteria	69716	Neuroblastoma	D009447	2	2	2	0	1	4.422	enriched	1.000	0
+8271	Klebsiella	genus	Proteobacteria	20491	Colorectal Neoplasms	D015179	2	2	2	0	1	3.943	enriched	1.000	0
+8271	Klebsiella	genus	Proteobacteria	77286	Purpura, Thrombocytopenic, Idiopathic	D016553	2	2	2	0	1	3.562	enriched	1.000	0
+8277	Merdimmobilis	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	2.29	enriched	1.000	0
+8304	Parabacteroides	genus	Bacteroidetes	44996	Diabetes Mellitus, Type 1	D003922	3	2	2	0	1	3.992	enriched	1.000	0
+8304	Parabacteroides	genus	Bacteroidetes	46796	Diarrhea	D003967	2	2	2	0	1	3.767	enriched	1.000	0
+8304	Parabacteroides	genus	Bacteroidetes	55276	Hepatitis C	D006526	2	2	0	2	1	4.033	depleted	1.000	0
+8304	Parabacteroides	genus	Bacteroidetes	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	4.017	enriched	1.000	0
+8304	Parabacteroides	genus	Bacteroidetes	62143	Renal Insufficiency, Chronic	D051436	2	2	2	0	1	4.331	enriched	1.000	0
+8304	Parabacteroides	genus	Bacteroidetes	310742	Vitiligo	D014820	2	2	2	0	1	NULL	enriched	1.000	0
+8432	Mesosutterella	genus	Proteobacteria	12713	Crohn Disease	D003424	2	2	0	2	1	2.862	depleted	1.000	0
+8432	Mesosutterella	genus	Proteobacteria	28066	COVID-19	D000086382	2	2	0	2	1	2.64	depleted	1.000	0
+8488	Anaeromassilibacillus	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	3	2	2	0	1	2.43	enriched	1.000	0
+8488	Anaeromassilibacillus	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	2	2	2	0	1	2.11	enriched	1.000	0
+8556	Anaeroglobus	genus	NULL	12711	Colitis, Ulcerative	D003093	2	2	0	2	1	2.529	depleted	1.000	0
+8556	Anaeroglobus	genus	NULL	12713	Crohn Disease	D003424	2	2	2	0	1	2.529	enriched	1.000	0
+8606	Oxalobacter	genus	Proteobacteria	73716	Parkinson Disease	D010300	2	2	2	0	1	2.313	enriched	1.000	0
+8744	Pyramidobacter	genus	Synergistetes	20491	Colorectal Neoplasms	D015179	2	2	2	0	1	3.314	enriched	1.000	0
+8752	Sphingomonas	genus	Proteobacteria	12713	Crohn Disease	D003424	3	2	2	0	1	3.954	enriched	1.000	0
+8908	Oscillospira	genus	Firmicutes	28066	COVID-19	D000086382	2	2	0	2	1	2.568	depleted	1.000	0
+9069	Dysosmobacter	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	3.292	enriched	1.000	0
+9069	Dysosmobacter	genus	Firmicutes	73716	Parkinson Disease	D010300	2	2	2	0	1	3.253	enriched	1.000	0
+9112	Porphyromonas	genus	Bacteroidetes	7798	Liver Cirrhosis	D008103	2	2	2	0	1	2.333	enriched	1.000	0
+9263	Faecalimonas	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	2	2	2	0	1	2.449	enriched	1.000	0
+9311	Paratractidigestivibacter	genus	Actinobacteria	76576	Psoriasis	D011565	2	2	0	2	1	2.342	depleted	1.000	0
+9313	Peptostreptococcus	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	2	2	2	0	1	2.719	enriched	1.000	0
+9313	Peptostreptococcus	genus	Firmicutes	28066	COVID-19	D000086382	2	2	2	0	1	3.054	enriched	1.000	0
+9425	Olsenella	genus	Actinobacteria	56231	HIV Infections	D015658	2	2	2	0	1	2.991	enriched	1.000	0
+9639	Lancefieldella	genus	Actinobacteria	28066	COVID-19	D000086382	2	2	2	0	1	2.708	enriched	1.000	0
+9691	Phocaeicola	genus	Bacteroidetes	12711	Colitis, Ulcerative	D003093	3	2	2	0	1	4.318	enriched	1.000	0
+9691	Phocaeicola	genus	Bacteroidetes	69716	Neuroblastoma	D009447	2	2	0	2	1	4.501	depleted	1.000	0
+9850	Selenomonas	genus	Firmicutes	12713	Crohn Disease	D003424	2	2	2	0	1	2.431	enriched	1.000	0
+9986	Emergencia	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	2.371	enriched	1.000	0
+9988	Enorma	genus	Actinobacteria	12711	Colitis, Ulcerative	D003093	2	2	2	0	1	3.216	enriched	1.000	0
+10056	Massilimicrobiota	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	2.413	enriched	1.000	0
+10064	Merdimonas	genus	Firmicutes	62116	Kidney Failure, Chronic	D007676	2	2	2	0	1	2.515	enriched	1.000	0
+10109	Schaalia	genus	Actinobacteria	20491	Colorectal Neoplasms	D015179	2	2	2	0	1	3.24	enriched	1.000	0
+10225	Massilistercora	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	2	2	2	0	1	2.827	enriched	1.000	0
+10225	Massilistercora	genus	Firmicutes	12713	Crohn Disease	D003424	2	2	0	2	1	2.827	depleted	1.000	0
+10450	Candidatus Borkfalkia	genus	Firmicutes	12711	Colitis, Ulcerative	D003093	3	2	0	2	1	2.096	depleted	1.000	0
+10450	Candidatus Borkfalkia	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	2	2	0	2	1	2.474	depleted	1.000	0
+10450	Candidatus Borkfalkia	genus	Firmicutes	48916	Fatigue Syndrome, Chronic	D015673	2	2	0	2	1	2.395	depleted	1.000	0
+10626	Mediterranea	genus	Bacteroidetes	12713	Crohn Disease	D003424	2	2	0	2	1	2.334	depleted	1.000	0
+10768	Zhenhengia	genus	Firmicutes	12713	Crohn Disease	D003424	3	2	2	0	1	3.111	enriched	1.000	0
+11742	Moryella	genus	Firmicutes	20491	Colorectal Neoplasms	D015179	2	2	2	0	1	2.996	enriched	1.000	0
+13510	Zhenpiania	genus	Firmicutes	28066	COVID-19	D000086382	2	2	0	2	1	2.653	depleted	1.000	0
+14155	Caballeronia	genus	Proteobacteria	53356	Hand, Foot and Mouth Disease	D006232	2	2	0	2	1	3.135	depleted	1.000	0
+18316	Pseudoxanthomonas	genus	Proteobacteria	53356	Hand, Foot and Mouth Disease	D006232	2	2	0	2	1	2.911	depleted	1.000	0

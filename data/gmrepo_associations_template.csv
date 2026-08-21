@@ -1,0 +1,3 @@
+project_id,project_title,project_description,data_type,data_quality,scientific_name,taxonomic_rank,ncbi_tax_id,disease_name,mesh_id,phenotype_a,phenotype_a_mesh_id,phenotype_b,phenotype_b_mesh_id,negative_enriched_in,positive_enriched_in,effect_type,lda_score,p_value,q_value,association_url,citation,notes
+PRJXXXXXX,Project title,Project description,metagenomics,curated,Genus species,species,12345,Disease name,D000000,Health,D006262,Disease name,D000000,Health,Disease name,LDA,3.2,,,https://gmrepo.humangut.info/data/project/PRJXXXXXX,,
+

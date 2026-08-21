@@ -1,0 +1,6 @@
+{
+  "gastritis": ["Gastritis", "D005756"],
+  "intestinal metaplasia": ["Metaplasia", "D008679"],
+  "early gastric cancer": ["Stomach Neoplasms", "D013274"],
+  "advanced gastric cancer": ["Stomach Neoplasms", "D013274"]
+}

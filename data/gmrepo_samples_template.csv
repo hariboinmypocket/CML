@@ -1,0 +1,2 @@
+project_id,project_title,data_type,data_quality,run_id,sample_id,disease_name,mesh_id,sex,age_years,country,qc_status
+PRJXXXXXX,Project title,metagenomics,curated,SRR000000,SAMPLE001,Health,D006262,Female,34,United States,passed
