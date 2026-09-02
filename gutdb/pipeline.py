@@ -184,7 +184,6 @@ def upsert_taxon(
     if energy not in {"fermenter", "respirator", "mixed", "N/A"}:
         energy = "N/A"
     values = (
-        clean_str(taxon.get("kingdom")) or None,
         clean_str(taxon.get("superkingdom")) or None,
         clean_str(taxon.get("phylum")) or None,
         clean_str(taxon.get("class_name")) or None,
@@ -218,7 +217,7 @@ def upsert_taxon(
         normalize_source_database(taxon.get("source_database")),
     )
     columns = (
-        "kingdom", "superkingdom", "phylum", "class_name", "order_name", "family",
+        "superkingdom", "phylum", "class_name", "order_name", "family",
         "genus", "species",
         "genus_key", "species_key", "scientific_name", "taxonomic_rank", "ncbi_tax_id",
         "gram_stain", "oxygen_requirement", "ph_preference", "sporulation",
@@ -363,7 +362,6 @@ def _collapse_mimedb(path: str | Path) -> list[dict[str, Any]]:
         ]
         collapsed.append(
             {
-                "kingdom": most_common(first_value(r, "kingdom") for r in rows),
                 "superkingdom": most_common(first_value(r, "superkingdom") for r in rows),
                 "phylum": most_common(first_value(r, "phylum") for r in rows),
                 "class_name": most_common(first_value(r, "klass", "class") for r in rows),

@@ -15,7 +15,9 @@ CREATE TABLE IF NOT EXISTS ingestion_runs (
 
 CREATE TABLE IF NOT EXISTS taxa (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    kingdom VARCHAR(100) NULL,
+    -- superkingdom replaces the former `kingdom` column, which mixed two
+    -- vocabularies (Eubacteria/Fungi alongside NCBI's newer Bacillati/
+    -- Pseudomonadati) and carried no information superkingdom lacked.
     superkingdom VARCHAR(50) NULL,
     phylum VARCHAR(150) NULL,
     class_name VARCHAR(150) NULL,
