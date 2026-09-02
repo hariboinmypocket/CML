@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import Counter
+from decimal import Decimal, ROUND_FLOOR, ROUND_HALF_UP
 import math
 import re
 from typing import Any, Iterable, Mapping
@@ -251,6 +252,25 @@ def nullable_float(value: Any) -> float | None:
         return float(text)
     except ValueError:
         return None
+
+
+def quantize_effect_size(value: Any) -> float | None:
+    """Quantize an effect size to two decimals: round positives, floor negatives.
+
+    Negatives are floored rather than rounded so a score's magnitude never
+    shrinks: an LDA score's absolute value is the strength of the effect, so
+    -4.301 becomes -4.31, whereas rounding to -4.30 would understate it.
+    Positives use round-half-up rather than Python's default round-half-even,
+    which would send 2.345 to 2.34.
+    """
+    number = nullable_float(value)
+    if number is None:
+        return None
+    quantized = Decimal(str(number)).quantize(
+        Decimal("0.01"),
+        rounding=ROUND_FLOOR if number < 0 else ROUND_HALF_UP,
+    )
+    return float(quantized)
 
 
 def nullable_int(value: Any) -> int | None:

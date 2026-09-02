@@ -3,6 +3,7 @@ import csv
 from pathlib import Path
 
 from gutdb.transform import (
+    quantize_effect_size,
     association_direction,
     collapse_energy_modes,
     collapse_food_sources,
@@ -72,6 +73,25 @@ class TransformTests(unittest.TestCase):
         }
         self.assertEqual(len(rows), 34)
         self.assertEqual(directions, {"enriched", "depleted"})
+
+
+class QuantizeEffectSizeTests(unittest.TestCase):
+    def test_positive_rounds_half_up(self):
+        self.assertEqual(quantize_effect_size("2.3576382479"), 2.36)
+        self.assertEqual(quantize_effect_size("2.345"), 2.35)  # not 2.34 (half-even)
+
+    def test_negative_floors_away_from_zero(self):
+        # a score's magnitude is the effect strength, so it must not shrink
+        self.assertEqual(quantize_effect_size("-4.3012"), -4.31)
+        self.assertEqual(quantize_effect_size("-2.031"), -2.04)
+
+    def test_already_two_decimals_unchanged(self):
+        self.assertEqual(quantize_effect_size("-4.31"), -4.31)
+        self.assertEqual(quantize_effect_size(3.5), 3.5)
+
+    def test_missing_and_unparseable_stay_none(self):
+        for value in ("", None, "NA", "abc"):
+            self.assertIsNone(quantize_effect_size(value))
 
 
 if __name__ == "__main__":

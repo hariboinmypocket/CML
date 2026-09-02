@@ -55,6 +55,7 @@ from .transform import (
     nullable_float,
     nullable_int,
     parse_scientific_name,
+    quantize_effect_size,
 )
 
 
@@ -595,11 +596,15 @@ def load_associations(
                 },
                 overwrite=False,
             )
-            lda = nullable_float(first_value(row, "lda_score", "effect_size", "score"))
+            lda_raw = nullable_float(first_value(row, "lda_score", "effect_size", "score"))
+            # Direction is derived from the FULL-PRECISION value: quantizing first
+            # could send a tiny positive score to 0.00, which association_direction
+            # reads as "marker" rather than "enriched".
             direction = association_direction(
-                lda, disease_name, positive_name, negative_name,
+                lda_raw, disease_name, positive_name, negative_name,
                 first_value(row, "direction"),
             )
+            lda = quantize_effect_size(lda_raw)
             cursor = connection.cursor()
             cursor.execute(
                 """
