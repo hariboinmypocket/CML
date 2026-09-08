@@ -30,6 +30,16 @@ Lit. Reviews/
 *.pptx
 *.potx
 
+# SQLite build outputs (scripts/build_gutdb_sqlite.py, cleanup_gutdb.py,
+# query_gutdb.py): all regenerable from the scripts, and the database itself is
+# ~68MB, past GitHub's warning threshold.
+gut_microbiome.sqlite
+gut_microbiome.sqlite-journal
+q[1-7]_*.csv
+coverage_before_after.csv
+cleanup_log.txt
+taxdump/
+
 # Local scratch
 tmp/
 .DS_Store
