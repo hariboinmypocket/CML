@@ -5,7 +5,10 @@
 -- One deliberate addition: taxon_disease_associations.p_value / .q_value, which
 -- the literature marker CSVs carry and the MySQL schema currently discards.
 --
--- Four deliberate omissions, all empty in every row this mirror can load:
+-- Five deliberate omissions, all empty in every row this mirror can load:
+--   ingestion_runs.error_message  -- only gutdb/pipeline.py writes it (MySQL side);
+--     this mirror's Loader.finish_run takes no error argument, so a failed load
+--     leaves its row at status = 'running' rather than recording a message.
 --   samples.subject_id, samples.timepoint  -- written only by
 --     scripts/load_biomapai_study.py (PRJNA1125469, longitudinal), a study this
 --     mirror does not load; still live in gutdb/schema.sql.
@@ -28,8 +31,7 @@ CREATE TABLE IF NOT EXISTS ingestion_runs (
     rows_read INTEGER NOT NULL DEFAULT 0,
     rows_inserted INTEGER NOT NULL DEFAULT 0,
     rows_updated INTEGER NOT NULL DEFAULT 0,
-    rows_skipped INTEGER NOT NULL DEFAULT 0,
-    error_message TEXT
+    rows_skipped INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS taxa (

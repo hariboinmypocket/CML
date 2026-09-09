@@ -12,7 +12,7 @@ changes nothing in the MySQL pipeline.
 
 | File | What it is |
 | --- | --- |
-| `gutdb/schema_sqlite.sql` | `gutdb/schema.sql` translated to SQLite. Table names, column names, keys and view semantics preserved 1:1; only engine syntax changes (`AUTO_INCREMENT`→`AUTOINCREMENT`, `ENUM`→`TEXT`+`CHECK`, boolean expressions→`CASE`, integer division→`*1.0`) — plus `p_value`/`q_value` added and four always-empty columns omitted, both noted in the file header and below. |
+| `gutdb/schema_sqlite.sql` | `gutdb/schema.sql` translated to SQLite. Table names, column names, keys and view semantics preserved 1:1; only engine syntax changes (`AUTO_INCREMENT`→`AUTOINCREMENT`, `ENUM`→`TEXT`+`CHECK`, boolean expressions→`CASE`, integer division→`*1.0`) — plus `p_value`/`q_value` added and five always-empty columns omitted, both noted in the file header and below. |
 | `scripts/build_gutdb_sqlite.py` | Loader. Imports `gutdb.transform` rather than re-implementing normalization, so taxon keys, phylum folding, effect-size quantization and direction derivation match what the MySQL loads produce. Idempotent — rebuilds the file from scratch. |
 | `scripts/cleanup_gutdb.py` | Back-fill and normalization pass; see the section at the end. Idempotent. |
 | `scripts/query_gutdb.py` | The seven queries below; writes one CSV per query. |
@@ -246,11 +246,11 @@ which is left as free descriptive text (41 values) since it is not a controlled 
 
 ## Columns dropped from the mirror
 
-A column-redundancy audit (`docs/redundant_columns.csv`) found four columns empty in
+A column-redundancy audit (`docs/redundant_columns.csv`) found five columns empty in
 every row of every table this build can populate. They are gone from
 `gutdb/schema_sqlite.sql` and from the SQLite file; `gutdb/schema.sql`,
-`gutdb/pipeline.py` and `scripts/load_biomapai_study.py` are untouched, because three
-of the four are live on the MySQL side.
+`gutdb/pipeline.py` and `scripts/load_biomapai_study.py` are untouched, because four
+of the five are live on the MySQL side.
 
 | Column | Why it was always empty here |
 |---|---|
@@ -258,6 +258,7 @@ of the four are live on the MySQL side.
 | `samples.timepoint` | Same loader, same reason |
 | `samples.unclassified_fraction` | `pipeline.sync_gmrepo_abundances` computes it and writes it straight to MySQL, but it is not among that function's CSV export fieldnames, so no value reaches this build |
 | `sample_taxon_abundances.detection_threshold` | `pipeline.py` inserts it from a source field the GMrepo export does not carry |
+| `ingestion_runs.error_message` | Written only by `gutdb/pipeline.py` on the MySQL side. This mirror's `Loader.finish_run` takes no error argument and hardcodes `status = 'completed'`, so nothing local could ever fill it. All 20 run rows were `completed` with the column NULL. A load that dies part-way still shows up: its row stays at `status = 'running'`, which the `CHECK` constraint keeps alongside `failed` |
 
 Consequences: `v_abundance_genus` and `v_abundance_species` no longer select
 `subject_id`; `v_abundance_coverage` no longer reports `unclassified_fraction` (it was
