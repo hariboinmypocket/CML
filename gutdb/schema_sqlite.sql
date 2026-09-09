@@ -4,6 +4,17 @@
 -- TEXT + CHECK, boolean expressions -> CASE, integer division -> *1.0).
 -- One deliberate addition: taxon_disease_associations.p_value / .q_value, which
 -- the literature marker CSVs carry and the MySQL schema currently discards.
+--
+-- Four deliberate omissions, all empty in every row this mirror can load:
+--   samples.subject_id, samples.timepoint  -- written only by
+--     scripts/load_biomapai_study.py (PRJNA1125469, longitudinal), a study this
+--     mirror does not load; still live in gutdb/schema.sql.
+--   samples.unclassified_fraction  -- computed by pipeline.sync_gmrepo_abundances
+--     and written straight to MySQL; it is not in that function's CSV export
+--     fieldnames, so no value ever reaches this build.
+--   sample_taxon_abundances.detection_threshold  -- pipeline.py inserts it from a
+--     source field the GMrepo export does not carry.
+-- Restore any of them here if the corresponding source becomes loadable.
 PRAGMA foreign_keys = ON;
 
 CREATE TABLE IF NOT EXISTS ingestion_runs (
@@ -120,25 +131,20 @@ CREATE TABLE IF NOT EXISTS samples (
     disease_id INTEGER REFERENCES diseases(id),
     gmrepo_sample_id TEXT,
     run_accession TEXT NOT NULL UNIQUE,
-    subject_id TEXT,
-    timepoint TEXT,
     sex TEXT,
     age_years REAL,
     bmi REAL,
     country TEXT,
     qc_status TEXT,
-    body_site TEXT,
-    unclassified_fraction REAL
+    body_site TEXT
 );
 CREATE INDEX IF NOT EXISTS ix_sample_study ON samples (study_id);
-CREATE INDEX IF NOT EXISTS ix_sample_subject ON samples (subject_id);
 CREATE INDEX IF NOT EXISTS ix_sample_disease ON samples (disease_id);
 
 CREATE TABLE IF NOT EXISTS sample_taxon_abundances (
     sample_id INTEGER NOT NULL REFERENCES samples(id) ON DELETE CASCADE,
     taxon_id INTEGER NOT NULL REFERENCES taxa(id) ON DELETE CASCADE,
     relative_abundance REAL NOT NULL,
-    detection_threshold REAL,
     PRIMARY KEY (sample_id, taxon_id)
 );
 CREATE INDEX IF NOT EXISTS ix_abundance_taxon ON sample_taxon_abundances (taxon_id);
@@ -324,7 +330,7 @@ FROM (
 DROP VIEW IF EXISTS v_abundance_genus;
 CREATE VIEW v_abundance_genus AS
 SELECT
-    a.sample_id, s.run_accession, s.subject_id, s.study_id, s.disease_id,
+    a.sample_id, s.run_accession, s.study_id, s.disease_id,
     a.taxon_id, t.scientific_name AS genus, t.phylum, t.superkingdom,
     a.relative_abundance
 FROM sample_taxon_abundances a
@@ -335,7 +341,7 @@ WHERE t.taxonomic_rank = 'genus';
 DROP VIEW IF EXISTS v_abundance_species;
 CREATE VIEW v_abundance_species AS
 SELECT
-    a.sample_id, s.run_accession, s.subject_id, s.study_id, s.disease_id,
+    a.sample_id, s.run_accession, s.study_id, s.disease_id,
     a.taxon_id, t.scientific_name AS species, t.genus, t.phylum, t.superkingdom,
     a.relative_abundance
 FROM sample_taxon_abundances a
@@ -351,9 +357,8 @@ SELECT
     t.taxonomic_rank,
     COUNT(*) AS n_taxa,
     ROUND(SUM(a.relative_abundance), 6) AS rank_total,
-    CASE WHEN ABS(SUM(a.relative_abundance) - 1.0) <= 0.01 THEN 1 ELSE 0 END AS sums_to_one,
-    s.unclassified_fraction
+    CASE WHEN ABS(SUM(a.relative_abundance) - 1.0) <= 0.01 THEN 1 ELSE 0 END AS sums_to_one
 FROM sample_taxon_abundances a
 JOIN taxa t ON t.id = a.taxon_id
 JOIN samples s ON s.id = a.sample_id
-GROUP BY a.sample_id, s.run_accession, t.taxonomic_rank, s.unclassified_fraction;
+GROUP BY a.sample_id, s.run_accession, t.taxonomic_rank;

@@ -12,12 +12,14 @@ changes nothing in the MySQL pipeline.
 
 | File | What it is |
 | --- | --- |
-| `gutdb/schema_sqlite.sql` | `gutdb/schema.sql` translated to SQLite. Table names, column names, keys and view semantics preserved 1:1; only engine syntax changes (`AUTO_INCREMENT`→`AUTOINCREMENT`, `ENUM`→`TEXT`+`CHECK`, boolean expressions→`CASE`, integer division→`*1.0`). |
+| `gutdb/schema_sqlite.sql` | `gutdb/schema.sql` translated to SQLite. Table names, column names, keys and view semantics preserved 1:1; only engine syntax changes (`AUTO_INCREMENT`→`AUTOINCREMENT`, `ENUM`→`TEXT`+`CHECK`, boolean expressions→`CASE`, integer division→`*1.0`) — plus `p_value`/`q_value` added and four always-empty columns omitted, both noted in the file header and below. |
 | `scripts/build_gutdb_sqlite.py` | Loader. Imports `gutdb.transform` rather than re-implementing normalization, so taxon keys, phylum folding, effect-size quantization and direction derivation match what the MySQL loads produce. Idempotent — rebuilds the file from scratch. |
 | `scripts/cleanup_gutdb.py` | Back-fill and normalization pass; see the section at the end. Idempotent. |
 | `scripts/query_gutdb.py` | The seven queries below; writes one CSV per query. |
 | `docs/gutdb_overview.png` | Two-panel summary of what landed. |
 | `docs/gutdb_cleanup_coverage.png` | What the cleanup pass filled. |
+| `docs/redundant_columns.csv` | Column-redundancy audit: 22 verdicts with the evidence behind each and a recommendation. |
+| `docs/column_profile.csv` | All 92 columns — percent empty, distinct values, dominant value and its share. |
 
 Outputs (`gut_microbiome.sqlite`, `q1…q7_*.csv`, `coverage_before_after.csv`,
 `cleanup_log.txt`) are written to the working directory and are gitignored —
@@ -222,9 +224,8 @@ which is left as free descriptive text (41 values) since it is not a controlled 
 ### What is still empty, and why
 
 - **Sample demographics** — `bmi` (33,332 of 33,630 rows), `sex` (21,005),
-  `age_years` (20,629), `country` (66), `subject_id`, `timepoint`, plus
-  `qc_status` (2,743). Blank in the GMrepo export itself;
-  filling them needs a GMrepo API pull, not a local source.
+  `age_years` (20,629), `country` (66), plus `qc_status` (2,743). Blank in the
+  GMrepo export itself; filling them needs a GMrepo API pull, not a local source.
 - **5 samples with no disease** (`PRJNA769284`) — that project contains both
   `Prostatic Neoplasms` (57) and `Health` (26) samples, so no project-level label can
   be assigned honestly. Left NULL.
@@ -240,3 +241,26 @@ which is left as free descriptive text (41 values) since it is not a controlled 
   negative evidence for taxa that simply were not annotated).
 - **`p_value` / `q_value` / `effect_size`** — blank where the source is blank; the
   GMrepo export carries no significance columns.
+
+## Columns dropped from the mirror
+
+A column-redundancy audit (`docs/redundant_columns.csv`) found four columns empty in
+every row of every table this build can populate. They are gone from
+`gutdb/schema_sqlite.sql` and from the SQLite file; `gutdb/schema.sql`,
+`gutdb/pipeline.py` and `scripts/load_biomapai_study.py` are untouched, because three
+of the four are live on the MySQL side.
+
+| Column | Why it was always empty here |
+|---|---|
+| `samples.subject_id` | Written only by `scripts/load_biomapai_study.py` (`PRJNA1125469`, 2–3 timepoints per subject), a study this mirror does not load |
+| `samples.timepoint` | Same loader, same reason |
+| `samples.unclassified_fraction` | `pipeline.sync_gmrepo_abundances` computes it and writes it straight to MySQL, but it is not among that function's CSV export fieldnames, so no value reaches this build |
+| `sample_taxon_abundances.detection_threshold` | `pipeline.py` inserts it from a source field the GMrepo export does not carry |
+
+Consequences: `v_abundance_genus` and `v_abundance_species` no longer select
+`subject_id`; `v_abundance_coverage` no longer reports `unclassified_fraction` (it was
+NULL in all 12,049 rows). Row counts are unchanged in all 8 tables, `PRAGMA
+foreign_key_check` and `integrity_check` are clean, all 7 query outputs return the same
+row counts as before, and `VACUUM` took the file from 71.7 MB to 65.0 MB. Restore any
+column here if its source becomes loadable — the header of `schema_sqlite.sql` records
+where each one comes from.

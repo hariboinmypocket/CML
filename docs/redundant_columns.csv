@@ -1,0 +1,23 @@
+table,column,verdict,evidence,recommendation
+samples,subject_id,empty in every row,"33,630 of 33,630 rows empty","Blank in the GMrepo export. Drop, or fill from the GMrepo API if you need repeated-measures structure."
+samples,timepoint,empty in every row,"33,630 of 33,630 rows empty",Same source gap. Drop unless longitudinal cohorts are coming.
+samples,unclassified_fraction,empty in every row,"33,630 of 33,630 rows empty",Not in the export; v_abundance_coverage reports it and always shows NULL. Drop or compute as 1 - sum(relative_abundance).
+sample_taxon_abundances,detection_threshold,empty in every row,"1,243,990 of 1,243,990 rows empty",Drop. On the largest table it is the only column costing space for nothing.
+ingestion_runs,error_message,empty in every row,20 of 20 rows empty,Keep — nullable by design; no run has failed yet.
+ingestion_runs,status,single value,'completed' in all 20 rows,Keep — same reason; it discriminates only when a run fails.
+samples,body_site,single value,"'gut' in all 33,630 rows",Keep only if non-gut cohorts are planned; today it carries no information.
+taxa,human_pathogen,single value,"1 in 63 rows, NULL in the other 4,311","A boolean that never records 'no'. Either fill negatives from a source that asserts them, or rename to reflect that it means 'asserted pathogen'."
+taxa,genus_key,exact relabelling,"= casefold(genus) in 4,374 of 4,374 rows","Keep as an index/join key, but it is not independent data — never treat it as a second field."
+taxa,species_key,exact relabelling,"= casefold(species) in 3,587 of 3,587 populated rows",Same.
+diseases,name_key,exact relabelling,= casefold(name) in 158 of 158 rows,Same.
+taxa,scientific_name / genus / species,one column derivable from the other two,"scientific_name = genus + ' ' + species in 3,585 of 3,585 species rows; = genus in 787 of 789 genus rows","Three columns, two columns of information. The 2 genus rows with a stray species value are the only disagreements — worth clearing."
+phenotype_comparisons,positive_score_enriched_in_id,duplicate of another column,== phenotype_b_id in all 333 populated rows (45 NULL),"Drop and read phenotype_b_id, or keep exactly one of the two pairs."
+phenotype_comparisons,negative_score_enriched_in_id,duplicate of another column,== phenotype_a_id in all 333 populated rows (45 NULL),Same.
+taxon_disease_associations,source_database,denormalized from parent,"== studies.source_database via comparison_id in all 16,390 rows (GMrepo 16,072, PubMed 318)",Redundant with the join. Convenient for filtering; keep only if you accept it can drift.
+studies,data_quality,1:1 with another column,"GMrepo -> curated (273), PubMed -> qualified (39); no other combination",One of the two columns is spare while only these two sources exist.
+phenotype_comparisons,method,determined by parent,One method per study_id across all 378 comparisons; 2 distinct values,"Belongs on studies, not on each comparison."
+taxon_disease_associations,effect_type,partly determined by source,"GMrepo -> LDA in all 16,072 rows; PubMed splits LEfSe 123 / reported 195","Keep — it separates literature effect types, which source_database cannot."
+taxon_disease_associations,direction,"derivable, but keep","Equals the orientation-corrected sign of effect_size in 16,072 of 16,072 rows; the raw sign alone would mislabel 1,170 (7.3%)",Keep. It is the only place the comparison's orientation is already applied.
+taxa,phylum / class_name / order_name / family / superkingdom,"denormalized lineage, has drifted","37 families map to >1 order, 24 orders to >1 class, 9 classes to >1 phylum, 3 phyla to >1 domain","Normalize to one lineage table keyed by ncbi_tax_id, or pin every rank from a single taxonomy vintage."
+taxa,phylum (subset),"denormalized lineage, wrong values","32 bacterial/archaeal taxa carry insect or plant lineage (Bacillus 13, Serratia 4, Rothia 3, ...); 82 associations and 2,329 abundance rows sit on them","Genus-name homonym misjoin in the taxdump lookup. Needs a fix in cleanup_gutdb.py, not a schema change."
+taxon_disease_associations,p_value / q_value,"sparse, not redundant","58 and 42 non-null of 16,390",Keep — only literature rows carry them; GMrepo does not export them.
