@@ -566,7 +566,13 @@ def load_associations(
                 disease_name,
                 first_value(row, "mesh_id", "disease_mesh_id"),
             )
-            a_id = upsert_disease(connection, phenotype_a, first_value(row, "phenotype_a_mesh_id"))
+            # The literature marker CSVs no longer carry the phenotype columns
+            # (phenotype_a was the constant "Health"/D006262 and phenotype_b
+            # restated disease_name/mesh_id); the defaults on lines 556-557 and
+            # here reconstruct them. The GMrepo export still supplies its own.
+            a_mesh = first_value(row, "phenotype_a_mesh_id") or (
+                "D006262" if phenotype_a == "Health" else None)
+            a_id = upsert_disease(connection, phenotype_a, a_mesh)
             b_id = upsert_disease(connection, phenotype_b, first_value(row, "phenotype_b_mesh_id", "mesh_id"))
             positive_name = first_value(row, "positive_enriched_in")
             negative_name = first_value(row, "negative_enriched_in")

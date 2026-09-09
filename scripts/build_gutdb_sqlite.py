@@ -38,6 +38,11 @@ ASSOC_FILES = [
     os.path.join(PROJECT, "data/gmrepo_PRJNA705217_ibs_markers.csv"),
 ] + sorted(glob.glob(os.path.join(PROJECT, "data/literature_*_markers.csv")))
 SAMPLES_FILE = os.path.join(PROJECT, "data/gmrepo_project_samples.csv")
+
+# Control arm of a literature marker comparison, dropped from those CSVs as
+# constant columns; see Loader.comparison.
+CONTROL_PHENOTYPE = "Health"
+CONTROL_MESH_ID = "D006262"
 ABUNDANCE_FILE = os.path.join(PROJECT, "data/gmrepo_species_abundances.csv")
 
 
@@ -229,9 +234,17 @@ class Loader:
                          (*usable.values(), taxon_id))
 
     def comparison(self, study_id, row) -> int:
-        pheno_a = T.first_value(row, "phenotype_a")
+        # The literature marker CSVs no longer carry the phenotype columns: every
+        # one of their comparisons was disease-versus-healthy, so phenotype_a was
+        # the constant "Health"/D006262 and phenotype_b restated disease_name/
+        # mesh_id. The defaults below reconstruct them. The full GMrepo export
+        # still carries real phenotype pairs, and supplies them, so no default
+        # fires on that path.
+        pheno_a = T.first_value(row, "phenotype_a") or CONTROL_PHENOTYPE
         pheno_b = T.first_value(row, "phenotype_b") or T.first_value(row, "disease_name")
-        a_id = self.disease(pheno_a, T.first_value(row, "phenotype_a_mesh_id"))
+        a_mesh = T.first_value(row, "phenotype_a_mesh_id") or (
+            CONTROL_MESH_ID if pheno_a == CONTROL_PHENOTYPE else None)
+        a_id = self.disease(pheno_a, a_mesh)
         b_id = self.disease(pheno_b, T.first_value(row, "phenotype_b_mesh_id")
                             or T.first_value(row, "mesh_id"))
         method = T.first_value(row, "method")

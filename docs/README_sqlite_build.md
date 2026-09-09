@@ -241,6 +241,8 @@ which is left as free descriptive text (41 values) since it is not a controlled 
   negative evidence for taxa that simply were not annotated).
 - **`p_value` / `q_value` / `effect_size`** — blank where the source is blank; the
   GMrepo export carries no significance columns.
+- **`studies.title` for the 39 `PubMed` studies** — `project_title` was dropped from the
+  marker CSVs; see the last section. `project_accession` (the PMID) still identifies them.
 
 ## Columns dropped from the mirror
 
@@ -264,3 +266,43 @@ foreign_key_check` and `integrity_check` are clean, all 7 query outputs return t
 row counts as before, and `VACUUM` took the file from 71.7 MB to 65.0 MB. Restore any
 column here if its source becomes loadable — the header of `schema_sqlite.sql` records
 where each one comes from.
+
+## Columns dropped from the literature marker CSVs
+
+The same audit checked the 15 hand-curated marker files (14 `data/literature_*_markers.csv`
+plus `data/gmrepo_PRJNA705217_ibs_markers.csv`, 352 rows). Every comparison in them is
+disease-versus-healthy, which made four columns pure restatement, and `project_title`
+was dropped alongside them:
+
+| Column | Evidence over the 352 rows |
+|---|---|
+| `phenotype_b` | equals `disease_name` in all 352 |
+| `phenotype_b_mesh_id` | equals `mesh_id` in all 318 rows of the 14 files that carry both; the IBS file carries neither |
+| `phenotype_a` | the constant `Health` in all 352 |
+| `phenotype_a_mesh_id` | the constant `D006262` (Health) in all 352 |
+| `project_title` | dropped by request; not redundant — see the consequence below |
+
+1,730 cells removed. `positive_enriched_in` and `negative_enriched_in` were left alone:
+`positive_enriched_in` matches `phenotype_b` in only 34 of 352 rows, so those two carry
+the direction of each association, not a copy of the arms.
+
+`Loader.comparison` in `scripts/build_gutdb_sqlite.py` and the comparison upsert in
+`gutdb/pipeline.py` now default the control arm to `Health`/`D006262` and take the case
+arm from `disease_name`/`mesh_id`. Neither default fires on the full GMrepo export, which
+carries real phenotype pairs and supplies them; `comparison_key` is built from the same
+two names as before, so its values are unchanged.
+
+**Consequence of dropping `project_title`:** it was the only source of `studies.title`
+for literature studies, and no other column reconstructs it (`project_id` is a bare PMID,
+`citation` gives author/year/journal, `project_description` is a methods summary). Titles
+are now NULL for the 39 `PubMed` studies, and `PRJNA705217` falls back to the title
+`pipeline.py` synthesizes for GMrepo projects — `GMrepo curated Health vs. Irritable
+Bowel Syndrome` in place of `Gut metagenomes of patients with post-infection IBS`.
+`studies.title` is 273 of 312 non-null, down from 312.
+
+Verified by building the database twice from the same loader, once with the original CSVs
+and once with the trimmed ones: all 8 tables byte-identical except those 40 title cells,
+same 4,374 / 161 / 312 / 378 / 16,390 / 33,630 / 1,243,990 row counts, and after the
+cleanup pass the file matches the previously committed database in every table but
+`studies.title`. `PRAGMA integrity_check` and `foreign_key_check` clean, all 7 queries
+return their prior row counts.
