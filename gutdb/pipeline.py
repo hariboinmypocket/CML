@@ -1275,15 +1275,11 @@ def load_abundances(connection: MySQLConnection, path: str | Path) -> LoadStats:
             cursor.execute(
                 """
                 INSERT INTO sample_taxon_abundances
-                    (sample_id, taxon_id, relative_abundance, detection_threshold)
-                VALUES (%s, %s, %s, %s)
-                ON DUPLICATE KEY UPDATE relative_abundance = VALUES(relative_abundance),
-                    detection_threshold = VALUES(detection_threshold)
+                    (sample_id, taxon_id, relative_abundance)
+                VALUES (%s, %s, %s)
+                ON DUPLICATE KEY UPDATE relative_abundance = VALUES(relative_abundance)
                 """,
-                (
-                    sample[0], taxon_id, abundance,
-                    nullable_float(first_value(row, "detection_threshold")),
-                ),
+                (sample[0], taxon_id, abundance),
             )
             cursor.close()
             stats.updated += int(existed)

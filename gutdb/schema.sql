@@ -163,7 +163,8 @@ CREATE TABLE IF NOT EXISTS sample_taxon_abundances (
     sample_id BIGINT UNSIGNED NOT NULL,
     taxon_id BIGINT UNSIGNED NOT NULL,
     relative_abundance DOUBLE NOT NULL,
-    detection_threshold DOUBLE NULL,
+    -- detection_threshold was dropped: no source this pipeline ingests has
+    -- ever supplied the column, so it was NULL in all 2.58M rows.
     PRIMARY KEY (sample_id, taxon_id),
     KEY ix_abundance_taxon (taxon_id),
     CONSTRAINT fk_abundance_sample FOREIGN KEY (sample_id) REFERENCES samples(id)
