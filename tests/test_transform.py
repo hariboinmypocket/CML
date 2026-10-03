@@ -11,6 +11,7 @@ from gutdb.transform import (
     derive_primary_food_source,
     extract_species_epithet,
     normalize_genus,
+    normalize_phylum,
     parse_scientific_name,
 )
 
@@ -92,6 +93,31 @@ class QuantizeEffectSizeTests(unittest.TestCase):
     def test_missing_and_unparseable_stay_none(self):
         for value in ("", None, "NA", "abc"):
             self.assertIsNone(quantize_effect_size(value))
+
+
+class NormalizePhylumTests(unittest.TestCase):
+    def test_classic_renames_fold_to_literature_name(self):
+        self.assertEqual(normalize_phylum("Bacillota"), "Firmicutes")
+        self.assertEqual(normalize_phylum("Bacteroidota"), "Bacteroidetes")
+        self.assertEqual(normalize_phylum("Pseudomonadota"), "Proteobacteria")
+
+    def test_thermodesulfobacteriota_is_not_folded(self):
+        """NCBI's Thermodesulfobacteriota absorbed Desulfobacterota.
+
+        Mapping it onto the classic small Thermodesulfobacteria phylum filed
+        the gut sulfate reducers (Desulfovibrio, Bilophila) as thermophiles.
+        """
+        self.assertEqual(
+            normalize_phylum("Thermodesulfobacteriota"), "Thermodesulfobacteriota"
+        )
+        self.assertEqual(
+            normalize_phylum("Thermodesulfobacteria"), "Thermodesulfobacteria"
+        )
+
+    def test_unknown_and_empty(self):
+        self.assertEqual(normalize_phylum("Firmicutes"), "Firmicutes")
+        self.assertEqual(normalize_phylum(""), "")
+        self.assertEqual(normalize_phylum(None), "")
 
 
 if __name__ == "__main__":

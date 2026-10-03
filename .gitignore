@@ -43,3 +43,6 @@ taxdump/
 # Local scratch
 tmp/
 .DS_Store
+
+# Local Claude Code settings - personal permission grants
+.claude/settings.local.json

@@ -202,7 +202,13 @@ PHYLUM_SYNONYMS = {
     "pseudomonadota": "Proteobacteria",
     "spirochaetota": "Spirochaetes",
     "synergistota": "Synergistetes",
-    "thermodesulfobacteriota": "Thermodesulfobacteria",
+    # NOT "Thermodesulfobacteria". The ICNP did rename that classic phylum to
+    # Thermodesulfobacteriota, but NCBI subsequently folded Desulfobacterota --
+    # the former Deltaproteobacteria sulfate reducers -- into the same name, so
+    # NCBI's Thermodesulfobacteriota is now a broad phylum, not the small
+    # thermophile one. Folding it onto the classic name filed Desulfovibrio,
+    # Bilophila and Desulfobulbus (gut sulfate reducers studied in IBD and CRC)
+    # as hot-spring thermophiles. Left unmapped so the source's own name stands.
     "thermotogota": "Thermotogae",
     "verrucomicrobiota": "Verrucomicrobia",
 }
