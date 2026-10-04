@@ -48,6 +48,15 @@ AUDIT = Path("data/curated_csv_lineage_audit.csv")
 COLUMN_RANK = {"Phylum": "phylum", "Class": "class", "Order": "order", "Family": "family"}
 SUPERKINGDOM_RANKS = ("superkingdom", "domain", "kingdom")
 
+# Within-domain reclassifications this script may apply. Everything not listed
+# is reported only: a dated name is a taxonomic decision, not a repair, and the
+# default is to surface it rather than normalize it away. Each entry mirrors one
+# in scripts/normalize_reclassified_phyla.py so the CSV and the two databases
+# agree about which moves have been sanctioned.
+APPROVED_RECLASSIFICATIONS = {
+    ("Proteobacteria", "Campylobacterota"),
+}
+
 
 def load_taxdump() -> tuple[dict[str, int], dict[int, dict[str, str]]]:
     """Return (name -> taxid, taxid -> {rank: name}) for the four ranks above."""
@@ -264,7 +273,8 @@ def main() -> int:
                 any(stored_sig) and any(correct_sig) and stored_sig != correct_sig)
             case_variant = stored_phylum.casefold() == correct_phylum.casefold()
             unknown_name = not stored_candidates
-            if not (different_organism or case_variant or unknown_name):
+            approved = (stored_phylum, correct_phylum) in APPROVED_RECLASSIFICATIONS
+            if not (different_organism or case_variant or unknown_name or approved):
                 stats["reclassification_not_homonym"] += 1
                 audit.append({
                     "id": row.get("id", ""),

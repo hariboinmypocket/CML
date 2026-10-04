@@ -703,7 +703,7 @@ Actinobacteria,Actinobacteria,Propionibacteriales,Propionibacteriaceae,Arachnia,
 Actinobacteria,Actinobacteria,Actinomycetales,Actinomycetaceae,Arcanobacterium,haemolyticum,Facultative anaerobe,,Nonsporulating,mixed,organic_unspecified,957
 Actinobacteria,Actinobacteria,Actinomycetales,Actinomycetaceae,Arcanobacterium,pyogenes,Facultative anaerobe,,,mixed,carbohydrates,958
 Euryarchaeota,Archaeoglobi,Archaeoglobales,Archaeoglobaceae,Archaeoglobus,fulgidus,Anaerobe,,,fermenter,N/A,959
-Proteobacteria,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Arcobacter,butzleri,Aerobe,,Singles - Chains,mixed,carbohydrates,960
+Campylobacterota,Epsilonproteobacteria,Campylobacterales,Arcobacteraceae,Arcobacter,butzleri,Aerobe,,Singles - Chains,mixed,carbohydrates,960
 Proteobacteria,Betaproteobacteria,Rhodocyclales,Rhodocyclaceae,Aromatoleum,tolulyticum,,,,N/A,N/A,961
 Actinobacteria,Actinobacteria,Micrococcales,Micrococcaceae,Arthrobacter,globiformis,,,,N/A,N/A,962
 Actinobacteria,Actinobacteria,Micrococcales,Micrococcaceae,Arthrobacter,,,,,N/A,N/A,963
@@ -1196,17 +1196,17 @@ Ascomycota,Saccharomycetes,Saccharomycetales,Saccharomycodaceae,Hanseniaspora,uv
 Firmicutes,Clostridia,Clostridiales,Lachnospiraceae,Lachnoclostridium,methoxybenzovorans,Anaerobe,,,fermenter,carbohydrates,1459
 Cyanobacteria,,Nostocales,Hapalosiphonaceae,Hapalosiphon,welwitschii,,,,N/A,N/A,1460
 Firmicutes,Clostridia,Clostridiales,Lachnospiraceae,Lachnoclostridium,phytofermentans,Anaerobe,,Sporulating,fermenter,organic_unspecified,1461
-Proteobacteria,Epsilonproteobacteria,Campylobacterales,Helicobacteraceae,Helicobacter,bilis,Microaerophile,,,mixed,carbohydrates,1462
+Campylobacterota,Epsilonproteobacteria,Campylobacterales,Helicobacteraceae,Helicobacter,bilis,Microaerophile,,,mixed,carbohydrates,1462
 Firmicutes,Clostridia,Clostridiales,Lachnospiraceae,Lachnoclostridium,scindens,Aerotolerant,,,fermenter,carbohydrates,1463
-Proteobacteria,Epsilonproteobacteria,Campylobacterales,Helicobacteraceae,Helicobacter,canadensis,Microaerophile,,,mixed,carbohydrates,1464
+Campylobacterota,Epsilonproteobacteria,Campylobacterales,Helicobacteraceae,Helicobacter,canadensis,Microaerophile,,,mixed,carbohydrates,1464
 Firmicutes,Clostridia,Clostridiales,Lachnospiraceae,Lachnoclostridium,symbiosum,Anaerobe,,,fermenter,carbohydrates,1465
-Proteobacteria,Epsilonproteobacteria,Campylobacterales,Helicobacteraceae,Helicobacter,cinaedi,Microaerophile,,,mixed,carbohydrates,1466
+Campylobacterota,Epsilonproteobacteria,Campylobacterales,Helicobacteraceae,Helicobacter,cinaedi,Microaerophile,,,mixed,carbohydrates,1466
 Firmicutes,Clostridia,Clostridiales,Lachnospiraceae,Lachnospira,eligens,Anaerobe,,,fermenter,N/A,1467
 Bacillota,Clostridia,Lachnospirales,Lachnospiraceae,Lachnospira,hominis,Anaerobic,,,N/A,carbohydrates,1468
 Bacillota,Clostridia,Lachnospirales,Lachnospiraceae,Lachnospira,intestinalis,Anaerobic,,,N/A,carbohydrates,1469
-Proteobacteria,Epsilonproteobacteria,Campylobacterales,Helicobacteraceae,Helicobacter,fennelliae,,,,N/A,N/A,1470
+Campylobacterota,Epsilonproteobacteria,Campylobacterales,Helicobacteraceae,Helicobacter,fennelliae,,,,N/A,N/A,1470
 Firmicutes,Clostridia,Clostridiales,Lachnospiraceae,Lachnospira,multipara,Anaerobe,,,fermenter,carbohydrates,1471
-Proteobacteria,Epsilonproteobacteria,Campylobacterales,Helicobacteraceae,Helicobacter,winghamensis,Microaerophile,,,mixed,carbohydrates,1472
+Campylobacterota,Epsilonproteobacteria,Campylobacterales,Helicobacteraceae,Helicobacter,winghamensis,Microaerophile,,,mixed,carbohydrates,1472
 Bacillota,Clostridia,Lachnospirales,Lachnospiraceae,Lachnospira,rogosae,Anaerobic,,,N/A,carbohydrates,1473
 Proteobacteria,Betaproteobacteria,Burkholderiales,Oxalobacteraceae,Herbaspirillum,,,,,N/A,N/A,1474
 Ascomycota,Leotiomycetes,Helotiales,Lachnaceae,Lachnum,palmae,,,,N/A,N/A,1475
@@ -1431,35 +1431,35 @@ Firmicutes,Clostridia,Clostridiales,Lachnospiraceae,Butyrivibrio,proteoclasticus
 Ascomycota,Sordariomycetes,Trichosphaeriales,Trichosphaeriaceae,Nigrospora,oryzae,Aerobe,,Sporulating,fermenter,complex_carbs_fiber,1694
 Firmicutes,Clostridia,Thermoanaerobacterales,Thermoanaerobacterales Family III. Incertae Sedis,Caldicellulosiruptor,bescii,Anaerobe,,,fermenter,complex_carbs_fiber,1695
 Ascomycota,Sordariomycetes,Trichosphaeriales,Trichosphaeriaceae,Nigrospora,sphaerica,,,,N/A,N/A,1696
-Proteobacteria,Epsilonproteobacteria,Nautiliales,Nautiliaceae,Caminibacter,mediatlanticus,,,,N/A,N/A,1697
+Campylobacterota,Epsilonproteobacteria,Nautiliales,Nautiliaceae,Caminibacter,mediatlanticus,,,,N/A,N/A,1697
 Proteobacteria,Alphaproteobacteria,Rhizobiales,Bradyrhizobiaceae,Nitrobacter,hamburgensis,,,,N/A,N/A,1698
-Proteobacteria,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,coli,Microaerophile,,,mixed,carbohydrates,1699
+Campylobacterota,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,coli,Microaerophile,,,mixed,carbohydrates,1699
 Proteobacteria,Alphaproteobacteria,Rhizobiales,Bradyrhizobiaceae,Nitrobacter,winogradskyi,Aerobe; anaerobe,,,fermenter,inorganic,1700
-Proteobacteria,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,concisus,Microaerophilic,,Chains - Singles,N/A,N/A,1701
+Campylobacterota,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,concisus,Microaerophilic,,Chains - Singles,N/A,N/A,1701
 Proteobacteria,Gammaproteobacteria,Chromatiales,Ectothiorhodospiraceae,Nitrococcus,mobilis,,,,N/A,N/A,1702
-Proteobacteria,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,curvus,Microaerophilic,,Chains - Singles,N/A,N/A,1703
+Campylobacterota,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,curvus,Microaerophilic,,Chains - Singles,N/A,N/A,1703
 Proteobacteria,Gammaproteobacteria,Chromatiales,Chromatiaceae,Nitrosococcus,halophilus,,,,N/A,N/A,1704
-Proteobacteria,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,fetus,Microaerophilic,,Chains - Singles,mixed,carbohydrates,1705
+Campylobacterota,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,fetus,Microaerophilic,,Chains - Singles,mixed,carbohydrates,1705
 Proteobacteria,Gammaproteobacteria,Chromatiales,Chromatiaceae,Nitrosococcus,oceani,Aerobe,,,respirer,inorganic,1706
-Proteobacteria,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,gracilis,Aerobe,,,respirer,N/A,1707
+Campylobacterota,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,gracilis,Aerobe,,,respirer,N/A,1707
 Proteobacteria,Betaproteobacteria,Nitrosomonadales,Nitrosomonadaceae,Nitrosomonas,europaea,Aerobe,,,respirer,N/A,1708
-Proteobacteria,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,hominis,Anaerobe,,Chains - Singles,fermenter,N/A,1709
+Campylobacterota,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,hominis,Anaerobe,,Chains - Singles,fermenter,N/A,1709
 Proteobacteria,Betaproteobacteria,Nitrosomonadales,Nitrosomonadaceae,Nitrosomonas,eutropha,Aerobe,,,respirer,inorganic,1710
-Proteobacteria,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,hyointestinalis,Microaerophile,,,mixed,carbohydrates,1711
+Campylobacterota,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,hyointestinalis,Microaerophile,,,mixed,carbohydrates,1711
 Thaumarchaeota,Nitrososphaeria,Nitrososphaerales,Nitrososphaeraceae,Nitrososphaera,nitrososphaera gargensis,Aerobe,,,respirer,N/A,1712
-Proteobacteria,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,jejuni,Microaerophile,,Chains - Singles,mixed,carbohydrates,1713
+Campylobacterota,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,jejuni,Microaerophile,,Chains - Singles,mixed,carbohydrates,1713
 Proteobacteria,Betaproteobacteria,Nitrosomonadales,Nitrosomonadaceae,Nitrosospira,multiformis,Aerobe,,,respirer,inorganic,1714
-Proteobacteria,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,lari,Microaerophilic,,Chains - Singles,N/A,N/A,1715
+Campylobacterota,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,lari,Microaerophilic,,Chains - Singles,N/A,N/A,1715
 Actinobacteria,Actinobacteria,Corynebacteriales,Nocardiaceae,Nocardia,asteroides,,,,N/A,N/A,1716
-Proteobacteria,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,rectus,Microaerophile,,,mixed,carbohydrates,1717
+Campylobacterota,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,rectus,Microaerophile,,,mixed,carbohydrates,1717
 Actinobacteria,Actinobacteria,Corynebacteriales,Nocardiaceae,Nocardia,brasiliensis,,,,N/A,N/A,1718
-Proteobacteria,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,showae,Aerobe,,,respirer,N/A,1719
+Campylobacterota,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,showae,Aerobe,,,respirer,N/A,1719
 Actinobacteria,Actinobacteria,Streptosporangiales,Nocardiopsaceae,Nocardiopsis,,,,,N/A,N/A,1720
 Actinobacteria,Actinobacteria,Streptosporangiales,Streptosporangiaceae,Nonomuraea,rubra,,,,N/A,N/A,1721
 Actinobacteria,Actinobacteria,Streptosporangiales,Streptosporangiaceae,Nonomuraea,,,,,N/A,N/A,1722
 Basidiomycota,Agaricomycetes,Polyporales,Gelatoporiaceae,Obba,rivulosa,Aerobe,,Sporulating (basidiospores)/reproduction by budding,fermenter,complex_carbs_fiber,1723
-Proteobacteria,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,sputorum,,,,N/A,N/A,1724
-Proteobacteria,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,upsaliensis,Microaerophile,,,mixed,carbohydrates,1725
+Campylobacterota,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,sputorum,,,,N/A,N/A,1724
+Campylobacterota,Epsilonproteobacteria,Campylobacterales,Campylobacteraceae,Campylobacter,upsaliensis,Microaerophile,,,mixed,carbohydrates,1725
 Firmicutes,Bacilli,Bacillales,Bacillaceae,Oceanobacillus,picturae,,,,N/A,N/A,1726
 Ascomycota,Saccharomycetes,Saccharomycetales,Debaryomycetaceae,Candida,albicans,Facultative anaerobe,,Sporulating (ascospores)/reproduction by budding,mixed,organic_unspecified,1727
 Ascomycota,Saccharomycetes,Saccharomycetales,Debaryomycetaceae,Candida,dubliniensis,Aerobe,,Sporulating (chlamydospores)/reproduction by budding,fermenter,organic_unspecified,1728
@@ -1906,7 +1906,7 @@ Crenarchaeota,Thermoprotei,Sulfolobales,Sulfolobaceae,Sulfolobus,acidocaldarius,
 Ascomycota,Sordariomycetes,Glomerellales,Plectosphaerellaceae,Verticillium,dahliae,Aerobic,,Sporulating (ascospores); reproduction also by budding,fermenter,complex_carbs_fiber,2169
 Crenarchaeota,Thermoprotei,Sulfolobales,Sulfolobaceae,Sulfolobus,solfataricus,Aerobe,,Singles,respirer,inorganic,2170
 Proteobacteria,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,fischeri,Facultative anaerobe,,,mixed,carbohydrates,2171
-Proteobacteria,Epsilonproteobacteria,Campylobacterales,Thiovulaceae,Sulfurimonas,denitrificans,Anaerobe,,Singles,fermenter,N/A,2172
+Campylobacterota,Epsilonproteobacteria,Campylobacterales,Sulfurimonadaceae,Sulfurimonas,denitrificans,Anaerobe,,Singles,fermenter,N/A,2172
 Proteobacteria,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,fluvialis,Aerobe,,,respirer,N/A,2173
 Proteobacteria,Betaproteobacteria,Burkholderiales,Sutterellaceae,Sutterella,parvirubra,Facultative anaerobe,,,mixed,N/A,2174
 Proteobacteria,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,furnissii,Facultative anaerobe,,,mixed,carbohydrates,2175

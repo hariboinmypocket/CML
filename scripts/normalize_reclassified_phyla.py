@@ -47,6 +47,13 @@ AUDIT = Path("data/phylum_reclassification_audit.csv")
 APPROVED = {
     ("Proteobacteria", "Thermodesulfobacteriota"),
     ("Thermodesulfobacteria", "Thermodesulfobacteriota"),
+    # Campylobacterota, the former Epsilonproteobacteria, split out of
+    # Proteobacteria. Helicobacter and Campylobacter were spread across both
+    # names, which splits the lineage carrying this database's gastric cancer
+    # evidence. NCBI still files the class as Epsilonproteobacteria under the
+    # new phylum, so only the phylum moves -- renaming the class to
+    # Campylobacteria would diverge from the dump.
+    ("Proteobacteria", "Campylobacterota"),
 }
 
 
