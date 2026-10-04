@@ -1,0 +1,809 @@
+id,organism,matched_on,ncbi_tax_id,action,column,before,after
+1,Clostridium Aminophilum,clostridium aminophilum,1526,reported_only,Order Family,Eubacteriales | Clostridiaceae,Lachnospirales | Lachnospiraceae
+18,Treponema,treponema,157,reported_only,Order,Spirochaetales,Treponematales
+40,Ruminococcus Torques,ruminococcus torques,33039,reported_only,Order Family,Eubacteriales | Oscillospiraceae,Lachnospirales | Lachnospiraceae
+41,Ruminococcus Gnavus,ruminococcus gnavus,33038,reported_only,Order Family,Eubacteriales | Oscillospiraceae,Lachnospirales | Lachnospiraceae
+45,Bacillus Muralis,bacillus muralis,264697,rewritten,Phylum Class Order Family,Phylum=Arthropoda | Class=Insecta | Order=Phasmatodea | Family=Bacillidae,Phylum=Firmicutes | Class=Bacilli | Order=Caryophanales | Family=Bacillaceae
+61,Methanocorpusculum,methanocorpusculum,2192,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+76,Victoria Amazonica,victoria amazonica,85961,rewritten,Phylum Class Order Family,Phylum=Arthropoda | Class=Insecta | Order=Lepidoptera | Family=Geometridae,Phylum=Streptophyta | Class=Magnoliopsida | Order=Nymphaeales | Family=Nymphaeaceae
+114,Methanobrevibacter,methanobrevibacter,2172,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+143,Bacillus Asahii,bacillus asahii,228899,rewritten,Phylum Class Order Family,Phylum=Arthropoda | Class=Insecta | Order=Phasmatodea | Family=Bacillidae,Phylum=Firmicutes | Class=Bacilli | Order=Caryophanales | Family=Bacillaceae
+153,Methanobacterium Bryantii,methanobacterium bryantii,2161,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+178,Brevibacillus Laterosporus,brevibacillus laterosporus,1465,reported_only,Order,Bacillales,Caryophanales
+206,Serratia Marcescens,serratia marcescens,615,rewritten,Phylum Class Order Family,Phylum=Arthropoda | Class=Insecta | Order=Coleoptera | Family=Lampyridae,Phylum=Proteobacteria | Class=Gammaproteobacteria | Order=Enterobacterales | Family=Yersiniaceae
+237,Alicyclobacillus Pomorum,alicyclobacillus pomorum,204470,reported_only,Order,Bacillales,Caryophanales
+244,Alicyclobacillus Cycloheptanicus,alicyclobacillus cycloheptanicus,1457,reported_only,Order,Bacillales,Caryophanales
+257,Gemella,gemella,1378,reported_only,Order,Bacillales,Caryophanales
+258,Clostridium Methylpentosum,clostridium methylpentosum,84026,reported_only,Family,Clostridiaceae,Oscillospiraceae
+273,Erwinia Chrysanthemi,erwinia chrysanthemi,556,reported_only,Family,Erwiniaceae,Pectobacteriaceae
+274,Exiguobacterium,exiguobacterium,33986,reported_only,Order,Bacillales,Caryophanales
+283,Paenibacillus Stellifer,paenibacillus stellifer,169760,reported_only,Order,Bacillales,Caryophanales
+306,Clostridium Colinum,clostridium colinum,36835,reported_only,Order Family,Eubacteriales | Clostridiaceae,Lachnospirales | Lachnospiraceae
+315,Rothia Mucilaginosa,rothia mucilaginosa,43675,rewritten,Phylum Class Order Family,Phylum=Streptophyta | Class=Magnoliopsida | Order=Fabales | Family=Fabaceae,Phylum=Actinobacteria | Class=Actinomycetes | Order=Micrococcales | Family=Micrococcaceae
+324,Rummeliibacillus,rummeliibacillus,648802,reported_only,Order Family,Bacillales | Planococcaceae,Caryophanales | Caryophanaceae
+326,Staphylococcus Aureus,staphylococcus aureus,1280,reported_only,Order,Bacillales,Caryophanales
+347,Salinicoccus,salinicoccus,45669,reported_only,Order,Bacillales,Caryophanales
+353,Brochothrix,brochothrix,2755,reported_only,Order,Bacillales,Caryophanales
+355,Caldicoprobacter,caldicoprobacter,715222,reported_only,Order,Eubacteriales,Caldicoprobacterales
+356,Clostridium Bifermentans,clostridium bifermentans,1490,reported_only,Order Family,Eubacteriales | Clostridiaceae,Peptostreptococcales | Peptostreptococcaceae
+364,Bacillus Ginsengihumi,bacillus,1386,rewritten,Phylum Class Order Family,Phylum=Arthropoda | Class=Insecta | Order=Phasmatodea | Family=Bacillidae,Phylum=Firmicutes | Class=Bacilli | Order=Caryophanales | Family=Bacillaceae
+368,Clostridium Hiranonis,clostridium hiranonis,89152,reported_only,Order Family,Eubacteriales | Clostridiaceae,Peptostreptococcales | Peptostreptococcaceae
+372,Rothia Dentocariosa,rothia dentocariosa,2047,rewritten,Phylum Class Order Family,Phylum=Streptophyta | Class=Magnoliopsida | Order=Fabales | Family=Fabaceae,Phylum=Actinobacteria | Class=Actinomycetes | Order=Micrococcales | Family=Micrococcaceae
+388,Staphylococcus Epidermidis,staphylococcus epidermidis,1282,reported_only,Order,Bacillales,Caryophanales
+395,Lysinibacillus Boronitolerans,lysinibacillus boronitolerans,309788,reported_only,Order,Bacillales,Caryophanales
+402,Staphylococcus Succinus,staphylococcus succinus,61015,reported_only,Order,Bacillales,Caryophanales
+407,Planomicrobium,planomicrobium,162291,reported_only,Order Family,Bacillales | Planococcaceae,Caryophanales | Caryophanaceae
+417,Pontibacillus,pontibacillus,289201,reported_only,Order,Bacillales,Caryophanales
+437,Clostridium Citroniae,clostridium citroniae,358743,reported_only,Order Family,Eubacteriales | Clostridiaceae,Lachnospirales | Lachnospiraceae
+438,Bacillus Cereus,bacillus cereus,1396,rewritten,Phylum Class Order Family,Phylum=Arthropoda | Class=Insecta | Order=Phasmatodea | Family=Bacillidae,Phylum=Firmicutes | Class=Bacilli | Order=Caryophanales | Family=Bacillaceae
+453,Bacillus Foraminis,bacillus foraminis,279826,rewritten,Phylum Class Order Family,Phylum=Arthropoda | Class=Insecta | Order=Phasmatodea | Family=Bacillidae,Phylum=Firmicutes | Class=Bacilli | Order=Caryophanales | Family=Bacillaceae
+454,Clostridium Hungatei,clostridium hungatei,48256,reported_only,Family,Clostridiaceae,Oscillospiraceae
+458,Thermobacillus Composti,thermobacillus composti,377615,reported_only,Order,Bacillales,Caryophanales
+460,Shimazuella,shimazuella,471798,reported_only,Order,Bacillales,Caryophanales
+463,Macrococcus Caseolyticus,macrococcus caseolyticus,69966,reported_only,Order,Bacillales,Caryophanales
+471,Brevibacillus Reuszeri,brevibacillus reuszeri,54915,reported_only,Order,Bacillales,Caryophanales
+483,Ureibacillus,ureibacillus,160795,reported_only,Order Family,Bacillales | Planococcaceae,Caryophanales | Caryophanaceae
+486,Clostridium Piliforme,clostridium piliforme,1524,reported_only,Order Family,Eubacteriales | Clostridiaceae,Lachnospirales | Lachnospiraceae
+504,Serratia Symbiotica,serratia symbiotica,138074,rewritten,Phylum Class Order Family,Phylum=Arthropoda | Class=Insecta | Order=Coleoptera | Family=Lampyridae,Phylum=Proteobacteria | Class=Gammaproteobacteria | Order=Enterobacterales | Family=Yersiniaceae
+510,Enhydrobacter,enhydrobacter,212791,reported_only,Class Order,Gammaproteobacteria | Moraxellales,Alphaproteobacteria | Hyphomicrobiales
+514,Yersinia,yersinia,629,rewritten,Phylum Class Order Family,Phylum=Arthropoda | Class=Insecta | Order=Mantodea | Family=Amelidae,Phylum=Proteobacteria | Class=Gammaproteobacteria | Order=Enterobacterales | Family=Yersiniaceae
+541,Pelomonas,pelomonas,93681,reported_only,Family,Comamonadaceae,Sphaerotilaceae
+544,Thermobaculum Terrenum,thermobaculum terrenum,166501,reported_only,Class Order Family,Thermobacula | Thermobaculales | Thermobaculaceae,Chloroflexia | Thermobaculales (SeqCode) | Thermobaculaceae (SeqCode)
+552,Sporolactobacillus,sporolactobacillus,2077,reported_only,Order,Bacillales,Caryophanales
+559,Proteus,proteus,583,rewritten,Phylum Class Order Family,Phylum=Chordata | Class=Amphibia | Order=Caudata | Family=Proteidae,Phylum=Proteobacteria | Class=Gammaproteobacteria | Order=Enterobacterales | Family=Morganellaceae
+575,Buchnera,buchnera,32199,rewritten,Phylum Class Order Family,Phylum=Streptophyta | Class=Magnoliopsida | Order=Lamiales | Family=Orobanchaceae,Phylum=Proteobacteria | Class=Gammaproteobacteria | Order=Enterobacterales | Family=Erwiniaceae
+577,Desulfococcus Oleovorans,desulfococcus oleovorans,181663,reported_only,Family,Desulfococcaceae,Desulfosudaceae
+583,Aneurinibacillus,aneurinibacillus,55079,reported_only,Order,Bacillales,Caryophanales
+584,Lawsonia,lawsonia,41707,rewritten,Phylum Class Order Family,Phylum=Arthropoda | Class=Insecta | Order=Coleoptera | Family=Anthribidae,Phylum=Thermodesulfobacteriota | Class=Desulfovibrionia | Order=Desulfovibrionales | Family=Desulfovibrionaceae
+595,Mariprofundus,mariprofundus,377315,reported_only,Class,Zetaproteobacteria,Candidatius Mariprofundia
+609,Mitsuaria Chitosanitabida,mitsuaria,93681,reported_only,Family,Comamonadaceae,Sphaerotilaceae
+635,Clostridium Fimetarium,clostridium fimetarium,99656,reported_only,Order Family,Eubacteriales | Clostridiaceae,Lachnospirales | Lachnospiraceae
+637,Fusibacter,fusibacter,76008,reported_only,Family,Eubacteriales Family XII. Incertae Sedis,Fusibacteraceae
+647,Schwartzia,schwartzia,55506,rewritten,Phylum Class Order Family,Phylum=Streptophyta | Class=Magnoliopsida | Order=Ericales | Family=Marcgraviaceae,Phylum=Firmicutes | Class=Negativicutes | Order=Selenomonadales | Family=Selenomonadaceae
+653,Clostridium Cocleatum,clostridium cocleatum,69824,reported_only,Class Order Family,Clostridia | Eubacteriales | Clostridiaceae,Erysipelotrichia | Erysipelotrichales | Coprobacillaceae
+659,Bacillus Humi,bacillus humi,263474,rewritten,Phylum Class Order Family,Phylum=Arthropoda | Class=Insecta | Order=Phasmatodea | Family=Bacillidae,Phylum=Firmicutes | Class=Bacilli | Order=Caryophanales | Family=Bacillaceae
+665,Petrobacter Succinatimandens,petrobacter succinatimandens,224436,reported_only,Class Order Family,Betaproteobacteria | Rhodocyclales | Rhodocyclaceae,Hydrogenophilia | Hydrogenophilales | Hydrogenophilaceae
+666,Aquabacterium,aquabacterium,92793,reported_only,Family,Comamonadaceae,Sphaerotilaceae
+670,Gordonia,gordonia,2053,rewritten,Phylum Class Order Family,Phylum=Streptophyta | Class=Magnoliopsida | Order=Ericales | Family=Theaceae,Phylum=Actinobacteria | Class=Actinomycetes | Order=Mycobacteriales | Family=Gordoniaceae
+671,Swaminathania,swaminathania,209260,reported_only,Order,Rhodospirillales,Acetobacterales
+688,Oceanobacillus Oncorhynchi,oceanobacillus oncorhynchi,545501,reported_only,Order,Bacillales,Caryophanales
+689,Sphingobium,sphingobium,165695,reported_only,Family,Sphingomonadaceae,Sphingobiaceae
+695,Clostridium Saccharogumia,clostridium saccharogumia,341225,reported_only,Class Order Family,Clostridia | Eubacteriales | Clostridiaceae,Erysipelotrichia | Erysipelotrichales | Coprobacillaceae
+712,Solibacillus,solibacillus,648800,reported_only,Order Family,Bacillales | Planococcaceae,Caryophanales | Caryophanaceae
+715,Methanothermobacter Thermautotrophicus,methanothermobacter thermautotrophicus,145262,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+729,Bacillus Firmus,bacillus firmus,1399,rewritten,Phylum Class Order Family,Phylum=Arthropoda | Class=Insecta | Order=Phasmatodea | Family=Bacillidae,Phylum=Firmicutes | Class=Bacilli | Order=Caryophanales | Family=Bacillaceae
+733,Bacillus Horti,bacillus horti,77523,rewritten,Phylum Class Order Family,Phylum=Arthropoda | Class=Insecta | Order=Phasmatodea | Family=Bacillidae,Phylum=Firmicutes | Class=Bacilli | Order=Caryophanales | Family=Bacillaceae
+750,Gluconacetobacter Liquefaciens,gluconacetobacter liquefaciens,89584,reported_only,Order,Rhodospirillales,Acetobacterales
+765,Bacillus Selenatarsenatis,bacillus selenatarsenatis,388741,rewritten,Phylum Class Order Family,Phylum=Arthropoda | Class=Insecta | Order=Phasmatodea | Family=Bacillidae,Phylum=Firmicutes | Class=Bacilli | Order=Caryophanales | Family=Bacillaceae
+766,Paracoccus Marcusii,paracoccus marcusii,59779,rewritten,Phylum Class Order Family,Phylum=Arthropoda | Class=Insecta | Order=Hemiptera | Family=Pseudococcidae,Phylum=Proteobacteria | Class=Alphaproteobacteria | Order=Rhodobacterales | Family=Paracoccaceae
+767,Bacillus Flexus,bacillus flexus,86664,rewritten,Phylum Class Order Family,Phylum=Arthropoda | Class=Insecta | Order=Phasmatodea | Family=Bacillidae,Phylum=Firmicutes | Class=Bacilli | Order=Caryophanales | Family=Bacillaceae
+777,Bacillus Coagulans,bacillus coagulans,1398,rewritten,Phylum Class Order Family,Phylum=Arthropoda | Class=Insecta | Order=Phasmatodea | Family=Bacillidae,Phylum=Firmicutes | Class=Bacilli | Order=Caryophanales | Family=Bacillaceae
+787,Ornithinibacillus Scapharcae,ornithinibacillus scapharcae,1147159,reported_only,Order,Bacillales,Caryophanales
+793,Bacillus Aurantiacus,bacillus aurantiacus,254410,rewritten,Phylum Class Order Family,Phylum=Arthropoda | Class=Insecta | Order=Phasmatodea | Family=Bacillidae,Phylum=Firmicutes | Class=Bacilli | Order=Caryophanales | Family=Bacillaceae
+796,Syntrophus,syntrophus,43773,rewritten,Phylum Class Order Family,Phylum=Arthropoda | Class=Insecta | Order=Coleoptera | Family=Curculionidae,Phylum=Thermodesulfobacteriota | Class=Syntrophia | Order=Syntrophales | Family=Syntrophaceae
+799,Thermoflavimicrobium Dichotomicum,thermoflavimicrobium dichotomicum,46223,reported_only,Order,Bacillales,Caryophanales
+816,Edwardsiella,edwardsiella,635,rewritten,Phylum Class Order Family,Phylum=Cnidaria | Class=Anthozoa | Order=Actiniaria | Family=Edwardsiidae,Phylum=Proteobacteria | Class=Gammaproteobacteria | Order=Enterobacterales | Family=Hafniaceae
+832,Morganella Morganii,morganella morganii,582,rewritten,Phylum Class Order Family,Phylum=Arthropoda | Class=Insecta | Order=Hemiptera | Family=Diaspididae,Phylum=Proteobacteria | Class=Gammaproteobacteria | Order=Enterobacterales | Family=Morganellaceae
+858,Ammoniphilus,ammoniphilus,66862,reported_only,Order,Bacillales,Caryophanales
+867,Rhodoplanes,rhodoplanes,29407,reported_only,Family,Hyphomicrobiaceae,Nitrobacteraceae
+891,Clostridium Sticklandii,clostridium sticklandii,1511,reported_only,Order Family,Eubacteriales | Clostridiaceae,Peptostreptococcales | Filifactoraceae
+892,Bacillus Coahuilensis,bacillus coahuilensis,408580,rewritten,Phylum Class Order Family,Phylum=Arthropoda | Class=Insecta | Order=Phasmatodea | Family=Bacillidae,Phylum=Firmicutes | Class=Bacilli | Order=Caryophanales | Family=Bacillaceae
+893,Agathobaculum desmolans,agathobaculum desmolans,39484,reported_only,Order Family,Clostridiales | Ruminococcaceae,Eubacteriales | Butyricicoccaceae
+896,Sporosarcina,sporosarcina,1569,reported_only,Order Family,Bacillales | Planococcaceae,Caryophanales | Caryophanaceae
+899,Methanosaeta,methanosaeta,2222,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+900,Agrobacterium tumefaciens,agrobacterium tumefaciens,358,reported_only,Order,Rhizobiales,Hyphomicrobiales
+911,Serratia Ureilytica,serratia ureilytica,300181,rewritten,Phylum Class Order Family,Phylum=Arthropoda | Class=Insecta | Order=Coleoptera | Family=Lampyridae,Phylum=Proteobacteria | Class=Gammaproteobacteria | Order=Enterobacterales | Family=Yersiniaceae
+917,Alkalihalobacillus clausii,alkalihalobacillus clausii,79880,reported_only,Order,Bacillales,Caryophanales
+918,Alkalihalobacillus halodurans,alkalihalobacillus halodurans,86665,reported_only,Order,Bacillales,Caryophanales
+919,Alkalihalobacillus pseudofirmus,alkalihalobacillus pseudofirmus,79885,reported_only,Order,Bacillales,Caryophanales
+932,Aminobacterium colombiense,aminobacterium colombiense,81468,reported_only,Family,Synergistaceae,Aminobacteriaceae
+933,Amycolatopsis balhimycina,amycolatopsis balhimycina,208443,reported_only,Class,Actinobacteria,Actinomycetes
+934,Amycolatopsis sp. aa4,amycolatopsis sp. aa4,1896961,reported_only,Class,Actinobacteria,Actinomycetes
+936,Anaerobaculum hydrogeniformans,anaerobaculum hydrogeniformans,649746,reported_only,Family,Synergistaceae,Acetomicrobiaceae
+938,Anaerobutyricum hallii,anaerobutyricum hallii,39488,reported_only,Order,Clostridiales,Lachnospirales
+939,Anaerobutyricum soehngenii,anaerobutyricum soehngenii,105843,reported_only,Order,Clostridiales,Lachnospirales
+942,Anaerococcus prevotii,anaerococcus prevotii,33034,reported_only,Class Order Family,Clostridia | Clostridiales | Clostridiales Family XI. Incertae Sedis,Tissierellia | Tissierellales | Peptoniphilaceae
+945,Anaerofustis stercorihominis,anaerofustis stercorihominis,214853,reported_only,Order,Clostridiales,Eubacteriales
+946,Anaerostipes caccae,anaerostipes caccae,105841,reported_only,Order,Clostridiales,Lachnospirales
+947,Anaerostipes hadrus,anaerostipes hadrus,649756,reported_only,Order,Clostridiales,Lachnospirales
+948,Anaerotruncus colihominis,anaerotruncus colihominis,169435,reported_only,Order Family,Clostridiales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+949,Aneurinibacillus aneurinilyticus,aneurinibacillus aneurinilyticus,1391,reported_only,Order,Bacillales,Caryophanales
+954,Aplanochytrium kerguelense,aplanochytrium kerguelense,87111,reported_only,Family,Thraustochytriaceae,Thraustochytriidae
+955,Aquifex aeolicus,aquifex aeolicus,63363,reported_only,Class,Aquificae,Aquificia
+956,Arachnia propionica,arachnia propionica,1750,reported_only,Class,Actinobacteria,Actinomycetes
+957,Arcanobacterium haemolyticum,arcanobacterium haemolyticum,28264,reported_only,Class,Actinobacteria,Actinomycetes
+958,Arcanobacterium pyogenes,arcanobacterium,28263,reported_only,Class,Actinobacteria,Actinomycetes
+959,Archaeoglobus fulgidus,archaeoglobus fulgidus,2234,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+960,Arcobacter butzleri,arcobacter butzleri,28197,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Campylobacterota (bacteria)
+962,Arthrobacter globiformis,arthrobacter globiformis,1665,reported_only,Class,Actinobacteria,Actinomycetes
+963,Arthrobacter,arthrobacter,1663,reported_only,Class,Actinobacteria,Actinomycetes
+966,Ascoidea rubescens,ascoidea rubescens,54195,reported_only,Order,Saccharomycetales,Ascoideales
+998,Atopobium parvulum,atopobium parvulum,1382,reported_only,Class Family,Actinobacteria | Coriobacteriaceae,Coriobacteriia | Atopobiaceae
+1002,Azorhizobium caulinodans,azorhizobium caulinodans,7,reported_only,Order,Rhizobiales,Hyphomicrobiales
+1005,Babjeviella inositovora,babjeviella inositovora,45609,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Serinales
+1006,Bacillus altitudinis,bacillus altitudinis,293387,reported_only,Order,Bacillales,Caryophanales
+1007,Bacillus amyloliquefaciens,bacillus amyloliquefaciens,1390,reported_only,Order,Bacillales,Caryophanales
+1008,Bacillus anthracis,bacillus anthracis,1392,reported_only,Order,Bacillales,Caryophanales
+1009,Bacillus atrophaeus,bacillus atrophaeus,1452,reported_only,Order,Bacillales,Caryophanales
+1010,Bacillus cellulosilyticus,bacillus cellulosilyticus,1413,reported_only,Order,Bacillales,Caryophanales
+1011,Bacillus circulans,bacillus,1386,reported_only,Order,Bacillales,Caryophanales
+1012,Bacillus clausii,bacillus clausii,79880,reported_only,Order,Bacillales,Caryophanales
+1013,Bacillus cytotoxicus,bacillus cytotoxicus,580165,reported_only,Order,Bacillales,Caryophanales
+1014,Bacillus endophyticus,bacillus endophyticus,135735,reported_only,Order,Bacillales,Caryophanales
+1015,Bacillus fordii,bacillus fordii,254759,reported_only,Order,Bacillales,Caryophanales
+1016,Bacillus halodurans,bacillus,1386,reported_only,Order,Bacillales,Caryophanales
+1017,Bacillus infantis,bacillus infantis,324767,reported_only,Order,Bacillales,Caryophanales
+1018,Bacillus licheniformis,bacillus licheniformis,1402,reported_only,Order,Bacillales,Caryophanales
+1019,Bacillus megaterium,bacillus megaterium,1404,reported_only,Order,Bacillales,Caryophanales
+1020,Bacillus mojavensis,bacillus mojavensis,72360,reported_only,Order,Bacillales,Caryophanales
+1021,Bacillus mycoides,bacillus mycoides,1405,reported_only,Order,Bacillales,Caryophanales
+1022,Bacillus nealsonii,bacillus nealsonii,115979,reported_only,Order,Bacillales,Caryophanales
+1023,Bacillus pseudofirmus,bacillus pseudofirmus,79885,reported_only,Order,Bacillales,Caryophanales
+1024,Bacillus pseudomycoides,bacillus pseudomycoides,64104,reported_only,Order,Bacillales,Caryophanales
+1025,Bacillus pumilus,bacillus pumilus,1408,reported_only,Order,Bacillales,Caryophanales
+1026,Bacillus sonorensis,bacillus sonorensis,119858,reported_only,Order,Bacillales,Caryophanales
+1027,Bacillus subtilis,bacillus subtilis,1423,reported_only,Order,Bacillales,Caryophanales
+1028,Bacillus thermoamylovorans,bacillus thermoamylovorans,35841,reported_only,Order,Bacillales,Caryophanales
+1029,Bacillus thuringiensis,bacillus thuringiensis,1428,reported_only,Order,Bacillales,Caryophanales
+1030,Bacillus timonensis,bacillus timonensis,1033734,reported_only,Order,Bacillales,Caryophanales
+1031,Bacillus vallismortis,bacillus vallismortis,72361,reported_only,Order,Bacillales,Caryophanales
+1032,Bacillus vulcani,bacillus vulcani,135517,reported_only,Order Family,Bacillales | Bacillaceae,Caryophanales | Anoxybacillaceae
+1033,Bacillus,bacillus,1386,reported_only,Order,Bacillales,Caryophanales
+1053,Bacteroides sp. 2_1_7,bacteroides sp. 2_1_7,457388,reported_only,Family,Bacteroidaceae,Tannerellaceae
+1073,Bartonella henselae,bartonella henselae,38323,reported_only,Order,Rhizobiales,Hyphomicrobiales
+1074,Bartonella quintana,bartonella quintana,803,reported_only,Order,Rhizobiales,Hyphomicrobiales
+1076,Beijerinckia indica,beijerinckia indica,533,reported_only,Order,Rhizobiales,Hyphomicrobiales
+1078,Bifidobacterium angulatum,bifidobacterium angulatum,1683,reported_only,Class,Actinobacteria,Actinomycetes
+1079,Bifidobacterium animalis,bifidobacterium animalis,28025,reported_only,Class,Actinobacteria,Actinomycetes
+1080,Bifidobacterium boum,bifidobacterium boum,78343,reported_only,Class,Actinobacteria,Actinomycetes
+1081,Bifidobacterium catenulatum,bifidobacterium catenulatum,1686,reported_only,Class,Actinobacteria,Actinomycetes
+1082,Bifidobacterium coryneforme,bifidobacterium coryneforme,1687,reported_only,Class,Actinobacteria,Actinomycetes
+1083,Bifidobacterium dentium,bifidobacterium dentium,1689,reported_only,Class,Actinobacteria,Actinomycetes
+1084,Bifidobacterium gallicum,bifidobacterium gallicum,78342,reported_only,Class,Actinobacteria,Actinomycetes
+1085,Bifidobacterium hominis,bifidobacterium hominis,3133177,reported_only,Class,Actinobacteria,Actinomycetes
+1086,Bifidobacterium mongoliense,bifidobacterium mongoliense,518643,reported_only,Class,Actinobacteria,Actinomycetes
+1087,Bifidobacterium pseudocatenulatum,bifidobacterium pseudocatenulatum,28026,reported_only,Class,Actinobacteria,Actinomycetes
+1088,Bifidobacterium ruminantium,bifidobacterium ruminantium,78346,reported_only,Class,Actinobacteria,Actinomycetes
+1089,Bifidobacterium scardovii,bifidobacterium scardovii,158787,reported_only,Class,Actinobacteria,Actinomycetes
+1090,Bifidobacterium thermacidophilum,bifidobacterium thermacidophilum,246618,reported_only,Class,Actinobacteria,Actinomycetes
+1091,Bifidobacterium thermophilum,bifidobacterium thermophilum,33905,reported_only,Class,Actinobacteria,Actinomycetes
+1092,Bilophila wadsworthia,bilophila wadsworthia,35833,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Thermodesulfobacteriota (bacteria)
+1098,Blastobotrys adeninivorans,blastobotrys adeninivorans,409370,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Dipodascomycetes | Dipodascales
+1099,Blastococcus blastococcus massiliensis,blastococcus,38501,reported_only,Class,Actinobacteria,Actinomycetes
+1103,Blautia gnavus,blautia,572511,reported_only,Order,Clostridiales,Lachnospirales
+1104,Blautia hansenii,blautia hansenii,1322,reported_only,Order,Clostridiales,Lachnospirales
+1105,Blautia hydrogenotrophica,blautia hydrogenotrophica,53443,reported_only,Order,Clostridiales,Lachnospirales
+1107,Blautia torques,blautia,572511,reported_only,Order,Clostridiales,Lachnospirales
+1108,Blautia wexlerae,blautia wexlerae,418240,reported_only,Order,Clostridiales,Lachnospirales
+1117,Brachybacterium paraconglomeratum,brachybacterium paraconglomeratum,173362,reported_only,Class,Actinobacteria,Actinomycetes
+1119,Bradyrhizobium elkanii,bradyrhizobium elkanii,29448,reported_only,Order Family,Rhizobiales | Bradyrhizobiaceae,Hyphomicrobiales | Nitrobacteraceae
+1120,Bradyrhizobium japonicum,bradyrhizobium japonicum,375,reported_only,Order Family,Rhizobiales | Bradyrhizobiaceae,Hyphomicrobiales | Nitrobacteraceae
+1121,Brettanomyces bruxellensis,brettanomyces bruxellensis,5007,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Pichiales
+1123,Brevibacillus agri,brevibacillus agri,51101,reported_only,Order,Bacillales,Caryophanales
+1125,Brevibacillus borstelensis,brevibacillus borstelensis,45462,reported_only,Order,Bacillales,Caryophanales
+1127,Brevibacillus brevis,brevibacillus brevis,1393,reported_only,Order,Bacillales,Caryophanales
+1129,Brevibacterium casei,brevibacterium casei,33889,reported_only,Class,Actinobacteria,Actinomycetes
+1130,Jeotgalicoccus Psychrophilus,jeotgalicoccus psychrophilus,157228,reported_only,Order,Bacillales,Caryophanales
+1131,Brevibacterium linens,brevibacterium linens,1703,reported_only,Class,Actinobacteria,Actinomycetes
+1133,Brevibacterium ravenspurgense,brevibacterium ravenspurgense,479117,reported_only,Class,Actinobacteria,Actinomycetes
+1136,Brochothrix thermosphacta,brochothrix thermosphacta,2756,reported_only,Order,Bacillales,Caryophanales
+1138,Kurthia,kurthia,1649,reported_only,Order Family,Bacillales | Planococcaceae,Caryophanales | Caryophanaceae
+1149,Clostridium carboxidivorans,clostridium carboxidivorans,217159,reported_only,Order,Clostridiales,Eubacteriales
+1151,Clostridium cellulovorans,clostridium cellulovorans,1493,reported_only,Order,Clostridiales,Eubacteriales
+1154,Clostridium kluyveri,clostridium kluyveri,1534,reported_only,Order,Clostridiales,Eubacteriales
+1156,Clostridium ljungdahlii,clostridium ljungdahlii,1538,reported_only,Order,Clostridiales,Eubacteriales
+1158,Clostridium novyi,clostridium novyi,1542,reported_only,Order,Clostridiales,Eubacteriales
+1160,Clostridium paraputrificum,clostridium paraputrificum,29363,reported_only,Order,Clostridiales,Eubacteriales
+1162,Clostridium saccharoperbutylacetonicum,clostridium saccharoperbutylacetonicum,36745,reported_only,Order,Clostridiales,Eubacteriales
+1163,Acetoanaerobium sticklandii,acetoanaerobium sticklandii,1511,reported_only,Order Family,Clostridiales | Peptostreptococcaceae,Peptostreptococcales | Filifactoraceae
+1164,Acetobacter pasteurianus,acetobacter pasteurianus,438,reported_only,Order,Rhodospirillales,Acetobacterales
+1165,Clostridium sartagoforme,clostridium sartagoforme,84031,reported_only,Order,Clostridiales,Eubacteriales
+1166,Clostridium sp. 7_2_43faa,clostridium sp. 7_2_43faa,457396,reported_only,Order,Clostridiales,Eubacteriales
+1167,Clostridium sp. l2-50,clostridium sp. l2-50,411489,reported_only,Order,Clostridiales,Eubacteriales
+1169,Clostridium sp. m62/1,clostridium sp. m62/1,411486,reported_only,Order,Clostridiales,Eubacteriales
+1171,Clostridium sp. md294,clostridium sp. md294,97138,reported_only,Order,Clostridiales,Eubacteriales
+1173,Clostridium sp. ss2/1,clostridium sp. ss2/1,411484,reported_only,Order,Clostridiales,Eubacteriales
+1175,Clostridium sp. sy8519,clostridium sp. sy8519,1042156,reported_only,Order,Clostridiales,Eubacteriales
+1176,Clostridium sporogenes,clostridium sporogenes,1509,reported_only,Order,Clostridiales,Eubacteriales
+1178,Clostridium subterminale,clostridium subterminale,1550,reported_only,Order,Clostridiales,Eubacteriales
+1179,Acidaminococcus fermentans,acidaminococcus fermentans,905,reported_only,Order,Selenomonadales,Acidaminococcales
+1181,Acidaminococcus intestini,acidaminococcus intestini,187327,reported_only,Order,Selenomonadales,Acidaminococcales
+1185,Acidiphilium cryptum,acidiphilium cryptum,524,reported_only,Order Family,Rhodospirillales | Acetobacteraceae,Acetobacterales | Acidocellaceae
+1187,Acidipropionibacterium acidipropionici,acidipropionibacterium acidipropionici,1748,reported_only,Class,Actinobacteria,Actinomycetes
+1189,Acidipropionibacterium jensenii,acidipropionibacterium jensenii,1749,reported_only,Class,Actinobacteria,Actinomycetes
+1194,Acidothermus cellulolyticus,acidothermus cellulolyticus,28049,reported_only,Class,Actinobacteria,Actinomycetes
+1197,Acinetobacter baumannii,acinetobacter baumannii,470,reported_only,Order,Pseudomonadales,Moraxellales
+1198,Coprobacillus sp. d7,coprobacillus sp. d7,556270,reported_only,Family,Erysipelotrichaceae,Coprobacillaceae
+1200,Coprococcus comes,coprococcus comes,410072,reported_only,Order,Clostridiales,Lachnospirales
+1201,Acinetobacter calcoaceticus,acinetobacter calcoaceticus,471,reported_only,Order,Pseudomonadales,Moraxellales
+1203,Acinetobacter haemolyticus,acinetobacter haemolyticus,29430,reported_only,Order,Pseudomonadales,Moraxellales
+1204,Acinetobacter junii,acinetobacter junii,40215,reported_only,Order,Pseudomonadales,Moraxellales
+1205,Coprococcus sp. art55_1,coprococcus sp. art55_1,2710826,reported_only,Order,Clostridiales,Lachnospirales
+1206,Acinetobacter pittii,acinetobacter pittii,48296,reported_only,Order,Pseudomonadales,Moraxellales
+1207,Acinetobacter radioresistens,acinetobacter radioresistens,40216,reported_only,Order,Pseudomonadales,Moraxellales
+1209,Corynebacterium ammoniagenes,corynebacterium ammoniagenes,1697,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+1210,Actinoalloteichus caeruleus,actinoalloteichus caeruleus,2893586,reported_only,Class,Actinomycetia,Actinomycetes
+1211,Corynebacterium amycolatum,corynebacterium amycolatum,43765,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+1213,Corynebacterium aurimucosum,corynebacterium aurimucosum,169292,reported_only,Class Order,Actinobacteria | Actinomycetales,Actinomycetes | Mycobacteriales
+1215,Corynebacterium diphtheriae,corynebacterium diphtheriae,1717,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+1216,Actinomyces cardiffensis,actinomyces cardiffensis,181487,reported_only,Class,Actinobacteria,Actinomycetes
+1217,Corynebacterium glucuronolyticum,corynebacterium glucuronolyticum,39791,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+1218,Actinomyces georgiae,actinomyces georgiae,52768,reported_only,Class,Actinobacteria,Actinomycetes
+1219,Corynebacterium glutamicum,corynebacterium glutamicum,1718,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+1220,Actinomyces graevenitzii,actinomyces graevenitzii,55565,reported_only,Class,Actinobacteria,Actinomycetes
+1221,Corynebacterium kroppenstedtii,corynebacterium kroppenstedtii,161879,reported_only,Class Order,Actinobacteria | Actinomycetales,Actinomycetes | Mycobacteriales
+1222,Actinomyces israelii,actinomyces israelii,1659,reported_only,Class,Actinobacteria,Actinomycetes
+1223,Corynebacterium matruchotii,corynebacterium matruchotii,43768,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+1224,Actinomyces naeslundii,actinomyces naeslundii,1655,reported_only,Class,Actinobacteria,Actinomycetes
+1225,Corynebacterium propinquum,corynebacterium propinquum,43769,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+1226,Actinomyces odontolytica,actinomyces,1654,reported_only,Class,Actinobacteria,Actinomycetes
+1227,Corynebacterium striatum,corynebacterium striatum,43770,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+1228,Actinomyces oris,actinomyces oris,544580,reported_only,Class,Actinobacteria,Actinomycetes
+1229,Corynebacterium tuberculostearicum,corynebacterium tuberculostearicum,38304,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+1230,Corynebacterium ulcerans,corynebacterium ulcerans,65058,reported_only,Class Order,Actinobacteria | Actinomycetales,Actinomycetes | Mycobacteriales
+1231,Corynebacterium ureicelerivorans,corynebacterium ureicelerivorans,401472,reported_only,Class Order,Actinobacteria | Actinomycetales,Actinomycetes | Mycobacteriales
+1232,Actinomyces turicensis,actinomyces,1654,reported_only,Class,Actinobacteria,Actinomycetes
+1233,Craterellus odoratus,craterellus odoratus,2170348,reported_only,Family,Cantharellaceae,Hydnaceae
+1234,Actinomyces urogenitalis,actinomyces urogenitalis,103621,reported_only,Class,Actinobacteria,Actinomycetes
+1235,Actinomyces viscosus,actinomyces viscosus,1656,reported_only,Class,Actinobacteria,Actinomycetes
+1236,Actinoplanes,actinoplanes,1865,reported_only,Class,Actinobacteria,Actinomycetes
+1237,Actinosynnema mirum,actinosynnema mirum,40567,reported_only,Class,Actinobacteria,Actinomycetes
+1240,Cryptobacterium curtum,cryptobacterium curtum,84163,reported_only,Class Order Family,Actinobacteria | Coriobacteriales | Coriobacteriaceae,Coriobacteriia | Eggerthellales | Eggerthellaceae
+1244,Curtobacterium flaccumfaciens,curtobacterium flaccumfaciens,2035,reported_only,Class,Actinobacteria,Actinomycetes
+1245,Aeromicrobium marinum,aeromicrobium marinum,219314,reported_only,Class,Actinobacteria,Actinomycetes
+1248,Cutibacterium acnes,cutibacterium acnes,1747,reported_only,Class,Actinobacteria,Actinomycetes
+1251,Cutibacterium avidum,cutibacterium avidum,33010,reported_only,Class,Actinobacteria,Actinomycetes
+1252,Cutibacterium granulosum,cutibacterium granulosum,33011,reported_only,Class,Actinobacteria,Actinomycetes
+1254,Cyberlindnera fabianii,cyberlindnera fabianii,36022,reported_only,Order Family,Saccharomycetales | Phaffomycetaceae,Phaffomycetales | Wickerhamomycetaceae
+1255,Aeropyrum pernix,aeropyrum pernix,56636,reported_only_reclassification,Phylum,Crenarchaeota (archaea),Thermoproteota (archaea)
+1256,Cyberlindnera jadinii,cyberlindnera jadinii,4903,reported_only,Order Family,Saccharomycetales | Phaffomycetaceae,Phaffomycetales | Wickerhamomycetaceae
+1257,Afipia birgiae,afipia birgiae,151414,reported_only,Order Family,Rhizobiales | Bradyrhizobiaceae,Hyphomicrobiales | Nitrobacteraceae
+1258,Cyberlindnera suaveolens,cyberlindnera suaveolens,907738,reported_only,Order Family,Saccharomycetales | Phaffomycetaceae,Phaffomycetales | Wickerhamomycetaceae
+1267,Cytobacillus firmus,cytobacillus firmus,1399,reported_only,Order,Bacillales,Caryophanales
+1272,Enterobacter asburiae,enterobacter asburiae,61645,reported_only,Order,Enterobacteriales,Enterobacterales
+1275,Debaryomyces fabryi,debaryomyces fabryi,58627,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Serinales
+1276,Enterobacter intestinihominis,enterobacter intestinihominis,3133180,rewritten,Phylum Order,Phylum=Pseudomonadata | Order=Enterobaterales,Phylum=Proteobacteria | Order=Enterobacterales
+1277,Debaryomyces hansenii,debaryomyces hansenii,4959,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Serinales
+1278,Enterocloster asparagiformis,enterocloster asparagiformis,333367,reported_only,Order,Clostridiales,Lachnospirales
+1279,Deinococcus radiodurans,deinococcus radiodurans,1299,rewritten,Phylum,Phylum=Deinococcus-thermus,Phylum=Deinococcus-Thermus
+1280,Enterocloster bolteae,enterocloster bolteae,208479,reported_only,Order,Clostridiales,Lachnospirales
+1282,Enterocloster citroniae,enterocloster citroniae,358743,reported_only,Order,Clostridiales,Lachnospirales
+1283,Denitrovibrio acetiphilus,denitrovibrio acetiphilus,118000,reported_only,Family,Deferribacteraceae,Geovibrionaceae
+1284,Enterocloster clostridioformis,enterocloster clostridioformis,1531,reported_only,Order,Clostridiales,Lachnospirales
+1285,Dermacoccus nishinomiyaensis,dermacoccus nishinomiyaensis,1274,reported_only,Class Order,Actinobacteria | Actinomycetales,Actinomycetes | Micrococcales
+1287,Desulfarculus baarsii,desulfarculus baarsii,453230,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Thermodesulfobacteriota (bacteria)
+1290,Desulfatibacillum alkenivorans,desulfatibacillum alkenivorans,259354,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Thermodesulfobacteriota (bacteria)
+1292,Desulfitobacterium hafniense,desulfitobacterium hafniense,49338,reported_only,Order Family,Clostridiales | Peptococcaceae,Eubacteriales | Desulfitobacteriaceae
+1297,Desulfobacterium autotrophicum,desulfobacterium,2295,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Thermodesulfobacteriota (bacteria)
+1300,Desulfobulbus propionicus,desulfobulbus propionicus,894,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Thermodesulfobacteriota (bacteria)
+1302,Desulfohalobium retbaense,desulfohalobium retbaense,45663,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Thermodesulfobacteriota (bacteria)
+1304,Desulfomicrobium baculatum,desulfomicrobium baculatum,899,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Thermodesulfobacteriota (bacteria)
+1306,Desulfonatronospira thiodismutans,desulfonatronospira thiodismutans,488939,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Thermodesulfobacteriota (bacteria)
+1308,Desulfotalea psychrophila,desulfotalea psychrophila,84980,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Thermodesulfobacteriota (bacteria)
+1310,Desulfotomaculum nigrificans,desulfotomaculum nigrificans,1565,reported_only,Order Family,Clostridiales | Peptococcaceae,Eubacteriales | Desulfotomaculaceae
+1312,Desulfotomaculum reducens,desulfotomaculum reducens,59610,reported_only,Order,Clostridiales,Eubacteriales
+1314,Desulfovibrio desulfuricans,desulfovibrio desulfuricans,876,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Thermodesulfobacteriota (bacteria)
+1316,Desulfovibrio magneticus,desulfovibrio magneticus,184917,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Thermodesulfobacteriota (bacteria)
+1318,Desulfovibrio piger,desulfovibrio piger,901,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Thermodesulfobacteriota (bacteria)
+1320,Desulfovibrio salexigens,desulfovibrio salexigens,880,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Thermodesulfobacteriota (bacteria)
+1321,Erysipelatoclostridium innocuum,erysipelatoclostridium,3025755,reported_only,Family,Erysipelotrichaceae,Coprobacillaceae
+1322,Desulfovibrio sp. 3_1_syn3,desulfovibrio sp. 3_1_syn3,457398,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Thermodesulfobacteriota (bacteria)
+1323,Erysipelatoclostridium ramosum,erysipelatoclostridium ramosum,1547,reported_only,Family,Erysipelotrichaceae,Coprobacillaceae
+1324,Desulfuromonas acetoxidans,desulfuromonas acetoxidans,891,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Thermodesulfobacteriota (bacteria)
+1325,Erysipelatoclostridium saccharogumia,erysipelatoclostridium,3025755,reported_only,Family,Erysipelotrichaceae,Coprobacillaceae
+1327,Erysipelatoclostridium spiroforme,erysipelatoclostridium,3025755,reported_only,Family,Erysipelotrichaceae,Coprobacillaceae
+1330,Erysiphe necator,erysiphe necator,52586,reported_only,Order,Erysiphales,Helotiales
+1334,Escherichia hermannii,escherichia,561,reported_only,Order,Enterobacteriales,Enterobacterales
+1336,Escherichia sp. 1_1_43,escherichia sp. 1_1_43,457400,reported_only,Order,Enterobacteriales,Enterobacterales
+1338,Escherichia sp. 4_1_40b,escherichia sp. 4_1_40b,457401,reported_only,Order,Enterobacteriales,Enterobacterales
+1340,Ethanoligenens harbinense,ethanoligenens harbinense,253239,reported_only,Order Family,Clostridiales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1341,Dietzia cinnamea,dietzia cinnamea,321318,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+1342,Eubacterium brachy,eubacterium brachy,35517,reported_only,Order Family,Clostridiales | Clostridiales Incertae Sedis XIII,Peptostreptococcales | Anaerovoracaceae
+1343,Dietzia maris,dietzia maris,37915,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+1344,Eubacterium cellulosolvens,eubacterium cellulosolvens,29322,reported_only,Order,Clostridiales,Eubacteriales
+1346,Eubacterium desmolans,eubacterium desmolans,39484,reported_only,Order Family,Clostridiales | Ruminococcaceae,Eubacteriales | Butyricicoccaceae
+1348,Eubacterium eligen,eubacterium,1730,reported_only,Order,Clostridiales,Eubacteriales
+1349,Dorea longicatena,dorea longicatena,88431,reported_only,Order,Clostridiales,Lachnospirales
+1350,Eubacterium hallii,eubacterium hallii,39488,reported_only,Order Family,Clostridiales | Eubacteriaceae,Lachnospirales | Lachnospiraceae
+1351,Eubacterium limosum,eubacterium limosum,1736,reported_only,Order,Clostridiales,Eubacteriales
+1352,Dyadobacter beijingensis,dyadobacter beijingensis,365489,reported_only,Family,Cytophagaceae,Spirosomataceae
+1353,Eubacterium ramulus,eubacterium ramulus,39490,reported_only,Order,Clostridiales,Eubacteriales
+1354,Dyadobacter fermentans,dyadobacter fermentans,94254,reported_only,Family,Cytophagaceae,Spirosomataceae
+1355,Eubacterium rectale,eubacterium,1730,reported_only,Order,Clostridiales,Eubacteriales
+1357,Eubacterium saphenum,eubacterium saphenum,51123,reported_only,Order Family,Clostridiales | Clostridiales Incertae Sedis XIII,Peptostreptococcales | Anaerovoracaceae
+1358,Edwardsiella tarda,edwardsiella tarda,636,reported_only,Order Family,Enterobacteriales | Enterobacteriaceae,Enterobacterales | Hafniaceae
+1359,Eubacterium sulci,eubacterium sulci,143393,reported_only,Order Family,Clostridiales | Clostridiales Incertae Sedis XIII,Peptostreptococcales | Anaerovoracaceae
+1361,Eubacterium ventriosum,eubacterium ventriosum,39496,reported_only,Order,Clostridiales,Eubacteriales
+1362,Eggerthella sp. yy7918,eggerthella sp. yy7918,502558,reported_only,Class Order Family,Actinobacteria | Coriobacteriales | Coriobacteriaceae,Coriobacteriia | Eggerthellales | Eggerthellaceae
+1364,Exiguobacterium aurantiacum,exiguobacterium aurantiacum,33987,reported_only,Order,Bacillales,Caryophanales
+1368,Eggerthia catenaformis,eggerthia catenaformis,31973,reported_only,Family,Erysipelotrichaceae,Coprobacillaceae
+1374,Faecalibacterium faecis,faecalibacterium faecis,3133157,reported_only,Order Family,Oscillospirales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1376,Faecalibacterium intestinale,faecalibacterium intestinale,3133155,reported_only,Order Family,Oscillospirales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1378,Faecalibacterium tardum,faecalibacterium tardum,3133156,reported_only,Order Family,Oscillospirales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1379,Fusobacterium nucleatum,fusobacterium nucleatum,851,reported_only,Class,Fusobacteria,Fusobacteriia
+1384,Faecousia intestinalis,faecousia intestinalis,3133167,reported_only,Order Family,Oscillospirales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1386,Fannyhessea vaginae,fannyhessea vaginae,82135,reported_only,Class Order Family,Actinobacteria | Actinomycetales | Actinomycetaceae,Coriobacteriia | Coriobacteriales | Atopobiaceae
+1388,Filifactor alocis,filifactor alocis,143361,reported_only,Order Family,Clostridiales | Peptostreptococcaceae,Peptostreptococcales | Filifactoraceae
+1389,Gardnerella vaginalis,gardnerella vaginalis,2702,reported_only,Class,Actinobacteria,Actinomycetes
+1391,Gemella bergeri,gemella bergeri,84136,reported_only,Order,Bacillales,Caryophanales
+1393,Gemella haemolysans,gemella haemolysans,1379,reported_only,Order Family,Bacillales | Bacillales Incertae Sedis XI,Caryophanales | Gemellaceae
+1394,Gemella morbillorum,gemella morbillorum,29391,reported_only,Order Family,Bacillales | Bacillales Incertae Sedis XI,Caryophanales | Gemellaceae
+1395,Gemella sanguinis,gemella sanguinis,84135,reported_only,Order Family,Bacillales | Bacillales Incertae Sedis XI,Caryophanales | Gemellaceae
+1397,Geobacillus stearothermophilus,geobacillus stearothermophilus,1422,reported_only,Order Family,Bacillales | Bacillaceae,Caryophanales | Anoxybacillaceae
+1399,Geobacillus thermodenitrificans,geobacillus thermodenitrificans,33940,reported_only,Order Family,Bacillales | Bacillaceae,Caryophanales | Anoxybacillaceae
+1400,Flavonifractor hominis,flavonifractor hominis,3133178,reported_only,Order Family,Oscillospirales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1401,Geobacillus vulcani,geobacillus vulcani,135517,reported_only,Order Family,Bacillales | Bacillaceae,Caryophanales | Anoxybacillaceae
+1402,Flavonifractor plautii,flavonifractor plautii,292800,reported_only,Order Family,Clostridiales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1403,Geobacter bemidjiensis,geobacter bemidjiensis,225194,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Thermodesulfobacteriota (bacteria)
+1405,Geobacter metallireducens,geobacter metallireducens,28232,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Thermodesulfobacteriota (bacteria)
+1407,Geobacter sulfurreducens,geobacter sulfurreducens,35554,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Thermodesulfobacteriota (bacteria)
+1408,Frankia alni,frankia alni,1859,reported_only,Class,Actinobacteria,Actinomycetes
+1409,Geodermatophilus,geodermatophilus,1860,reported_only,Class,Actinobacteria,Actinomycetes
+1411,Geotrichum candidum,geotrichum candidum,1173061,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Dipodascomycetes | Dipodascales
+1415,Gleimia coleocanis,gleimia coleocanis,103618,reported_only,Class,Actinobacteria,Actinomycetes
+1419,Gluconobacter oxydans,gluconobacter oxydans,442,reported_only,Order,Rhodospirillales,Acetobacterales
+1421,Gonapodya prolifera,gonapodya prolifera,1123529,reported_only_reclassification,Phylum,Chytridiomycota (eukaryota),Monoblepharomycota (eukaryota)
+1423,Gordonia rubripertincta,gordonia rubripertincta,36822,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+1424,Gordonia terrae,gordonia terrae,2055,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+1428,Granulibacter bethesdensis,granulibacter bethesdensis,364410,reported_only,Order,Rhodospirillales,Acetobacterales
+1445,Hafnia pneumoniae,hafnia,568,reported_only,Order Family,Enterobacteriales | Enterobacteriaceae,Enterobacterales | Hafniaceae
+1447,Haloarcula marismortui,haloarcula marismortui,2238,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1448,Lachnobacterium bovis,lachnobacterium bovis,140626,reported_only,Order,Clostridiales,Lachnospirales
+1449,Halobacterium salinarum,halobacterium salinarum,2242,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1450,Lachnoclostridium asparagiformis,lachnoclostridium,1506553,reported_only,Order,Clostridiales,Lachnospirales
+1451,Halococcus morrhuae,halococcus morrhuae,2250,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1452,Lachnoclostridium bolteae,lachnoclostridium,1506553,reported_only,Order,Clostridiales,Lachnospirales
+1453,Haloferax volcanii,haloferax volcanii,2246,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1454,Lachnoclostridium citroniae,lachnoclostridium,1506553,reported_only,Order,Clostridiales,Lachnospirales
+1455,Lachnoclostridium clostridioformis,lachnoclostridium,1506553,reported_only,Order,Clostridiales,Lachnospirales
+1456,Lachnoclostridium hylemonae,lachnoclostridium,1506553,reported_only,Order,Clostridiales,Lachnospirales
+1457,Lachnoclostridium indolis,lachnoclostridium,1506553,reported_only,Order,Clostridiales,Lachnospirales
+1458,Hanseniaspora uvarum,hanseniaspora uvarum,29833,reported_only,Order,Saccharomycetales,Saccharomycodales
+1459,Lachnoclostridium methoxybenzovorans,lachnoclostridium,1506553,reported_only,Order,Clostridiales,Lachnospirales
+1461,Lachnoclostridium phytofermentans,lachnoclostridium phytofermentans,66219,reported_only,Order,Clostridiales,Lachnospirales
+1462,Helicobacter bilis,helicobacter bilis,37372,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Campylobacterota (bacteria)
+1463,Lachnoclostridium scindens,lachnoclostridium,1506553,reported_only,Order,Clostridiales,Lachnospirales
+1464,Helicobacter canadensis,helicobacter canadensis,123841,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Campylobacterota (bacteria)
+1465,Lachnoclostridium symbiosum,lachnoclostridium,1506553,reported_only,Order,Clostridiales,Lachnospirales
+1466,Helicobacter cinaedi,helicobacter cinaedi,213,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Campylobacterota (bacteria)
+1467,Lachnospira eligens,lachnospira eligens,39485,reported_only,Order,Clostridiales,Lachnospirales
+1470,Helicobacter fennelliae,helicobacter fennelliae,215,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Campylobacterota (bacteria)
+1471,Lachnospira multipara,lachnospira multipara,28051,reported_only,Order,Clostridiales,Lachnospirales
+1472,Helicobacter winghamensis,helicobacter winghamensis,157268,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Campylobacterota (bacteria)
+1477,Lacrimispora indolis,lacrimispora indolis,69825,reported_only,Order,Clostridiales,Lachnospirales
+1479,Lacrimispora saccharolytica,lacrimispora saccharolytica,84030,reported_only,Order,Clostridiales,Lachnospirales
+1484,Hominicola intestinalis,hominicola intestinalis,2897707,reported_only,Order Family,Oscillospirales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1491,Hungateiclostridium clariflavum,hungateiclostridium clariflavum,288965,reported_only,Order Family,Clostridiales | Hungateiclostridiaceae,Acetivibrionales | Acetivibrionaceae
+1493,Hungateiclostridium thermocellum,hungateiclostridium thermocellum,1515,reported_only,Order Family,Clostridiales | Hungateiclostridiaceae,Acetivibrionales | Acetivibrionaceae
+1495,Hungatella hathewayi,hungatella hathewayi,154046,reported_only,Order Family,Clostridiales | Clostridiaceae,Lachnospirales | Lachnospiraceae
+1497,Hyphomicrobium denitrificans,hyphomicrobium denitrificans,53399,reported_only,Order,Rhizobiales,Hyphomicrobiales
+1498,Hyphopichia burtonii,hyphopichia burtonii,717740,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Serinales
+1529,Laribacter hongkongensis,laribacter hongkongensis,168471,reported_only,Family,Neisseriaceae,Aquaspirillaceae
+1532,Lentzea aerocolonigenes,lentzea aerocolonigenes,68170,reported_only,Class,Actinobacteria,Actinomycetes
+1535,Leptospira interrogans,leptospira interrogans,173,reported_only,Class,Spirochaetia,Leptospiria
+1536,Leptospira noguchii,leptospira noguchii,28182,reported_only,Class,Spirochaetia,Leptospiria
+1537,Leptospira weilii,leptospira weilii,28184,reported_only,Class,Spirochaetia,Leptospiria
+1543,Leuconostoc cibaria,leuconostoc,1243,reported_only,Family,Leuconostocaceae,Lactobacillaceae
+1544,Leuconostoc citreum,leuconostoc citreum,33964,reported_only,Family,Leuconostocaceae,Lactobacillaceae
+1545,Leuconostoc confusa,leuconostoc,1243,reported_only,Family,Leuconostocaceae,Lactobacillaceae
+1546,Leuconostoc gelidum,leuconostoc gelidum,1244,reported_only,Family,Leuconostocaceae,Lactobacillaceae
+1547,Leuconostoc kimchii,leuconostoc kimchii,136609,reported_only,Family,Leuconostocaceae,Lactobacillaceae
+1548,Leuconostoc lactis,leuconostoc lactis,1246,reported_only,Family,Leuconostocaceae,Lactobacillaceae
+1549,Leuconostoc mesenteroides,leuconostoc mesenteroides,1245,reported_only,Family,Leuconostocaceae,Lactobacillaceae
+1554,Listeria grayi,listeria grayi,1641,reported_only,Order,Bacillales,Caryophanales
+1555,Listeria innocua,listeria innocua,1642,reported_only,Order,Bacillales,Caryophanales
+1556,Listeria ivanovii,listeria ivanovii,1638,reported_only,Order,Bacillales,Caryophanales
+1557,Listeria monocytogenes,listeria monocytogenes,1639,reported_only,Order,Bacillales,Caryophanales
+1558,Lodderomyces elongisporus,lodderomyces elongisporus,36914,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Serinales
+1560,Lysinibacillus fusiformis,lysinibacillus fusiformis,28031,reported_only,Order,Bacillales,Caryophanales
+1561,Lysinibacillus sphaericus,lysinibacillus sphaericus,1421,reported_only,Order,Bacillales,Caryophanales
+1570,Mammaliicoccus sciuri,mammaliicoccus sciuri,1296,reported_only,Order,Bacillales,Caryophanales
+1571,Mammaliicoccus vitulinus,mammaliicoccus vitulinus,71237,reported_only,Order,Bacillales,Caryophanales
+1572,Marmoricola scoriae,marmoricola,86795,reported_only,Class,Actinobacteria,Actinomycetes
+1573,Mediterraneibacter lactaris,mediterraneibacter lactaris,46228,reported_only,Order,Clostridiales,Lachnospirales
+1574,Mediterraneibacter torques,mediterraneibacter torques,33039,reported_only,Order,Clostridiales,Lachnospirales
+1576,Megasphaera elsdenii,megasphaera elsdenii,907,reported_only,Order,Selenomonadales,Veillonellales
+1582,Mesorhizobium ciceri,mesorhizobium ciceri,39645,reported_only,Order,Rhizobiales,Hyphomicrobiales
+1583,Mesorhizobium japonicum,mesorhizobium japonicum,2066070,reported_only,Order,Rhizobiales,Hyphomicrobiales
+1584,Mesorhizobium loti,mesorhizobium loti,381,reported_only,Order,Rhizobiales,Hyphomicrobiales
+1585,Mesorhizobium opportunistum,mesorhizobium opportunistum,593909,reported_only,Order,Rhizobiales,Hyphomicrobiales
+1586,Metallosphaera sedula,metallosphaera sedula,43687,reported_only_reclassification,Phylum,Crenarchaeota (archaea),Thermoproteota (archaea)
+1589,Methanobrevibacter ruminantium,methanobrevibacter ruminantium,83816,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1590,Methanobrevibacter smithii,methanobrevibacter smithii,2173,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1591,Methanocaldococcus fervens,methanocaldococcus fervens,83171,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1592,Methanocaldococcus infernus,methanocaldococcus infernus,67760,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1593,Methanocaldococcus jannaschii,methanocaldococcus jannaschii,2190,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1594,Methanocaldococcus vulcanius,methanocaldococcus vulcanius,73913,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1595,Methanococcoides burtonii,methanococcoides burtonii,29291,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1596,Methanococcus aeolicus,methanococcus aeolicus,42879,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1597,Methanococcus maripaludis,methanococcus maripaludis,39152,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1598,Methanococcus vannielii,methanococcus vannielii,2187,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1599,Methanococcus voltae,methanococcus voltae,2188,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1600,Methanocorpusculum labreanum,methanocorpusculum labreanum,83984,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1601,Methanoculleus marisnigri,methanoculleus marisnigri,2198,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1602,Methanohalobium evestigatum,methanohalobium evestigatum,2322,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1603,Methanohalophilus mahii,methanohalophilus mahii,2176,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1604,Methanomassiliicoccus luminyensis,methanomassiliicoccus luminyensis,1080712,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Thermoplasmatota (archaea)
+1605,Methanomassiliicoccus methanomassiliicoccus intestinalis,methanomassiliicoccus,1080709,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Thermoplasmatota (archaea)
+1606,Methanopyrus kandleri,methanopyrus kandleri,2320,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1607,Methanosarcina acetivorans,methanosarcina acetivorans,2214,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1608,Methanosarcina barkeri,methanosarcina barkeri,2208,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1609,Methanosarcina mazei,methanosarcina mazei,2209,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1610,Methanosphaera stadtmanae,methanosphaera stadtmanae,2317,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1611,Methanosphaerula palustris,methanosphaerula palustris,475088,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1613,Ignicoccus hospitalis,ignicoccus hospitalis,160233,reported_only_reclassification,Phylum,Crenarchaeota (archaea),Thermoproteota (archaea)
+1615,Intestinibacter bartlettii,intestinibacter bartlettii,261299,reported_only,Order,Clostridiales,Peptostreptococcales
+1616,Johnsonella ignava,johnsonella ignava,43995,reported_only,Order,Clostridiales,Lachnospirales
+1617,Jonesia denitrificans,jonesia denitrificans,43674,reported_only,Class,Actinobacteria,Actinomycetes
+1620,Kandleria vitulina,kandleria vitulina,1630,reported_only,Family,Erysipelotrichaceae,Coprobacillaceae
+1624,Ketogulonicigenium vulgare,ketogulonicigenium vulgare,92945,reported_only,Family,Rhodobacteraceae,Roseobacteraceae
+1628,Kitasatospora aureofaciens,kitasatospora aureofaciens,1894,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+1629,Kitasatospora griseola,kitasatospora griseola,2064,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+1630,Kitasatospora setae,kitasatospora setae,2066,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+1631,Kitasatospora,kitasatospora,2063,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+1633,Klebsiella michiganensis,klebsiella michiganensis,1134687,reported_only,Order,Enterobacteriales,Enterobacterales
+1635,Klebsiella variicola,klebsiella variicola,244366,reported_only,Order,Enterobacteriales,Enterobacterales
+1639,Kocuria palustris,kocuria palustris,71999,reported_only,Class,Actinobacteria,Actinomycetes
+1640,Kocuria rhizophila,kocuria rhizophila,72000,reported_only,Class Order,Actinobacteria | Actinomycetales,Actinomycetes | Micrococcales
+1641,Kocuria rosea,kocuria rosea,1275,reported_only,Class,Actinobacteria,Actinomycetes
+1642,Komagataella pastoris,komagataella pastoris,4922,reported_only,Class Order Family,Saccharomycetes | Saccharomycetales | Phaffomycetaceae,Pichiomycetes | Pichiales | Pichiaceae
+1643,Komagataella phaffii,komagataella phaffii,460519,reported_only,Class Order Family,Saccharomycetes | Saccharomycetales | Phaffomycetaceae,Pichiomycetes | Pichiales | Pichiaceae
+1644,Kurthia massiliensis,kurthia massiliensis,1033739,reported_only,Order Family,Bacillales | Planococcaceae,Caryophanales | Caryophanaceae
+1645,Kutzneria,kutzneria,43356,reported_only,Class,Actinobacteria,Actinomycetes
+1647,Kytococcus sedentarius,kytococcus sedentarius,1276,reported_only,Class Order Family,Actinobacteria | Actinomycetales | Dermacoccaceae,Actinomycetes | Micrococcales | Kytococcaceae
+1649,Lachnoanaerobaculum saburreum,lachnoanaerobaculum saburreum,467210,reported_only,Order,Clostridiales,Lachnospirales
+1651,Mycoplasma synoviae,mycoplasma synoviae,2109,reported_only,Order Family,Mycoplasmatales | Mycoplasmataceae,Mycoplasmoidales | Metamycoplasmataceae
+1655,Brucella abortus,brucella abortus,235,reported_only,Order,Rhizobiales,Hyphomicrobiales
+1657,Brucella canis,brucella canis,36855,reported_only,Order,Rhizobiales,Hyphomicrobiales
+1659,Brucella intermedia,brucella intermedia,94625,reported_only,Order,Rhizobiales,Hyphomicrobiales
+1661,Brucella melitensis,brucella melitensis,29459,reported_only,Order,Rhizobiales,Hyphomicrobiales
+1663,Brucella suis,brucella suis,29461,reported_only,Order,Rhizobiales,Hyphomicrobiales
+1687,Nevskia ramosa,nevskia ramosa,64002,reported_only,Family,Sinobacteraceae,Nevskiaceae
+1690,Butyrivibrio crossotus,butyrivibrio crossotus,45851,reported_only,Order,Clostridiales,Lachnospirales
+1692,Butyrivibrio fibrisolvens,butyrivibrio fibrisolvens,831,reported_only,Order,Clostridiales,Lachnospirales
+1693,Butyrivibrio proteoclasticus,butyrivibrio proteoclasticus,43305,reported_only,Order,Clostridiales,Lachnospirales
+1694,Nigrospora oryzae,nigrospora oryzae,335854,reported_only,Order Family,Trichosphaeriales | Trichosphaeriaceae,Amphisphaeriales | Apiosporaceae
+1695,Caldicellulosiruptor bescii,caldicellulosiruptor bescii,31899,reported_only,Order Family,Thermoanaerobacterales | Thermoanaerobacterales Family III. Incertae Sedis,Caldicellulosiruptorales | Caldicellulosiruptoraceae
+1696,Nigrospora sphaerica,nigrospora sphaerica,114231,reported_only,Order Family,Trichosphaeriales | Trichosphaeriaceae,Amphisphaeriales | Apiosporaceae
+1697,Caminibacter mediatlanticus,caminibacter mediatlanticus,291048,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Campylobacterota (bacteria)
+1698,Nitrobacter hamburgensis,nitrobacter hamburgensis,912,reported_only,Order Family,Rhizobiales | Bradyrhizobiaceae,Hyphomicrobiales | Nitrobacteraceae
+1699,Campylobacter coli,campylobacter coli,195,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Campylobacterota (bacteria)
+1700,Nitrobacter winogradskyi,nitrobacter winogradskyi,913,reported_only,Order Family,Rhizobiales | Bradyrhizobiaceae,Hyphomicrobiales | Nitrobacteraceae
+1701,Campylobacter concisus,campylobacter concisus,199,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Campylobacterota (bacteria)
+1703,Campylobacter curvus,campylobacter curvus,200,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Campylobacterota (bacteria)
+1705,Campylobacter fetus,campylobacter fetus,196,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Campylobacterota (bacteria)
+1707,Campylobacter gracilis,campylobacter gracilis,824,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Campylobacterota (bacteria)
+1709,Campylobacter hominis,campylobacter hominis,76517,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Campylobacterota (bacteria)
+1711,Campylobacter hyointestinalis,campylobacter hyointestinalis,198,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Campylobacterota (bacteria)
+1712,Nitrososphaera nitrososphaera gargensis,nitrososphaera,497726,reported_only_reclassification,Phylum,Thaumarchaeota (archaea),Nitrososphaerota (archaea)
+1713,Campylobacter jejuni,campylobacter jejuni,197,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Campylobacterota (bacteria)
+1715,Campylobacter lari,campylobacter lari,201,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Campylobacterota (bacteria)
+1716,Nocardia asteroides,nocardia asteroides,1824,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+1717,Campylobacter rectus,campylobacter rectus,203,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Campylobacterota (bacteria)
+1718,Nocardia brasiliensis,nocardia brasiliensis,37326,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+1719,Campylobacter showae,campylobacter showae,204,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Campylobacterota (bacteria)
+1720,Nocardiopsis,nocardiopsis,2013,reported_only,Class Family,Actinobacteria | Nocardiopsaceae,Actinomycetes | Nocardiopsidaceae
+1721,Nonomuraea rubra,nonomuraea rubra,46180,reported_only,Class,Actinobacteria,Actinomycetes
+1722,Nonomuraea,nonomuraea,83681,reported_only,Class,Actinobacteria,Actinomycetes
+1724,Campylobacter sputorum,campylobacter sputorum,206,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Campylobacterota (bacteria)
+1725,Campylobacter upsaliensis,campylobacter upsaliensis,28080,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Campylobacterota (bacteria)
+1726,Oceanobacillus picturae,oceanobacillus picturae,171693,reported_only,Order,Bacillales,Caryophanales
+1727,Candida albicans,candida albicans,5476,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Serinales
+1728,Candida dubliniensis,candida dubliniensis,42374,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Serinales
+1729,Oceanobacillus sp. s1,oceanobacillus sp. s1,333381,reported_only,Order,Bacillales,Caryophanales
+1730,Candida maltosa,candida maltosa,5479,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Serinales
+1731,Ochrobactrum anthropi,ochrobactrum anthropi,529,reported_only,Order,Rhizobiales,Hyphomicrobiales
+1732,Candida orthopsilosis,candida orthopsilosis,273371,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Serinales
+1733,Ochrobactrum intermedium,ochrobactrum intermedium,94625,reported_only,Order,Rhizobiales,Hyphomicrobiales
+1736,Odoribacter splanchnicus,odoribacter splanchnicus,28118,reported_only,Family,Porphyromonadaceae,Odoribacteraceae
+1737,Candida solani,candida solani,51925,reported_only,Order,Saccharomycetales,Phaffomycetales
+1738,Oenococcus oeni,oenococcus oeni,1247,reported_only,Family,Leuconostocaceae,Lactobacillaceae
+1739,Candida tropicalis,candida tropicalis,5482,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Serinales
+1740,Candida viswanathii,candida viswanathii,5486,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Serinales
+1741,Oerskovia,oerskovia,162491,reported_only,Class,Actinobacteria,Actinomycetes
+1745,Olsenella uli,olsenella uli,133926,reported_only,Class Family,Actinobacteria | Coriobacteriaceae,Coriobacteriia | Atopobiaceae
+1749,Oribacterium sinus,oribacterium sinus,237576,reported_only,Order,Clostridiales,Lachnospirales
+1751,Paenibacillus alvei,paenibacillus alvei,44250,reported_only,Order,Bacillales,Caryophanales
+1752,Paenibacillus barengoltzii,paenibacillus barengoltzii,343517,reported_only,Order,Bacillales,Caryophanales
+1753,Paenibacillus daejeonensis,paenibacillus daejeonensis,135193,reported_only,Order,Bacillales,Caryophanales
+1754,Paenibacillus graminis,paenibacillus graminis,189425,reported_only,Order,Bacillales,Caryophanales
+1756,Paenibacillus lactis,paenibacillus lactis,228574,reported_only,Order,Bacillales,Caryophanales
+1757,Cellulomonas flavigena,cellulomonas flavigena,1711,reported_only,Class,Actinobacteria,Actinomycetes
+1758,Paenibacillus larvae,paenibacillus larvae,1464,reported_only,Order,Bacillales,Caryophanales
+1759,Cellulosilyticum lentocellum,cellulosilyticum lentocellum,29360,reported_only,Order Family,Clostridiales | Lachnospiraceae,Lachnospirales | Cellulosilyticaceae
+1760,Paenibacillus polymyxa,paenibacillus polymyxa,1406,reported_only,Order,Bacillales,Caryophanales
+1761,Cellulosimicrobium cellulans,cellulosimicrobium cellulans,1710,reported_only,Class,Actinobacteria,Actinomycetes
+1762,Paeniclostridium sordellii,paeniclostridium sordellii,1505,reported_only,Order,Clostridiales,Peptostreptococcales
+1764,Paeniglutamicibacter,paeniglutamicibacter,1742990,reported_only,Class,Actinobacteria,Actinomycetes
+1766,Papiliotrema flavescens,papiliotrema flavescens,214993,reported_only,Family,Rhynchogastremataceae,Rhynchogastremaceae
+1768,Parabacteroides goldsteinii,parabacteroides goldsteinii,328812,reported_only,Family,Porphyromonadaceae,Tannerellaceae
+1769,Chlamydia trachomatis,chlamydia trachomatis,813,reported_only,Class,Chlamydiae,Chlamydiia
+1773,Chlorobium ferrooxidans,chlorobium ferrooxidans,84205,reported_only,Class,Chlorobia,Chlorobiia
+1774,Parabacteroides sp. d13,parabacteroides sp. d13,563193,reported_only,Family,Porphyromonadaceae,Tannerellaceae
+1775,Chlorobium limicola,chlorobium limicola,1092,reported_only,Class,Chlorobia,Chlorobiia
+1776,Paraclostridium bifermentans,paraclostridium bifermentans,1490,reported_only,Order,Clostridiales,Peptostreptococcales
+1777,Chlorobium phaeobacteroides,chlorobium phaeobacteroides,1096,reported_only,Class,Chlorobia,Chlorobiia
+1782,Paracoccus denitrificans,paracoccus denitrificans,266,reported_only,Family,Rhodobacteraceae,Paracoccaceae
+1783,Paracoccus yeei,paracoccus yeei,147645,reported_only,Family,Rhodobacteraceae,Paracoccaceae
+1794,Clavibacter michiganensis,clavibacter michiganensis,28447,reported_only,Class,Actinobacteria,Actinomycetes
+1798,Clavispora lusitaniae,clavispora lusitaniae,36911,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Serinales
+1800,Clostridioides difficile,clostridioides difficile,1496,reported_only,Order,Clostridiales,Peptostreptococcales
+1801,Clostridium acetobutylicum,clostridium acetobutylicum,1488,reported_only,Order,Clostridiales,Eubacteriales
+1802,Clostridium aminobutyricum,clostridium aminobutyricum,33953,reported_only,Order,Clostridiales,Eubacteriales
+1803,Clostridium bartlettii,clostridium bartlettii,261299,reported_only,Order Family,Clostridiales | Clostridiaceae,Peptostreptococcales | Peptostreptococcaceae
+1804,Clostridium beijerinckii,clostridium beijerinckii,1520,reported_only,Order,Clostridiales,Eubacteriales
+1805,Clostridium cadaveris,clostridium cadaveris,1529,reported_only,Order,Clostridiales,Eubacteriales
+1811,Peptacetobacter hiranonis,peptacetobacter hiranonis,89152,reported_only,Order,Clostridiales,Peptostreptococcales
+1812,Peptoanaerobacter yurii,peptoanaerobacter,1913599,reported_only,Order Family,Clostridiales | Peptostreptococcaceae,Peptostreptococcales | Filifactoraceae
+1814,Peptoniphilus hominis,peptoniphilus hominis,3133174,reported_only,Class,Clostridia,Tissierellia
+1818,Peptostreptococcus sp.,peptostreptococcus sp.,1262,reported_only,Order,Clostridiales,Peptostreptococcales
+1819,Peptostreptococcus stomatis,peptostreptococcus stomatis,341694,reported_only,Order,Clostridiales,Peptostreptococcales
+1820,Pestalotiopsis fici,pestalotiopsis fici,393283,reported_only,Order,Xylariales,Amphisphaeriales
+1828,Phocaeicola coprophilus,phocaeicola coprophilus,387090,reported_only,Family,acteroidaceae,Bacteroidaceae
+1832,Phocaeicola salanitronis,phocaeicola salanitronis,376805,reported_only,Family,acteroidaceae,Bacteroidaceae
+1836,Pichia kudriavzevii,pichia kudriavzevii,4909,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Pichiales
+1837,Pichia membranifaciens,pichia membranifaciens,4926,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Pichiales
+1838,Picrophilus torridus,picrophilus torridus,46632,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Thermoplasmatota (archaea)
+1840,Pneumocystis jirovecii,pneumocystis jirovecii,42068,reported_only,Class Order Family,Pneumocystidomycetes | Pneumocystidales | Pneumocystidaceae,Pneumocystomycetes | Pneumocystales | Pneumocystaceae
+1841,Podospora anserina,podospora anserina,2587412,reported_only,Family,Chaetomiaceae,Podosporaceae
+1846,Prauserella,prauserella,142577,reported_only,Class,Actinobacteria,Actinomycetes
+1869,Promicromonospora,promicromonospora,43676,reported_only,Class,Actinobacteria,Actinomycetes
+1870,Propionibacterium acidipropionici,propionibacterium acidipropionici,1748,reported_only,Class Order,Actinobacteria | Actinomycetales,Actinomycetes | Propionibacteriales
+1871,Propionibacterium avidum,propionibacterium avidum,33010,reported_only,Class Order,Actinobacteria | Actinomycetales,Actinomycetes | Propionibacteriales
+1872,Propionibacterium freudenreichii,propionibacterium freudenreichii,1744,reported_only,Class,Actinobacteria,Actinomycetes
+1873,Propionibacterium gingivalis,propionibacterium,1743,reported_only,Class Order,Actinobacteria | Actinomycetales,Actinomycetes | Propionibacteriales
+1874,Propionibacterium granulosum,propionibacterium,1743,reported_only,Class Order,Actinobacteria | Actinomycetales,Actinomycetes | Propionibacteriales
+1875,Propionibacterium jensenii,propionibacterium jensenii,1749,reported_only,Class Order,Actinobacteria | Actinomycetales,Actinomycetes | Propionibacteriales
+1876,Propionibacterium propionicum,propionibacterium,1743,reported_only,Class Order,Actinobacteria | Actinomycetales,Actinomycetes | Propionibacteriales
+1886,Pseudobutyrivibrio ruminis,pseudobutyrivibrio ruminis,46206,reported_only,Order,Clostridiales,Lachnospirales
+1887,Pseudoflavonifractor capillosus,pseudoflavonifractor capillosus,106588,reported_only,Order Family,Clostridiales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1888,Pseudoflavonifractor intestinihominis,pseudoflavonifractor intestinihominis,3133171,reported_only,Order Family,Oscillospirales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1903,Pyrobaculum aerophilum,pyrobaculum aerophilum,13773,reported_only_reclassification,Phylum,Crenarchaeota (archaea),Thermoproteota (archaea)
+1905,Pyrobaculum calidifontis,pyrobaculum calidifontis,181486,reported_only_reclassification,Phylum,Crenarchaeota (archaea),Thermoproteota (archaea)
+1907,Pyrococcus abyssi,pyrococcus abyssi,29292,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1909,Pyrococcus furiosus,pyrococcus furiosus,2261,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1910,Pseudoramibacter alactolyticus,pseudoramibacter alactolyticus,113287,reported_only,Order,Clostridiales,Eubacteriales
+1911,Pyrococcus horikoshii,pyrococcus horikoshii,53953,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+1922,Rhizobium etli,rhizobium etli,29449,reported_only,Order,Rhizobiales,Hyphomicrobiales
+1923,Sistotremastrum suecicum,sistotremastrum suecicum,467971,reported_only,Order Family,Trechisporales | Hydnodontaceae,Sistotremastrales | Sistotremastraceae
+1924,Rhizobium leguminosarum,rhizobium leguminosarum,384,reported_only,Order,Rhizobiales,Hyphomicrobiales
+1928,Rhizophagus irregularis,rhizophagus irregularis,588596,reported_only_reclassification,Phylum,Mucoromycota (eukaryota),Glomeromycota (eukaryota)
+1932,Rhodobacter sphaeroides,rhodobacter sphaeroides,1063,reported_only,Family,Rhodobacteraceae,Paracoccaceae
+1933,Sodalis glossinidius,sodalis glossinidius,63612,reported_only,Family,Pectobacteriaceae,Bruguierivoracaceae
+1934,Rhodococcus erythropolis,rhodococcus erythropolis,1833,reported_only,Class Order,Actinobacteria | Actinomycetales,Actinomycetes | Mycobacteriales
+1935,Solibaculum intestinale,solibaculum intestinale,3133165,reported_only,Order Family,Oscillospirales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1938,Spathaspora passalidarum,spathaspora passalidarum,340170,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Serinales
+1939,Rhodococcus hoagii,rhodococcus hoagii,43767,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+1940,Sphaerisporangium,sphaerisporangium,321315,reported_only,Class,Actinobacteria,Actinomycetes
+1941,Rhodococcus rhodochrous,rhodococcus rhodochrous,1829,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+1942,Sphaerobacter thermophilus,sphaerobacter thermophilus,2057,rewritten,Phylum,Phylum=Chloroflexi,Phylum=Thermomicrobiota
+1943,Rhodopseudomonas palustris,rhodopseudomonas palustris,1076,reported_only,Order Family,Rhizobiales | Bradyrhizobiaceae,Hyphomicrobiales | Nitrobacteraceae
+1946,Sphingobium japonicum,sphingobium japonicum,332055,reported_only,Family,Sphingomonadaceae,Sphingobiaceae
+1947,Rhodothermus marinus,rhodothermus marinus,29549,reported_only_reclassification,Phylum,Bacteroidetes (bacteria),Rhodothermota (bacteria)
+1948,Sphingomonas paucimobilis,sphingomonas paucimobilis,13689,reported_only,Class,Gammaproteobacteria,Alphaproteobacteria
+1950,Spirillospora,spirillospora,58122,reported_only,Class,Actinobacteria,Actinomycetes
+1952,Spirochaeta thermophila,spirochaeta thermophila,154,reported_only,Order Family,Spirochaetales | Spirochaetaceae,Winmispirales | Winmispiraceae
+1955,Rhynchogastrema tunnelae,rhynchogastrema tunnelae,1255125,reported_only,Family,Rhynchogastremataceae,Rhynchogastremaceae
+1959,Robertmurraya yapensis,robertmurraya yapensis,2492960,reported_only,Order,Bacillales,Caryophanales
+1960,Stackebrandtia,stackebrandtia,283810,reported_only,Class,Actinobacteria,Actinomycetes
+1961,Roseburia hominis,roseburia hominis,301301,reported_only,Order,Clostridiales,Lachnospirales
+1962,Staphylococcus arlettae,staphylococcus arlettae,29378,reported_only,Order,Bacillales,Caryophanales
+1963,Roseburia intestinalis,roseburia intestinalis,166486,reported_only,Order,Clostridiales,Lachnospirales
+1964,Staphylococcus capitis,staphylococcus capitis,29388,reported_only,Order,Bacillales,Caryophanales
+1965,Roseburia inulinivorans,roseburia inulinivorans,360807,reported_only,Order,Clostridiales,Lachnospirales
+1966,Staphylococcus caprae,staphylococcus caprae,29380,reported_only,Order,Bacillales,Caryophanales
+1967,Roseobacter denitrificans,roseobacter denitrificans,2434,reported_only,Family,Rhodobacteraceae,Roseobacteraceae
+1968,Roseomonas mucosa,roseomonas mucosa,207340,reported_only,Order Family,Rhodospirillales | Acetobacteraceae,Acetobacterales | Roseomonadaceae
+1969,Staphylococcus carnosus,staphylococcus carnosus,1281,reported_only,Order,Bacillales,Caryophanales
+1970,Rothia aeria,rothia aeria,172042,reported_only,Class,Actinobacteria,Actinomycetes
+1971,Staphylococcus cohnii,staphylococcus cohnii,29382,reported_only,Order,Bacillales,Caryophanales
+1973,Staphylococcus equorum,staphylococcus equorum,246432,reported_only,Order,Bacillales,Caryophanales
+1974,Ruminiclostridium cellobioparum,ruminiclostridium cellobioparum,29355,reported_only,Order Family,Clostridiales | Hungateiclostridiaceae,Eubacteriales | Oscillospiraceae
+1975,Staphylococcus haemolyticus,staphylococcus haemolyticus,1283,reported_only,Order,Bacillales,Caryophanales
+1976,Ruminiclostridium clariflavum,ruminiclostridium,1508657,reported_only,Order Family,Clostridiales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1977,Ruminiclostridium leptum,ruminiclostridium,1508657,reported_only,Order Family,Clostridiales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1978,Ruminiclostridium methylpentosum,ruminiclostridium,1508657,reported_only,Order Family,Clostridiales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1979,Ruminiclostridium siraeum,ruminiclostridium siraeum,39492,reported_only,Order Family,Clostridiales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1980,Ruminiclostridium sporosphaeroides,ruminiclostridium,1508657,reported_only,Order Family,Clostridiales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1981,Ruminiclostridium viride,ruminiclostridium,1508657,reported_only,Order Family,Clostridiales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1982,Staphylococcus hominis,staphylococcus hominis,1290,reported_only,Order,Bacillales,Caryophanales
+1983,Ruminococcoides bili,ruminococcoides bili,2678306,reported_only,Order Family,Oscillospirales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1984,Staphylococcus intermedius,staphylococcus intermedius,1285,reported_only,Order,Bacillales,Caryophanales
+1985,Ruminococcoides intestinale,ruminococcoides intestinale,3133162,reported_only,Order Family,Oscillospirales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1986,Staphylococcus lugdunensis,staphylococcus lugdunensis,28035,reported_only,Order,Bacillales,Caryophanales
+1987,Ruminococcoides intestinihominis,ruminococcoides intestinihominis,3133161,reported_only,Order Family,Oscillospirales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1988,Staphylococcus pasteuri,staphylococcus pasteuri,45972,reported_only,Order,Bacillales,Caryophanales
+1989,Ruminococcus bicirculans,ruminococcus,1263,reported_only,Order Family,Clostridiales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1990,Staphylococcus pettenkoferi,staphylococcus pettenkoferi,170573,reported_only,Order,Bacillales,Caryophanales
+1991,Ruminococcus champanellensis,ruminococcus champanellensis,1161942,reported_only,Order Family,Clostridiales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1992,Staphylococcus pseudintermedius,staphylococcus pseudintermedius,283734,reported_only,Order,Bacillales,Caryophanales
+1993,Ruminococcus gauvreauii,ruminococcus gauvreauii,438033,reported_only,Order Family,Clostridiales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1994,Staphylococcus saprophyticus,staphylococcus saprophyticus,29385,reported_only,Order,Bacillales,Caryophanales
+1995,Ruminococcus lactaris,ruminococcus lactaris,46228,reported_only,Order Family,Clostridiales | Ruminococcaceae,Lachnospirales | Lachnospiraceae
+1996,Staphylococcus sciuri,staphylococcus,1279,reported_only,Order,Bacillales,Caryophanales
+1997,Ruminococcus sp. 5_1_39bfaa,ruminococcus sp. 5_1_39bfaa,457412,reported_only,Order Family,Clostridiales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+1998,Staphylococcus simulans,staphylococcus simulans,1286,reported_only,Order,Bacillales,Caryophanales
+1999,Ruminococcus sp. sr1/5,ruminococcus sp. sr1/5,657323,reported_only,Order Family,Clostridiales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+2000,Staphylococcus vitulinus,staphylococcus,1279,reported_only,Order,Bacillales,Caryophanales
+2001,Ruthenibacterium intestinale,ruthenibacterium intestinale,3133163,reported_only,Order Family,Oscillospirales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+2002,Staphylococcus warneri,staphylococcus warneri,1292,reported_only,Order,Bacillales,Caryophanales
+2003,Saccharolobus solfataricus,saccharolobus solfataricus,2287,reported_only_reclassification,Phylum,Crenarchaeota (archaea),Thermoproteota (archaea)
+2004,Staphylococcus xylosus,staphylococcus xylosus,1288,reported_only,Order,Bacillales,Caryophanales
+2006,Starkeya novella,starkeya novella,921,reported_only,Order,Rhizobiales,Hyphomicrobiales
+2008,Stenotrophomonas rhizophila,stenotrophomonas rhizophila,216778,reported_only,Order Family,Xanthomonadales | Xanthomonadaceae,Lysobacterales | Lysobacteraceae
+2013,Saccharomycopsis fibuligera,saccharomycopsis fibuligera,4944,reported_only,Order,Saccharomycetales,Ascoideales
+2014,Streptacidiphilus,streptacidiphilus,228398,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2015,Saccharothrix syringae,saccharothrix syringae,103733,reported_only,Class,Actinobacteria,Actinomycetes
+2016,Streptoalloteichus tenebrarius,streptoalloteichus tenebrarius,1933,reported_only,Class,Actinobacteria,Actinomycetes
+2017,Saccharothrix,saccharothrix,2071,reported_only,Class,Actinobacteria,Actinomycetes
+2021,Sakamotonia hominis,sakamotonia hominis,3078042,reported_only,Order Family,Lachnospirales | Lachnospiraceae,Eubacteriales | Clostridiaceae
+2023,Salinispora arenicola,salinispora arenicola,168697,reported_only,Class,Actinobacteria,Actinomycetes
+2025,Salisediminibacterium selenitireducens,salisediminibacterium selenitireducens,85683,reported_only,Order,Bacillales,Caryophanales
+2027,Scardovia inopinata,scardovia inopinata,78259,reported_only,Class,Actinobacteria,Actinomycetes
+2029,Scardovia wiggsiae,scardovia wiggsiae,230143,reported_only,Class,Actinobacteria,Actinomycetes
+2033,Schaalia cardiffensis,schaalia cardiffensis,181487,reported_only,Class,Actinobacteria,Actinomycetes
+2035,Schaalia georgiae,schaalia georgiae,52768,reported_only,Class,Actinobacteria,Actinomycetes
+2037,Schaalia odontolytica,schaalia odontolytica,1660,reported_only,Class,Actinobacteria,Actinomycetes
+2039,Schaalia turicensis,schaalia turicensis,131111,reported_only,Class,Actinobacteria,Actinomycetes
+2041,Schaedlerella arabinosiphila,schaedlerella arabinosiphila,2044587,reported_only,Order,Clostridiales,Lachnospirales
+2043,Scheffersomyces stipitis,scheffersomyces stipitis,4924,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Serinales
+2071,Serratia multitudinisentens,serratia,613,reported_only,Order Family,Enterobacteriales | Enterobacteriaceae,Enterobacterales | Yersiniaceae
+2084,Silanimonas lenta,silanimonas lenta,265429,reported_only,Order Family,Xanthomonadales | Xanthomonadaceae,Lysobacterales | Lysobacteraceae
+2086,Sinorhizobium meliloti,sinorhizobium meliloti,382,reported_only,Order,Rhizobiales,Hyphomicrobiales
+2088,Sistotrema brinkmannii,sistotrema brinkmannii,139132,reported_only,Order Family,Corticiales | Corticiaceae,Cantharellales | Hydnaceae
+2091,Streptomyces actuosus,streptomyces actuosus,1885,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2092,Streptomyces alboniger,streptomyces alboniger,132473,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2093,Streptomyces albosporeus,streptomyces albosporeus,58341,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2094,Streptomyces albus,streptomyces albus,1888,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2095,Streptomyces antibioticus,streptomyces antibioticus,1890,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2096,Streptomyces anulatus,streptomyces anulatus,1892,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2097,Streptomyces armeniacus,streptomyces armeniacus,83291,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2098,Streptomyces aurantiogriseus,streptomyces aurantiogriseus,66870,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2099,Streptomyces avermitilis,streptomyces avermitilis,33903,reported_only,Class Order,Actinobacteria | Actinomycetales,Actinomycetes | Kitasatosporales
+2100,Streptomyces azureus,streptomyces azureus,146537,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2101,Streptomyces californicus,streptomyces californicus,67351,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2102,Streptomyces calvus,streptomyces calvus,67282,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2103,Streptomyces candidus,streptomyces candidus,67283,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2104,Streptomyces cavourensis,streptomyces cavourensis,67258,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2105,Streptomyces cellulosae,streptomyces cellulosae,1968,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2106,Streptomyces coeruleorubidus,streptomyces coeruleorubidus,116188,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2107,Streptomyces collinus,streptomyces collinus,42684,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2108,Streptomyces diastatochromogenes,streptomyces diastatochromogenes,42236,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2109,Streptomyces echinatus,streptomyces echinatus,67293,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2110,Streptomyces ehimensis,streptomyces ehimensis,68195,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2111,Streptomyces eurythermus,streptomyces eurythermus,42237,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2112,Streptomyces filamentosus,streptomyces filamentosus,67294,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2113,Streptomyces filipinensis,streptomyces filipinensis,66887,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2114,Streptomyces griseosporeus,streptomyces griseosporeus,1910,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2115,Streptomyces fradiae,streptomyces fradiae,1906,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2116,Streptomyces griseus,streptomyces griseus,1911,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2117,Streptomyces griseoruber,streptomyces griseoruber,1943,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2118,Streptomyces kanamyceticus,streptomyces kanamyceticus,1967,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2119,Streptomyces griseorubiginosus,streptomyces griseorubiginosus,67304,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2120,Streptomyces kitasatoensis,streptomyces kitasatoensis,97405,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2121,Streptomyces lavendofoliae,streptomyces lavendofoliae,67314,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2122,Streptomyces lavendulae,streptomyces lavendulae,1914,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2123,Streptomyces lividans,streptomyces lividans,1916,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2125,Streptomyces mediolani,streptomyces mediolani,68237,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2126,Streptomyces microflavus,streptomyces microflavus,1919,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2127,Unclassified Lachnospiraceae bacterium,unclassified lachnospiraceae,186928,reported_only,Order,Clostridiales,Lachnospirales
+2128,Streptomyces murinus,streptomyces murinus,33900,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2129,Unclassified Lachnospiraceae rectale,unclassified lachnospiraceae,186928,reported_only,Order,Clostridiales,Lachnospirales
+2130,Streptomyces nashvillensis,streptomyces nashvillensis,67367,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2131,Unclassified Peptostreptococcaceae hiranonis,unclassified peptostreptococcaceae,1411023,reported_only,Order,Clostridiales,Peptostreptococcales
+2132,Streptomyces nodosus,streptomyces nodosus,40318,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2133,Unclassified Ruminococcaceae bacterium,unclassified ruminococcaceae,473772,reported_only,Order Family,Clostridiales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+2134,Streptomyces noursei,streptomyces noursei,1971,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2135,Ureaplasma parvum,ureaplasma parvum,134821,reported_only,Order Family,Mycoplasmatales | Mycoplasmataceae,Mycoplasmoidales | Mycoplasmoidaceae
+2136,Streptomyces rimosus,streptomyces rimosus,1927,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2137,Streptomyces roseoverticillatus,streptomyces roseoverticillatus,66429,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2138,Ureaplasma urealyticum,ureaplasma urealyticum,2130,reported_only,Order Family,Mycoplasmatales | Mycoplasmataceae,Mycoplasmoidales | Mycoplasmoidaceae
+2139,Streptomyces sclerotialus,streptomyces sclerotialus,1957,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2140,Ureibacillus thermosphaericus,ureibacillus thermosphaericus,51173,reported_only,Order Family,Bacillales | Planococcaceae,Caryophanales | Caryophanaceae
+2141,Streptomyces somaliensis,streptomyces somaliensis,78355,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2143,Streptomyces tendae,streptomyces tendae,1932,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2145,Streptomyces vinaceus,streptomyces vinaceus,1960,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2146,Streptomyces violaceoruber,streptomyces violaceoruber,1935,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2148,Streptomyces violaceus,streptomyces violaceus,1936,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2149,Varibaculum cambriense,varibaculum cambriense,184870,reported_only,Class,Actinobacteria,Actinomycetes
+2150,Streptomyces viridochromogenes,streptomyces viridochromogenes,1938,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2152,Streptomyces,streptomyces,1883,reported_only,Class Order,Actinobacteria | Streptomycetales,Actinomycetes | Kitasatosporales
+2154,Streptosporangium roseum,streptosporangium roseum,2001,reported_only,Class,Actinobacteria,Actinomycetes
+2155,Veillonella ruminantium,veillonella,29465,reported_only,Order Family,Selenomonadales | Selenomonadaceae,Veillonellales | Veillonellaceae
+2158,Subdoligranulum sp. 4_3_54a2faa,subdoligranulum sp. 4_3_54a2faa,665956,reported_only,Order Family,Clostridiales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+2159,Veillonella sp. 3_1_44,veillonella sp. 3_1_44,457416,reported_only,Class Order,Clostridia | Clostridiales,Negativicutes | Veillonellales
+2160,Subdoligranulum variabile,subdoligranulum variabile,214851,reported_only,Order Family,Clostridiales | Ruminococcaceae,Eubacteriales | Oscillospiraceae
+2161,Veillonella sp. 6_1_27,veillonella sp. 6_1_27,450749,reported_only,Class Order,Clostridia | Clostridiales,Negativicutes | Veillonellales
+2164,Sugiyamaella lignohabitans,sugiyamaella lignohabitans,796027,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Dipodascomycetes | Dipodascales
+2166,Suhomyces tanzawaensis,suhomyces tanzawaensis,46583,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Serinales
+2168,Sulfolobus acidocaldarius,sulfolobus acidocaldarius,2285,reported_only_reclassification,Phylum,Crenarchaeota (archaea),Thermoproteota (archaea)
+2170,Sulfolobus solfataricus,sulfolobus solfataricus,2287,reported_only_reclassification,Phylum,Crenarchaeota (archaea),Thermoproteota (archaea)
+2172,Sulfurimonas denitrificans,sulfurimonas denitrificans,39766,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Campylobacterota (bacteria)
+2181,Syntrophobacter fumaroxidans,syntrophobacter fumaroxidans,119484,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Thermodesulfobacteriota (bacteria)
+2183,Syntrophobotulus glycolicus,syntrophobotulus glycolicus,51197,reported_only,Order Family,Clostridiales | Peptococcaceae,Eubacteriales | Desulfitobacteriaceae
+2186,Syntrophomonas wolfei,syntrophomonas wolfei,863,reported_only,Order,Clostridiales,Eubacteriales
+2188,Methanospirillum hungatei,methanospirillum hungatei,2203,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+2190,Syntrophothermus lipocalidus,syntrophothermus lipocalidus,86170,reported_only,Order,Clostridiales,Eubacteriales
+2192,Methanothermobacter marburgensis,methanothermobacter marburgensis,145263,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+2194,Syntrophus aciditrophicus,syntrophus aciditrophicus,316277,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Thermodesulfobacteriota (bacteria)
+2196,Pelobacter carbinolicus,pelobacter carbinolicus,19,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Thermodesulfobacteriota (bacteria)
+2197,Methanothermococcus okinawensis,methanothermococcus okinawensis,155863,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+2200,Pelobacter propionicus,pelobacter propionicus,29543,reported_only_reclassification,Phylum,Proteobacteria (bacteria),Thermodesulfobacteriota (bacteria)
+2201,Methanothermus fervidus,methanothermus fervidus,2180,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+2204,Pelotomaculum thermopropionicum,pelotomaculum thermopropionicum,110500,reported_only,Order Family,Clostridiales | Peptococcaceae,Eubacteriales | Desulfotomaculaceae
+2213,Wickerhamomyces ciferrii,wickerhamomyces ciferrii,1041607,reported_only,Order Family,Saccharomycetales | Phaffomycetaceae,Phaffomycetales | Wickerhamomycetaceae
+2221,Winkia neuii,winkia neuii,33007,reported_only,Class,Actinobacteria,Actinomycetes
+2223,Methylobacterium mesophilicum,methylobacterium mesophilicum,39956,reported_only,Order,Rhizobiales,Hyphomicrobiales
+2226,Tannerella forsythia,tannerella forsythia,28112,reported_only,Family,Porphyromonadaceae,Tannerellaceae
+2227,Methylobacterium nodulans,methylobacterium nodulans,114616,reported_only,Order,Rhizobiales,Hyphomicrobiales
+2229,Xanthobacter autotrophicus,xanthobacter autotrophicus,280,reported_only,Order,Rhizobiales,Hyphomicrobiales
+2230,Methylobacterium populi,methylobacterium populi,223967,reported_only,Order,Rhizobiales,Hyphomicrobiales
+2232,Xanthomonas campestris,xanthomonas campestris,339,reported_only,Order Family,Xanthomonadales | Xanthomonadaceae,Lysobacterales | Lysobacteraceae
+2233,Methylobacterium radiotolerans,methylobacterium radiotolerans,31998,reported_only,Order,Rhizobiales,Hyphomicrobiales
+2235,Methylocella silvestris,methylocella silvestris,199596,reported_only,Order,Rhizobiales,Hyphomicrobiales
+2236,Xylella fastidiosa,xylella fastidiosa,2371,reported_only,Order Family,Xanthomonadales | Xanthomonadaceae,Lysobacterales | Lysobacteraceae
+2239,Methylorubrum extorquens,methylorubrum extorquens,408,reported_only,Order,Rhizobiales,Hyphomicrobiales
+2240,Terrisporobacter glycolicus,terrisporobacter glycolicus,36841,reported_only,Order,Clostridiales,Peptostreptococcales
+2241,Yamadazyma tenuis,yamadazyma tenuis,2315449,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Serinales
+2242,Methylorubrum populi,methylorubrum populi,223967,reported_only,Order,Rhizobiales,Hyphomicrobiales
+2243,Yarrowia lipolytica,yarrowia lipolytica,4952,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Dipodascomycetes | Dipodascales
+2245,Methylosinus trichosporium,methylosinus trichosporium,426,reported_only,Order,Rhizobiales,Hyphomicrobiales
+2249,Yersinia enterocolitica,yersinia enterocolitica,630,reported_only,Order Family,Enterobacteriales | Enterobacteriaceae,Enterobacterales | Yersiniaceae
+2250,Metschnikowia bicuspidata,metschnikowia bicuspidata,27322,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Serinales
+2252,Meyerozyma guilliermondii,meyerozyma guilliermondii,4929,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Serinales
+2254,Teunomyces kruisii,teunomyces kruisii,45561,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Serinales
+2255,Microbacterium gubbeenense,microbacterium gubbeenense,159896,reported_only,Class,Actinobacteria,Actinomycetes
+2258,Microbacterium oleivorans,microbacterium oleivorans,273677,reported_only,Class,Actinobacteria,Actinomycetes
+2259,Yersinia pseudotuberculosis,yersinia pseudotuberculosis,633,reported_only,Order Family,Enterobacteriales | Enterobacteriaceae,Enterobacterales | Yersiniaceae
+2261,Microbacterium paraoxydans,microbacterium paraoxydans,199592,reported_only,Class,Actinobacteria,Actinomycetes
+2263,Microbispora rosea,microbispora rosea,58117,reported_only,Class,Actinobacteria,Actinomycetes
+2267,Micrococcus luteus,micrococcus luteus,1270,reported_only,Class,Actinobacteria,Actinomycetes
+2268,Zymomonas mobilis,zymomonas mobilis,542,reported_only,Family,Sphingomonadaceae,Zymomonadaceae
+2272,Micromonospora aurantiaca,micromonospora aurantiaca,47850,reported_only,Class Order,Actinobacteria | Actinomycetales,Actinomycetes | Micromonosporales
+2273,Thermobifida fusca,thermobifida fusca,2021,reported_only,Class Family,Actinobacteria | Nocardiopsaceae,Actinomycetes | Nocardiopsidaceae
+2274,Micromonospora chalcea,micromonospora chalcea,1874,reported_only,Class,Actinobacteria,Actinomycetes
+2275,Thermococcus barophilus,thermococcus barophilus,55802,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+2276,Micromonospora,micromonospora,1873,reported_only,Class,Actinobacteria,Actinomycetes
+2277,Thermococcus gammatolerans,thermococcus gammatolerans,187878,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+2279,Thermococcus onnurineus,thermococcus onnurineus,342948,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+2280,Microtetraspora glauca,microtetraspora glauca,1996,reported_only,Class,Actinobacteria,Actinomycetes
+2281,Thermococcus sibiricus,thermococcus sibiricus,172049,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Methanobacteriota (archaea)
+2282,Microvirgula aerodenitrificans,microvirgula aerodenitrificans,57480,reported_only,Family,Chromobacteriaceae,Aquaspirillaceae
+2283,Thermodesulfovibrio yellowstonii,thermodesulfovibrio yellowstonii,28262,reported_only,Class Order Family,Nitrospira | Nitrospirales | Nitrospiraceae,Thermodesulfovibrionia | Thermodesulfovibrionales | Thermodesulfovibrionaceae
+2284,Millerozyma farinosa,millerozyma farinosa,4920,reported_only,Class Order,Saccharomycetes | Saccharomycetales,Pichiomycetes | Serinales
+2285,Thermomonospora curvata,thermomonospora curvata,2020,reported_only,Class,Actinobacteria,Actinomycetes
+2287,Thermoplasma acidophilum,thermoplasma acidophilum,2303,reported_only_reclassification,Phylum,Euryarchaeota (archaea),Thermoplasmatota (archaea)
+2290,Mobiluncus curtisii,mobiluncus curtisii,2051,reported_only,Class,Actinobacteria,Actinomycetes
+2294,Mogibacterium timidum,mogibacterium timidum,35519,reported_only,Order Family,Clostridiales | Clostridiales Family XIII. Incertae Sedis,Peptostreptococcales | Anaerovoracaceae
+2297,Thermus thermophilus,thermus thermophilus,274,rewritten,Phylum,Phylum=Deinococcus-thermus,Phylum=Deinococcus-Thermus
+2300,Monoblepharis insignis,monoblepharis insignis,109953,reported_only_reclassification,Phylum,Chytridiomycota (eukaryota),Monoblepharomycota (eukaryota)
+2302,Monographella nivalis,monographella nivalis,101483,reported_only,Order,Xylariales,Amphisphaeriales
+2303,Tistrella mobilis,tistrella mobilis,171437,reported_only,Order Family,Rhodospirillales | Rhodospirillaceae,Geminicoccales | Geminicoccaceae
+2304,Moorella thermoacetica,moorella thermoacetica,1525,reported_only,Order Family,Thermoanaerobacterales | Thermoanaerobacteraceae,Neomoorellales | Neomoorellaceae
+2306,Moorena producens,moorena producens,1155739,reported_only,Order Family,Oscillatoriales | Oscillatoriaceae,Coleofasciculales | Coleofasciculaceae
+2308,Moraxella catarrhalis,moraxella catarrhalis,480,reported_only,Order,Pseudomonadales,Moraxellales
+2316,Mycobacterium avium,mycobacterium avium,1764,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+2318,Mycobacterium fortuitum,mycobacterium fortuitum,1766,reported_only,Class Order,Actinobacteria | Actinomycetales,Actinomycetes | Mycobacteriales
+2319,Treponema denticola,treponema denticola,158,reported_only,Class Order Family,Spirochaetes | Spirochaetales | Spirochaetaceae,Spirochaetia | Treponematales | Treponemataceae
+2320,Mycobacterium leprae,mycobacterium leprae,1769,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+2321,Treponema pallidum,treponema pallidum,160,reported_only,Order Family,Spirochaetales | Spirochaetaceae,Treponematales | Treponemataceae
+2322,Mycobacterium tuberculosis,mycobacterium tuberculosis,1773,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+2324,Mycobacterium ulcerans,mycobacterium ulcerans,1809,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+2326,Mycobacteroides chelonae,mycobacteroides chelonae,1774,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+2328,Mycolicibacterium fortuitum,mycolicibacterium fortuitum,1766,reported_only,Class Order,Actinobacteria | Corynebacteriales,Actinomycetes | Mycobacteriales
+2332,Mycoplasma alligatoris,mycoplasma alligatoris,47687,reported_only,Order Family,Mycoplasmatales | Mycoplasmataceae,Mycoplasmoidales | Metamycoplasmataceae
+2336,Mycoplasma bovis,mycoplasma bovis,28903,reported_only,Order Family,Mycoplasmatales | Mycoplasmataceae,Mycoplasmoidales | Metamycoplasmataceae
+2341,Tropheryma whipplei,tropheryma whipplei,2039,reported_only,Class,Actinobacteria,Actinomycetes
+2343,Trueperella pyogenes,trueperella pyogenes,1661,reported_only,Class,Actinobacteria,Actinomycetes
+2344,Mycoplasma fermentans,mycoplasma fermentans,2115,reported_only,Order Family,Mycoplasmatales | Mycoplasmataceae,Mycoplasmoidales | Metamycoplasmataceae
+2346,Mycoplasma gallisepticum,mycoplasma gallisepticum,2096,reported_only,Order Family,Mycoplasmatales | Mycoplasmataceae,Mycoplasmoidales | Mycoplasmoidaceae
+2347,Turicibacter sanguinis,turicibacter sanguinis,154288,reported_only,Family,Erysipelotrichaceae,Turicibacteraceae
+2348,Mycoplasma genitalium,mycoplasma genitalium,2097,reported_only,Order Family,Mycoplasmatales | Mycoplasmataceae,Mycoplasmoidales | Mycoplasmoidaceae
+2349,Tyzzerella nexilis,tyzzerella nexilis,29361,reported_only,Order,Clostridiales,Lachnospirales
+2354,Mycoplasma hyopneumoniae,mycoplasma hyopneumoniae,2099,reported_only,Order Family,Mycoplasmatales | Mycoplasmataceae,Mycoplasmoidales | Metamycoplasmataceae
+2355,Unclassified Clostridiales bacterium,unclassified clostridiales,39779,reported_only,Order,Clostridiales,Eubacteriales
+2357,Unclassified Clostridiales pectinophilus,unclassified clostridiales,39779,reported_only,Order,Clostridiales,Eubacteriales
+2358,Mycoplasma mobile,mycoplasma mobile,2118,reported_only,Order Family,Mycoplasmatales | Mycoplasmataceae,Mycoplasmoidales | Metamycoplasmataceae
+2359,Unclassified Enterobacteriaceae bacterium 9_2_54faa,unclassified enterobacteriaceae,36866,reported_only,Order,Enterobacteriales,Enterobacterales
+2365,Mycoplasma penetrans,mycoplasma penetrans,28227,reported_only,Order Family,Mycoplasmatales | Mycoplasmataceae,Mycoplasmoidales | Mycoplasmoidaceae
+566,Rhodococcus Fascians,genus consensus,,genus_consensus,Phylum Class Family Order(cleared),Phylum=Arthropoda | Class=Insecta | Order=Hemiptera | Family=Coccidae,Phylum=Actinobacteria | Class=Actinobacteria | Family=Nocardiaceae | Order=

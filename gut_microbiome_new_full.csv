@@ -30,7 +30,7 @@ Bacillota,Negativicutes,Selenomonadales,Selenomonadaceae,Anaerovibrio,,anaerobe,
 Bacillota,Clostridia,Lachnospirales,Lachnospiraceae,Moryella,Indoligenes,anaerobe,Unknown,0,,,39
 Bacillota,Clostridia,Eubacteriales,Oscillospiraceae,Ruminococcus,Torques,anaerobe,Unknown,0,,,40
 Bacillota,Clostridia,Eubacteriales,Oscillospiraceae,Ruminococcus,Gnavus,anaerobe,Unknown,0,N/A,N/A,41
-Arthropoda,Insecta,Phasmatodea,Bacillidae,Bacillus,Muralis,aerobe,alkaliphile,1,,,45
+Firmicutes,Bacilli,Caryophanales,Bacillaceae,Bacillus,Muralis,aerobe,alkaliphile,1,,,45
 Bacillota,Clostridia,Lachnospirales,Lachnospiraceae,Butyrivibrio,,anaerobe,Unknown,Unknown,,,46
 Bacillota,Bacilli,Lactobacillales,Carnobacteriaceae,Granulicatella,,anaerobe,Unknown,Unknown,,,48
 Bacteroidota,Bacteroidia,Bacteroidales,Odoribacteraceae,Odoribacter,,anaerobe,Unknown,0,,,50
@@ -52,7 +52,7 @@ Bacteroidota,Bacteroidia,Bacteroidales,Bacteroidaceae,Bacteroides,Coprophilus,an
 Actinomycetota,Coriobacteriia,Eggerthellales,Eggerthellaceae,Slackia,,anaerobe,Unknown,0,,,71
 Bacteroidota,Bacteroidia,Bacteroidales,Paludibacteraceae,Paludibacter,,facultative anaerobe,acidophile,0,,,72
 Streptophyta,Magnoliopsida,Myrtales,Onagraceae,Oenothera,Berteroana,Unknown,Unknown,Unknown,,,73
-Arthropoda,Insecta,Lepidoptera,Geometridae,Victoria,Amazonica,Unknown,Unknown,Unknown,,,76
+Streptophyta,Magnoliopsida,Nymphaeales,Nymphaeaceae,Victoria,Amazonica,Unknown,Unknown,Unknown,,,76
 Bacillota,Negativicutes,Selenomonadales,Selenomonadaceae,Mitsuokella,Multacida,anaerobe,Unknown,Unknown,fermenter,carbohydrates,77
 Streptophyta,Magnoliopsida,Proteales,Nelumbonaceae,Nelumbo,Nucifera,Unknown,Unknown,Unknown,,,78
 Bacillota,Clostridia,Lachnospirales,Lachnospiraceae,Anaerostipes,,anaerobe,Unknown,1,,,79
@@ -98,7 +98,7 @@ Bacillota,Clostridia,Lachnospirales,Lachnospiraceae,Lachnobacterium,,anaerobe,Un
 Bacillota,Bacilli,Lactobacillales,Lactobacillaceae,Lactobacillus,Agilis,anaerobe,acidophile,0,,,137
 Bacteroidota,Flavobacteriia,Flavobacteriales,Weeksellaceae,Chryseobacterium,,aerobe,alkaliphile,0,,,138
 Bacillota,Clostridia,Lachnospirales,Lachnospiraceae,Candidatus Epulonipiscium,,Unknown,Unknown,Unknown,,,140
-Arthropoda,Insecta,Phasmatodea,Bacillidae,Bacillus,Asahii,aerobe,alkaliphile,1,,,143
+Firmicutes,Bacilli,Caryophanales,Bacillaceae,Bacillus,Asahii,aerobe,alkaliphile,1,,,143
 Bacillota,Bacilli,Lactobacillales,Enterococcaceae,Enterococcus,Casseliflavus,facultative anaerobe,alkaliphile,0,mixed,carbohydrates,145
 Bacteroidota,Bacteroidia,Bacteroidales,Prevotellaceae,Prevotella,Tannerae,anaerobe,alkaliphile,0,,,146
 Actinomycetota,Actinomycetes,Actinomycetales,Actinomycetaceae,Arcanobacterium,,anaerobe,Unknown,0,,,147
@@ -138,7 +138,7 @@ Bacillota,Clostridia,Eubacteriales,Clostridiaceae,Sarcina,,anaerobe,Unknown,Unkn
 Pseudomonadota,Alphaproteobacteria,Sphingomonadales,Sphingomonadaceae,Sphingomonas,Yabuuchiae,aerobe,alkaliphile,0,,,202
 Synergistota,Synergistia,Synergistales,Acetomicrobiaceae,Acetomicrobium,Acetomicrobium hydrogeniformans,anaerobe,alkaliphile,0,,,203
 Pseudomonadota,Betaproteobacteria,Burkholderiales,Burkholderiaceae,Lautropia,,aerobe,Unknown,Unknown,,,205
-Arthropoda,Insecta,Coleoptera,Lampyridae,Serratia,Marcescens,aerobe,alkaliphile,0,mixed,N/A,206
+Proteobacteria,Gammaproteobacteria,Enterobacterales,Yersiniaceae,Serratia,Marcescens,aerobe,alkaliphile,0,mixed,N/A,206
 Pseudomonadota,Betaproteobacteria,Rhodocyclales,Rhodocyclaceae,Propionivibrio,,anaerobe,Unknown,Unknown,,,207
 Thermodesulfobacteriota,Desulfovibrionia,Desulfovibrionales,Desulfovibrionaceae,Desulfovibrio,Vulgaris,anaerobe,alkaliphile,0,fermenter,N/A,208
 Bacillota,Clostridia,Eubacteriales,Clostridiaceae,Clostridium,Gasigenes,anaerobe,alkaliphile,1,,,210
@@ -219,7 +219,7 @@ Bacillota,Negativicutes,Veillonellales,Veillonellaceae,Dialister,,anaerobe,Unkno
 Bacillota,Bacilli,Lactobacillales,Lactobacillaceae,Leuconostoc,,facultative anaerobe,alkaliphile,0,,,312
 Bacillota,Bacilli,Lactobacillales,Streptococcaceae,Streptococcus,Equi,facultative anaerobe,alkaliphile,0,mixed,carbohydrates,313
 Bacillota,Clostridia,Eubacteriales,Eubacteriaceae,Eubacterium,Dolichum,anaerobe,Unknown,0,,,314
-Streptophyta,Magnoliopsida,Fabales,Fabaceae,Rothia,Mucilaginosa,aerobe,alkaliphile,0,respirer,N/A,315
+Actinobacteria,Actinomycetes,Micrococcales,Micrococcaceae,Rothia,Mucilaginosa,aerobe,alkaliphile,0,respirer,N/A,315
 Bacillota,Clostridia,Lachnospirales,Lachnospiraceae,Shuttleworthia,Satelles,Unknown,Unknown,Unknown,,,316
 Nitrososphaerota,Nitrososphaeria,Nitrososphaerales,Nitrososphaeraceae,Nitrososphaera,Gargensis,Unknown,Unknown,Unknown,,,319
 Bacillota,Bacilli,Lactobacillales,Streptococcaceae,Streptococcus,Minor,facultative anaerobe,alkaliphile,0,,,320
@@ -259,14 +259,14 @@ Pseudomonadota,Betaproteobacteria,Burkholderiales,Comamonadaceae,Ramlibacter,,ae
 Bacillota,Tissierellia,Tissierellales,Thermohalobacteraceae,Clostridiisalibacter,,anaerobe,alkaliphile,1,,,360
 Pseudomonadota,Betaproteobacteria,Nitrosomonadales,Methylophilaceae,Methylotenera,Mobilis,anaerobe,alkaliphile,1,N/A,N/A,361
 Fusobacteriota,Fusobacteriia,Fusobacteriales,Leptotrichiaceae,Leptotrichia,,anaerobe,Unknown,0,,,363
-Arthropoda,Insecta,Phasmatodea,Bacillidae,Bacillus,Ginsengihumi,aerobe,alkaliphile,1,,,364
+Firmicutes,Bacilli,Caryophanales,Bacillaceae,Bacillus,Ginsengihumi,aerobe,alkaliphile,1,,,364
 Bacillota,Clostridia,Eubacteriales,Clostridiaceae,Clostridium,Metallolevans,anaerobe,alkaliphile,1,,,366
 Streptophyta,Magnoliopsida,Fabales,Fabaceae,Lupinus,Luteus,Unknown,Unknown,Unknown,,,367
 Bacillota,Clostridia,Eubacteriales,Clostridiaceae,Clostridium,Hiranonis,anaerobe,alkaliphile,1,,,368
 Pseudomonadota,Betaproteobacteria,Burkholderiales,Comamonadaceae,Giesbergeria,,aerobe,alkaliphile,0,,,369
 Bacillota,Bacilli,Lactobacillales,Aerococcaceae,Facklamia,,facultative anaerobe,Unknown,Unknown,,,370
 Actinomycetota,Actinomycetes,Micrococcales,Microbacteriaceae,Aquiluna,Rubra,Unknown,Unknown,Unknown,,,371
-Streptophyta,Magnoliopsida,Fabales,Fabaceae,Rothia,Dentocariosa,aerobe,alkaliphile,0,respirer,N/A,372
+Actinobacteria,Actinomycetes,Micrococcales,Micrococcaceae,Rothia,Dentocariosa,aerobe,alkaliphile,0,respirer,N/A,372
 Bacillota,Bacilli,Lactobacillales,Lactobacillaceae,Lactobacillus,Mucosae,anaerobe,acidophile,0,mixed,carbohydrates,373
 Bacillota,Bacilli,Lactobacillales,Lactobacillaceae,Lactobacillus,Pontis,anaerobe,acidophile,0,,,374
 Bacillota,Bacilli,Lactobacillales,Carnobacteriaceae,Trichococcus,,aerobe,alkaliphile,Unknown,,,375
@@ -315,7 +315,7 @@ Pseudomonadota,Betaproteobacteria,Rhodocyclales,Zoogloeaceae,Zoogloea,,aerobe,Un
 Bacillota,Clostridia,Peptostreptococcales,Peptostreptococcaceae,Tepidibacter,,anaerobe,alkaliphile,1,,,434
 Pseudomonadota,Gammaproteobacteria,Enterobacterales,Enterobacteriaceae,Enterobacter,Hormaechei,aerobe,alkaliphile,0,mixed,N/A,435
 Bacillota,Clostridia,Eubacteriales,Clostridiaceae,Clostridium,Citroniae,anaerobe,alkaliphile,1,,,437
-Arthropoda,Insecta,Phasmatodea,Bacillidae,Bacillus,Cereus,aerobe,alkaliphile,1,mixed,carbohydrates,438
+Firmicutes,Bacilli,Caryophanales,Bacillaceae,Bacillus,Cereus,aerobe,alkaliphile,1,mixed,carbohydrates,438
 Pseudomonadota,Betaproteobacteria,Neisseriales,Neisseriaceae,Neisseria,Cinerea,microaerophile,alkaliphile,0,fermenter,carbohydrates,439
 Fusobacteriota,Fusobacteriia,Fusobacteriales,Fusobacteriaceae,Cetobacterium,Somerae,anaerobe,Unknown,Unknown,fermenter,carbohydrates,440
 Pseudomonadota,Gammaproteobacteria,Pasteurellales,Pasteurellaceae,Aggregatibacter,Segnis,microaerophile,Unknown,Unknown,,,441
@@ -325,7 +325,7 @@ Pseudomonadota,Betaproteobacteria,Burkholderiales,Burkholderiaceae,Cupriavidus,G
 Pseudomonadota,Gammaproteobacteria,Pasteurellales,Pasteurellaceae,Pasteurella,Mairii,facultative anaerobe,Unknown,Unknown,,,446
 Pseudomonadota,Gammaproteobacteria,Enterobacterales,Erwiniaceae,Pantoea,Agglomerans,aerobe,Unknown,0,mixed,N/A,448
 Bacillota,Bacilli,Lactobacillales,Lactobacillaceae,Lactobacillus,Salivarius,anaerobe,acidophile,0,mixed,N/A,451
-Arthropoda,Insecta,Phasmatodea,Bacillidae,Bacillus,Foraminis,aerobe,alkaliphile,1,,,453
+Firmicutes,Bacilli,Caryophanales,Bacillaceae,Bacillus,Foraminis,aerobe,alkaliphile,1,,,453
 Bacillota,Clostridia,Eubacteriales,Clostridiaceae,Clostridium,Hungatei,anaerobe,alkaliphile,1,,,454
 Pseudomonadota,Gammaproteobacteria,Pasteurellales,Pasteurellaceae,Actinobacillus,Porcinus,facultative anaerobe,Unknown,Unknown,,,455
 Pseudomonadota,Gammaproteobacteria,Pasteurellales,Pasteurellaceae,Actinobacillus,Seminis,facultative anaerobe,Unknown,Unknown,,,456
@@ -369,14 +369,14 @@ Bacteroidota,Sphingobacteriia,Sphingobacteriales,Sphingobacteriaceae,Pedobacter,
 Pseudomonadota,Betaproteobacteria,Burkholderiales,Oxalobacteraceae,Collimonas,,aerobe,Unknown,0,,,501
 Pseudomonadota,Gammaproteobacteria,Enterobacterales,Enterobacteriaceae,Enterobacter,Cloacae,aerobe,alkaliphile,0,mixed,N/A,502
 Fusobacteriota,Fusobacteriia,Fusobacteriales,Fusobacteriaceae,Propionigenium,,anaerobe,Unknown,Unknown,,,503
-Arthropoda,Insecta,Coleoptera,Lampyridae,Serratia,Symbiotica,aerobe,alkaliphile,0,,,504
+Proteobacteria,Gammaproteobacteria,Enterobacterales,Yersiniaceae,Serratia,Symbiotica,aerobe,alkaliphile,0,,,504
 Bacillota,Clostridia,Peptostreptococcales,Filifactoraceae,Filifactor,,anaerobe,Unknown,Unknown,,,505
 Thermodesulfobacteriota,Desulfovibrionia,Desulfovibrionales,Desulfovibrionaceae,Desulfovibrio,D168,anaerobe,alkaliphile,0,,,507
 Bacillota,Clostridia,Eubacteriales,Oscillospiraceae,Cellulosibacter,Alkalithermophilus,anaerobe,alkaliphile,1,,,508
 Bacteroidota,Bacteroidia,Bacteroidales,Rikenellaceae,Alistipes,Massiliensis,anaerobe,Unknown,0,,,509
 Pseudomonadota,Gammaproteobacteria,Moraxellales,Moraxellaceae,Enhydrobacter,,aerobe,Unknown,Unknown,,,510
 Bacillota,Bacilli,Lactobacillales,Lactobacillaceae,Lactobacillus,Iners,anaerobe,acidophile,0,mixed,carbohydrates,511
-Arthropoda,Insecta,Mantodea,Amelidae,Yersinia,,aerobe,Unknown,0,,,514
+Proteobacteria,Gammaproteobacteria,Enterobacterales,Yersiniaceae,Yersinia,,aerobe,Unknown,0,,,514
 Pseudomonadota,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,Cholerae,facultative anaerobe,alkaliphile,0,mixed,organic_unspecified,515
 Pseudomonadota,Gammaproteobacteria,Alteromonadales,Ferrimonadaceae,Ferrimonas,,anaerobe,alkaliphile,Unknown,,,517
 Pseudomonadota,Gammaproteobacteria,Moraxellales,Moraxellaceae,Moraxella,,aerobe,Unknown,0,,,518
@@ -406,26 +406,26 @@ Bacillota,Bacilli,Bacillales,Sporolactobacillaceae,Sporolactobacillus,,facultati
 Pseudomonadota,Gammaproteobacteria,Vibrionales,Vibrionaceae,Vibrio,Tapetis,facultative anaerobe,alkaliphile,0,,,555
 Bacteroidota,Flavobacteriia,Flavobacteriales,Cryomorphaceae,Cryomorpha,,Unknown,Unknown,Unknown,,,556
 Actinomycetota,Actinomycetes,Micrococcales,Promicromonosporaceae,Cellulosimicrobium,,aerobe,alkaliphile,0,,,557
-Chordata,Amphibia,Caudata,Proteidae,Proteus,,facultative anaerobe,alkaliphile,Unknown,,,559
+Proteobacteria,Gammaproteobacteria,Enterobacterales,Morganellaceae,Proteus,,facultative anaerobe,alkaliphile,Unknown,,,559
 Pseudomonadota,Gammaproteobacteria,Enterobacterales,Budviciaceae,Leminorella,Grimontii,facultative anaerobe,Unknown,Unknown,mixed,N/A,560
 Pseudomonadota,Gammaproteobacteria,Moraxellales,Moraxellaceae,Alkanindiges,,Unknown,Unknown,Unknown,,,561
 Pseudomonadota,Gammaproteobacteria,Enterobacterales,Erwiniaceae,Pantoea,Ananatis,aerobe,Unknown,0,,,562
 Pseudomonadota,Gammaproteobacteria,Enterobacterales,Pectobacteriaceae,Dickeya,,aerobe,Unknown,Unknown,,,563
 Pseudomonadota,Gammaproteobacteria,Thiotrichales,Thiotrichaceae,Beggiatoa,,Unknown,Unknown,Unknown,,,564
 Pseudomonadota,Gammaproteobacteria,Enterobacterales,Enterobacteriaceae,Enterobacter,Gergoviae,aerobe,alkaliphile,0,,,565
-Arthropoda,Insecta,Hemiptera,Coccidae,Rhodococcus,Fascians,aerobe,alkaliphile,0,N/A,N/A,566
+Actinobacteria,Actinobacteria,,Nocardiaceae,Rhodococcus,Fascians,aerobe,alkaliphile,0,N/A,N/A,566
 Bacillota,Clostridia,Peptostreptococcales,Natronincolaceae,Natronincola,,anaerobe,Unknown,Unknown,,,567
 Pseudomonadota,Gammaproteobacteria,Alteromonadales,Shewanellaceae,Shewanella,Benthica,aerobe,alkaliphile,0,,,568
 Pseudomonadota,Gammaproteobacteria,Enterobacterales,Enterobacteriaceae,Enterobacter,Pyrinus,aerobe,alkaliphile,0,,,572
 Pseudomonadota,Gammaproteobacteria,Oceanospirillales,Oceanospirillaceae,Marinomonas,,aerobe,alkaliphile,0,,,574
-Streptophyta,Magnoliopsida,Lamiales,Orobanchaceae,Buchnera,,Unknown,Unknown,Unknown,,,575
+Proteobacteria,Gammaproteobacteria,Enterobacterales,Erwiniaceae,Buchnera,,Unknown,Unknown,Unknown,,,575
 Thermodesulfobacteriota,Desulfobacteria,Desulfobacterales,Desulfococcaceae,Desulfococcus,Oleovorans,anaerobe,Unknown,Unknown,fermenter,N/A,577
 Pseudomonadota,Gammaproteobacteria,Enterobacterales,Enterobacteriaceae,Enterobacter,Arachidis,aerobe,alkaliphile,0,,,579
 Pseudomonadota,Gammaproteobacteria,Thiotrichales,Thiotrichaceae,Candidatus Thiopilula,Aggregata,Unknown,Unknown,Unknown,,,580
 Pseudomonadota,Gammaproteobacteria,Oceanospirillales,Halomonadaceae,Halomonas,,aerobe,alkaliphile,0,,,581
 Pseudomonadota,Alphaproteobacteria,Hyphomicrobiales,Rhizobiaceae,Agrobacterium,,aerobe,alkaliphile,0,,,582
 Bacillota,Bacilli,Bacillales,Paenibacillaceae,Aneurinibacillus,,facultative anaerobe,acidophile,1,,,583
-Arthropoda,Insecta,Coleoptera,Anthribidae,Lawsonia,,Unknown,Unknown,Unknown,,,584
+Thermodesulfobacteriota,Desulfovibrionia,Desulfovibrionales,Desulfovibrionaceae,Lawsonia,,Unknown,Unknown,Unknown,,,584
 Bacillota,Bacilli,Lactobacillales,Lactobacillaceae,Fructobacillus,,aerobe,acidophile,0,,,585
 Bacillota,Clostridia,Eubacteriales,Clostridiaceae,Clostridium,Hathewayi,anaerobe,alkaliphile,1,,,586
 Thermodesulfobacteriota,Desulfovibrionia,Desulfovibrionales,Desulfovibrionaceae,Desulfovibrio,Litoralis,anaerobe,alkaliphile,0,,,588
@@ -462,13 +462,13 @@ Pseudomonadota,Gammaproteobacteria,Enterobacterales,Enterobacteriaceae,Escherich
 Actinomycetota,Coriobacteriia,Coriobacteriales,Atopobiaceae,Atopobium,Rimae,anaerobe,Unknown,Unknown,fermenter,carbohydrates,643
 Pseudomonadota,Gammaproteobacteria,Aeromonadales,Succinivibrionaceae,Ruminobacter,,anaerobe,Unknown,Unknown,,,644
 Actinomycetota,Actinomycetes,Bifidobacteriales,Bifidobacteriaceae,Gardnerella,,anaerobe,Unknown,Unknown,,,646
-Streptophyta,Magnoliopsida,Ericales,Marcgraviaceae,Schwartzia,,anaerobe,Unknown,Unknown,,,647
+Firmicutes,Negativicutes,Selenomonadales,Selenomonadaceae,Schwartzia,,anaerobe,Unknown,Unknown,,,647
 Pseudomonadota,Gammaproteobacteria,Lysobacterales,Lysobacteraceae,Lysobacter,,aerobe,alkaliphile,0,,,648
 Pseudomonadota,Gammaproteobacteria,Enterobacterales,Erwiniaceae,Erwinia,Oleae,facultative anaerobe,alkaliphile,0,,,649
 Fusobacteriota,Fusobacteriia,Fusobacteriales,Fusobacteriaceae,Psychrilyobacter,,anaerobe,Unknown,0,,,652
 Bacillota,Clostridia,Eubacteriales,Clostridiaceae,Clostridium,Cocleatum,anaerobe,alkaliphile,1,,,653
 Pseudomonadota,Gammaproteobacteria,Enterobacterales,Pectobacteriaceae,Samsonia,Erythrinae,facultative anaerobe,Unknown,Unknown,,,658
-Arthropoda,Insecta,Phasmatodea,Bacillidae,Bacillus,Humi,aerobe,alkaliphile,1,,,659
+Firmicutes,Bacilli,Caryophanales,Bacillaceae,Bacillus,Humi,aerobe,alkaliphile,1,,,659
 Pseudomonadota,Gammaproteobacteria,Aeromonadales,Aeromonadaceae,Oceanimonas,,obligate aerobe,alkaliphile,Unknown,,,660
 Bacteroidota,Bacteroidia,Bacteroidales,Prevotellaceae,Prevotella,Intermedia,anaerobe,alkaliphile,0,fermenter,carbohydrates,661
 Pseudomonadota,Alphaproteobacteria,Rhodospirillales,Thalassospiraceae,Thalassospira,Xiamenensis,aerobe,alkaliphile,0,,,662
@@ -476,7 +476,7 @@ Pseudomonadota,Betaproteobacteria,Rhodocyclales,Rhodocyclaceae,Petrobacter,Succi
 Pseudomonadota,Betaproteobacteria,Burkholderiales,Comamonadaceae,Aquabacterium,,aerobe,alkaliphile,0,,,666
 Bacillota,Bacilli,Lactobacillales,Lactobacillaceae,Weissella,Paramesenteroides,anaerobe,alkaliphile,0,mixed,carbohydrates,668
 Pseudomonadota,Betaproteobacteria,Burkholderiales,Oxalobacteraceae,Massilia,Aerolata,aerobe,alkaliphile,0,,,669
-Streptophyta,Magnoliopsida,Ericales,Theaceae,Gordonia,,aerobe,alkaliphile,0,N/A,N/A,670
+Actinobacteria,Actinomycetes,Mycobacteriales,Gordoniaceae,Gordonia,,aerobe,alkaliphile,0,N/A,N/A,670
 Pseudomonadota,Alphaproteobacteria,Rhodospirillales,Acetobacteraceae,Swaminathania,,Unknown,acidophile,Unknown,,,671
 Bacillota,Tissierellia,Tissierellales,Peptoniphilaceae,Anaerococcus,,anaerobe,Unknown,Unknown,,,673
 Bacillota,Tissierellia,Tissierellales,Peptoniphilaceae,Finegoldia,,anaerobe,Unknown,0,,,674
@@ -518,10 +518,10 @@ Pseudomonadota,Betaproteobacteria,Neisseriales,Neisseriaceae,Neisseria,Subflava,
 Streptophyta,Magnoliopsida,Brassicales,Caricaceae,Carica,Papaya,Unknown,Unknown,Unknown,,,725
 Streptophyta,Pinopsida,Araucariales,Podocarpaceae,Nageia,Nagi,Unknown,Unknown,Unknown,,,727
 Bacillota,Clostridia,Thermoanaerobacterales,Thermoanaerobacteraceae,Thermoanaerobacterium,,anaerobe,acidophile,1,,,728
-Arthropoda,Insecta,Phasmatodea,Bacillidae,Bacillus,Firmus,aerobe,alkaliphile,1,mixed,carbohydrates,729
+Firmicutes,Bacilli,Caryophanales,Bacillaceae,Bacillus,Firmus,aerobe,alkaliphile,1,mixed,carbohydrates,729
 Bacillota,Clostridia,Eubacteriales,Desulfitobacteriaceae,Dehalobacter,,anaerobe,Unknown,Unknown,,,731
 Bacteroidota,Flavobacteriia,Flavobacteriales,Weeksellaceae,Wautersiella,,Unknown,Unknown,Unknown,,,732
-Arthropoda,Insecta,Phasmatodea,Bacillidae,Bacillus,Horti,aerobe,alkaliphile,1,,,733
+Firmicutes,Bacilli,Caryophanales,Bacillaceae,Bacillus,Horti,aerobe,alkaliphile,1,,,733
 Pseudomonadota,Gammaproteobacteria,Pseudomonadales,Marinobacteraceae,Marinobacter,,aerobe,alkaliphile,0,,,734
 Pseudomonadota,Gammaproteobacteria,Thiotrichales,Piscirickettsiaceae,Thiomicrospira,,microaerophile,alkaliphile,Unknown,,,735
 Bacillota,Clostridia,Peptostreptococcales,Acidaminobacteraceae,Acidaminobacter,,anaerobe,Unknown,Unknown,,,737
@@ -542,9 +542,9 @@ Thermodesulfobacteriota,Desulfovibrionia,Desulfovibrionales,Desulfovibrionaceae,
 Bacillota,Clostridia,Eubacteriales,Clostridiaceae,Proteiniborus,Ethanoligenes,anaerobe,alkaliphile,0,,,761
 Pseudomonadota,Betaproteobacteria,Rhodocyclales,Rhodocyclaceae,Azovibrio,,Unknown,Unknown,Unknown,,,762
 Bacteroidota,Bacteroidia,Bacteroidales,Prevotellaceae,Prevotella,Ruminicola,anaerobe,alkaliphile,0,fermenter,N/A,764
-Arthropoda,Insecta,Phasmatodea,Bacillidae,Bacillus,Selenatarsenatis,aerobe,alkaliphile,1,,,765
-Arthropoda,Insecta,Hemiptera,Pseudococcidae,Paracoccus,Marcusii,aerobe,alkaliphile,0,,,766
-Arthropoda,Insecta,Phasmatodea,Bacillidae,Bacillus,Flexus,aerobe,alkaliphile,1,mixed,carbohydrates,767
+Firmicutes,Bacilli,Caryophanales,Bacillaceae,Bacillus,Selenatarsenatis,aerobe,alkaliphile,1,,,765
+Proteobacteria,Alphaproteobacteria,Rhodobacterales,Paracoccaceae,Paracoccus,Marcusii,aerobe,alkaliphile,0,,,766
+Firmicutes,Bacilli,Caryophanales,Bacillaceae,Bacillus,Flexus,aerobe,alkaliphile,1,mixed,carbohydrates,767
 Pseudomonadota,Alphaproteobacteria,Rhodobacterales,Roseobacteraceae,Roseivivax,,aerobe,alkaliphile,Unknown,,,768
 Bacteroidota,Flavobacteriia,Flavobacteriales,Flavobacteriaceae,Myroides,Odoratimimus,aerobe,alkaliphile,0,N/A,N/A,769
 Pseudomonadota,Alphaproteobacteria,Rhodobacterales,Paracoccaceae,Rhodobacter,,aerobe,alkaliphile,0,,,770
@@ -554,7 +554,7 @@ Pseudomonadota,Gammaproteobacteria,Cellvibrionales,Cellvibrionaceae,Cellvibrio,,
 Pseudomonadota,Alphaproteobacteria,Rhodobacterales,Roseobacteraceae,Roseisalinus,Antarcticus,microaerophile,alkaliphile,0,,,774
 Pseudomonadota,Alphaproteobacteria,Rhodobacterales,Roseobacteraceae,Maritimibacter,Alkaliphilus,anaerobe,alkaliphile,1,,,775
 Pseudomonadota,Gammaproteobacteria,Moraxellales,Moraxellaceae,Acinetobacter,Johnsonii,aerobe,alkaliphile,0,fermenter,carbohydrates,776
-Arthropoda,Insecta,Phasmatodea,Bacillidae,Bacillus,Coagulans,aerobe,alkaliphile,1,N/A,N/A,777
+Firmicutes,Bacilli,Caryophanales,Bacillaceae,Bacillus,Coagulans,aerobe,alkaliphile,1,N/A,N/A,777
 Actinomycetota,Actinomycetes,Pseudonocardiales,Pseudonocardiaceae,Amycolatopsis,,aerobe,alkaliphile,1,,,780
 Bacillota,Bacilli,Lactobacillales,Lactobacillaceae,Lactobacillus,Vaginalis,anaerobe,acidophile,0,mixed,carbohydrates,783
 Pseudomonadota,Alphaproteobacteria,Rhodobacterales,Roseobacteraceae,Nautella,Italica,Unknown,Unknown,Unknown,,,784
@@ -564,8 +564,8 @@ Bacillota,Bacilli,Bacillales,Bacillaceae,Ornithinibacillus,Scapharcae,aerobe,alk
 Pseudomonadota,Gammaproteobacteria,Enterobacterales,Pectobacteriaceae,Brenneria,Alni,facultative anaerobe,alkaliphile,Unknown,,,788
 Acidobacteriota,Terriglobia,Bryobacterales,Solibacteraceae,Candidatus Solibacter,,Unknown,Unknown,Unknown,,,789
 Bacillota,Bacilli,Lactobacillales,Lactobacillaceae,Lactobacillus,Coleohominis,anaerobe,acidophile,0,mixed,carbohydrates,792
-Arthropoda,Insecta,Phasmatodea,Bacillidae,Bacillus,Aurantiacus,aerobe,alkaliphile,1,,,793
-Arthropoda,Insecta,Coleoptera,Curculionidae,Syntrophus,,anaerobe,Unknown,Unknown,,,796
+Firmicutes,Bacilli,Caryophanales,Bacillaceae,Bacillus,Aurantiacus,aerobe,alkaliphile,1,,,793
+Thermodesulfobacteriota,Syntrophia,Syntrophales,Syntrophaceae,Syntrophus,,anaerobe,Unknown,Unknown,,,796
 Pseudomonadota,Betaproteobacteria,Nitrosomonadales,Sterolibacteriaceae,Methyloversatilis,,aerobe,Unknown,Unknown,,,797
 Bacillota,Bacilli,Bacillales,Thermoactinomycetaceae,Thermoflavimicrobium,Dichotomicum,aerobe,alkaliphile,1,,,799
 Actinomycetota,Actinomycetes,Mycobacteriales,Nocardiaceae,Nocardia,,aerobe,alkaliphile,1,N/A,N/A,800
@@ -579,7 +579,7 @@ Bacteroidota,Flavobacteriia,Flavobacteriales,Flavobacteriaceae,Sufflavibacter,Ma
 Pseudomonadota,Gammaproteobacteria,Enterobacterales,Enterobacteriaceae,Baumannia,Cicadellinicola,Unknown,Unknown,Unknown,,,812
 Bacillota,Clostridia,Eubacteriales,Clostridiaceae,Caldanaerocella,,Unknown,Unknown,Unknown,,,813
 Bacillota,Clostridia,Christensenellales,Christensenellaceae,Christensenella,,anaerobe,alkaliphile,0,,,814
-Cnidaria,Anthozoa,Actiniaria,Edwardsiidae,Edwardsiella,,facultative anaerobe,Unknown,Unknown,,,816
+Proteobacteria,Gammaproteobacteria,Enterobacterales,Hafniaceae,Edwardsiella,,facultative anaerobe,Unknown,Unknown,,,816
 Actinomycetota,Actinomycetes,Micrococcales,Microbacteriaceae,Rathayibacter,,obligate aerobe,Unknown,Unknown,,,817
 Bacteroidota,Bacteroidia,Bacteroidales,Barnesiellaceae,Barnesiella,Viscericola,anaerobe,Unknown,0,,,818
 Deferribacterota,Deferribacteres,Deferribacterales,Flexistipitaceae,Flexistipes,,anaerobe,Unknown,Unknown,,,819
@@ -589,7 +589,7 @@ Thermotogota,Thermotogae,Thermotogales,Thermotogaceae,Thermotoga,,anaerobe,alkal
 Bacillota,Clostridia,Thermoanaerobacterales,Thermoanaerobacteraceae,Thermoanaerobacter,,anaerobe,acidophile,1,,,825
 Bacillota,Clostridia,Eubacteriales,Peptococcaceae,Desulfonispora,Thiosulfatigenes,anaerobe,Unknown,Unknown,,,826
 Pseudomonadota,Gammaproteobacteria,Enterobacterales,Budviciaceae,Pragia,Fontium,Unknown,Unknown,Unknown,,,830
-Arthropoda,Insecta,Hemiptera,Diaspididae,Morganella,Morganii,facultative anaerobe,Unknown,Unknown,mixed,N/A,832
+Proteobacteria,Gammaproteobacteria,Enterobacterales,Morganellaceae,Morganella,Morganii,facultative anaerobe,Unknown,Unknown,mixed,N/A,832
 Actinomycetota,Actinomycetes,Bifidobacteriales,Bifidobacteriaceae,Alloscardovia,,anaerobe,acidophile,0,,,833
 Bacteroidota,Cytophagia,Cytophagales,Leadbetterellaceae,Leadbetterella,,aerobe,Unknown,Unknown,,,834
 Pseudomonadota,Gammaproteobacteria,Lysobacterales,Lysobacteraceae,Pseudoxanthomonas,Mexicana,aerobe,alkaliphile,0,,,835
@@ -637,7 +637,7 @@ Pseudomonadota,Alphaproteobacteria,Maricaulales,Maricaulaceae,Oceanicaulis,,aero
 Actinomycetota,Actinomycetes,Micrococcales,Microbacteriaceae,Curtobacterium,,aerobe,acidophile,0,,,889
 Basidiomycota,Agaricomycetes,Agaricales,Agaricaceae,Agaricus,bisporus,Aerobic,,Sporulating (basidiospores); reproduction also by budding,fermenter,complex_carbs_fiber,890
 Bacillota,Clostridia,Eubacteriales,Clostridiaceae,Clostridium,Sticklandii,anaerobe,alkaliphile,1,fermenter,organic_unspecified,891
-Arthropoda,Insecta,Phasmatodea,Bacillidae,Bacillus,Coahuilensis,aerobe,alkaliphile,1,N/A,N/A,892
+Firmicutes,Bacilli,Caryophanales,Bacillaceae,Bacillus,Coahuilensis,aerobe,alkaliphile,1,N/A,N/A,892
 Firmicutes,Clostridia,Clostridiales,Ruminococcaceae,Agathobaculum,desmolans,,,,N/A,N/A,893
 Actinomycetota,Actinomycetes,Micrococcales,Sanguibacteraceae,Sanguibacter,,aerobe,alkaliphile,0,,,894
 Proteobacteria,Gammaproteobacteria,Pasteurellales,Pasteurellaceae,Aggregatibacter,actinomycetemcomitans,,,,N/A,N/A,895
@@ -654,7 +654,7 @@ Proteobacteria,Gammaproteobacteria,Vibrionales,Vibrionaceae,Aliivibrio,salmonici
 Bacteroidetes,Bacteroidia,Bacteroidales,Rikenellaceae,Alistipes,bacterium ph8,,,,N/A,N/A,908
 Pseudomonadota,Gammaproteobacteria,Thiotrichales,Thiotrichaceae,Thiothrix,,aerobe,alkaliphile,Unknown,,,909
 Bacteroidetes,Bacteroidia,Bacteroidales,Rikenellaceae,Alistipes,finegoldii,Anaerobe,,,fermenter,carbohydrates,910
-Arthropoda,Insecta,Coleoptera,Lampyridae,Serratia,Ureilytica,aerobe,alkaliphile,0,,,911
+Proteobacteria,Gammaproteobacteria,Enterobacterales,Yersiniaceae,Serratia,Ureilytica,aerobe,alkaliphile,0,,,911
 Bacteroidota,Bacteroidia,Bacteroidales,Rikenellaceae,Alistipes,intestinihominis,Anaerobic,,,N/A,carbohydrates,912
 Bacteroidetes,Bacteroidia,Bacteroidales,Rikenellaceae,Alistipes,onderdonkii,Anaerobe,,,fermenter,carbohydrates,913
 Bacteroidetes,Bacteroidia,Bacteroidales,Rikenellaceae,Alistipes,putredinis,Anaerobe,,,fermenter,carbohydrates,914
@@ -1010,10 +1010,10 @@ Proteobacteria,Gammaproteobacteria,Enterobacteriales,Enterobacteriaceae,Enteroba
 Ascomycota,Orbiliomycetes,Orbiliales,Orbiliaceae,Dactylellina,haptotyla,Aerobe,,Sporulating,fermenter,complex_carbs_fiber,1273
 Proteobacteria,Gammaproteobacteria,Enterobacterales,Enterobacteriaceae,Enterobacter,cancerogenus,Facultative anaerobe,,,mixed,carbohydrates,1274
 Ascomycota,Saccharomycetes,Saccharomycetales,Debaryomycetaceae,Debaryomyces,fabryi,Aerobe,,Sporulating (ascospores),respirer,organic_unspecified,1275
-Pseudomonadata,Gammaproteobacteria,Enterobaterales,Enterobacteriaceae,Enterobacter,intestinihominis,Anaerobic,,,N/A,carbohydrates,1276
+Proteobacteria,Gammaproteobacteria,Enterobacterales,Enterobacteriaceae,Enterobacter,intestinihominis,Anaerobic,,,N/A,carbohydrates,1276
 Ascomycota,Saccharomycetes,Saccharomycetales,Debaryomycetaceae,Debaryomyces,hansenii,Aerobe/facultative anaerobe,,Sporulating (ascospores),mixed,organic_unspecified,1277
 Firmicutes,Clostridia,Clostridiales,Lachnospiraceae,Enterocloster,asparagiformis,,,,N/A,N/A,1278
-Deinococcus-thermus,Deinococci,Deinococcales,Deinococcaceae,Deinococcus,radiodurans,Aerobe,,,respirer,organic_unspecified,1279
+Deinococcus-Thermus,Deinococci,Deinococcales,Deinococcaceae,Deinococcus,radiodurans,Aerobe,,,respirer,organic_unspecified,1279
 Firmicutes,Clostridia,Clostridiales,Lachnospiraceae,Enterocloster,bolteae,,,,N/A,N/A,1280
 Proteobacteria,Betaproteobacteria,Burkholderiales,Comamonadaceae,Delftia,acidovorans,Aerobe,,,respirer,N/A,1281
 Firmicutes,Clostridia,Clostridiales,Lachnospiraceae,Enterocloster,citroniae,,,,N/A,N/A,1282
@@ -1676,7 +1676,7 @@ Ascomycota,Saccharomycetes,Saccharomycetales,Debaryomycetaceae,Spathaspora,passa
 Actinobacteria,Actinobacteria,Corynebacteriales,Nocardiaceae,Rhodococcus,hoagii,Aerobe,,,fermenter,carbohydrates,1939
 Actinobacteria,Actinobacteria,Streptosporangiales,Streptosporangiaceae,Sphaerisporangium,,,,,N/A,N/A,1940
 Actinobacteria,Actinobacteria,Corynebacteriales,Nocardiaceae,Rhodococcus,rhodochrous,Aerobe,,,mixed,carbohydrates,1941
-Chloroflexi,Thermomicrobia,Sphaerobacterales,Sphaerobacteraceae,Sphaerobacter,thermophilus,Obligate aerobic,,Nonsporulating,N/A,N/A,1942
+Thermomicrobiota,Thermomicrobia,Sphaerobacterales,Sphaerobacteraceae,Sphaerobacter,thermophilus,Obligate aerobic,,Nonsporulating,N/A,N/A,1942
 Proteobacteria,Alphaproteobacteria,Rhizobiales,Bradyrhizobiaceae,Rhodopseudomonas,palustris,Aerobe; anaerobe,,,fermenter,inorganic,1943
 Ascomycota,Dothideomycetes,Mycosphaerellales,Mycosphaerellaceae,Sphaerulina,musiva,Aerobe,,Sporulating,fermenter,complex_carbs_fiber,1944
 Proteobacteria,Alphaproteobacteria,Rhodospirillales,Rhodospirillaceae,Rhodospirillum,rubrum,Facultative anaerobe,,Nonsporulating,mixed,inorganic,1945
@@ -2031,7 +2031,7 @@ Basidiomycota,Ustilaginomycetes,Ustilaginales,Ustilaginaceae,Moesziomyces,aphidi
 Firmicutes,Clostridia,Clostridiales,Clostridiales Family XIII. Incertae Sedis,Mogibacterium,timidum,Anaerobe,,,fermenter,carbohydrates,2294
 Thermotogae,Thermotogae,Thermotogales,Thermotogaceae,Thermotoga,maritima,Anaerobe,,,fermenter,N/A,2295
 Thermotogae,Thermotogae,Thermotogales,Thermotogaceae,Thermotoga,neapolitana,Microaerophilic,,Nonsporulating,N/A,organic_unspecified,2296
-Deinococcus-thermus,Deinococci,Thermales,Thermaceae,Thermus,thermophilus,Aerobe,,,respirer,N/A,2297
+Deinococcus-Thermus,Deinococci,Thermales,Thermaceae,Thermus,thermophilus,Aerobe,,,respirer,N/A,2297
 Proteobacteria,Betaproteobacteria,Nitrosomonadales,Thiobacillaceae,Thiobacillus,denitrificans,Aerobe,,Nonsporulating,respirer,inorganic,2298
 Basidiomycota,Exobasidiomycetes,Tilletiales,Tilletiaceae,Tilletia,indica,Aerobic,,Sporulating (basidiospores); reproduction also by budding,fermenter,complex_carbs_fiber,2299
 Chytridiomycota,Monoblepharidomycetes,Monoblepharidales,Monoblepharidaceae,Monoblepharis,insignis,Aerobic,,Sporulating,fermenter,complex_carbs_fiber,2300
