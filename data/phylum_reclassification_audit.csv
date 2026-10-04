@@ -1,0 +1,212 @@
+store,taxon_id,scientific_name,rank,ncbi_tax_id,stored_phylum,ncbi_phylum,action
+mysql,42,Methanocorpusculum,genus,2192,Euryarchaeota,Methanobacteriota,reported_only
+mysql,81,Methanobrevibacter,genus,2172,Euryarchaeota,Methanobacteriota,reported_only
+mysql,108,Methanobacterium bryantii,species,2161,Euryarchaeota,Methanobacteriota,reported_only
+mysql,512,Methanothermobacter thermautotrophicus,species,145262,Euryarchaeota,Methanobacteriota,reported_only
+mysql,645,Methanosaeta,genus,2222,Euryarchaeota,Methanobacteriota,reported_only
+mysql,704,Archaeoglobus fulgidus,species,2234,Euryarchaeota,Methanobacteriota,reported_only
+mysql,991,Aeropyrum pernix,species,56636,Crenarchaeota,Thermoproteota,reported_only
+mysql,1012,Enterobacter intestinihominis,species,3133180,Pseudomonadata,Proteobacteria,reported_only
+mysql,1157,Gonapodya prolifera,species,1123529,Chytridiomycota,Monoblepharomycota,reported_only
+mysql,1183,Haloarcula marismortui,species,2238,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1185,Halobacterium salinarum,species,2242,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1187,Halococcus morrhuae,species,2250,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1189,Haloferax volcanii,species,2246,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1198,Helicobacter bilis,species,37372,Proteobacteria,Campylobacterota,reported_only
+mysql,1200,Helicobacter canadensis,species,123841,Proteobacteria,Campylobacterota,reported_only
+mysql,1202,Helicobacter cinaedi,species,213,Proteobacteria,Campylobacterota,reported_only
+mysql,1206,Helicobacter fennelliae,species,215,Proteobacteria,Campylobacterota,reported_only
+mysql,1208,Helicobacter winghamensis,species,157268,Proteobacteria,Campylobacterota,reported_only
+mysql,1322,Metallosphaera sedula,species,43687,Crenarchaeota,Thermoproteota,reported_only
+mysql,1325,Methanobrevibacter ruminantium,species,634498,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1326,Methanobrevibacter smithii,species,2173,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1327,Methanocaldococcus fervens,species,83171,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1328,Methanocaldococcus infernus,species,67760,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1329,Methanocaldococcus jannaschii,species,2190,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1330,Methanocaldococcus vulcanius,species,73913,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1331,Methanococcoides burtonii,species,29291,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1332,Methanococcus aeolicus,species,42879,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1333,Methanococcus maripaludis,species,39152,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1334,Methanococcus vannielii,species,2187,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1335,Methanococcus voltae,species,2188,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1336,Methanocorpusculum labreanum,species,83984,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1337,Methanoculleus marisnigri,species,2198,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1338,Methanohalobium evestigatum,species,2322,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1339,Methanohalophilus mahii,species,2176,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1340,Methanomassiliicoccus luminyensis,species,1080712,Euryarchaeota,Thermoplasmatota,reported_only
+mysql,1341,Methanomassiliicoccus intestinalis,species,1406512,Euryarchaeota,Thermoplasmatota,reported_only
+mysql,1342,Methanopyrus kandleri,species,2320,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1343,Methanosarcina acetivorans,species,2214,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1344,Methanosarcina barkeri,species,2208,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1345,Methanosarcina mazei,species,2209,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1346,Methanosphaera stadtmanae,species,2317,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1347,Methanosphaerula palustris,species,475088,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1349,Ignicoccus hospitalis,species,160233,Crenarchaeota,Thermoproteota,reported_only
+mysql,1433,Caminibacter mediatlanticus,species,291048,Proteobacteria,Campylobacterota,reported_only
+mysql,1435,Campylobacter coli,species,195,Proteobacteria,Campylobacterota,reported_only
+mysql,1437,Campylobacter concisus,species,199,Proteobacteria,Campylobacterota,reported_only
+mysql,1439,Campylobacter curvus,species,200,Proteobacteria,Campylobacterota,reported_only
+mysql,1441,Campylobacter fetus,species,196,Proteobacteria,Campylobacterota,reported_only
+mysql,1443,Campylobacter gracilis,species,553220,Proteobacteria,Campylobacterota,reported_only
+mysql,1445,Campylobacter hominis,species,360107,Proteobacteria,Campylobacterota,reported_only
+mysql,1447,Campylobacter hyointestinalis,species,1031746,Proteobacteria,Campylobacterota,reported_only
+mysql,1449,Campylobacter jejuni,species,1295400,Proteobacteria,Campylobacterota,reported_only
+mysql,1451,Campylobacter lari,species,201,Proteobacteria,Campylobacterota,reported_only
+mysql,1453,Campylobacter rectus,species,203,Proteobacteria,Campylobacterota,reported_only
+mysql,1455,Campylobacter showae,species,1244083,Proteobacteria,Campylobacterota,reported_only
+mysql,1460,Campylobacter sputorum,species,206,Proteobacteria,Campylobacterota,reported_only
+mysql,1461,Campylobacter upsaliensis,species,28080,Proteobacteria,Campylobacterota,reported_only
+mysql,1639,Pyrobaculum aerophilum,species,13773,Crenarchaeota,Thermoproteota,reported_only
+mysql,1641,Pyrobaculum calidifontis,species,181486,Crenarchaeota,Thermoproteota,reported_only
+mysql,1643,Pyrococcus abyssi,species,29292,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1645,Pyrococcus furiosus,species,2261,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1647,Pyrococcus horikoshii,species,53953,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1664,Rhizophagus irregularis,species,588596,Mucoromycota,Glomeromycota,reported_only
+mysql,1678,Sphaerobacter thermophilus,species,2057,Chloroflexi,Thermomicrobiota,reported_only
+mysql,1683,Rhodothermus marinus,species,29549,Bacteroidetes,Rhodothermota,reported_only
+mysql,1739,Saccharolobus solfataricus,species,2287,Crenarchaeota,Thermoproteota,reported_only
+mysql,1904,Sulfolobus acidocaldarius,species,2285,Crenarchaeota,Thermoproteota,reported_only
+mysql,1908,Sulfurimonas denitrificans,species,39766,Proteobacteria,Campylobacterota,reported_only
+mysql,1924,Methanospirillum hungatei,species,2203,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1928,Methanothermobacter marburgensis,species,145263,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1933,Methanothermococcus okinawensis,species,155863,Euryarchaeota,Methanobacteriota,reported_only
+mysql,1937,Methanothermus fervidus,species,2180,Euryarchaeota,Methanobacteriota,reported_only
+mysql,2011,Thermococcus barophilus,species,55802,Euryarchaeota,Methanobacteriota,reported_only
+mysql,2013,Thermococcus gammatolerans,species,187878,Euryarchaeota,Methanobacteriota,reported_only
+mysql,2015,Thermococcus onnurineus,species,342948,Euryarchaeota,Methanobacteriota,reported_only
+mysql,2017,Thermococcus sibiricus,species,172049,Euryarchaeota,Methanobacteriota,reported_only
+mysql,2023,Thermoplasma acidophilum,species,2303,Euryarchaeota,Thermoplasmatota,reported_only
+mysql,2036,Monoblepharis insignis,species,109953,Chytridiomycota,Monoblepharomycota,reported_only
+mysql,2170,Methanomassiliicoccus candidatus methanomassiliicoccus intestinalis,species,1295009,Candidatus thermoplasmatota,Thermoplasmatota,reported_only
+mysql,3230,Sphingomonas sphingobacterium paucimobilis,species,1346330,Proteobacteria,Bacteroidetes,reported_only
+mysql,1448871,Aliarcobacter butzleri,species,28197,Proteobacteria,Campylobacterota,reported_only
+mysql,68,Desulfovibrio c21 c20,,,Thermodesulfobacteria,Thermodesulfobacteriota,genus_consensus (12 of 14 agree)
+mysql,373,Desulfovibrio d168,,,Thermodesulfobacteria,Thermodesulfobacteriota,genus_consensus (13 of 14 agree)
+sqlite,32,Bacillus muralis,species,264697,Arthropoda,Firmicutes,reported_only
+sqlite,42,Methanocorpusculum,genus,2192,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,54,Victoria amazonica,species,85961,Arthropoda,Streptophyta,reported_only
+sqlite,81,Methanobrevibacter,genus,2172,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,100,Bacillus asahii,species,228899,Arthropoda,Firmicutes,reported_only
+sqlite,108,Methanobacterium bryantii,species,2161,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,140,Serratia marcescens,species,615,Arthropoda,Proteobacteria,reported_only
+sqlite,221,Rothia mucilaginosa,species,43675,Streptophyta,Actinobacteria,reported_only
+sqlite,268,Rothia dentocariosa,species,2047,Streptophyta,Actinobacteria,reported_only
+sqlite,317,Bacillus cereus,species,1396,Arthropoda,Firmicutes,reported_only
+sqlite,327,Bacillus foraminis,species,279826,Arthropoda,Firmicutes,reported_only
+sqlite,371,Serratia symbiotica,species,138074,Arthropoda,Proteobacteria,reported_only
+sqlite,378,Yersinia,genus,629,Arthropoda,Proteobacteria,reported_only
+sqlite,408,Proteus,genus,583,Chordata,Proteobacteria,reported_only
+sqlite,415,Rhodococcus fascians,species,1828,Arthropoda,Actinobacteria,reported_only
+sqlite,420,Buchnera,genus,32199,Streptophyta,Proteobacteria,reported_only
+sqlite,427,Lawsonia,genus,41707,Arthropoda,Thermodesulfobacteriota,reported_only
+sqlite,464,Schwartzia,genus,55506,Streptophyta,Firmicutes,reported_only
+sqlite,470,Bacillus humi,species,263474,Arthropoda,Firmicutes,reported_only
+sqlite,478,Gordonia,genus,2053,Streptophyta,Actinobacteria,reported_only
+sqlite,512,Methanothermobacter thermautotrophicus,species,145262,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,520,Bacillus firmus,species,1399,Arthropoda,Firmicutes,reported_only
+sqlite,523,Bacillus horti,species,77523,Arthropoda,Firmicutes,reported_only
+sqlite,544,Bacillus selenatarsenatis,species,388741,Arthropoda,Firmicutes,reported_only
+sqlite,545,Paracoccus marcusii,species,59779,Arthropoda,Proteobacteria,reported_only
+sqlite,546,Bacillus flexus,species,1292043,Arthropoda,Firmicutes,reported_only
+sqlite,556,Bacillus coagulans,species,1398,Arthropoda,Firmicutes,reported_only
+sqlite,566,Bacillus aurantiacus,species,254410,Arthropoda,Firmicutes,reported_only
+sqlite,567,Syntrophus,genus,43773,Arthropoda,Thermodesulfobacteriota,reported_only
+sqlite,581,Edwardsiella,genus,635,Cnidaria,Proteobacteria,reported_only
+sqlite,591,Morganella morganii,species,582,Arthropoda,Proteobacteria,reported_only
+sqlite,638,Bacillus coahuilensis,species,408580,Arthropoda,Firmicutes,reported_only
+sqlite,644,Methanosaeta,genus,2222,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,655,Serratia ureilytica,species,300181,Arthropoda,Proteobacteria,reported_only
+sqlite,703,Archaeoglobus fulgidus,species,2234,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,704,Arcobacter butzleri,species,28197,Proteobacteria,Campylobacterota,reported_only
+sqlite,989,Aeropyrum pernix,species,56636,Crenarchaeota,Thermoproteota,reported_only
+sqlite,1010,Enterobacter intestinihominis,species,3133180,Pseudomonadata,Proteobacteria,reported_only
+sqlite,1155,Gonapodya prolifera,species,1123529,Chytridiomycota,Monoblepharomycota,reported_only
+sqlite,1181,Haloarcula marismortui,species,2238,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1183,Halobacterium salinarum,species,2242,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1185,Halococcus morrhuae,species,2250,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1187,Haloferax volcanii,species,2246,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1196,Helicobacter bilis,species,37372,Proteobacteria,Campylobacterota,reported_only
+sqlite,1198,Helicobacter canadensis,species,123841,Proteobacteria,Campylobacterota,reported_only
+sqlite,1200,Helicobacter cinaedi,species,213,Proteobacteria,Campylobacterota,reported_only
+sqlite,1204,Helicobacter fennelliae,species,215,Proteobacteria,Campylobacterota,reported_only
+sqlite,1206,Helicobacter winghamensis,species,157268,Proteobacteria,Campylobacterota,reported_only
+sqlite,1320,Metallosphaera sedula,species,43687,Crenarchaeota,Thermoproteota,reported_only
+sqlite,1323,Methanobrevibacter ruminantium,species,634498,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1324,Methanobrevibacter smithii,species,2173,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1325,Methanocaldococcus fervens,species,83171,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1326,Methanocaldococcus infernus,species,67760,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1327,Methanocaldococcus jannaschii,species,2190,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1328,Methanocaldococcus vulcanius,species,73913,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1329,Methanococcoides burtonii,species,29291,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1330,Methanococcus aeolicus,species,42879,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1331,Methanococcus maripaludis,species,39152,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1332,Methanococcus vannielii,species,2187,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1333,Methanococcus voltae,species,2188,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1334,Methanocorpusculum labreanum,species,83984,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1335,Methanoculleus marisnigri,species,2198,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1336,Methanohalobium evestigatum,species,2322,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1337,Methanohalophilus mahii,species,2176,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1338,Methanomassiliicoccus luminyensis,species,1080712,Euryarchaeota,Thermoplasmatota,reported_only
+sqlite,1339,Methanomassiliicoccus intestinalis,species,1406512,Euryarchaeota,Thermoplasmatota,reported_only
+sqlite,1340,Methanopyrus kandleri,species,2320,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1341,Methanosarcina acetivorans,species,2214,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1342,Methanosarcina barkeri,species,2208,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1343,Methanosarcina mazei,species,2209,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1344,Methanosphaera stadtmanae,species,2317,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1345,Methanosphaerula palustris,species,475088,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1347,Ignicoccus hospitalis,species,160233,Crenarchaeota,Thermoproteota,reported_only
+sqlite,1431,Caminibacter mediatlanticus,species,291048,Proteobacteria,Campylobacterota,reported_only
+sqlite,1433,Campylobacter coli,species,195,Proteobacteria,Campylobacterota,reported_only
+sqlite,1435,Campylobacter concisus,species,199,Proteobacteria,Campylobacterota,reported_only
+sqlite,1437,Campylobacter curvus,species,200,Proteobacteria,Campylobacterota,reported_only
+sqlite,1439,Campylobacter fetus,species,196,Proteobacteria,Campylobacterota,reported_only
+sqlite,1441,Campylobacter gracilis,species,824,Proteobacteria,Campylobacterota,reported_only
+sqlite,1443,Campylobacter hominis,species,76517,Proteobacteria,Campylobacterota,reported_only
+sqlite,1445,Campylobacter hyointestinalis,species,198,Proteobacteria,Campylobacterota,reported_only
+sqlite,1446,Campylobacter jejuni,species,197,Proteobacteria,Campylobacterota,reported_only
+sqlite,1448,Campylobacter lari,species,201,Proteobacteria,Campylobacterota,reported_only
+sqlite,1450,Campylobacter rectus,species,203,Proteobacteria,Campylobacterota,reported_only
+sqlite,1452,Campylobacter showae,species,204,Proteobacteria,Campylobacterota,reported_only
+sqlite,1457,Campylobacter sputorum,species,206,Proteobacteria,Campylobacterota,reported_only
+sqlite,1458,Campylobacter upsaliensis,species,28080,Proteobacteria,Campylobacterota,reported_only
+sqlite,1636,Pyrobaculum aerophilum,species,13773,Crenarchaeota,Thermoproteota,reported_only
+sqlite,1638,Pyrobaculum calidifontis,species,181486,Crenarchaeota,Thermoproteota,reported_only
+sqlite,1640,Pyrococcus abyssi,species,29292,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1642,Pyrococcus furiosus,species,2261,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1644,Pyrococcus horikoshii,species,53953,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1661,Rhizophagus irregularis,species,588596,Mucoromycota,Glomeromycota,reported_only
+sqlite,1675,Sphaerobacter thermophilus,species,2057,Chloroflexi,Thermomicrobiota,reported_only
+sqlite,1680,Rhodothermus marinus,species,29549,Bacteroidetes,Rhodothermota,reported_only
+sqlite,1736,Saccharolobus solfataricus,species,2287,Crenarchaeota,Thermoproteota,reported_only
+sqlite,1901,Sulfolobus acidocaldarius,species,2285,Crenarchaeota,Thermoproteota,reported_only
+sqlite,1903,Sulfolobus solfataricus,species,2287,Crenarchaeota,Thermoproteota,reported_only
+sqlite,1905,Sulfurimonas denitrificans,species,39766,Proteobacteria,Campylobacterota,reported_only
+sqlite,1921,Methanospirillum hungatei,species,2203,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1925,Methanothermobacter marburgensis,species,145263,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1930,Methanothermococcus okinawensis,species,155863,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,1934,Methanothermus fervidus,species,2180,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,2008,Thermococcus barophilus,species,55802,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,2010,Thermococcus gammatolerans,species,187878,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,2012,Thermococcus onnurineus,species,342948,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,2014,Thermococcus sibiricus,species,172049,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,2020,Thermoplasma acidophilum,species,2303,Euryarchaeota,Thermoplasmatota,reported_only
+sqlite,2033,Monoblepharis insignis,species,109953,Chytridiomycota,Monoblepharomycota,reported_only
+sqlite,2124,Campylobacter,genus,194,Proteobacteria,Campylobacterota,reported_only
+sqlite,2138,Rothia,genus,32207,Streptophyta,Actinobacteria,reported_only
+sqlite,2254,Methanomassiliicoccus,genus,1080709,Euryarchaeota,Thermoplasmatota,reported_only
+sqlite,2294,Helicobacter,genus,209,Proteobacteria,Campylobacterota,reported_only
+sqlite,2474,Methanosphaera,genus,2316,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,2527,Bosea,genus,85413,Streptophyta,Proteobacteria,reported_only
+sqlite,2574,Morganella,genus,581,Arthropoda,Proteobacteria,reported_only
+sqlite,2643,Bacteroides pectinophilus,species,384638,Bacteroidetes,Firmicutes,reported_only
+sqlite,3010,Methanosphaera cuniculi,species,1077256,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,3468,Methanobrevibacter arboriphilus,species,39441,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,3638,Methanobrevibacter oralis,species,66851,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,3814,Methanobrevibacter woesei,species,190976,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,4019,Methanobacterium formicicum,species,2162,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,4033,Methanobacterium sp. mb1,species,1379702,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,4066,Methanosarcina thermophila,species,2210,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,4068,Methanoculleus thermophilus,species,2200,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,4293,Methanobrevibacter boviskoreani,species,1348249,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,4304,Halococcus dombrowskii,species,179637,Euryarchaeota,Methanobacteriota,reported_only
+sqlite,4183,Deinococcus soli (ex cha et al. 2016),,,Deinococcus-thermus,Deinococcus-Thermus,genus_consensus (3 of 4 agree)

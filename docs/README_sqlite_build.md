@@ -257,7 +257,7 @@ of the five are live on the MySQL side.
 | `samples.subject_id` | Written only by `scripts/load_biomapai_study.py` (`PRJNA1125469`, 2–3 timepoints per subject), a study this mirror does not load |
 | `samples.timepoint` | Same loader, same reason |
 | `samples.unclassified_fraction` | `pipeline.sync_gmrepo_abundances` computes it and writes it straight to MySQL, but it is not among that function's CSV export fieldnames, so no value reaches this build |
-| `sample_taxon_abundances.detection_threshold` | `pipeline.py` inserts it from a source field the GMrepo export does not carry |
+| `sample_taxon_abundances.detection_threshold` | `pipeline.py` read it from a source field no ingested export carries. Since dropped on the MySQL side too, where it was NULL in all 2.58M rows — so this is no longer a mirror-only omission |
 | `ingestion_runs.error_message` | Written only by `gutdb/pipeline.py` on the MySQL side. This mirror's `Loader.finish_run` takes no error argument and hardcodes `status = 'completed'`, so nothing local could ever fill it. All 20 run rows were `completed` with the column NULL. A load that dies part-way still shows up: its row stays at `status = 'running'`, which the `CHECK` constraint keeps alongside `failed` |
 
 Consequences: `v_abundance_genus` and `v_abundance_species` no longer select

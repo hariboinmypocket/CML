@@ -15,8 +15,9 @@
 --   samples.unclassified_fraction  -- computed by pipeline.sync_gmrepo_abundances
 --     and written straight to MySQL; it is not in that function's CSV export
 --     fieldnames, so no value ever reaches this build.
---   sample_taxon_abundances.detection_threshold  -- pipeline.py inserts it from a
---     source field the GMrepo export does not carry.
+--   sample_taxon_abundances.detection_threshold  -- dropped from the MySQL side
+--     too: pipeline.py read it from a source field no ingested export carries,
+--     so it was NULL in all 2.58M rows there as well.
 -- Restore any of them here if the corresponding source becomes loadable.
 PRAGMA foreign_keys = ON;
 
