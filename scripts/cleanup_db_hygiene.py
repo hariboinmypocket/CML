@@ -36,7 +36,13 @@
    source this pipeline ingests has ever supplied one, so the column only
    ever stored NULL. That read is removed alongside the column.
 
-Dry run by default; pass --apply to write. Pass --only STEP (1-5, repeatable)
+6. Ten species rows sit under phylum Arthropoda, which none of them are. Nine
+   are MiMeDB "Bacillus <epithet>" rows that NCBI renamed in the 2020 Bacillus
+   split (B. firmus -> Cytobacillus firmus, B. muralis -> Peribacillus
+   muralis); the tenth is Victoria amazonica, a water lily whose tax ID is
+   right and whose stored phylum is not.
+
+Dry run by default; pass --apply to write. Pass --only=STEP (1-6, repeatable)
 to run a subset.
 """
 from __future__ import annotations
@@ -52,7 +58,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from gutdb.config import Settings
 from gutdb.db import connect
 from gutdb.ncbi import TaxonomyClient
-from gutdb.transform import normalize_phylum
+from gutdb.transform import normalize_phylum, parse_scientific_name, same_epithet, taxon_key
 
 DRY_RUN = "--apply" not in sys.argv
 AUDIT = Path("data/db_hygiene_audit.csv")
@@ -261,6 +267,152 @@ def step5_drop_column(cur) -> dict:
     return {"column_dropped": 1}
 
 
+def step6_arthropoda_species(cur, client) -> dict:
+    """Species rows filed under phylum Arthropoda, which none of them are.
+
+    Two unrelated causes sit in the same bucket:
+
+    - Nine MiMeDB rows named "Bacillus <epithet>" with no tax ID. These are
+      real organisms that NCBI renamed in the 2020 Bacillus split, so
+      resolve_name refuses them: it will not claim "Bacillus firmus" is tax ID
+      1399 when NCBI calls that Cytobacillus firmus. Identity is established
+      here by the species epithet surviving the genus change, which is the
+      same test the duplicate-tax-ID merge uses, and only then is the record
+      adopted -- tax ID, lineage and NCBI's current name.
+    - Victoria amazonica, a water lily, whose tax ID (85961) is correct and
+      whose stored phylum is simply wrong. Its lineage is rewritten from its
+      own tax ID; it stays a plant, since the MiMeDB reference library holds
+      plants deliberately.
+
+    Where the epithet does not survive, the genus is resolved for lineage only
+    and ncbi_tax_id is left NULL. Writing a genus tax ID onto a species row is
+    the defect that put the F. prausnitzii strain ID on the species.
+    """
+    stats = {"renamed_from_synonym": 0, "lineage_only": 0, "retaxid_lineage": 0,
+             "deleted_stale_duplicate": 0, "needs_merge": 0, "unresolved": 0}
+    cur.execute(
+        "SELECT id, genus, species, scientific_name, ncbi_tax_id FROM taxa "
+        "WHERE phylum = 'Arthropoda' ORDER BY id")
+    rows = cur.fetchall()
+
+    def lineage_values(record: dict) -> dict:
+        values = {}
+        for field, ranks in NCBI_RANK_FOR_FIELD.items():
+            for rank in ranks:
+                if record.get(rank):
+                    values[field] = record[rank]
+                    break
+        if values.get("phylum"):
+            values["phylum"] = normalize_phylum(values["phylum"])
+        return values
+
+    def write(taxon_id: int, values: dict, taxid: str | None) -> None:
+        if DRY_RUN or not values:
+            return
+        assignments = ", ".join(f"`{f}` = %s" for f in values)
+        params = list(values.values())
+        if taxid is not None:
+            assignments += ", ncbi_tax_id = %s"
+            params.append(int(taxid))
+        cur.execute(f"UPDATE taxa SET {assignments} WHERE id = %s", (*params, taxon_id))
+
+    for taxon_id, genus, species, sci, existing_taxid in rows:
+        if existing_taxid:
+            record = client.fetch_lineages([str(existing_taxid)]).get(str(existing_taxid), {})
+            time.sleep(0.35)
+            values = lineage_values(record)
+            if not values:
+                stats["unresolved"] += 1
+                continue
+            record_arthropoda(taxon_id, sci, f"phylum Arthropoda, taxid {existing_taxid}",
+                              f"phylum {values.get('phylum','?')}",
+                              "tax ID was already correct; only the stored lineage was wrong")
+            write(taxon_id, values, None)
+            stats["retaxid_lineage"] += 1
+            continue
+
+        taxid, ncbi_name, record = client.resolve_synonym(sci, "Bacteria")
+        time.sleep(0.35)
+        _, ncbi_epithet = parse_scientific_name(ncbi_name) if ncbi_name else ("", "")
+        if taxid and same_epithet(species, ncbi_epithet):
+            values = lineage_values(record)
+            genus_key, species_key = taxon_key(*parse_scientific_name(ncbi_name))
+            cur.execute(
+                "SELECT id FROM taxa WHERE genus_key = %s AND species_key = %s AND id <> %s",
+                (genus_key, species_key, taxon_id))
+            clash = cur.fetchone()
+            if clash:
+                # A row already holds NCBI's current name for this organism, so
+                # this one is a stale duplicate under the superseded name.
+                # Adopting the tax ID here would recreate exactly the duplicate
+                # pair the merge removes, so an empty row is deleted outright
+                # and a row carrying data is left for the merge to fold.
+                cur.execute(
+                    """SELECT (SELECT COUNT(*) FROM taxon_disease_associations a
+                                WHERE a.taxon_id = %s),
+                              (SELECT COUNT(*) FROM sample_taxon_abundances b
+                                WHERE b.taxon_id = %s)""",
+                    (taxon_id, taxon_id))
+                n_assoc, n_abund = cur.fetchone()
+                if n_assoc or n_abund:
+                    record_arthropoda(
+                        taxon_id, sci, "phylum Arthropoda, no taxid",
+                        f"taxid {taxid}, phylum {values.get('phylum','?')}",
+                        f"carries {n_assoc} assoc / {n_abund} abund; {ncbi_name!r} is "
+                        f"row {clash[0]} - run merge_duplicate_taxa.py to fold them")
+                    write(taxon_id, values, taxid)
+                    stats["needs_merge"] += 1
+                else:
+                    record_arthropoda(
+                        taxon_id, sci, "phylum Arthropoda, no taxid, no data", "deleted",
+                        f"stale duplicate of row {clash[0]} {ncbi_name!r}, which already "
+                        f"holds tax ID {taxid} and the correct lineage")
+                    if not DRY_RUN:
+                        cur.execute("DELETE FROM taxa WHERE id = %s", (taxon_id,))
+                    stats["deleted_stale_duplicate"] += 1
+                continue
+            record_arthropoda(taxon_id, sci, "phylum Arthropoda, no taxid",
+                              f"{ncbi_name}, taxid {taxid}, phylum {values.get('phylum','?')}",
+                              "renamed: epithet survives the genus change, so same organism")
+            if not DRY_RUN:
+                new_genus, new_species = parse_scientific_name(ncbi_name)
+                values_with_name = dict(values)
+                cur.execute(
+                    f"""UPDATE taxa SET genus = %s, species = %s, genus_key = %s,
+                        species_key = %s, scientific_name = %s, ncbi_tax_id = %s,
+                        {', '.join(f'`{f}` = %s' for f in values_with_name)}
+                        WHERE id = %s""",
+                    (new_genus, new_species, genus_key, species_key, ncbi_name,
+                     int(taxid), *values_with_name.values(), taxon_id))
+            stats["renamed_from_synonym"] += 1
+            continue
+
+        # Fall back to the genus for lineage only, never its tax ID.
+        genus_taxid, genus_name, genus_record = client.resolve_synonym(genus, "Bacteria")
+        time.sleep(0.35)
+        if not genus_taxid or genus_name.casefold() != genus.casefold():
+            record_arthropoda(taxon_id, sci, "phylum Arthropoda", "lineage cleared",
+                              "neither the species nor the genus could be confirmed")
+            if not DRY_RUN:
+                cur.execute(
+                    """UPDATE taxa SET superkingdom = NULL, phylum = NULL, class_name = NULL,
+                       order_name = NULL, family = NULL WHERE id = %s""", (taxon_id,))
+            stats["unresolved"] += 1
+            continue
+        values = lineage_values(genus_record)
+        values.pop("family", None)  # a genus record's family is right; its species is unknown
+        record_arthropoda(taxon_id, sci, "phylum Arthropoda, no taxid",
+                          f"phylum {values.get('phylum','?')} (genus lineage, tax ID left NULL)",
+                          "species epithet did not survive; genus lineage only")
+        write(taxon_id, values, None)
+        stats["lineage_only"] += 1
+    return stats
+
+
+def record_arthropoda(taxon_id: int, sci: str, before: str, after: str, note: str) -> None:
+    record("6_arthropoda", f"taxon {taxon_id} {sci}", before, after, note)
+
+
 def main() -> int:
     conn = connect(Settings.from_env(".env"))
     cur = conn.cursor()
@@ -277,6 +429,8 @@ def main() -> int:
         results["4_phylum"] = step4_phylum(cur, client)
     if wanted(5):
         results["5_drop_column"] = step5_drop_column(cur)
+    if wanted(6):
+        results["6_arthropoda"] = step6_arthropoda_species(cur, client)
 
     if DRY_RUN:
         print("\n*** DRY RUN - nothing written. Re-run with --apply ***")

@@ -13,6 +13,7 @@ from gutdb.transform import (
     normalize_genus,
     normalize_phylum,
     parse_scientific_name,
+    same_epithet,
 )
 
 
@@ -93,6 +94,28 @@ class QuantizeEffectSizeTests(unittest.TestCase):
     def test_missing_and_unparseable_stay_none(self):
         for value in ("", None, "NA", "abc"):
             self.assertIsNone(quantize_effect_size(value))
+
+
+class SameEpithetTests(unittest.TestCase):
+    def test_gender_agreement_is_the_same_organism(self):
+        # A species moved to a new genus takes that genus's gender.
+        self.assertTrue(same_epithet("ramosum", "ramosa"))
+        self.assertTrue(same_epithet("crossotus", "crossota"))
+        self.assertTrue(same_epithet("firmus", "firmus"))
+
+    def test_different_epithets_are_different_organisms(self):
+        # The case that must never merge: tax ID 411483 is F. prausnitzii
+        # A2-165, renamed F. duncaniae, while the species is tax ID 853.
+        self.assertFalse(same_epithet("prausnitzii", "duncaniae"))
+        self.assertFalse(same_epithet("hominis", "pacaense"))
+
+    def test_short_or_prefix_overlap_is_not_enough(self):
+        self.assertFalse(same_epithet("coli", "colitis"))
+        self.assertFalse(same_epithet("avium", "avidum"))
+
+    def test_empty_never_matches(self):
+        for pair in (("", "ramosa"), ("ramosa", ""), ("", "")):
+            self.assertFalse(same_epithet(*pair))
 
 
 class NormalizePhylumTests(unittest.TestCase):

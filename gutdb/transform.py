@@ -222,6 +222,38 @@ def normalize_phylum(value: Any) -> str:
     return PHYLUM_SYNONYMS.get(text.casefold(), text)
 
 
+LATIN_INFLECTIONS = ("us", "um", "a", "is", "e", "ii", "i", "ae", "os", "on", "s", "ys")
+
+
+def latin_stem(word: str) -> str:
+    """Strip a trailing Latin case/gender ending, keeping at least four letters."""
+    text = clean_str(word).casefold()
+    for suffix in sorted(LATIN_INFLECTIONS, key=len, reverse=True):
+        if text.endswith(suffix) and len(text) - len(suffix) >= 4:
+            return text[: -len(suffix)]
+    return text
+
+
+def same_epithet(first: Any, second: Any) -> bool:
+    """True when two species epithets differ only by Latin gender agreement.
+
+    A species moved to a new genus takes that genus's grammatical gender, so
+    `Erysipelatoclostridium ramosum` becomes `Thomasclavelia ramosa` and
+    `Butyrivibrio crossotus` becomes `Eshraghiella crossota` -- same organism.
+    A genuinely different epithet (`prausnitzii` vs `duncaniae`) is a different
+    organism, and conflating the two relabels real measurements, so this is
+    deliberately strict: it only tolerates a shared stem of four or more
+    letters, never a prefix overlap.
+    """
+    one, two = clean_str(first).casefold(), clean_str(second).casefold()
+    if not one or not two:
+        return False
+    if one == two:
+        return True
+    stem_one, stem_two = latin_stem(one), latin_stem(two)
+    return len(stem_one) >= 4 and stem_one == stem_two
+
+
 def normalize_yes_no(value: Any) -> str:
     """Normalize a MiMeDB yes/no trait, discarding uncertain calls.
 

@@ -55,7 +55,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from gutdb.config import Settings
 from gutdb.db import connect
 from gutdb.ncbi import TaxonomyClient
-from gutdb.transform import parse_scientific_name, taxon_key
+from gutdb.transform import parse_scientific_name, same_epithet, taxon_key
 
 DRY_RUN = "--apply" not in sys.argv
 AUDIT = Path("data/taxa_merge_audit.csv")
@@ -102,34 +102,12 @@ OVERRIDES: dict[int, dict] = {
     33039: {"action": "merge", "note": "genuine 2020 Ruminococcus -> Mediterraneibacter move"},
 }
 
-INFLECTIONS = ("us", "um", "a", "is", "e", "ii", "i", "ae", "os", "on", "s", "ys")
-
-
 def norm(name: str) -> str:
     s = name.casefold()
     s = re.sub(r"\(.*?\)", " ", s)
     s = s.replace("[", " ").replace("]", " ")
     s = re.sub(r"[._\-]", " ", s)
     return re.sub(r"\s+", " ", s).strip()
-
-
-def stem(word: str) -> str:
-    for suffix in sorted(INFLECTIONS, key=len, reverse=True):
-        if word.endswith(suffix) and len(word) - len(suffix) >= 4:
-            return word[: -len(suffix)]
-    return word
-
-
-def same_epithet(a: str, b: str) -> bool:
-    """True when two epithets differ only by Latin gender agreement.
-
-    'ramosum'/'ramosa' and 'crossotus'/'crossota' are the same organism under a
-    new genus; 'prausnitzii'/'duncaniae' are not.
-    """
-    if a == b:
-        return True
-    sa, sb = stem(a), stem(b)
-    return len(sa) >= 4 and sa == sb
 
 
 def load_groups(cur) -> dict[int, list[dict]]:
@@ -452,11 +430,16 @@ def main() -> int:
                 renormalized += 1
     stats["rank_groups_renormalized"] = renormalized
 
-    AUDIT.parent.mkdir(parents=True, exist_ok=True)
-    with AUDIT.open("w", newline="", encoding="utf-8") as fh:
-        writer = csv.DictWriter(fh, fieldnames=list(audit[0].keys()))
-        writer.writeheader()
-        writer.writerows(audit)
+    # Nothing to merge is the expected steady state once this has run, so a
+    # re-run must report that rather than fail on an empty audit.
+    if audit:
+        AUDIT.parent.mkdir(parents=True, exist_ok=True)
+        with AUDIT.open("w", newline="", encoding="utf-8") as fh:
+            writer = csv.DictWriter(fh, fieldnames=list(audit[0].keys()))
+            writer.writeheader()
+            writer.writerows(audit)
+    else:
+        print("\nno duplicate tax IDs found - nothing to merge")
 
     if DRY_RUN:
         print("\n*** DRY RUN - nothing written. Re-run with --apply ***")

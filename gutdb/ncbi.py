@@ -205,6 +205,50 @@ class TaxonomyClient(SRAClient):
             results[taxid] = entry
         return results
 
+    def resolve_synonym(self, name: str, domain: str = "") -> tuple[str, str, dict]:
+        """Find a record for `name` WITHOUT requiring the name to still match.
+
+        This is not a looser `resolve_name` and must not be used in its place.
+        `resolve_name` returns nothing when NCBI's name differs, which is
+        correct: it is what stops a homonym or a fuzzy hit from grafting the
+        wrong lineage on. But that same check also rejects a legitimately
+        RENAMED organism -- "Bacillus firmus" is now "Cytobacillus firmus" --
+        and the caller may be able to establish identity another way.
+
+        Returns (taxid, ncbi_scientific_name, lineage) so the caller can make
+        that judgement itself, for example by comparing species epithets. A
+        caller that writes the result without verifying identity has
+        reintroduced the bug the guard exists to prevent.
+        """
+        query = clean_str(name)
+        if not query:
+            return "", "", {}
+        subtree = DOMAIN_SUBTREE.get(clean_str(domain).casefold())
+        params = {
+            "db": "taxonomy",
+            "term": f"{query} AND txid{subtree}[Subtree]" if subtree else query,
+            "retmode": "json",
+        }
+        if self.email:
+            params["email"] = self.email
+        if self.api_key:
+            params["api_key"] = self.api_key
+        response = self.session.get(
+            f"{EUTILS_BASE}/esearch.fcgi", params=params, timeout=self.timeout
+        )
+        response.raise_for_status()
+        try:
+            idlist = response.json().get("esearchresult", {}).get("idlist", [])
+        except ValueError:
+            return "", "", {}
+        if not idlist:
+            return "", "", {}
+        candidate = idlist[0]
+        record = self.fetch_lineages([candidate]).get(candidate)
+        if not record:
+            return "", "", {}
+        return candidate, record.get("_scientific_name", ""), record
+
     def resolve_name(self, name: str, domain: str = "") -> str:
         """Return a taxid only when NCBI's record genuinely matches this organism.
 

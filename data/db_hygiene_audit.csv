@@ -1,67 +1,11 @@
 step,target,before,after,note
-1_data_type,29 studies,16S rRNA,16S,"same platform, two spellings"
-1_data_type,9 studies,shotgun metagenomics,mNGS,"same platform, two spellings"
-2_sentinel,52 samples,bmi = 0,NULL,PRJEB6172 records absent BMI as 0; its real range is 16.3-31.8
-2_sentinel,41 samples,age_years = 0,NULL,adult-only cohorts; PRJNA716780 excluded as a real infant cohort
-2_sentinel,3 samples,"age_years out of [0,110]",NULL,-88 in a cohort aged 3-28; 119 where the next oldest is 71
-3_homonym,taxon 378 Yersinia,"taxid 444888, phylum Arthropoda","taxid 629, phylum Proteobacteria",re-resolved with the search constrained to Bacteria
-3_homonym,taxon 420 Buchnera,"taxid 46073, phylum Streptophyta","taxid 32199, phylum Proteobacteria",re-resolved with the search constrained to Bacteria
-3_homonym,taxon 427 Lawsonia,"taxid 1091138, phylum Arthropoda","taxid 41707, phylum Thermodesulfobacteriota",re-resolved with the search constrained to Bacteria
-3_homonym,taxon 464 Schwartzia,"taxid 164984, phylum Streptophyta","taxid 55506, phylum Firmicutes",re-resolved with the search constrained to Bacteria
-3_homonym,taxon 478 Gordonia,"taxid 79255, phylum Streptophyta","taxid 2053, phylum Actinobacteria",re-resolved with the search constrained to Bacteria
-3_homonym,taxon 567 Syntrophus,"taxid 1671858, phylum Arthropoda","taxid 43773, phylum Thermodesulfobacteriota",re-resolved with the search constrained to Bacteria
-3_homonym,taxon 57881 Microcystis,"taxid 3252632, phylum Mollusca","taxid 1125, phylum Cyanobacteria",re-resolved with the search constrained to Bacteria
-3_homonym,taxon 57945 Coxiella,"taxid 1260513, phylum Mollusca","taxid 776, phylum Proteobacteria",re-resolved with the search constrained to Bacteria
-3_homonym,taxon 58465 Planococcus,"taxid 40929, phylum Arthropoda","taxid 1372, phylum Firmicutes",re-resolved with the search constrained to Bacteria
-3_homonym,taxon 65747 Moorella,"taxid 216400, phylum Arthropoda",lineage cleared,NCBI could not confirm a bacterial match
-4_phylum,taxon 197 Desulfobulbus,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 235 Bilophila,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 274 Geobacter lovleyi,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 421 Desulfococcus oleovorans,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 430 Desulfovibrio litoralis,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 540 Desulfovibrio aminophilus,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 571 Pelobacter,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 576 Desulfobacca,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 597 Desulfotignum,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 616 Desulfovibrio cavernae,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 632 Desulfomicrobium,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 7843 Desulfovibrio,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 10505 Desulfovibrio fairfieldensis,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 13414 Desulfovibrio legallii,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 59277 Geobacter,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 59872 Desulfovermiculus,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 61726 Desulfovirga,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 63582 Desulfurivibrio,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 63585 Syntrophobacter,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 64343 Desulfocapsa,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 65234 Desulfosalsimonas,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 67515 Desulfuromonas,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 84514 Mailhella,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 282117 Desulfotalea,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 434309 Geoalkalibacter,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 434399 Desulfococcus,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 434419 Desulforhabdus,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 434867 Desulfatiglans,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 435128 Syntrophorhabdus,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 435150 Desulfomonile,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 435621 Desulfatitalea,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 436184 Desulfoprunum,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 455625 Desulfuromonadaceae,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 455635 Desulfocastanea,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 455640 Desulfuromonadia,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 455659 Halodesulfovibrio,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 455676 Geothermobacter,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 455677 Geobacteraceae,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 455746 Desulfatirhabdium,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 455749 Citrifermentans,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 455785 Desulfofrigus,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 455831 Thermodesulforhabdus,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 455887 Desulfopila,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 586030 Nitratidesulfovibrio,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 978693 Trichlorobacter,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 1063254 Smithella,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 1143296 Deferrisoma,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 1215269 Desulfofustis,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 1226987 Desulforhopalus,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-4_phylum,taxon 1891030 Nitratidesulfovibrio vulgaris,Thermodesulfobacteria,Thermodesulfobacteriota,re-resolved from NCBI after the synonym fix
-5_drop_column,sample_taxon_abundances.detection_threshold,"column present, 0 of 2.58M rows populated",dropped,no loader ever wrote it
+6_arthropoda,taxon 32 Bacillus muralis,"phylum Arthropoda, no taxid","Peribacillus muralis, taxid 264697, phylum Firmicutes","renamed: epithet survives the genus change, so same organism"
+6_arthropoda,taxon 54 Victoria amazonica,"phylum Arthropoda, taxid 85961",phylum Streptophyta,tax ID was already correct; only the stored lineage was wrong
+6_arthropoda,taxon 100 Bacillus asahii,"phylum Arthropoda, no taxid","Peribacillus asahii, taxid 228899, phylum Firmicutes","renamed: epithet survives the genus change, so same organism"
+6_arthropoda,taxon 261 Bacillus ginsengihumi,"phylum Arthropoda, no taxid","phylum Firmicutes (genus lineage, tax ID left NULL)",species epithet did not survive; genus lineage only
+6_arthropoda,taxon 327 Bacillus foraminis,"phylum Arthropoda, no taxid","Mesobacillus foraminis, taxid 279826, phylum Firmicutes","renamed: epithet survives the genus change, so same organism"
+6_arthropoda,taxon 470 Bacillus humi,"phylum Arthropoda, no taxid","Ferdinandcohnia humi, taxid 263474, phylum Firmicutes","renamed: epithet survives the genus change, so same organism"
+6_arthropoda,taxon 520 Bacillus firmus,"phylum Arthropoda, no taxid, no data",deleted,"stale duplicate of row 1003 'Cytobacillus firmus', which already holds tax ID 1399 and the correct lineage"
+6_arthropoda,taxon 523 Bacillus horti,"phylum Arthropoda, no taxid","Caldalkalibacillus horti, taxid 77523, phylum Firmicutes","renamed: epithet survives the genus change, so same organism"
+6_arthropoda,taxon 544 Bacillus selenatarsenatis,"phylum Arthropoda, no taxid","Mesobacillus selenatarsenatis, taxid 388741, phylum Firmicutes","renamed: epithet survives the genus change, so same organism"
+6_arthropoda,taxon 566 Bacillus aurantiacus,"phylum Arthropoda, no taxid","Alteribacter aurantiacus, taxid 254410, phylum Firmicutes","renamed: epithet survives the genus change, so same organism"
