@@ -400,6 +400,14 @@ S4,crc_zeller,PMID25432777,Colorectal Neoplasms,Pseudoflavonifractor,0.00115,,en
 S4,crc_zeller,PMID25432777,Colorectal Neoplasms,Eubacterium,0.00115,,depleted
 S4,crc_zeller,PMID25432777,Colorectal Neoplasms,Ruminococcus,0.00687,,depleted
 S4,crc_zeller,PMID25432777,Colorectal Neoplasms,Leptotrichia,0.0283,,enriched
+S4,crc_zeller,PMID25432777,Colorectal Neoplasms,Pseudoflavonifractor capillosus,0.00107,,enriched
+S4,crc_zeller,PMID25432777,Colorectal Neoplasms,Eubacterium hallii,0.018,,depleted
+S4,crc_zeller,PMID25432777,Colorectal Neoplasms,Eubacterium eligens,0.0205,,depleted
+S4,crc_zeller,PMID25432777,Colorectal Neoplasms,Leptotrichia hofstadii,0.035,,enriched
+S4,crc_zeller,PMID25432777,Colorectal Neoplasms,Fusobacterium nucleatum,1.3e-05,,enriched
+S4,crc_zeller,PMID25432777,Colorectal Neoplasms,Porphyromonas asaccharolytica,0.00961,,enriched
+S4,crc_zeller,PMID25432777,Colorectal Neoplasms,Prevotella nigrescens,0.0215,,enriched
+S4,crc_zeller,PMID25432777,Colorectal Neoplasms,Peptostreptococcus stomatis,0.022,,enriched
 S4,ob_goodrich,PMID25417156,Obesity,Dehalobacterium,0.00038986,,depleted
 S4,ob_goodrich,PMID25417156,Obesity,Lachnospira,0.000462957,,depleted
 S4,ob_goodrich,PMID25417156,Obesity,Dorea,0.004816193,,enriched

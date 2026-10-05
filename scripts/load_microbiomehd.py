@@ -254,15 +254,31 @@ def load_literature(s1_datasets: list[str]) -> tuple[list[dict], Counter, dict[s
             mapping[sid] = exact[0]
 
     attrition = Counter()
-    keep: list[dict] = []
+    collected: dict[tuple[str, str, str], dict] = {}
     for row in rows:
-        if row["taxonomic_level"].casefold() != "genus":
-            attrition["not_genus_level"] += 1
+        # Species rows load too: taxa holds (genus, species), so a binomial
+        # finding has a key. Ranks above genus do not -- taxa.genus is NOT NULL,
+        # so a family- or phylum-level row cannot be represented without making
+        # the column nullable, which is a schema change, not a cleanup.
+        level = row["taxonomic_level"].casefold()
+        if level not in ("genus", "species", "species_metagenomics"):
+            attrition["rank_above_genus_or_otu"] += 1
             continue
         match = re.search(r"g__([A-Za-z0-9_\-]+)", row["taxa_or_feature"])
         if not match:
             attrition["genus_field_empty"] += 1
             continue
+        epithet = ""
+        if level != "genus":
+            species_match = re.search(r"s__([A-Za-z0-9_\-]+)", row["taxa_or_feature"])
+            if not species_match:
+                attrition["species_field_empty"] += 1
+                continue
+            # Subspecies are collapsed to the species: "s__nucleatum;sb__polymorphum"
+            # and "s__nucleatum;sb__nucleatum" are two findings about one organism
+            # as far as a (genus, species) key is concerned, so the stronger q is
+            # kept rather than one arbitrarily overwriting the other.
+            epithet = species_match.group(1).casefold()
         if row["study"] not in mapping:
             attrition["study_unmappable"] += 1
             continue
@@ -279,16 +295,27 @@ def load_literature(s1_datasets: list[str]) -> tuple[list[dict], Counter, dict[s
         if qval >= Q_THRESHOLD:
             attrition["not_significant"] += 1
             continue
-        keep.append({
+        entry = {
             "dataset": mapping[row["study"]],
             "s4_study": row["study"],
             "genus": match.group(1),
+            "species": epithet,
+            "rank": "species" if epithet else "genus",
             "qval": qval,
             "direction": "depleted" if higher in S4_CONTROL else "enriched",
             "method": row["method"].strip() or "as reported",
             "multi_comp": row["multi_comp"].strip(),
-        })
-    return keep, attrition, mapping
+        }
+        key = (entry["dataset"], entry["genus"].casefold(), epithet)
+        existing = collected.get(key)
+        if existing is None:
+            collected[key] = entry
+        elif qval < existing["qval"]:
+            collected[key] = entry
+            attrition["subspecies_collapsed"] += 1
+        else:
+            attrition["subspecies_collapsed"] += 1
+    return list(collected.values()), attrition, mapping
 
 
 def load_identity() -> dict[str, dict[str, str]]:
@@ -502,8 +529,9 @@ def main() -> int:
             rec = identity.get(row["dataset"], {})
             accession = f"PMID{rec['pmid']}" if rec.get("pmid") else rec.get("accession") or row["dataset"]
             stats["s4_associations"] += 1
+            organism = f"{genus} {row['species']}".strip()
             audit.append({"dataset": row["dataset"], "study": accession, "disease": name,
-                          "genus": genus, "q_value": row["qval"], "log2_fold_change": "",
+                          "genus": organism, "q_value": row["qval"], "log2_fold_change": "",
                           "direction": row["direction"], "source_file": "S4"})
             if DRY_RUN:
                 continue
@@ -518,9 +546,11 @@ def main() -> int:
                            f"{row['dataset']}, curated in file-S4; multiple-comparison "
                            f"correction: {row['multi_comp'] or 'not stated'}. Distinct "
                            f"from the standardized re-analysis comparison on this study."))
-            if genus not in taxon_cache:
-                taxon_cache[genus], existed = upsert_taxon(conn, {
-                    "genus": genus, "species": "", "taxonomic_rank": "genus",
+            cache_key = f"{genus}|{row['species']}"
+            if cache_key not in taxon_cache:
+                taxon_cache[cache_key], existed = upsert_taxon(conn, {
+                    "genus": genus, "species": row["species"],
+                    "taxonomic_rank": row["rank"],
                     "source_database": "MicrobiomeHD"}, overwrite=False)
                 stats["taxa_already_present" if existed else "taxa_created"] += 1
             cursor = conn.cursor()
@@ -533,7 +563,7 @@ def main() -> int:
                 ON DUPLICATE KEY UPDATE
                     direction = VALUES(direction), q_value = VALUES(q_value)
                 """,
-                (taxon_cache[genus], case_id, comparison_cache[key],
+                (taxon_cache[cache_key], case_id, comparison_cache[key],
                  row["direction"], row["qval"]),
             )
             cursor.close()

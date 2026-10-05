@@ -231,13 +231,26 @@ GROUP BY t.id, d.id, s.id
 HAVING reanalysis IS NOT NULL AND as_published IS NOT NULL;
 ```
 
-**S4 is notes, not a matrix, and only 30 of its 1,027 rows load — 3%.** Treat it
-as a sample of the literature, not a summary of it. The loader reports the
-attrition every run: 640 rows are not genus-level (OTU, species, phylum, family,
-and `taxa.genus` is NOT NULL so a family-level finding has no key), 209 belong
-to studies with no counterpart in the re-analysis, 94 name a family with an
-empty `g__`, 44 report no parseable q value, 8 are above threshold, and 1 is a
-disease-versus-disease comparison rather than case-versus-control.
+Species-level rows load as well as genus-level ones, since `taxa` holds
+(genus, species). That matters more than the count suggests: it is what brings in
+*Fusobacterium nucleatum* in colorectal cancer at q = 1.3e-05, along with
+*Porphyromonas asaccharolytica*, *Peptostreptococcus stomatis* and
+*Leptotrichia hofstadii* — findings with no genus-level equivalent in the file.
+Subspecies collapse to their species, keeping the stronger q, because
+`s__nucleatum;sb__polymorphum` and `s__nucleatum;sb__nucleatum` are one organism
+under a (genus, species) key.
+
+**S4 is notes, not a matrix, and only 38 of its 1,027 rows load — under 4%.**
+Treat it as a sample of the literature, not a summary of it. The loader reports
+the attrition every run: 509 rows sit at a rank above genus or are OTU-level
+(`taxa.genus` is NOT NULL, so a family- or phylum-level finding has no key at
+all), 210 belong to studies with no counterpart in the re-analysis, 167 name a
+family with an empty `g__`, 70 report no parseable q value, 22 are above
+threshold, 6 are species rows with an empty `s__`, 3 are subspecies collapsed
+into their species, and 1 is a disease-versus-disease comparison.
+
+Threshold notation (`<0.05`, `<0.001`) was measured and deliberately not parsed:
+every such row also fails another rule, so interpreting it recovers nothing.
 
 Study ids in S4 are abbreviated differently from the re-analysis
 (`ra_littman`, `ibd_hut`, `mhe_zhang`) and the repository documents no mapping,
