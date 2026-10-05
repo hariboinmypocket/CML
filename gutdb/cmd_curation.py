@@ -47,7 +47,15 @@ class CMDCurationClient:
         return [item["name"] for item in response.json() if item.get("type") == "dir"]
 
     def study_samples(self, study: str) -> list[dict[str, str]]:
-        for suffix in ("_sample.tsv", "_metadata.tsv"):
+        """Read one study's curation table.
+
+        The repo stores it as `<study>/<study>.tsv`. Two older spellings are
+        kept as fallbacks, but the bare name is tried first: when it was absent
+        this method returned [] for every study, so callers saw "cMD holds
+        nothing" instead of an error, and a coverage check against it reported a
+        confident zero.
+        """
+        for suffix in (".tsv", "_sample.tsv", "_metadata.tsv"):
             try:
                 response = self.session.get(
                     f"{CMD_RAW}/{study}/{study}{suffix}", timeout=self.timeout
