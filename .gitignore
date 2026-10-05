@@ -49,3 +49,7 @@ tmp/
 
 # Safety copy written by scripts/fix_curated_csv_lineage.py; git holds the original
 *.before_lineage_fix
+
+# MicrobiomeHD upstream files (Duvallet et al. 2017) - fetched, not ours to
+# redistribute; scripts/load_microbiomehd.py prints the curl commands
+data/microbiomehd/

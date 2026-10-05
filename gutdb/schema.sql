@@ -114,6 +114,14 @@ CREATE TABLE IF NOT EXISTS taxon_disease_associations (
     direction ENUM('enriched', 'depleted', 'marker', 'no_difference') NOT NULL,
     effect_type VARCHAR(50) NOT NULL DEFAULT 'LDA',
     effect_size DOUBLE NULL,
+    -- Significance, where the source reports it. These are independent of
+    -- effect_size, not derived from it: GMrepo's LEfSe export carries an LDA
+    -- score and no p/q value, while MicrobiomeHD's standardized re-analysis
+    -- carries an FDR-corrected q value and no effect size. A row may therefore
+    -- have one, the other, or both, and a NULL means "the source did not report
+    -- it" rather than "not significant".
+    p_value DOUBLE NULL,
+    q_value DOUBLE NULL,
     source_database VARCHAR(100) NOT NULL DEFAULT 'GMrepo',
     PRIMARY KEY (id),
     UNIQUE KEY uq_taxon_disease_evidence (taxon_id, disease_id, comparison_id, effect_type),

@@ -162,6 +162,8 @@ def normalize_source_database(value: Any) -> str:
         return "PubMed"
     if source == "mgnify":
         return "MGnify"
+    if source == "microbiomehd":
+        return "MicrobiomeHD"
     return "MiMeDB"
 
 

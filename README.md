@@ -161,6 +161,38 @@ HAVING COUNT(DISTINCT a.disease_id) > 1
 ORDER BY disease_count DESC, t.scientific_name;
 ```
 
+### MicrobiomeHD standardized re-analysis
+
+[Duvallet et al. 2017](https://doi.org/10.1038/s41467-017-01973-8) (PMID 29209090)
+re-processed 28 case-control 16S studies through one pipeline and published the
+resulting genus-level q-values. Because every dataset went through identical
+processing, it is an independent check on the per-project LEfSe results this
+database takes from GMrepo, rather than more of the same evidence.
+
+```bash
+python populate_database.py validate            # before
+python scripts/load_microbiomehd.py             # dry run; prints the curl commands if files are missing
+python scripts/load_microbiomehd.py --apply
+```
+
+Two schema additions support it: `taxon_disease_associations.p_value` and
+`.q_value`. These are independent of `effect_size`, not derived from it — GMrepo
+reports an LDA score and no significance, MicrobiomeHD reports an FDR-corrected
+q value and no effect size — so a row may carry either, both, or neither, and
+NULL means "the source did not report it" rather than "not significant". Loaded
+rows use `effect_type = 'q_value'` so they never pool with LDA scores in an
+`ORDER BY ABS(effect_size)` query.
+
+Only the 434 rows significant at |q| < 0.05 are loaded, of 2,769 present in the
+matrix. The other 2,335 are real "tested, not significant" results, but
+`v_taxon_specificity` counts `COUNT(DISTINCT disease_id)` over every association
+row with no direction filter, so admitting them as `direction = 'no_difference'`
+would push a merely-tested genus toward `broad` or `pan_disease`. They belong in
+a separate table if they are ever wanted.
+
+38 further rows are dropped because the RDP classifier labels they carry are not
+organisms (`Clostridium_IV`, `Lachnospiracea_incertae_sedis` and similar).
+
 ## Data notes
 
 - MiMeDB taxonomic and metabolic text is normalized before matching. Species are matched case-insensitively by `(genus, species)`.
