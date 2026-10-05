@@ -61,6 +61,7 @@ DRY_RUN = "--apply" not in sys.argv
 # fetch them into the default location (see FETCH_HINT below).
 SOURCE = Path(os.environ.get("MICROBIOMEHD_DIR", "data/microbiomehd"))
 QVALUES = SOURCE / "file-S1.qvalues.txt"
+EFFECTS = SOURCE / "file-S5.effects.txt"
 IDENTITY = SOURCE / "dataset_identity.csv"
 AUDIT = Path("data/microbiomehd_s1_audit.csv")
 
@@ -71,6 +72,8 @@ Required files are missing from {SOURCE}/. To fetch them:
   mkdir -p {SOURCE}
   curl -sS -o {SOURCE}/file-S1.qvalues.txt \\
     {RAW}/final/supp-files/file-S1.qvalues.txt
+  curl -sS -o {SOURCE}/file-S5.effects.txt \\
+    {RAW}/final/supp-files/file-S5.effects.txt
   curl -sS -o {SOURCE}/results_folders.yaml \\
     {RAW}/data/user_input/results_folders.yaml
 
@@ -124,6 +127,37 @@ def parse_lineage(label: str) -> dict[str, str]:
     return out
 
 
+def load_effects() -> tuple[dict[str, list[str]], list[str], set[float]]:
+    """Return (lineage -> row, datasets, sentinel values) from file-S5.
+
+    S5 holds log2(mean_cases / mean_controls), but three of its values are
+    placeholders rather than measurements: the table maximum stands in for a
+    fold-change against a zero control mean, the table minimum for a zero case
+    mean, and 0.0 for both means being zero. Those are division-by-zero markers,
+    so storing the max as an effect size would assert a ~1300-fold enrichment
+    the data cannot support. The sentinels are derived from the file instead of
+    hardcoded, so a regenerated file with different extremes still works.
+    """
+    if not EFFECTS.exists():
+        return {}, [], set()
+    rows = list(csv.reader(EFFECTS.open(), delimiter="\t"))
+    datasets = rows[0][1:]
+    values: list[float] = []
+    table: dict[str, list[str]] = {}
+    for row in rows[1:]:
+        table[row[0]] = row[1:]
+        for raw in row[1:]:
+            raw = raw.strip()
+            if not raw:
+                continue
+            try:
+                values.append(float(raw))
+            except ValueError:
+                pass
+    sentinels = {max(values), min(values), 0.0} if values else set()
+    return table, datasets, sentinels
+
+
 def load_identity() -> dict[str, dict[str, str]]:
     return {r["dataset"]: r for r in csv.DictReader(IDENTITY.open())}
 
@@ -133,6 +167,13 @@ def main() -> int:
         if not required.exists():
             raise SystemExit(FETCH_HINT)
     identity = load_identity()
+    s5_table, s5_datasets, s5_sentinels = load_effects()
+    s5_index = {name: i for i, name in enumerate(s5_datasets)}
+    if s5_table:
+        print(f"S5 effects: {len(s5_table)} genera, sentinels "
+              f"{sorted(round(v, 6) for v in s5_sentinels)}")
+    else:
+        print("S5 effects: file absent - effect sizes will be left NULL")
     rows = list(csv.reader(QVALUES.open(), delimiter="\t"))
     datasets = rows[0][1:]
     print(f"datasets in S1: {len(datasets)}   genera: {len(rows) - 1}")
@@ -188,7 +229,29 @@ def main() -> int:
             if not genus or NOT_A_GENUS.search(genus):
                 stats["skipped_not_a_genus"] += 1
                 continue
-            significant.append((genus, lineage, q))
+            effect = None
+            column_s5 = s5_index.get(dataset)
+            if column_s5 is None:
+                stats["effect_absent"] += 1
+            else:
+                cell_row = s5_table.get(row[0]) or []
+                cell = cell_row[column_s5].strip() if column_s5 < len(cell_row) else ""
+                if not cell:
+                    stats["effect_absent"] += 1
+                else:
+                    try:
+                        candidate = float(cell)
+                    except ValueError:
+                        candidate = None
+                    if candidate is None:
+                        stats["effect_absent"] += 1
+                    elif candidate in s5_sentinels:
+                        # division-by-zero placeholder, not a measurement
+                        stats["effect_sentinel_skipped"] += 1
+                    else:
+                        effect = candidate
+                        stats["effect_loaded"] += 1
+            significant.append((genus, lineage, q, effect))
 
         if not significant:
             stats["datasets_with_no_hits"] += 1
@@ -197,9 +260,10 @@ def main() -> int:
 
         if DRY_RUN:
             stats["associations"] += len(significant)
-            for genus, _, q in significant:
+            for genus, _, q, effect in significant:
                 audit.append({"dataset": dataset, "study": accession, "disease": name,
                               "genus": genus, "q_value": abs(q),
+                              "log2_fold_change": "" if effect is None else effect,
                               "direction": "enriched" if q > 0 else "depleted"})
             continue
 
@@ -230,7 +294,7 @@ def main() -> int:
         comparison_id = comparison_cache[dataset]
 
         cursor = conn.cursor()
-        for genus, lineage, q in significant:
+        for genus, lineage, q, effect in significant:
             if genus not in taxon_cache:
                 taxon = {"genus": genus, "species": "", "taxonomic_rank": "genus",
                          "source_database": "MicrobiomeHD"}
@@ -239,21 +303,37 @@ def main() -> int:
                 # row was already there, not when it was created.
                 taxon_cache[genus], existed = upsert_taxon(conn, taxon, overwrite=False)
                 stats["taxa_already_present" if existed else "taxa_created"] += 1
+            # effect_type is part of uq_taxon_disease_evidence, so a row whose
+            # effect_type changes between runs -- 'q_value' before S5 was loaded,
+            # 'log2_fold_change' after -- inserts a second row for the same
+            # finding instead of updating the first. Clear any other effect_type
+            # from this source for this triple so one finding keeps one row.
+            effect_type = "log2_fold_change" if effect is not None else "q_value"
+            cursor.execute(
+                """DELETE FROM taxon_disease_associations
+                   WHERE taxon_id = %s AND disease_id = %s AND comparison_id = %s
+                     AND source_database = 'MicrobiomeHD' AND effect_type <> %s""",
+                (taxon_cache[genus], case_id, comparison_id, effect_type),
+            )
+            stats["superseded_rows_removed"] += cursor.rowcount
             cursor.execute(
                 """
                 INSERT INTO taxon_disease_associations
                     (taxon_id, disease_id, comparison_id, direction, effect_type,
                      effect_size, q_value, source_database)
-                VALUES (%s, %s, %s, %s, 'q_value', NULL, %s, 'MicrobiomeHD')
+                VALUES (%s, %s, %s, %s, %s, %s, %s, 'MicrobiomeHD')
                 ON DUPLICATE KEY UPDATE
-                    direction = VALUES(direction), q_value = VALUES(q_value)
+                    direction = VALUES(direction), q_value = VALUES(q_value),
+                    effect_size = VALUES(effect_size)
                 """,
                 (taxon_cache[genus], case_id, comparison_id,
-                 "enriched" if q > 0 else "depleted", abs(q)),
+                 "enriched" if q > 0 else "depleted",
+                 effect_type, effect, abs(q)),
             )
             stats["associations"] += 1
             audit.append({"dataset": dataset, "study": accession, "disease": name,
                           "genus": genus, "q_value": abs(q),
+                          "log2_fold_change": "" if effect is None else effect,
                           "direction": "enriched" if q > 0 else "depleted"})
         cursor.close()
 
@@ -270,7 +350,9 @@ def main() -> int:
 
     for key in ("datasets_loaded", "datasets_with_no_hits", "datasets_skipped",
                 "qvalues_present", "not_significant", "skipped_not_a_genus",
-                "associations", "taxa_created", "taxa_already_present"):
+                "associations", "effect_loaded", "effect_sentinel_skipped",
+                "effect_absent", "superseded_rows_removed",
+                "taxa_created", "taxa_already_present"):
         print(f"    {key:26} {stats[key]}")
 
     if audit:

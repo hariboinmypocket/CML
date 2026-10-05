@@ -183,6 +183,22 @@ NULL means "the source did not report it" rather than "not significant". Loaded
 rows use `effect_type = 'q_value'` so they never pool with LDA scores in an
 `ORDER BY ABS(effect_size)` query.
 
+Effect sizes come from file-S5, which holds `log2(mean_cases / mean_controls)`.
+Three of its values are placeholders rather than measurements — the table
+maximum stands in for a fold-change against a zero control mean, the minimum for
+a zero case mean, and `0.0` for both means being zero — so storing the maximum
+would assert a roughly 1300-fold enrichment the data cannot support. Those 59
+rows keep `effect_type = 'q_value'` with a NULL `effect_size`; the 337 real
+measurements become `effect_type = 'log2_fold_change'`. The sentinels are derived
+from the file at load time rather than hardcoded. S5's signs agree with S1's on
+all 375 shared significant rows, which is what confirms the two files are
+column-aligned.
+
+Each finding keeps one row. Because `effect_type` is part of
+`uq_taxon_disease_evidence`, a row whose type changes between runs would
+otherwise insert a second row beside the first, so the loader clears any other
+`effect_type` from this source for the same triple before inserting.
+
 Only the 434 rows significant at |q| < 0.05 are loaded, of 2,769 present in the
 matrix. The other 2,335 are real "tested, not significant" results, but
 `v_taxon_specificity` counts `COUNT(DISTINCT disease_id)` over every association
