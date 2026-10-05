@@ -407,6 +407,25 @@ def load_identity() -> dict[str, dict[str, str]]:
 
 
 def main() -> int:
+    try:
+        return _run()
+    except Exception as exc:
+        # _start_run has already written an ingestion_runs row; without this a
+        # crash leaves it at status='running' forever, which is what happened
+        # twice while this loader was being built.
+        if _ACTIVE_RUN["conn"] is not None and _ACTIVE_RUN["id"] is not None:
+            try:
+                _finish_run(_ACTIVE_RUN["conn"], _ACTIVE_RUN["id"],
+                            LoadStats(), error=exc)
+            except Exception:
+                pass
+        raise
+
+
+_ACTIVE_RUN: dict = {"conn": None, "id": None}
+
+
+def _run() -> int:
     for required in (QVALUES, IDENTITY):
         if not required.exists():
             raise SystemExit(FETCH_HINT)
@@ -430,6 +449,7 @@ def main() -> int:
     run_id = None if DRY_RUN else _start_run(
         conn, "MicrobiomeHD_S1_qvalues",
         "https://github.com/cduvallet/microbiomeHD final/supp-files/file-S1.qvalues.txt")
+    _ACTIVE_RUN.update(conn=conn, id=run_id)
 
     stats = Counter()
     audit: list[dict] = []
