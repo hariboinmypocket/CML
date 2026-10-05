@@ -49,6 +49,18 @@ CREATE TABLE IF NOT EXISTS taxa (
     -- pathogen": MiMeDB only ever records the positive flag, so absence carries
     -- no negative evidence and must not be read as 0.
     human_pathogen TINYINT UNSIGNED NULL,
+    -- Whether this genus responds to disease NON-specifically, from MicrobiomeHD
+    -- (Duvallet et al. 2017, file-S3): a genus qualifies when it is significant
+    -- at q < 0.05 in the same direction in at least two DIFFERENT diseases.
+    -- 'health' and 'disease' say which direction, 'mixed' means it is enriched
+    -- in cases for two diseases and in controls for two others.
+    --
+    -- This is one meta-analysis's verdict over 28 studies, not an intrinsic
+    -- property, and NULL means "not assessed by that analysis" rather than
+    -- "specific to one disease". Its value is directional: v_taxon_specificity
+    -- can tell that a genus is pan-disease but not whether it marks health or
+    -- disease, which is exactly what this adds.
+    nonspecific_response ENUM('health', 'disease', 'mixed') NULL,
     energy_mode ENUM('fermenter', 'respirator', 'mixed', 'N/A') NOT NULL DEFAULT 'N/A',
     primary_food_source VARCHAR(100) NOT NULL DEFAULT 'N/A',
     source_database VARCHAR(100) NOT NULL DEFAULT 'MiMeDB',

@@ -1,0 +1,52 @@
+genus,label,taxon_id,action
+Akkermansia,health,7663,NULL -> health
+Alistipes,mixed,7667,NULL -> mixed
+Anaerococcus,disease,480,NULL -> disease
+Anaerofilum,health,73,NULL -> health
+Anaerostipes,health,57,NULL -> health
+Anaerovorax,mixed,277,NULL -> mixed
+Bacteroides,health,7657,NULL -> health
+Barnesiella,health,7721,NULL -> health
+Bifidobacterium,health,7857,NULL -> health
+Blautia,health,7870,NULL -> health
+Campylobacter,disease,7872,NULL -> disease
+Catenibacterium,mixed,7855,NULL -> mixed
+Clostridium_IV,health,,no matching genus row - not created
+Clostridium_XI,health,,no matching genus row - not created
+Clostridium_XVIII,mixed,,no matching genus row - not created
+Clostridium_XlVb,mixed,,no matching genus row - not created
+Collinsella,disease,7672,NULL -> disease
+Coprobacillus,health,7779,NULL -> health
+Coprococcus,health,7664,NULL -> health
+Enterococcus,disease,7877,NULL -> disease
+Escherichia,disease,7829,NULL -> disease
+Ethanoligenens,health,24,NULL -> health
+Faecalibacterium,health,7666,NULL -> health
+Finegoldia,disease,481,NULL -> disease
+Flavonifractor,mixed,7739,NULL -> mixed
+Fusobacterium,disease,45,NULL -> disease
+Gemmiger,health,8047,NULL -> health
+Howardella,health,8106,NULL -> health
+Lachnospiracea_incertae_sedis,health,,no matching genus row - not created
+Lactobacillus,disease,7813,NULL -> disease
+Leuconostoc,disease,218,NULL -> disease
+Mogibacterium,disease,37,NULL -> disease
+Murdochiella,health,13560,NULL -> health
+Oscillibacter,health,7677,NULL -> health
+Parvimonas,disease,155,NULL -> disease
+Peptoniphilus,disease,46,NULL -> disease
+Peptostreptococcus,disease,9313,NULL -> disease
+Phascolarctobacterium,health,13,NULL -> health
+Porphyromonas,disease,9112,NULL -> disease
+Prevotella,mixed,7673,NULL -> mixed
+Pseudoflavonifractor,health,7789,NULL -> health
+Pyramidobacter,disease,8744,NULL -> disease
+Roseburia,health,7686,NULL -> health
+Ruminococcus,health,7658,NULL -> health
+Sporobacter,health,61839,NULL -> health
+Staphylococcus,disease,8292,NULL -> disease
+Streptococcus,disease,7851,NULL -> disease
+Turicibacter,health,82,NULL -> health
+Varibaculum,disease,8922,NULL -> disease
+Veillonella,disease,7890,NULL -> disease
+Weissella,disease,7891,NULL -> disease
