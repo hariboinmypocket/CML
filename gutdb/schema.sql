@@ -238,9 +238,27 @@ SELECT
     (s.sex IS NOT NULL AND s.age_years IS NOT NULL) AS has_demographics,
     COALESCE(ab.n_taxa, 0)                 AS n_taxa_profiled,
     (COALESCE(ab.n_taxa, 0) > 0)           AS has_features,
+    -- The biological sample, not the sequencing run. A study may sequence one
+    -- sample several times, so `samples` can hold two to four rows that are one
+    -- piece of biological material: PRJEB28543 profiles each of its samples four
+    -- times, and 681 sample groups here cover 1,575 rows. Their profiles differ
+    -- genuinely (independent runs, independently profiled), so none is a
+    -- duplicate to delete -- but treating them as independent observations is
+    -- pseudo-replication, inflating the effective sample size and putting the
+    -- same material on both sides of a train/test split.
+    s.gmrepo_sample_id                     AS biological_sample_id,
+    COALESCE(rep.n_runs, 1)                AS runs_for_this_sample,
+    (COALESCE(rep.n_runs, 1) > 1
+     AND s.id <> rep.first_id)             AS is_replicate_run,
     (s.sex IS NOT NULL
      AND s.age_years IS NOT NULL
-     AND COALESCE(ab.n_taxa, 0) > 0)       AS ml_ready
+     AND COALESCE(ab.n_taxa, 0) > 0)       AS ml_ready,
+    -- ml_ready says the row has covariates and features; this additionally
+    -- keeps one run per biological sample, which is what a split should use.
+    (s.sex IS NOT NULL
+     AND s.age_years IS NOT NULL
+     AND COALESCE(ab.n_taxa, 0) > 0
+     AND (COALESCE(rep.n_runs, 1) = 1 OR s.id = rep.first_id)) AS ml_ready_deduplicated
 FROM samples s
 JOIN studies st ON st.id = s.study_id
 LEFT JOIN diseases d ON d.id = s.disease_id
@@ -248,7 +266,14 @@ LEFT JOIN (
     SELECT sample_id, COUNT(*) AS n_taxa
     FROM sample_taxon_abundances
     GROUP BY sample_id
-) ab ON ab.sample_id = s.id;
+) ab ON ab.sample_id = s.id
+LEFT JOIN (
+    SELECT study_id, gmrepo_sample_id, COUNT(*) AS n_runs, MIN(id) AS first_id
+    FROM samples
+    WHERE gmrepo_sample_id IS NOT NULL
+    GROUP BY study_id, gmrepo_sample_id
+) rep ON rep.study_id = s.study_id
+     AND rep.gmrepo_sample_id = s.gmrepo_sample_id;
 
 
 -- Study-level rollup: where each cohort stands on covariates vs features.
