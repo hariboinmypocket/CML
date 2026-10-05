@@ -1,397 +1,427 @@
-dataset,study,disease,genus,q_value,log2_fold_change,direction
-cdi_youngster,PMID24762631,Clostridium Infections,Corynebacterium,0.0,,depleted
-cdi_youngster,PMID24762631,Clostridium Infections,Porphyromonas,0.0,,depleted
-cdi_youngster,PMID24762631,Clostridium Infections,Enterococcus,0.0415417023367,,enriched
-cdi_youngster,PMID24762631,Clostridium Infections,Anaerosporobacter,0.00194075025809,,depleted
-cdi_youngster,PMID24762631,Clostridium Infections,Defluviitalea,0.0,,depleted
-cdi_youngster,PMID24762631,Clostridium Infections,Anaerostipes,0.0238380380696,-4.02450991748,depleted
-cdi_youngster,PMID24762631,Clostridium Infections,Coprococcus,0.0140168218161,-7.07084385511,depleted
-cdi_youngster,PMID24762631,Clostridium Infections,Dorea,0.0238380380696,-1.44259440272,depleted
-cdi_youngster,PMID24762631,Clostridium Infections,Hespellia,0.0199808572784,,depleted
-cdi_youngster,PMID24762631,Clostridium Infections,Acetanaerobacterium,0.00120677983885,-8.46162250934,depleted
-cdi_youngster,PMID24762631,Clostridium Infections,Acetivibrio,0.0,,depleted
-cdi_youngster,PMID24762631,Clostridium Infections,Anaerotruncus,0.00194075025809,,depleted
-cdi_youngster,PMID24762631,Clostridium Infections,Butyricicoccus,0.00132322847613,-6.60079797145,depleted
-cdi_youngster,PMID24762631,Clostridium Infections,Faecalibacterium,0.0140168218161,-7.72434541541,depleted
-cdi_youngster,PMID24762631,Clostridium Infections,Oscillibacter,0.00120677983885,-10.4403242349,depleted
-cdi_youngster,PMID24762631,Clostridium Infections,Pseudoflavonifractor,0.0199808572784,,depleted
-cdi_youngster,PMID24762631,Clostridium Infections,Ruminococcus,0.0376072520156,-9.02744013878,depleted
-cdi_youngster,PMID24762631,Clostridium Infections,Subdoligranulum,0.0140168218161,-2.84061266662,depleted
-cdi_youngster,PMID24762631,Clostridium Infections,Allisonella,0.0,,depleted
-cdi_youngster,PMID24762631,Clostridium Infections,Dialister,0.0376072520156,-3.46078445462,depleted
-cdi_youngster,PMID24762631,Clostridium Infections,Mitsuokella,0.0,,depleted
-cdi_youngster,PMID24762631,Clostridium Infections,Oxalobacter,0.0,,depleted
-hiv_noguerajulian,SRP068240,HIV Infections,Anaerorhabdus,0.0261063158614,0.674261365317,enriched
-hiv_noguerajulian,SRP068240,HIV Infections,Bacteroides,0.0058478413564,1.39277775912,enriched
-hiv_noguerajulian,SRP068240,HIV Infections,Hallella,0.0102892718359,-1.78863269261,depleted
-hiv_noguerajulian,SRP068240,HIV Infections,Prevotella,0.0224679582572,-0.611825827662,depleted
-hiv_noguerajulian,SRP068240,HIV Infections,Alistipes,0.0201831920681,1.53945722334,enriched
-hiv_noguerajulian,SRP068240,HIV Infections,Butyrivibrio,0.0058478413564,-1.72159382751,depleted
-hiv_noguerajulian,SRP068240,HIV Infections,Howardella,0.0058478413564,-0.958334782129,depleted
-hiv_noguerajulian,SRP068240,HIV Infections,Ruminococcus2,0.0481453844533,-0.576561501281,depleted
-hiv_noguerajulian,SRP068240,HIV Infections,Peptococcus,0.0058478413564,-1.37980205392,depleted
-hiv_noguerajulian,SRP068240,HIV Infections,Fastidiosipila,0.0196588085653,-1.92510111518,depleted
-hiv_noguerajulian,SRP068240,HIV Infections,Catenibacterium,0.0159894303051,-0.964474909218,depleted
-hiv_noguerajulian,SRP068240,HIV Infections,Turicibacter,0.0201831920681,-0.0129153534716,depleted
-hiv_noguerajulian,SRP068240,HIV Infections,Oligosphaera,0.00623069174765,-1.82574323658,depleted
-hiv_noguerajulian,SRP068240,HIV Infections,Coraliomargarita,0.0058478413564,-1.34608669596,depleted
-hiv_lozupone,PMID24034618,HIV Infections,Bacteroides,0.0156450419792,-1.39960827395,depleted
-hiv_lozupone,PMID24034618,HIV Infections,Odoribacter,0.0438061116313,-2.81182824284,depleted
-hiv_lozupone,PMID24034618,HIV Infections,Alloprevotella,0.0017806035917,,enriched
-hiv_lozupone,PMID24034618,HIV Infections,Hallella,0.00673923792398,,enriched
-hiv_lozupone,PMID24034618,HIV Infections,Prevotella,0.0121234081549,1.65472737443,enriched
-hiv_lozupone,PMID24034618,HIV Infections,Alistipes,0.00583607264554,-3.12821232241,depleted
-hiv_lozupone,PMID24034618,HIV Infections,Mogibacterium,0.0114071874043,3.45988733315,enriched
-hiv_lozupone,PMID24034618,HIV Infections,Anaerostipes,0.037343824503,-1.55911272968,depleted
-hiv_lozupone,PMID24034618,HIV Infections,Peptococcus,0.0125967186728,,enriched
-hiv_lozupone,PMID24034618,HIV Infections,Peptostreptococcus,0.0436010735082,,enriched
-hiv_lozupone,PMID24034618,HIV Infections,Catenibacterium,0.0158693127907,2.06253715586,enriched
-hiv_lozupone,PMID24034618,HIV Infections,Allisonella,0.00673923792398,,enriched
-hiv_lozupone,PMID24034618,HIV Infections,Dialister,0.0222965499024,2.08429662049,enriched
-hiv_lozupone,PMID24034618,HIV Infections,Megasphaera,0.00673923792398,8.67398386435,enriched
-hiv_lozupone,PMID24034618,HIV Infections,Parasutterella,0.0114071874043,-5.87239171357,depleted
-hiv_lozupone,PMID24034618,HIV Infections,Desulfovibrio,0.00583607264554,,enriched
-edd_singh,PMID26395244,Diarrhea,Bifidobacterium,7.66945470978e-07,-1.09598490111,depleted
-edd_singh,PMID26395244,Diarrhea,Adlercreutzia,0.00630706802104,-2.5027713355,depleted
-edd_singh,PMID26395244,Diarrhea,Collinsella,3.4693330182e-05,0.838531172283,enriched
-edd_singh,PMID26395244,Diarrhea,Eggerthella,0.0244005931557,-0.928872698223,depleted
-edd_singh,PMID26395244,Diarrhea,Enterorhabdus,9.15538382254e-06,-3.02664631195,depleted
-edd_singh,PMID26395244,Diarrhea,Slackia,0.00271336085414,-2.52280775438,depleted
-edd_singh,PMID26395244,Diarrhea,Barnesiella,1.0543477728e-09,-2.14862374542,depleted
-edd_singh,PMID26395244,Diarrhea,Butyricimonas,2.6137507003e-06,-1.4107551747,depleted
-edd_singh,PMID26395244,Diarrhea,Odoribacter,0.000135491701321,-0.592533220411,depleted
-edd_singh,PMID26395244,Diarrhea,Parabacteroides,2.46311536266e-11,-1.14711867151,depleted
-edd_singh,PMID26395244,Diarrhea,Paraprevotella,0.00390079628984,-2.45529041394,depleted
-edd_singh,PMID26395244,Diarrhea,Alistipes,2.0366471643e-18,-1.9818887471,depleted
-edd_singh,PMID26395244,Diarrhea,Gemella,0.0353235749212,4.53915449366,enriched
-edd_singh,PMID26395244,Diarrhea,Enterococcus,0.000135491701321,3.84306301619,enriched
-edd_singh,PMID26395244,Diarrhea,Tetragenococcus,4.2311001819e-05,4.1219126641,enriched
-edd_singh,PMID26395244,Diarrhea,Lactococcus,0.0440433830623,7.80103388337,enriched
-edd_singh,PMID26395244,Diarrhea,Streptococcus,0.000245062396033,2.62026848999,enriched
-edd_singh,PMID26395244,Diarrhea,Parvimonas,0.000302045673716,,enriched
-edd_singh,PMID26395244,Diarrhea,Anaerovorax,1.74085195045e-05,-1.47525783817,depleted
-edd_singh,PMID26395244,Diarrhea,Eubacterium,3.23976609676e-07,-3.27075061078,depleted
-edd_singh,PMID26395244,Diarrhea,Anaerostipes,3.59004222322e-09,-1.42165600759,depleted
-edd_singh,PMID26395244,Diarrhea,Blautia,2.06215959992e-14,-1.25821150132,depleted
-edd_singh,PMID26395244,Diarrhea,Coprococcus,2.31555732759e-10,-1.89104489284,depleted
-edd_singh,PMID26395244,Diarrhea,Dorea,0.000123132987947,-0.358731444517,depleted
-edd_singh,PMID26395244,Diarrhea,Howardella,7.72671160019e-05,-3.62048364348,depleted
-edd_singh,PMID26395244,Diarrhea,Pseudobutyrivibrio,0.00906241859468,-2.48725731759,depleted
-edd_singh,PMID26395244,Diarrhea,Roseburia,9.00602239639e-12,-1.06712142435,depleted
-edd_singh,PMID26395244,Diarrhea,Ruminococcus2,1.74085195045e-05,0.168587800152,enriched
-edd_singh,PMID26395244,Diarrhea,Peptostreptococcus,0.0455894283404,5.9939566354,enriched
-edd_singh,PMID26395244,Diarrhea,Anaerofilum,0.00877914471183,-1.6831616529,depleted
-edd_singh,PMID26395244,Diarrhea,Anaerotruncus,0.00110527389266,-0.87779806247,depleted
-edd_singh,PMID26395244,Diarrhea,Butyricicoccus,9.00602239639e-12,-1.56069552329,depleted
-edd_singh,PMID26395244,Diarrhea,Ethanoligenens,0.000574113799008,-1.64193739803,depleted
-edd_singh,PMID26395244,Diarrhea,Faecalibacterium,1.35309812843e-06,-0.560327683491,depleted
-edd_singh,PMID26395244,Diarrhea,Flavonifractor,2.62356841744e-17,-1.69155288135,depleted
-edd_singh,PMID26395244,Diarrhea,Oscillibacter,1.40914703028e-17,-2.05927955425,depleted
-edd_singh,PMID26395244,Diarrhea,Ruminococcus,3.25307904115e-11,-2.82061805429,depleted
-edd_singh,PMID26395244,Diarrhea,Sporobacter,1.27769024028e-14,-2.71774273916,depleted
-edd_singh,PMID26395244,Diarrhea,Catenibacterium,0.0163431436072,-0.30371784146,depleted
-edd_singh,PMID26395244,Diarrhea,Coprobacillus,5.50489984382e-07,-0.734243199505,depleted
-edd_singh,PMID26395244,Diarrhea,Holdemania,7.01442932603e-06,-1.67533658108,depleted
-edd_singh,PMID26395244,Diarrhea,Dialister,0.000376476248548,-1.39676291191,depleted
-edd_singh,PMID26395244,Diarrhea,Veillonella,4.60245133098e-11,2.85176672718,enriched
-edd_singh,PMID26395244,Diarrhea,Fusobacterium,7.72671160019e-05,5.222959503,enriched
-edd_singh,PMID26395244,Diarrhea,Victivallis,0.00261381945641,-4.37762523004,depleted
-edd_singh,PMID26395244,Diarrhea,Oxalobacter,0.00283398743287,-2.02227643381,depleted
-edd_singh,PMID26395244,Diarrhea,Parasutterella,1.3380445173e-07,-1.58370653877,depleted
-edd_singh,PMID26395244,Diarrhea,Sutterella,0.0150821755284,-0.757684608899,depleted
-edd_singh,PMID26395244,Diarrhea,Neisseria,0.0378979045489,,enriched
-edd_singh,PMID26395244,Diarrhea,Campylobacter,3.01604548557e-05,7.37270060102,enriched
-edd_singh,PMID26395244,Diarrhea,Aeromonas,0.030927461655,,enriched
-edd_singh,PMID26395244,Diarrhea,Cronobacter,1.47107389968e-21,3.88483077852,enriched
-edd_singh,PMID26395244,Diarrhea,Salmonella,1.91560962243e-11,7.44064804871,enriched
-edd_singh,PMID26395244,Diarrhea,Serratia,0.0378979045489,,enriched
-edd_singh,PMID26395244,Diarrhea,Yersinia,0.00389616524155,3.48250640365,enriched
-edd_singh,PMID26395244,Diarrhea,Haemophilus,4.86644657416e-08,3.54616320516,enriched
-edd_singh,PMID26395244,Diarrhea,Akkermansia,4.69951158127e-07,-1.00211924359,depleted
-crc_zeller,PMID25432777,Colorectal Neoplasms,Butyricimonas,0.0318777446151,1.96555175693,enriched
-crc_zeller,PMID25432777,Colorectal Neoplasms,Porphyromonas,0.0134584389692,5.70336114782,enriched
-crc_zeller,PMID25432777,Colorectal Neoplasms,Parvimonas,0.0107069249625,0.0472605821957,enriched
-crc_zeller,PMID25432777,Colorectal Neoplasms,Anaerovorax,0.0456970639457,1.24589710392,enriched
-crc_zeller,PMID25432777,Colorectal Neoplasms,Anaerostipes,0.0220753688402,-1.0912378348,depleted
-crc_zeller,PMID25432777,Colorectal Neoplasms,Peptostreptococcus,8.08144145122e-05,2.90209270478,enriched
-crc_zeller,PMID25432777,Colorectal Neoplasms,Anaerotruncus,0.0246718300885,3.80121334826,enriched
-crc_zeller,PMID25432777,Colorectal Neoplasms,Flavonifractor,0.0107069249625,1.19141122352,enriched
-crc_zeller,PMID25432777,Colorectal Neoplasms,Fusobacterium,8.08144145122e-05,1.27169001255,enriched
-crc_zeller,PMID25432777,Colorectal Neoplasms,Comamonas,0.0238039513316,0.589223789852,enriched
-crc_zeller,PMID25432777,Colorectal Neoplasms,Eikenella,0.0107069249625,,enriched
-liv_zhang,PMID23877352,Hepatic Encephalopathy,Veillonella,0.000268822825688,4.89308028704,enriched
-ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Odoribacter,0.0163772631661,-2.122339889,depleted
-ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Parabacteroides,0.00220444995001,-1.58872912057,depleted
-ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Alistipes,1.20486702131e-05,-2.41456399694,depleted
-ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Ruminococcus2,0.00992064948103,-0.635751519042,depleted
-ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Butyricicoccus,0.0272715734534,-0.751918952684,depleted
-ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Gemmiger,8.62520216648e-05,-1.89179918095,depleted
-ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Oscillibacter,0.00377766388565,-2.05277592737,depleted
-ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Ruminococcus,0.0497970336968,-0.902584661624,depleted
-ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Subdoligranulum,0.00992064948103,-6.02658835103,depleted
-ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Phascolarctobacterium,0.0163772631661,-2.38932796862,depleted
-ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Cronobacter,0.00407004860835,,enriched
-ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Escherichia/Shigella,0.00235160920747,4.41486732422,enriched
-ob_zhu,PMID23055155,Obesity,Varibaculum,0.0342714118065,4.77688574171,enriched
-ob_zhu,PMID23055155,Obesity,Porphyromonas,0.0280047640653,4.6057232769,enriched
-ob_zhu,PMID23055155,Obesity,Prevotella,0.00958167675208,2.50046618254,enriched
-ob_zhu,PMID23055155,Obesity,Leuconostoc,0.0303655853769,2.30600719846,enriched
-ob_zhu,PMID23055155,Obesity,Anaerococcus,0.00265831125333,2.72642407948,enriched
-ob_zhu,PMID23055155,Obesity,Finegoldia,0.00115220536348,6.79480064267,enriched
-ob_zhu,PMID23055155,Obesity,Peptoniphilus,0.00218832337953,2.93087690154,enriched
-ob_zhu,PMID23055155,Obesity,Anaerovorax,0.031523115459,-2.28264737472,depleted
-ob_zhu,PMID23055155,Obesity,Mogibacterium,0.0292412656952,3.01403584965,enriched
-ob_zhu,PMID23055155,Obesity,Murdochiella,0.0368710267781,-0.667316412419,depleted
-ob_zhu,PMID23055155,Obesity,Blautia,0.00979558882398,-1.97781305184,depleted
-ob_zhu,PMID23055155,Obesity,Selenomonas,0.0,,depleted
-ob_zhu,PMID23055155,Obesity,Comamonas,0.0,,depleted
-ob_zhu,PMID23055155,Obesity,Campylobacter,0.00218832337953,5.40427177853,enriched
-ob_zhu,PMID23055155,Obesity,Akkermansia,0.0292412656952,-1.28030164428,depleted
-crc_baxter,PMID27056827,Colorectal Neoplasms,Collinsella,0.0206998315896,0.7007632442,enriched
-crc_baxter,PMID27056827,Colorectal Neoplasms,Porphyromonas,4.92487594419e-08,8.010215052,enriched
-crc_baxter,PMID27056827,Colorectal Neoplasms,Alloprevotella,0.0497659914155,2.03059118603,enriched
-crc_baxter,PMID27056827,Colorectal Neoplasms,Staphylococcus,0.0293201288105,0.70044168449,enriched
-crc_baxter,PMID27056827,Colorectal Neoplasms,Anaerococcus,0.000390224720164,2.52559692175,enriched
-crc_baxter,PMID27056827,Colorectal Neoplasms,Parvimonas,4.92487594419e-08,5.71154020459,enriched
-crc_baxter,PMID27056827,Colorectal Neoplasms,Peptoniphilus,0.0206998315896,4.75301763171,enriched
-crc_baxter,PMID27056827,Colorectal Neoplasms,Lachnobacterium,0.0305200352983,-1.73285216465,depleted
-crc_baxter,PMID27056827,Colorectal Neoplasms,Peptostreptococcus,6.37996811083e-08,5.12543004202,enriched
-crc_baxter,PMID27056827,Colorectal Neoplasms,Gemmiger,0.0464172269711,-0.701230882515,depleted
-crc_baxter,PMID27056827,Colorectal Neoplasms,Catenibacterium,0.0206998315896,1.55807526974,enriched
-crc_baxter,PMID27056827,Colorectal Neoplasms,Fusobacterium,1.28586426416e-05,5.06330220365,enriched
-crc_baxter,PMID27056827,Colorectal Neoplasms,Victivallis,0.0464172269711,3.63969300789,enriched
-crc_baxter,PMID27056827,Colorectal Neoplasms,Enterobacter,0.0464172269711,2.98512845139,enriched
-crc_baxter,PMID27056827,Colorectal Neoplasms,Haemophilus,0.0464172269711,-2.43505426874,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Methanobrevibacter,0.00939780891862,-3.97615404172,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Actinomyces,7.42811488842e-07,3.77125909122,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Arthrobacter,0.00116304728298,3.89420362759,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Atopobium,0.0196984353815,5.324682995,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Eggerthella,5.12015369903e-07,,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Bacteroides,5.37064783839e-12,-1.037470719,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Barnesiella,2.553234986e-09,-2.74559178456,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Butyricimonas,4.1425517327e-06,-1.99834968197,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Dysgonomonas,0.000574478701384,2.98206681448,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Odoribacter,8.33217337531e-13,-1.38308251901,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Parabacteroides,4.05927178432e-05,-0.209102229558,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Prevotella,0.00178599194568,-4.47300900538,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Xylanibacter,0.00156817274354,,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Alistipes,8.29954644734e-14,-1.01417626378,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Sediminibacterium,0.042373550514,,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Gemella,0.000519894760473,5.25784125603,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Staphylococcus,0.00196606963629,2.50987001963,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Carnobacterium,3.35985948317e-08,,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Enterococcus,8.98976668207e-25,8.26743944118,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Tetragenococcus,9.67304189729e-08,5.86003844015,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Lactobacillus,3.89220374679e-15,4.80110000726,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Pediococcus,0.0180281047329,,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Streptococcus,2.20429865808e-07,2.57523256205,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Parvimonas,0.000208764015356,7.26619529339,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Anaerovorax,1.98657114585e-13,-1.8759234861,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Mogibacterium,0.0196984353815,5.13979616555,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Eubacterium,0.014267615944,-1.41484847296,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Anaerostipes,1.31122520908e-13,-1.23851262503,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Coprococcus,1.83721391672e-10,-0.563030312465,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Dorea,4.47519767621e-14,-0.687137958426,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Robinsoniella,0.00670537649445,5.76611934923,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Roseburia,4.06796450584e-17,-1.83693678311,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Ruminococcus2,0.0256419738024,0.759588613422,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Syntrophococcus,3.50117468546e-05,-2.43239551268,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Peptostreptococcus,0.0180281047329,,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Anaerofilum,0.00196606963629,-0.603325294981,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Butyricicoccus,3.38256860264e-07,0.528643155999,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Ethanoligenens,2.40177594587e-12,-2.37029665564,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Faecalibacterium,8.75720399337e-22,-2.21759178498,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Flavonifractor,3.87189657804e-07,0.00661696216599,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Gemmiger,2.40319324722e-11,0.992918617138,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Oscillibacter,2.0495587411e-16,-0.927797283977,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Ruminococcus,8.70949354153e-24,-6.12202928137,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Sporobacter,0.000519894760473,-0.33292412528,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Coprobacillus,0.00242895697653,0.529756476173,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Turicibacter,7.8491074e-05,-1.04486464189,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Dialister,0.0227447299039,-0.183281593312,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Veillonella,3.67552477804e-05,5.94618616163,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Fusobacterium,1.59637782745e-08,8.66276748374,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Bordetella,0.00831022395863,,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Oxalobacter,0.000133694689555,,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Parasutterella,3.76723319558e-10,-1.8603035421,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Sutterella,0.00150295794094,-2.30809999394,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Desulfovibrio,0.0415731684689,-0.966636876377,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Buttiauxella,4.29527649346e-05,3.91481079062,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Citrobacter,0.0165104617429,2.4455489304,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Kluyvera,0.00111114619416,7.05480638071,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Pantoea,0.00783320446588,,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Proteus,6.55433363252e-05,7.40904479456,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Raoultella,3.29374157986e-06,5.53539365774,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Serratia,6.17223838009e-05,2.1977142252,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Yersinia,5.84014571445e-06,6.68794411549,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Aggregatibacter,0.00316615692742,,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Pseudomonas,0.00231512053615,2.4368857763,enriched
-cdi_schubert,PMID24803517,Clostridium Infections,Cloacibacillus,0.0406495921861,-3.1064769393,depleted
-cdi_schubert,PMID24803517,Clostridium Infections,Asteroleplasma,0.0406495921861,-0.687922063128,depleted
-par_scheperjans,PMID25476529,Parkinson Disease,Alistipes,0.0239117735867,0.628362435682,enriched
-par_scheperjans,PMID25476529,Parkinson Disease,Lactobacillus,0.0164862090422,4.85281761772,enriched
-crc_wang,PMID21850056,Colorectal Neoplasms,Bacteroides,0.0237735428996,-0.80393735536,depleted
-crc_wang,PMID21850056,Colorectal Neoplasms,Porphyromonas,0.0262042612562,,enriched
-crc_wang,PMID21850056,Colorectal Neoplasms,Enterococcus,0.000596199207657,4.6693885144,enriched
-crc_wang,PMID21850056,Colorectal Neoplasms,Lachnospira,0.000596199207657,-2.20960878649,depleted
-crc_wang,PMID21850056,Colorectal Neoplasms,Roseburia,0.00418830508036,-1.23314880401,depleted
-crc_wang,PMID21850056,Colorectal Neoplasms,Peptostreptococcus,0.000596199207657,6.02669481869,enriched
-crc_wang,PMID21850056,Colorectal Neoplasms,Enterobacter,0.00693388107607,4.55086920763,enriched
-crc_wang,PMID21850056,Colorectal Neoplasms,Escherichia/Shigella,0.0127943736914,1.1990674558,enriched
-crc_wang,PMID21850056,Colorectal Neoplasms,Klebsiella,0.0451871589832,0.366853261063,enriched
-ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Methanobrevibacter,0.023927190006,-2.9185305327,depleted
-ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Collinsella,0.023927190006,-1.44305232071,depleted
-ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Lactobacillus,0.049487713618,6.78343642439,enriched
-ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Anaerosporobacter,0.00898597544958,-0.0198128449941,depleted
-ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Eubacterium,0.00163346666545,-1.46556367829,depleted
-ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Hespellia,0.0484110055531,-0.734422742635,depleted
-ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Roseburia,0.00305167691453,-1.65012745025,depleted
-ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Ruminococcus2,0.0372640817203,-1.01137963656,depleted
-ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Acetanaerobacterium,0.0484110055531,1.36044781007,enriched
-ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Papillibacter,0.0167030535977,-3.41320948649,depleted
-ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Pseudoflavonifractor,0.00784236473531,-1.31271380596,depleted
-ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Ruminococcus,0.00163346666545,-2.25979149382,depleted
-ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Sporobacter,0.0140880028593,-0.710022509298,depleted
-ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Subdoligranulum,0.0150700117562,-1.25076462949,depleted
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Mobiluncus,0.0180741851023,6.5789712682,enriched
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Varibaculum,0.00600936637482,4.63514912619,enriched
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Corynebacterium,0.0496908206945,-0.572875549963,depleted
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Bifidobacterium,0.0180741851023,-1.9734707198,depleted
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Olsenella,0.0414495578633,,enriched
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Barnesiella,0.0222381012421,-3.12794119901,depleted
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Porphyromonas,0.00319090379869,4.24418018236,enriched
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Hallella,0.025213417692,4.40225586437,enriched
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Prevotella,0.00691204993849,2.59106839396,enriched
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Alistipes,0.0226288590128,-2.31353527222,depleted
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Lactobacillus,0.0266522067486,,enriched
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Leuconostoc,0.0141908190498,3.57881843414,enriched
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Weissella,0.00691204993849,3.404859792,enriched
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Anaerococcus,0.000249921410586,2.96097359268,enriched
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Finegoldia,0.000409912713454,6.63283977417,enriched
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Gallicola,0.0222381012421,2.00160011962,enriched
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Peptoniphilus,0.000312737223668,3.37310539384,enriched
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Anaerovorax,0.0231118559418,-2.46426171382,depleted
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Mogibacterium,0.00211877330881,3.64437014022,enriched
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Murdochiella,0.0141908190498,-0.596232550747,depleted
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Anaerostipes,0.0231118559418,-1.86737162135,depleted
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Blautia,0.00893989749843,-1.3327069483,depleted
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Coprococcus,0.0141908190498,-1.93313792316,depleted
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Moryella,0.0266522067486,,enriched
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Syntrophococcus,0.0414495578633,,enriched
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Peptococcus,0.00893989749843,2.82508856074,enriched
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Faecalibacterium,0.0431024220304,-1.06258735683,depleted
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Gemmiger,0.0222381012421,-2.02739408625,depleted
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Ruminococcus,0.0288049984913,-2.28970172794,depleted
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Negativicoccus,0.0141908190498,,enriched
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Cetobacterium,0.0,,depleted
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Fusobacterium,0.0266522067486,,enriched
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Desulfomicrobium,0.0,,depleted
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Campylobacter,0.000385416999882,5.80325172329,enriched
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Escherichia/Shigella,0.0269045430327,3.57752739463,enriched
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Pyramidobacter,0.0141908190498,,enriched
-nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Akkermansia,0.0171514528891,-1.50308371039,depleted
-cdi_vincent,PMID24450844,Clostridium Infections,Odoribacter,0.0264299073294,-1.82982912407,depleted
-cdi_vincent,PMID24450844,Clostridium Infections,Parabacteroides,0.00574926807884,-0.130595922263,depleted
-cdi_vincent,PMID24450844,Clostridium Infections,Prevotella,0.0479711923554,-0.637057945428,depleted
-cdi_vincent,PMID24450844,Clostridium Infections,Enterococcus,0.0114754990703,2.6350763563,enriched
-cdi_vincent,PMID24450844,Clostridium Infections,Anaerococcus,0.00510507990629,-2.13868130843,depleted
-cdi_vincent,PMID24450844,Clostridium Infections,Finegoldia,0.00440179562579,-3.19239654826,depleted
-cdi_vincent,PMID24450844,Clostridium Infections,Peptoniphilus,0.0264299073294,-2.42845491337,depleted
-cdi_vincent,PMID24450844,Clostridium Infections,Murdochiella,0.00510507990629,-4.5836629514,depleted
-cdi_vincent,PMID24450844,Clostridium Infections,Fusobacterium,0.0264299073294,-9.20457144271,depleted
-cdi_vincent,PMID24450844,Clostridium Infections,Proteus,0.0479711923554,,enriched
-ob_goodrich,PMID25417156,Obesity,Weissella,0.0328194551594,3.14321314049,enriched
-ob_goodrich,PMID25417156,Obesity,Streptococcus,0.0186004547709,0.474216245448,enriched
-ob_goodrich,PMID25417156,Obesity,Anaerovorax,0.0450250145563,-0.630374045113,depleted
-ob_goodrich,PMID25417156,Obesity,Mogibacterium,0.0285747478655,0.209438970565,enriched
-ob_goodrich,PMID25417156,Obesity,Blautia,0.0328194551594,0.428392033752,enriched
-ob_goodrich,PMID25417156,Obesity,Robinsoniella,0.0142166266813,-0.974069454212,depleted
-ob_goodrich,PMID25417156,Obesity,Roseburia,0.000523869963275,0.666104500393,enriched
-ob_goodrich,PMID25417156,Obesity,Anaerofilum,0.0341453577659,-0.436124247841,depleted
-ob_goodrich,PMID25417156,Obesity,Oscillibacter,0.0341453577659,-0.346383819911,depleted
-ob_goodrich,PMID25417156,Obesity,Pseudoflavonifractor,0.0188355576396,-0.190726833192,depleted
-ob_goodrich,PMID25417156,Obesity,Sporobacter,0.0142166266813,-0.391714460961,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Methanobrevibacter,0.0151027973217,-1.38246799484,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Actinomyces,1.75466709439e-05,3.21774812889,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Arthrobacter,0.00226503252712,4.24335691161,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Atopobium,0.0032324711775,4.44200722983,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Eggerthella,2.621822153e-07,,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Bacteroides,3.57507407361e-14,-1.27743496513,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Barnesiella,1.05315766984e-05,-1.82048087319,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Butyricimonas,0.000159376716077,-0.9068437232,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Odoribacter,1.48811965247e-10,-1.34347812372,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Parabacteroides,1.18387982489e-07,-0.782342785051,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Porphyromonas,0.0458749963328,-2.0759771563,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Prevotella,0.00450241540259,-2.37023657026,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Xylanibacter,0.00678470818999,-4.92721533531,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Alistipes,2.24240640573e-07,-0.623970703492,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Sediminibacterium,0.0479007976053,,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Gemella,0.00197620918409,4.80533998061,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Staphylococcus,2.25947279948e-05,2.69088827662,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Carnobacterium,2.45630506727e-09,,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Enterococcus,8.49359669867e-21,9.42421395753,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Tetragenococcus,0.000159376716077,3.94601834099,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Lactobacillus,1.48811965247e-10,4.64352654864,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Lactococcus,0.00831860323013,3.47524780043,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Streptococcus,3.62763390067e-06,3.66242864368,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Clostridium_sensu_stricto,0.00462432044939,0.901944565702,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Sarcina,0.00413234066404,-1.75926393336,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Parvimonas,0.0124391369091,7.15700770121,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Anaerovorax,1.39238039757e-07,0.888495025765,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Anaerofustis,0.00872667420039,3.35085220598,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Eubacterium,0.00331406658698,-0.872344819677,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Anaerostipes,4.66955053281e-15,-1.93570901488,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Coprococcus,2.29245732432e-16,-1.75788697497,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Dorea,2.19265282566e-16,-1.80483829027,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Roseburia,1.05840226364e-18,-1.70091870777,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Ruminococcus2,0.0063869845928,0.796520991432,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Syntrophococcus,0.000161943860146,-3.11575514309,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Anaerofilum,0.00267235027028,-2.18239929202,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Butyricicoccus,6.74343904103e-08,1.75398348605,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Ethanoligenens,2.1281054983e-12,-4.22337137995,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Faecalibacterium,1.12259659781e-18,-2.10693128363,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Flavonifractor,1.83194024238e-07,-0.753268098174,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Gemmiger,2.72565408195e-11,0.0134500823437,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Oscillibacter,3.41375411151e-10,-0.791823666449,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Ruminococcus,1.05840226364e-18,-3.637612821,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Coprobacillus,8.60555400232e-05,-1.10302692058,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Turicibacter,1.25241938362e-08,-1.23266242717,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Phascolarctobacterium,0.00757918506694,,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Dialister,0.0032324711775,-0.938248080282,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Veillonella,0.00194974858781,5.20097662509,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Fusobacterium,0.00122414078213,5.26354530865,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Phenylobacterium,0.03014531272,3.34285879991,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Bordetella,0.0100709111217,,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Roseateles,0.00305649947982,2.46221249591,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Oxalobacter,0.0128371210674,-1.67048032745,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Parasutterella,1.79390108064e-07,-0.696345152501,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Sutterella,1.66978249247e-05,-3.8206497777,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Dickeya,0.0374351860887,,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Kluyvera,0.000420964051775,8.03044217453,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Pantoea,0.0374351860887,,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Raoultella,0.000420887000485,4.37256949302,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Serratia,0.00281818278331,1.88676380339,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Xenorhabdus,0.0374351860887,,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Yersinia,6.14721782771e-05,5.84755102834,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Acinetobacter,0.0185492261718,,depleted
-noncdi_schubert,PMID24803517,Diarrhea,Pseudomonas,0.00857883485788,5.42750931517,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Pyramidobacter,0.0374351860887,,enriched
-noncdi_schubert,PMID24803517,Diarrhea,Asteroleplasma,0.0136530949324,,depleted
-ibd_morgan,PMID23013615,Inflammatory Bowel Diseases,Ethanoligenens,0.0292436091678,-4.03940846464,depleted
-ibd_morgan,PMID23013615,Inflammatory Bowel Diseases,Gemmiger,0.00463286126544,-1.35726772845,depleted
-ibd_morgan,PMID23013615,Inflammatory Bowel Diseases,Ruminococcus,0.000714623785143,-3.39753432982,depleted
-ob_turnbaugh,PMID19043404,Obesity,Collinsella,0.00314278050625,1.03882009333,enriched
-ob_turnbaugh,PMID19043404,Obesity,Gordonibacter,0.00455983870022,-2.50029366001,depleted
-ob_turnbaugh,PMID19043404,Obesity,Barnesiella,0.000239251477215,-1.19687730736,depleted
-ob_turnbaugh,PMID19043404,Obesity,Alistipes,0.000239251477215,-0.88780877468,depleted
-ob_turnbaugh,PMID19043404,Obesity,Lactobacillus,0.00256296111181,7.01089298837,enriched
-ob_turnbaugh,PMID19043404,Obesity,Roseburia,0.00107645552141,0.714271966284,enriched
-ob_turnbaugh,PMID19043404,Obesity,Flavonifractor,0.0224569227448,-0.743995071081,depleted
-ob_turnbaugh,PMID19043404,Obesity,Oscillibacter,0.00797203301993,-0.582502059571,depleted
-ob_turnbaugh,PMID19043404,Obesity,Pseudoflavonifractor,0.0187612400876,-2.02910887155,depleted
-ob_turnbaugh,PMID19043404,Obesity,Ruminococcus,0.0133629120949,-0.551194839151,depleted
-ob_turnbaugh,PMID19043404,Obesity,Catenibacterium,0.0133629120949,1.46669911926,enriched
-ob_turnbaugh,PMID19043404,Obesity,Coprobacillus,0.0441192243039,-2.24389301344,depleted
-ob_turnbaugh,PMID19043404,Obesity,Acidaminococcus,0.000557239147647,4.14493005897,enriched
-ob_turnbaugh,PMID19043404,Obesity,Phascolarctobacterium,0.000277237085801,-1.10892197816,depleted
-ob_turnbaugh,PMID19043404,Obesity,Megasphaera,3.20646565068e-07,,enriched
+source_file,dataset,study,disease,genus,q_value,log2_fold_change,direction
+S1/S5,cdi_youngster,PMID24762631,Clostridium Infections,Corynebacterium,0.0,,depleted
+S1/S5,cdi_youngster,PMID24762631,Clostridium Infections,Porphyromonas,0.0,,depleted
+S1/S5,cdi_youngster,PMID24762631,Clostridium Infections,Enterococcus,0.0415417023367,,enriched
+S1/S5,cdi_youngster,PMID24762631,Clostridium Infections,Anaerosporobacter,0.00194075025809,,depleted
+S1/S5,cdi_youngster,PMID24762631,Clostridium Infections,Defluviitalea,0.0,,depleted
+S1/S5,cdi_youngster,PMID24762631,Clostridium Infections,Anaerostipes,0.0238380380696,-4.02450991748,depleted
+S1/S5,cdi_youngster,PMID24762631,Clostridium Infections,Coprococcus,0.0140168218161,-7.07084385511,depleted
+S1/S5,cdi_youngster,PMID24762631,Clostridium Infections,Dorea,0.0238380380696,-1.44259440272,depleted
+S1/S5,cdi_youngster,PMID24762631,Clostridium Infections,Hespellia,0.0199808572784,,depleted
+S1/S5,cdi_youngster,PMID24762631,Clostridium Infections,Acetanaerobacterium,0.00120677983885,-8.46162250934,depleted
+S1/S5,cdi_youngster,PMID24762631,Clostridium Infections,Acetivibrio,0.0,,depleted
+S1/S5,cdi_youngster,PMID24762631,Clostridium Infections,Anaerotruncus,0.00194075025809,,depleted
+S1/S5,cdi_youngster,PMID24762631,Clostridium Infections,Butyricicoccus,0.00132322847613,-6.60079797145,depleted
+S1/S5,cdi_youngster,PMID24762631,Clostridium Infections,Faecalibacterium,0.0140168218161,-7.72434541541,depleted
+S1/S5,cdi_youngster,PMID24762631,Clostridium Infections,Oscillibacter,0.00120677983885,-10.4403242349,depleted
+S1/S5,cdi_youngster,PMID24762631,Clostridium Infections,Pseudoflavonifractor,0.0199808572784,,depleted
+S1/S5,cdi_youngster,PMID24762631,Clostridium Infections,Ruminococcus,0.0376072520156,-9.02744013878,depleted
+S1/S5,cdi_youngster,PMID24762631,Clostridium Infections,Subdoligranulum,0.0140168218161,-2.84061266662,depleted
+S1/S5,cdi_youngster,PMID24762631,Clostridium Infections,Allisonella,0.0,,depleted
+S1/S5,cdi_youngster,PMID24762631,Clostridium Infections,Dialister,0.0376072520156,-3.46078445462,depleted
+S1/S5,cdi_youngster,PMID24762631,Clostridium Infections,Mitsuokella,0.0,,depleted
+S1/S5,cdi_youngster,PMID24762631,Clostridium Infections,Oxalobacter,0.0,,depleted
+S1/S5,hiv_noguerajulian,SRP068240,HIV Infections,Anaerorhabdus,0.0261063158614,0.674261365317,enriched
+S1/S5,hiv_noguerajulian,SRP068240,HIV Infections,Bacteroides,0.0058478413564,1.39277775912,enriched
+S1/S5,hiv_noguerajulian,SRP068240,HIV Infections,Hallella,0.0102892718359,-1.78863269261,depleted
+S1/S5,hiv_noguerajulian,SRP068240,HIV Infections,Prevotella,0.0224679582572,-0.611825827662,depleted
+S1/S5,hiv_noguerajulian,SRP068240,HIV Infections,Alistipes,0.0201831920681,1.53945722334,enriched
+S1/S5,hiv_noguerajulian,SRP068240,HIV Infections,Butyrivibrio,0.0058478413564,-1.72159382751,depleted
+S1/S5,hiv_noguerajulian,SRP068240,HIV Infections,Howardella,0.0058478413564,-0.958334782129,depleted
+S1/S5,hiv_noguerajulian,SRP068240,HIV Infections,Ruminococcus2,0.0481453844533,-0.576561501281,depleted
+S1/S5,hiv_noguerajulian,SRP068240,HIV Infections,Peptococcus,0.0058478413564,-1.37980205392,depleted
+S1/S5,hiv_noguerajulian,SRP068240,HIV Infections,Fastidiosipila,0.0196588085653,-1.92510111518,depleted
+S1/S5,hiv_noguerajulian,SRP068240,HIV Infections,Catenibacterium,0.0159894303051,-0.964474909218,depleted
+S1/S5,hiv_noguerajulian,SRP068240,HIV Infections,Turicibacter,0.0201831920681,-0.0129153534716,depleted
+S1/S5,hiv_noguerajulian,SRP068240,HIV Infections,Oligosphaera,0.00623069174765,-1.82574323658,depleted
+S1/S5,hiv_noguerajulian,SRP068240,HIV Infections,Coraliomargarita,0.0058478413564,-1.34608669596,depleted
+S1/S5,hiv_lozupone,PMID24034618,HIV Infections,Bacteroides,0.0156450419792,-1.39960827395,depleted
+S1/S5,hiv_lozupone,PMID24034618,HIV Infections,Odoribacter,0.0438061116313,-2.81182824284,depleted
+S1/S5,hiv_lozupone,PMID24034618,HIV Infections,Alloprevotella,0.0017806035917,,enriched
+S1/S5,hiv_lozupone,PMID24034618,HIV Infections,Hallella,0.00673923792398,,enriched
+S1/S5,hiv_lozupone,PMID24034618,HIV Infections,Prevotella,0.0121234081549,1.65472737443,enriched
+S1/S5,hiv_lozupone,PMID24034618,HIV Infections,Alistipes,0.00583607264554,-3.12821232241,depleted
+S1/S5,hiv_lozupone,PMID24034618,HIV Infections,Mogibacterium,0.0114071874043,3.45988733315,enriched
+S1/S5,hiv_lozupone,PMID24034618,HIV Infections,Anaerostipes,0.037343824503,-1.55911272968,depleted
+S1/S5,hiv_lozupone,PMID24034618,HIV Infections,Peptococcus,0.0125967186728,,enriched
+S1/S5,hiv_lozupone,PMID24034618,HIV Infections,Peptostreptococcus,0.0436010735082,,enriched
+S1/S5,hiv_lozupone,PMID24034618,HIV Infections,Catenibacterium,0.0158693127907,2.06253715586,enriched
+S1/S5,hiv_lozupone,PMID24034618,HIV Infections,Allisonella,0.00673923792398,,enriched
+S1/S5,hiv_lozupone,PMID24034618,HIV Infections,Dialister,0.0222965499024,2.08429662049,enriched
+S1/S5,hiv_lozupone,PMID24034618,HIV Infections,Megasphaera,0.00673923792398,8.67398386435,enriched
+S1/S5,hiv_lozupone,PMID24034618,HIV Infections,Parasutterella,0.0114071874043,-5.87239171357,depleted
+S1/S5,hiv_lozupone,PMID24034618,HIV Infections,Desulfovibrio,0.00583607264554,,enriched
+S1/S5,edd_singh,PMID26395244,Diarrhea,Bifidobacterium,7.66945470978e-07,-1.09598490111,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Adlercreutzia,0.00630706802104,-2.5027713355,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Collinsella,3.4693330182e-05,0.838531172283,enriched
+S1/S5,edd_singh,PMID26395244,Diarrhea,Eggerthella,0.0244005931557,-0.928872698223,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Enterorhabdus,9.15538382254e-06,-3.02664631195,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Slackia,0.00271336085414,-2.52280775438,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Barnesiella,1.0543477728e-09,-2.14862374542,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Butyricimonas,2.6137507003e-06,-1.4107551747,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Odoribacter,0.000135491701321,-0.592533220411,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Parabacteroides,2.46311536266e-11,-1.14711867151,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Paraprevotella,0.00390079628984,-2.45529041394,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Alistipes,2.0366471643e-18,-1.9818887471,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Gemella,0.0353235749212,4.53915449366,enriched
+S1/S5,edd_singh,PMID26395244,Diarrhea,Enterococcus,0.000135491701321,3.84306301619,enriched
+S1/S5,edd_singh,PMID26395244,Diarrhea,Tetragenococcus,4.2311001819e-05,4.1219126641,enriched
+S1/S5,edd_singh,PMID26395244,Diarrhea,Lactococcus,0.0440433830623,7.80103388337,enriched
+S1/S5,edd_singh,PMID26395244,Diarrhea,Streptococcus,0.000245062396033,2.62026848999,enriched
+S1/S5,edd_singh,PMID26395244,Diarrhea,Parvimonas,0.000302045673716,,enriched
+S1/S5,edd_singh,PMID26395244,Diarrhea,Anaerovorax,1.74085195045e-05,-1.47525783817,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Eubacterium,3.23976609676e-07,-3.27075061078,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Anaerostipes,3.59004222322e-09,-1.42165600759,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Blautia,2.06215959992e-14,-1.25821150132,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Coprococcus,2.31555732759e-10,-1.89104489284,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Dorea,0.000123132987947,-0.358731444517,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Howardella,7.72671160019e-05,-3.62048364348,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Pseudobutyrivibrio,0.00906241859468,-2.48725731759,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Roseburia,9.00602239639e-12,-1.06712142435,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Ruminococcus2,1.74085195045e-05,0.168587800152,enriched
+S1/S5,edd_singh,PMID26395244,Diarrhea,Peptostreptococcus,0.0455894283404,5.9939566354,enriched
+S1/S5,edd_singh,PMID26395244,Diarrhea,Anaerofilum,0.00877914471183,-1.6831616529,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Anaerotruncus,0.00110527389266,-0.87779806247,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Butyricicoccus,9.00602239639e-12,-1.56069552329,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Ethanoligenens,0.000574113799008,-1.64193739803,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Faecalibacterium,1.35309812843e-06,-0.560327683491,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Flavonifractor,2.62356841744e-17,-1.69155288135,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Oscillibacter,1.40914703028e-17,-2.05927955425,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Ruminococcus,3.25307904115e-11,-2.82061805429,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Sporobacter,1.27769024028e-14,-2.71774273916,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Catenibacterium,0.0163431436072,-0.30371784146,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Coprobacillus,5.50489984382e-07,-0.734243199505,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Holdemania,7.01442932603e-06,-1.67533658108,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Dialister,0.000376476248548,-1.39676291191,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Veillonella,4.60245133098e-11,2.85176672718,enriched
+S1/S5,edd_singh,PMID26395244,Diarrhea,Fusobacterium,7.72671160019e-05,5.222959503,enriched
+S1/S5,edd_singh,PMID26395244,Diarrhea,Victivallis,0.00261381945641,-4.37762523004,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Oxalobacter,0.00283398743287,-2.02227643381,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Parasutterella,1.3380445173e-07,-1.58370653877,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Sutterella,0.0150821755284,-0.757684608899,depleted
+S1/S5,edd_singh,PMID26395244,Diarrhea,Neisseria,0.0378979045489,,enriched
+S1/S5,edd_singh,PMID26395244,Diarrhea,Campylobacter,3.01604548557e-05,7.37270060102,enriched
+S1/S5,edd_singh,PMID26395244,Diarrhea,Aeromonas,0.030927461655,,enriched
+S1/S5,edd_singh,PMID26395244,Diarrhea,Cronobacter,1.47107389968e-21,3.88483077852,enriched
+S1/S5,edd_singh,PMID26395244,Diarrhea,Salmonella,1.91560962243e-11,7.44064804871,enriched
+S1/S5,edd_singh,PMID26395244,Diarrhea,Serratia,0.0378979045489,,enriched
+S1/S5,edd_singh,PMID26395244,Diarrhea,Yersinia,0.00389616524155,3.48250640365,enriched
+S1/S5,edd_singh,PMID26395244,Diarrhea,Haemophilus,4.86644657416e-08,3.54616320516,enriched
+S1/S5,edd_singh,PMID26395244,Diarrhea,Akkermansia,4.69951158127e-07,-1.00211924359,depleted
+S1/S5,crc_zeller,PMID25432777,Colorectal Neoplasms,Butyricimonas,0.0318777446151,1.96555175693,enriched
+S1/S5,crc_zeller,PMID25432777,Colorectal Neoplasms,Porphyromonas,0.0134584389692,5.70336114782,enriched
+S1/S5,crc_zeller,PMID25432777,Colorectal Neoplasms,Parvimonas,0.0107069249625,0.0472605821957,enriched
+S1/S5,crc_zeller,PMID25432777,Colorectal Neoplasms,Anaerovorax,0.0456970639457,1.24589710392,enriched
+S1/S5,crc_zeller,PMID25432777,Colorectal Neoplasms,Anaerostipes,0.0220753688402,-1.0912378348,depleted
+S1/S5,crc_zeller,PMID25432777,Colorectal Neoplasms,Peptostreptococcus,8.08144145122e-05,2.90209270478,enriched
+S1/S5,crc_zeller,PMID25432777,Colorectal Neoplasms,Anaerotruncus,0.0246718300885,3.80121334826,enriched
+S1/S5,crc_zeller,PMID25432777,Colorectal Neoplasms,Flavonifractor,0.0107069249625,1.19141122352,enriched
+S1/S5,crc_zeller,PMID25432777,Colorectal Neoplasms,Fusobacterium,8.08144145122e-05,1.27169001255,enriched
+S1/S5,crc_zeller,PMID25432777,Colorectal Neoplasms,Comamonas,0.0238039513316,0.589223789852,enriched
+S1/S5,crc_zeller,PMID25432777,Colorectal Neoplasms,Eikenella,0.0107069249625,,enriched
+S1/S5,liv_zhang,PMID23877352,Hepatic Encephalopathy,Veillonella,0.000268822825688,4.89308028704,enriched
+S1/S5,ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Odoribacter,0.0163772631661,-2.122339889,depleted
+S1/S5,ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Parabacteroides,0.00220444995001,-1.58872912057,depleted
+S1/S5,ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Alistipes,1.20486702131e-05,-2.41456399694,depleted
+S1/S5,ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Ruminococcus2,0.00992064948103,-0.635751519042,depleted
+S1/S5,ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Butyricicoccus,0.0272715734534,-0.751918952684,depleted
+S1/S5,ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Gemmiger,8.62520216648e-05,-1.89179918095,depleted
+S1/S5,ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Oscillibacter,0.00377766388565,-2.05277592737,depleted
+S1/S5,ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Ruminococcus,0.0497970336968,-0.902584661624,depleted
+S1/S5,ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Subdoligranulum,0.00992064948103,-6.02658835103,depleted
+S1/S5,ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Phascolarctobacterium,0.0163772631661,-2.38932796862,depleted
+S1/S5,ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Cronobacter,0.00407004860835,,enriched
+S1/S5,ibd_papa,PMID22768065,Inflammatory Bowel Diseases,Escherichia/Shigella,0.00235160920747,4.41486732422,enriched
+S1/S5,ob_zhu,PMID23055155,Obesity,Varibaculum,0.0342714118065,4.77688574171,enriched
+S1/S5,ob_zhu,PMID23055155,Obesity,Porphyromonas,0.0280047640653,4.6057232769,enriched
+S1/S5,ob_zhu,PMID23055155,Obesity,Prevotella,0.00958167675208,2.50046618254,enriched
+S1/S5,ob_zhu,PMID23055155,Obesity,Leuconostoc,0.0303655853769,2.30600719846,enriched
+S1/S5,ob_zhu,PMID23055155,Obesity,Anaerococcus,0.00265831125333,2.72642407948,enriched
+S1/S5,ob_zhu,PMID23055155,Obesity,Finegoldia,0.00115220536348,6.79480064267,enriched
+S1/S5,ob_zhu,PMID23055155,Obesity,Peptoniphilus,0.00218832337953,2.93087690154,enriched
+S1/S5,ob_zhu,PMID23055155,Obesity,Anaerovorax,0.031523115459,-2.28264737472,depleted
+S1/S5,ob_zhu,PMID23055155,Obesity,Mogibacterium,0.0292412656952,3.01403584965,enriched
+S1/S5,ob_zhu,PMID23055155,Obesity,Murdochiella,0.0368710267781,-0.667316412419,depleted
+S1/S5,ob_zhu,PMID23055155,Obesity,Blautia,0.00979558882398,-1.97781305184,depleted
+S1/S5,ob_zhu,PMID23055155,Obesity,Selenomonas,0.0,,depleted
+S1/S5,ob_zhu,PMID23055155,Obesity,Comamonas,0.0,,depleted
+S1/S5,ob_zhu,PMID23055155,Obesity,Campylobacter,0.00218832337953,5.40427177853,enriched
+S1/S5,ob_zhu,PMID23055155,Obesity,Akkermansia,0.0292412656952,-1.28030164428,depleted
+S1/S5,crc_baxter,PMID27056827,Colorectal Neoplasms,Collinsella,0.0206998315896,0.7007632442,enriched
+S1/S5,crc_baxter,PMID27056827,Colorectal Neoplasms,Porphyromonas,4.92487594419e-08,8.010215052,enriched
+S1/S5,crc_baxter,PMID27056827,Colorectal Neoplasms,Alloprevotella,0.0497659914155,2.03059118603,enriched
+S1/S5,crc_baxter,PMID27056827,Colorectal Neoplasms,Staphylococcus,0.0293201288105,0.70044168449,enriched
+S1/S5,crc_baxter,PMID27056827,Colorectal Neoplasms,Anaerococcus,0.000390224720164,2.52559692175,enriched
+S1/S5,crc_baxter,PMID27056827,Colorectal Neoplasms,Parvimonas,4.92487594419e-08,5.71154020459,enriched
+S1/S5,crc_baxter,PMID27056827,Colorectal Neoplasms,Peptoniphilus,0.0206998315896,4.75301763171,enriched
+S1/S5,crc_baxter,PMID27056827,Colorectal Neoplasms,Lachnobacterium,0.0305200352983,-1.73285216465,depleted
+S1/S5,crc_baxter,PMID27056827,Colorectal Neoplasms,Peptostreptococcus,6.37996811083e-08,5.12543004202,enriched
+S1/S5,crc_baxter,PMID27056827,Colorectal Neoplasms,Gemmiger,0.0464172269711,-0.701230882515,depleted
+S1/S5,crc_baxter,PMID27056827,Colorectal Neoplasms,Catenibacterium,0.0206998315896,1.55807526974,enriched
+S1/S5,crc_baxter,PMID27056827,Colorectal Neoplasms,Fusobacterium,1.28586426416e-05,5.06330220365,enriched
+S1/S5,crc_baxter,PMID27056827,Colorectal Neoplasms,Victivallis,0.0464172269711,3.63969300789,enriched
+S1/S5,crc_baxter,PMID27056827,Colorectal Neoplasms,Enterobacter,0.0464172269711,2.98512845139,enriched
+S1/S5,crc_baxter,PMID27056827,Colorectal Neoplasms,Haemophilus,0.0464172269711,-2.43505426874,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Methanobrevibacter,0.00939780891862,-3.97615404172,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Actinomyces,7.42811488842e-07,3.77125909122,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Arthrobacter,0.00116304728298,3.89420362759,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Atopobium,0.0196984353815,5.324682995,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Eggerthella,5.12015369903e-07,,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Bacteroides,5.37064783839e-12,-1.037470719,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Barnesiella,2.553234986e-09,-2.74559178456,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Butyricimonas,4.1425517327e-06,-1.99834968197,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Dysgonomonas,0.000574478701384,2.98206681448,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Odoribacter,8.33217337531e-13,-1.38308251901,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Parabacteroides,4.05927178432e-05,-0.209102229558,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Prevotella,0.00178599194568,-4.47300900538,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Xylanibacter,0.00156817274354,,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Alistipes,8.29954644734e-14,-1.01417626378,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Sediminibacterium,0.042373550514,,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Gemella,0.000519894760473,5.25784125603,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Staphylococcus,0.00196606963629,2.50987001963,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Carnobacterium,3.35985948317e-08,,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Enterococcus,8.98976668207e-25,8.26743944118,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Tetragenococcus,9.67304189729e-08,5.86003844015,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Lactobacillus,3.89220374679e-15,4.80110000726,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Pediococcus,0.0180281047329,,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Streptococcus,2.20429865808e-07,2.57523256205,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Parvimonas,0.000208764015356,7.26619529339,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Anaerovorax,1.98657114585e-13,-1.8759234861,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Mogibacterium,0.0196984353815,5.13979616555,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Eubacterium,0.014267615944,-1.41484847296,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Anaerostipes,1.31122520908e-13,-1.23851262503,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Coprococcus,1.83721391672e-10,-0.563030312465,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Dorea,4.47519767621e-14,-0.687137958426,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Robinsoniella,0.00670537649445,5.76611934923,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Roseburia,4.06796450584e-17,-1.83693678311,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Ruminococcus2,0.0256419738024,0.759588613422,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Syntrophococcus,3.50117468546e-05,-2.43239551268,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Peptostreptococcus,0.0180281047329,,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Anaerofilum,0.00196606963629,-0.603325294981,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Butyricicoccus,3.38256860264e-07,0.528643155999,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Ethanoligenens,2.40177594587e-12,-2.37029665564,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Faecalibacterium,8.75720399337e-22,-2.21759178498,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Flavonifractor,3.87189657804e-07,0.00661696216599,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Gemmiger,2.40319324722e-11,0.992918617138,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Oscillibacter,2.0495587411e-16,-0.927797283977,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Ruminococcus,8.70949354153e-24,-6.12202928137,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Sporobacter,0.000519894760473,-0.33292412528,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Coprobacillus,0.00242895697653,0.529756476173,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Turicibacter,7.8491074e-05,-1.04486464189,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Dialister,0.0227447299039,-0.183281593312,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Veillonella,3.67552477804e-05,5.94618616163,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Fusobacterium,1.59637782745e-08,8.66276748374,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Bordetella,0.00831022395863,,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Oxalobacter,0.000133694689555,,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Parasutterella,3.76723319558e-10,-1.8603035421,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Sutterella,0.00150295794094,-2.30809999394,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Desulfovibrio,0.0415731684689,-0.966636876377,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Buttiauxella,4.29527649346e-05,3.91481079062,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Citrobacter,0.0165104617429,2.4455489304,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Kluyvera,0.00111114619416,7.05480638071,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Pantoea,0.00783320446588,,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Proteus,6.55433363252e-05,7.40904479456,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Raoultella,3.29374157986e-06,5.53539365774,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Serratia,6.17223838009e-05,2.1977142252,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Yersinia,5.84014571445e-06,6.68794411549,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Aggregatibacter,0.00316615692742,,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Pseudomonas,0.00231512053615,2.4368857763,enriched
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Cloacibacillus,0.0406495921861,-3.1064769393,depleted
+S1/S5,cdi_schubert,PMID24803517,Clostridium Infections,Asteroleplasma,0.0406495921861,-0.687922063128,depleted
+S1/S5,par_scheperjans,PMID25476529,Parkinson Disease,Alistipes,0.0239117735867,0.628362435682,enriched
+S1/S5,par_scheperjans,PMID25476529,Parkinson Disease,Lactobacillus,0.0164862090422,4.85281761772,enriched
+S1/S5,crc_wang,PMID21850056,Colorectal Neoplasms,Bacteroides,0.0237735428996,-0.80393735536,depleted
+S1/S5,crc_wang,PMID21850056,Colorectal Neoplasms,Porphyromonas,0.0262042612562,,enriched
+S1/S5,crc_wang,PMID21850056,Colorectal Neoplasms,Enterococcus,0.000596199207657,4.6693885144,enriched
+S1/S5,crc_wang,PMID21850056,Colorectal Neoplasms,Lachnospira,0.000596199207657,-2.20960878649,depleted
+S1/S5,crc_wang,PMID21850056,Colorectal Neoplasms,Roseburia,0.00418830508036,-1.23314880401,depleted
+S1/S5,crc_wang,PMID21850056,Colorectal Neoplasms,Peptostreptococcus,0.000596199207657,6.02669481869,enriched
+S1/S5,crc_wang,PMID21850056,Colorectal Neoplasms,Enterobacter,0.00693388107607,4.55086920763,enriched
+S1/S5,crc_wang,PMID21850056,Colorectal Neoplasms,Escherichia/Shigella,0.0127943736914,1.1990674558,enriched
+S1/S5,crc_wang,PMID21850056,Colorectal Neoplasms,Klebsiella,0.0451871589832,0.366853261063,enriched
+S1/S5,ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Methanobrevibacter,0.023927190006,-2.9185305327,depleted
+S1/S5,ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Collinsella,0.023927190006,-1.44305232071,depleted
+S1/S5,ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Lactobacillus,0.049487713618,6.78343642439,enriched
+S1/S5,ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Anaerosporobacter,0.00898597544958,-0.0198128449941,depleted
+S1/S5,ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Eubacterium,0.00163346666545,-1.46556367829,depleted
+S1/S5,ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Hespellia,0.0484110055531,-0.734422742635,depleted
+S1/S5,ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Roseburia,0.00305167691453,-1.65012745025,depleted
+S1/S5,ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Ruminococcus2,0.0372640817203,-1.01137963656,depleted
+S1/S5,ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Acetanaerobacterium,0.0484110055531,1.36044781007,enriched
+S1/S5,ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Papillibacter,0.0167030535977,-3.41320948649,depleted
+S1/S5,ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Pseudoflavonifractor,0.00784236473531,-1.31271380596,depleted
+S1/S5,ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Ruminococcus,0.00163346666545,-2.25979149382,depleted
+S1/S5,ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Sporobacter,0.0140880028593,-0.710022509298,depleted
+S1/S5,ibd_gevers,PMID24629344,Inflammatory Bowel Diseases,Subdoligranulum,0.0150700117562,-1.25076462949,depleted
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Mobiluncus,0.0180741851023,6.5789712682,enriched
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Varibaculum,0.00600936637482,4.63514912619,enriched
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Corynebacterium,0.0496908206945,-0.572875549963,depleted
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Bifidobacterium,0.0180741851023,-1.9734707198,depleted
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Olsenella,0.0414495578633,,enriched
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Barnesiella,0.0222381012421,-3.12794119901,depleted
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Porphyromonas,0.00319090379869,4.24418018236,enriched
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Hallella,0.025213417692,4.40225586437,enriched
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Prevotella,0.00691204993849,2.59106839396,enriched
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Alistipes,0.0226288590128,-2.31353527222,depleted
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Lactobacillus,0.0266522067486,,enriched
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Leuconostoc,0.0141908190498,3.57881843414,enriched
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Weissella,0.00691204993849,3.404859792,enriched
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Anaerococcus,0.000249921410586,2.96097359268,enriched
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Finegoldia,0.000409912713454,6.63283977417,enriched
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Gallicola,0.0222381012421,2.00160011962,enriched
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Peptoniphilus,0.000312737223668,3.37310539384,enriched
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Anaerovorax,0.0231118559418,-2.46426171382,depleted
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Mogibacterium,0.00211877330881,3.64437014022,enriched
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Murdochiella,0.0141908190498,-0.596232550747,depleted
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Anaerostipes,0.0231118559418,-1.86737162135,depleted
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Blautia,0.00893989749843,-1.3327069483,depleted
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Coprococcus,0.0141908190498,-1.93313792316,depleted
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Moryella,0.0266522067486,,enriched
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Syntrophococcus,0.0414495578633,,enriched
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Peptococcus,0.00893989749843,2.82508856074,enriched
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Faecalibacterium,0.0431024220304,-1.06258735683,depleted
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Gemmiger,0.0222381012421,-2.02739408625,depleted
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Ruminococcus,0.0288049984913,-2.28970172794,depleted
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Negativicoccus,0.0141908190498,,enriched
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Cetobacterium,0.0,,depleted
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Fusobacterium,0.0266522067486,,enriched
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Desulfomicrobium,0.0,,depleted
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Campylobacter,0.000385416999882,5.80325172329,enriched
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Escherichia/Shigella,0.0269045430327,3.57752739463,enriched
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Pyramidobacter,0.0141908190498,,enriched
+S1/S5,nash_zhu,PMID23055155,Non-alcoholic Fatty Liver Disease,Akkermansia,0.0171514528891,-1.50308371039,depleted
+S1/S5,cdi_vincent,PMID24450844,Clostridium Infections,Odoribacter,0.0264299073294,-1.82982912407,depleted
+S1/S5,cdi_vincent,PMID24450844,Clostridium Infections,Parabacteroides,0.00574926807884,-0.130595922263,depleted
+S1/S5,cdi_vincent,PMID24450844,Clostridium Infections,Prevotella,0.0479711923554,-0.637057945428,depleted
+S1/S5,cdi_vincent,PMID24450844,Clostridium Infections,Enterococcus,0.0114754990703,2.6350763563,enriched
+S1/S5,cdi_vincent,PMID24450844,Clostridium Infections,Anaerococcus,0.00510507990629,-2.13868130843,depleted
+S1/S5,cdi_vincent,PMID24450844,Clostridium Infections,Finegoldia,0.00440179562579,-3.19239654826,depleted
+S1/S5,cdi_vincent,PMID24450844,Clostridium Infections,Peptoniphilus,0.0264299073294,-2.42845491337,depleted
+S1/S5,cdi_vincent,PMID24450844,Clostridium Infections,Murdochiella,0.00510507990629,-4.5836629514,depleted
+S1/S5,cdi_vincent,PMID24450844,Clostridium Infections,Fusobacterium,0.0264299073294,-9.20457144271,depleted
+S1/S5,cdi_vincent,PMID24450844,Clostridium Infections,Proteus,0.0479711923554,,enriched
+S1/S5,ob_goodrich,PMID25417156,Obesity,Weissella,0.0328194551594,3.14321314049,enriched
+S1/S5,ob_goodrich,PMID25417156,Obesity,Streptococcus,0.0186004547709,0.474216245448,enriched
+S1/S5,ob_goodrich,PMID25417156,Obesity,Anaerovorax,0.0450250145563,-0.630374045113,depleted
+S1/S5,ob_goodrich,PMID25417156,Obesity,Mogibacterium,0.0285747478655,0.209438970565,enriched
+S1/S5,ob_goodrich,PMID25417156,Obesity,Blautia,0.0328194551594,0.428392033752,enriched
+S1/S5,ob_goodrich,PMID25417156,Obesity,Robinsoniella,0.0142166266813,-0.974069454212,depleted
+S1/S5,ob_goodrich,PMID25417156,Obesity,Roseburia,0.000523869963275,0.666104500393,enriched
+S1/S5,ob_goodrich,PMID25417156,Obesity,Anaerofilum,0.0341453577659,-0.436124247841,depleted
+S1/S5,ob_goodrich,PMID25417156,Obesity,Oscillibacter,0.0341453577659,-0.346383819911,depleted
+S1/S5,ob_goodrich,PMID25417156,Obesity,Pseudoflavonifractor,0.0188355576396,-0.190726833192,depleted
+S1/S5,ob_goodrich,PMID25417156,Obesity,Sporobacter,0.0142166266813,-0.391714460961,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Methanobrevibacter,0.0151027973217,-1.38246799484,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Actinomyces,1.75466709439e-05,3.21774812889,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Arthrobacter,0.00226503252712,4.24335691161,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Atopobium,0.0032324711775,4.44200722983,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Eggerthella,2.621822153e-07,,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Bacteroides,3.57507407361e-14,-1.27743496513,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Barnesiella,1.05315766984e-05,-1.82048087319,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Butyricimonas,0.000159376716077,-0.9068437232,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Odoribacter,1.48811965247e-10,-1.34347812372,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Parabacteroides,1.18387982489e-07,-0.782342785051,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Porphyromonas,0.0458749963328,-2.0759771563,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Prevotella,0.00450241540259,-2.37023657026,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Xylanibacter,0.00678470818999,-4.92721533531,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Alistipes,2.24240640573e-07,-0.623970703492,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Sediminibacterium,0.0479007976053,,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Gemella,0.00197620918409,4.80533998061,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Staphylococcus,2.25947279948e-05,2.69088827662,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Carnobacterium,2.45630506727e-09,,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Enterococcus,8.49359669867e-21,9.42421395753,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Tetragenococcus,0.000159376716077,3.94601834099,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Lactobacillus,1.48811965247e-10,4.64352654864,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Lactococcus,0.00831860323013,3.47524780043,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Streptococcus,3.62763390067e-06,3.66242864368,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Clostridium_sensu_stricto,0.00462432044939,0.901944565702,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Sarcina,0.00413234066404,-1.75926393336,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Parvimonas,0.0124391369091,7.15700770121,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Anaerovorax,1.39238039757e-07,0.888495025765,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Anaerofustis,0.00872667420039,3.35085220598,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Eubacterium,0.00331406658698,-0.872344819677,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Anaerostipes,4.66955053281e-15,-1.93570901488,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Coprococcus,2.29245732432e-16,-1.75788697497,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Dorea,2.19265282566e-16,-1.80483829027,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Roseburia,1.05840226364e-18,-1.70091870777,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Ruminococcus2,0.0063869845928,0.796520991432,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Syntrophococcus,0.000161943860146,-3.11575514309,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Anaerofilum,0.00267235027028,-2.18239929202,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Butyricicoccus,6.74343904103e-08,1.75398348605,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Ethanoligenens,2.1281054983e-12,-4.22337137995,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Faecalibacterium,1.12259659781e-18,-2.10693128363,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Flavonifractor,1.83194024238e-07,-0.753268098174,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Gemmiger,2.72565408195e-11,0.0134500823437,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Oscillibacter,3.41375411151e-10,-0.791823666449,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Ruminococcus,1.05840226364e-18,-3.637612821,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Coprobacillus,8.60555400232e-05,-1.10302692058,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Turicibacter,1.25241938362e-08,-1.23266242717,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Phascolarctobacterium,0.00757918506694,,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Dialister,0.0032324711775,-0.938248080282,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Veillonella,0.00194974858781,5.20097662509,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Fusobacterium,0.00122414078213,5.26354530865,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Phenylobacterium,0.03014531272,3.34285879991,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Bordetella,0.0100709111217,,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Roseateles,0.00305649947982,2.46221249591,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Oxalobacter,0.0128371210674,-1.67048032745,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Parasutterella,1.79390108064e-07,-0.696345152501,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Sutterella,1.66978249247e-05,-3.8206497777,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Dickeya,0.0374351860887,,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Kluyvera,0.000420964051775,8.03044217453,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Pantoea,0.0374351860887,,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Raoultella,0.000420887000485,4.37256949302,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Serratia,0.00281818278331,1.88676380339,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Xenorhabdus,0.0374351860887,,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Yersinia,6.14721782771e-05,5.84755102834,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Acinetobacter,0.0185492261718,,depleted
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Pseudomonas,0.00857883485788,5.42750931517,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Pyramidobacter,0.0374351860887,,enriched
+S1/S5,noncdi_schubert,PMID24803517,Diarrhea,Asteroleplasma,0.0136530949324,,depleted
+S1/S5,ibd_morgan,PMID23013615,Inflammatory Bowel Diseases,Ethanoligenens,0.0292436091678,-4.03940846464,depleted
+S1/S5,ibd_morgan,PMID23013615,Inflammatory Bowel Diseases,Gemmiger,0.00463286126544,-1.35726772845,depleted
+S1/S5,ibd_morgan,PMID23013615,Inflammatory Bowel Diseases,Ruminococcus,0.000714623785143,-3.39753432982,depleted
+S1/S5,ob_turnbaugh,PMID19043404,Obesity,Collinsella,0.00314278050625,1.03882009333,enriched
+S1/S5,ob_turnbaugh,PMID19043404,Obesity,Gordonibacter,0.00455983870022,-2.50029366001,depleted
+S1/S5,ob_turnbaugh,PMID19043404,Obesity,Barnesiella,0.000239251477215,-1.19687730736,depleted
+S1/S5,ob_turnbaugh,PMID19043404,Obesity,Alistipes,0.000239251477215,-0.88780877468,depleted
+S1/S5,ob_turnbaugh,PMID19043404,Obesity,Lactobacillus,0.00256296111181,7.01089298837,enriched
+S1/S5,ob_turnbaugh,PMID19043404,Obesity,Roseburia,0.00107645552141,0.714271966284,enriched
+S1/S5,ob_turnbaugh,PMID19043404,Obesity,Flavonifractor,0.0224569227448,-0.743995071081,depleted
+S1/S5,ob_turnbaugh,PMID19043404,Obesity,Oscillibacter,0.00797203301993,-0.582502059571,depleted
+S1/S5,ob_turnbaugh,PMID19043404,Obesity,Pseudoflavonifractor,0.0187612400876,-2.02910887155,depleted
+S1/S5,ob_turnbaugh,PMID19043404,Obesity,Ruminococcus,0.0133629120949,-0.551194839151,depleted
+S1/S5,ob_turnbaugh,PMID19043404,Obesity,Catenibacterium,0.0133629120949,1.46669911926,enriched
+S1/S5,ob_turnbaugh,PMID19043404,Obesity,Coprobacillus,0.0441192243039,-2.24389301344,depleted
+S1/S5,ob_turnbaugh,PMID19043404,Obesity,Acidaminococcus,0.000557239147647,4.14493005897,enriched
+S1/S5,ob_turnbaugh,PMID19043404,Obesity,Phascolarctobacterium,0.000277237085801,-1.10892197816,depleted
+S1/S5,ob_turnbaugh,PMID19043404,Obesity,Megasphaera,3.20646565068e-07,,enriched
+S4,crc_zeller,PMID25432777,Colorectal Neoplasms,Fusobacterium,0.000272,,enriched
+S4,crc_zeller,PMID25432777,Colorectal Neoplasms,Pseudoflavonifractor,0.00115,,enriched
+S4,crc_zeller,PMID25432777,Colorectal Neoplasms,Eubacterium,0.00115,,depleted
+S4,crc_zeller,PMID25432777,Colorectal Neoplasms,Ruminococcus,0.00687,,depleted
+S4,crc_zeller,PMID25432777,Colorectal Neoplasms,Leptotrichia,0.0283,,enriched
+S4,ob_goodrich,PMID25417156,Obesity,Dehalobacterium,0.00038986,,depleted
+S4,ob_goodrich,PMID25417156,Obesity,Lachnospira,0.000462957,,depleted
+S4,ob_goodrich,PMID25417156,Obesity,Dorea,0.004816193,,enriched
+S4,ob_goodrich,PMID25417156,Obesity,Methanobrevibacter,0.00780729,,depleted
+S4,ob_goodrich,PMID25417156,Obesity,Oscillospira,0.010436368,,depleted
+S4,ob_goodrich,PMID25417156,Obesity,Sarcina,0.046204831,,depleted
+S4,ob_goodrich,PMID25417156,Obesity,Blautia,0.047806738,,enriched
+S4,ob_goodrich,PMID25417156,Obesity,Eggerthella,0.048502355,,enriched
+S4,ob_goodrich,PMID25417156,Obesity,Butyricimonas,0.048773243,,depleted
+S4,hiv_dinh,PMID25057045,HIV Infections,Alistipes,0.01,,depleted
+S4,hiv_dinh,PMID25057045,HIV Infections,Barnesiella,0.01,,enriched
+S4,t1d_mejialeon,PMID24448554,"Diabetes Mellitus, Type 1",Prevotella,0.003,,depleted
+S4,t1d_mejialeon,PMID24448554,"Diabetes Mellitus, Type 1",Bacteroides,0.0037,,enriched
+S4,t1d_mejialeon,PMID24448554,"Diabetes Mellitus, Type 1",Acidaminococcus,0.0214,,depleted
+S4,t1d_mejialeon,PMID24448554,"Diabetes Mellitus, Type 1",Megamonas,0.0161,,depleted
+S4,hiv_lozupone,PMID24034618,HIV Infections,Catenibacterium,0.000562759,,enriched
+S4,hiv_lozupone,PMID24034618,HIV Infections,Dialister,0.000820105,,enriched
+S4,hiv_lozupone,PMID24034618,HIV Infections,Oscillospira,0.002050511,,enriched
+S4,hiv_lozupone,PMID24034618,HIV Infections,Desulfovibrio,0.004751804,,enriched
+S4,hiv_lozupone,PMID24034618,HIV Infections,Bulleidia,0.007593229,,enriched
+S4,hiv_lozupone,PMID24034618,HIV Infections,Prevotella,0.007075473,,enriched
+S4,hiv_lozupone,PMID24034618,HIV Infections,Mitsuokella,0.019247692,,enriched
+S4,hiv_lozupone,PMID24034618,HIV Infections,Bacteroides,0.000841985,,depleted
+S4,hiv_lozupone,PMID24034618,HIV Infections,Parabacteroides,0.003106181,,depleted
+S4,hiv_lozupone,PMID24034618,HIV Infections,Alistipes,0.003506841,,depleted

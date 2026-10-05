@@ -54,7 +54,7 @@ from gutdb.pipeline import (
     upsert_study,
     upsert_taxon,
 )
-from gutdb.transform import normalize_phylum
+from gutdb.transform import clean_str, normalize_phylum
 
 DRY_RUN = "--apply" not in sys.argv
 # Upstream files are not redistributed here; point MICROBIOMEHD_DIR at a copy or
@@ -62,6 +62,7 @@ DRY_RUN = "--apply" not in sys.argv
 SOURCE = Path(os.environ.get("MICROBIOMEHD_DIR", "data/microbiomehd"))
 QVALUES = SOURCE / "file-S1.qvalues.txt"
 EFFECTS = SOURCE / "file-S5.effects.txt"
+LITERATURE = SOURCE / "file-S4.literature_results.txt"
 IDENTITY = SOURCE / "dataset_identity.csv"
 AUDIT = Path("data/microbiomehd_s1_audit.csv")
 
@@ -74,6 +75,8 @@ Required files are missing from {SOURCE}/. To fetch them:
     {RAW}/final/supp-files/file-S1.qvalues.txt
   curl -sS -o {SOURCE}/file-S5.effects.txt \\
     {RAW}/final/supp-files/file-S5.effects.txt
+  curl -sS -o {SOURCE}/file-S4.literature_results.txt \\
+    {RAW}/final/supp-files/file-S4.literature_results.txt
   curl -sS -o {SOURCE}/results_folders.yaml \\
     {RAW}/data/user_input/results_folders.yaml
 
@@ -158,6 +161,136 @@ def load_effects() -> tuple[dict[str, list[str]], list[str], set[float]]:
     return table, datasets, sentinels
 
 
+TAXDUMP = Path(os.environ.get("GUTDB_TAXDUMP", "taxdump"))
+_prokaryote_genera: set[str] | None = None
+
+
+def taxdump_has_prokaryote_genus(name: str) -> bool:
+    """True when `name` is a genus NCBI places under Bacteria or Archaea.
+
+    Used to reject names that are not organisms before they become taxa rows.
+    When no taxdump is available the check cannot run, so it passes rather than
+    silently dropping valid findings -- the caller's report says which happened.
+    """
+    global _prokaryote_genera
+    if _prokaryote_genera is None:
+        names, nodes = TAXDUMP / "names.dmp", TAXDUMP / "nodes.dmp"
+        if not (names.exists() and nodes.exists()):
+            print(f"    (no taxdump at {TAXDUMP}/ - genus names not validated)")
+            _prokaryote_genera = set()
+            return True
+        parent: dict[int, int] = {}
+        rank: dict[int, str] = {}
+        with nodes.open(encoding="utf-8", errors="replace") as fh:
+            for line in fh:
+                parts = line.split("\t|")
+                parent[int(parts[0])] = int(parts[1])
+                rank[int(parts[0])] = parts[2].strip()
+        # Bacteria = 2, Archaea = 2157
+        domains = {2, 2157}
+        def is_prokaryote(taxid: int) -> bool:
+            node, guard = taxid, 0
+            while node and node != 1 and guard < 60:
+                if node in domains:
+                    return True
+                node = parent.get(node, 0)
+                guard += 1
+            return False
+        genera = set()
+        with names.open(encoding="utf-8", errors="replace") as fh:
+            for line in fh:
+                parts = line.split("\t|")
+                if len(parts) < 4 or parts[3].strip() != "scientific name":
+                    continue
+                taxid = int(parts[0])
+                if rank.get(taxid) == "genus" and is_prokaryote(taxid):
+                    genera.add(parts[1].strip().casefold())
+        _prokaryote_genera = genera
+        print(f"    taxdump: {len(genera):,} prokaryote genus names loaded")
+    if not _prokaryote_genera:
+        return True
+    return clean_str(name).casefold() in _prokaryote_genera
+
+
+# Control-arm labels used across S4's hand-curated group columns.
+S4_CONTROL = {"control", "h", "healthy", "hc", "nt", "non-ibd", "nonibd"}
+
+
+def load_literature(s1_datasets: list[str]) -> tuple[list[dict], Counter, dict[str, str]]:
+    """Return (loadable rows, attrition counts, S4 study id -> S1 dataset id).
+
+    file-S4 is the authors' hand-curated record of what each ORIGINAL paper
+    reported, which makes it a third view: the publication's own claim, beside
+    MicrobiomeHD's re-analysis (S1/S5) and this database's GMrepo evidence. It is
+    notes rather than a matrix, though, and only a small part of it fits a
+    genus-keyed association table:
+
+      - 640 of 1,027 rows are not genus-level (OTU, species, phylum, family).
+        taxa.genus is NOT NULL, so a family- or phylum-level finding has no key.
+      - 512 rows belong to studies with no S1 counterpart. Their ids are
+        abbreviated differently ("ra_littman", "ibd_hut", "mhe_zhang") and the
+        repository documents no mapping, so they are left alone rather than
+        matched on a shared author name -- attaching a paper's claim to the
+        wrong study is worse than omitting it.
+      - 497 rows report no parseable q value.
+
+    What survives is 31 rows from 5 studies. That is 3% of the file, so this is
+    a sample of the literature, not a summary of it; the attrition is returned
+    so a caller can report it rather than imply coverage it does not have.
+    """
+    if not LITERATURE.exists():
+        return [], Counter(), {}
+    text = LITERATURE.read_bytes().decode("cp1252")  # not UTF-8 upstream
+    rows = list(csv.DictReader(text.splitlines(), delimiter="\t"))
+
+    mapping: dict[str, str] = {}
+    for sid in sorted({r["study"] for r in rows}):
+        if sid in s1_datasets:
+            mapping[sid] = sid
+            continue
+        code = sid.split("_")[0]
+        exact = [d for d in s1_datasets if d.startswith(sid) and d.split("_")[0] == code]
+        if len(exact) == 1:
+            mapping[sid] = exact[0]
+
+    attrition = Counter()
+    keep: list[dict] = []
+    for row in rows:
+        if row["taxonomic_level"].casefold() != "genus":
+            attrition["not_genus_level"] += 1
+            continue
+        match = re.search(r"g__([A-Za-z0-9_\-]+)", row["taxa_or_feature"])
+        if not match:
+            attrition["genus_field_empty"] += 1
+            continue
+        if row["study"] not in mapping:
+            attrition["study_unmappable"] += 1
+            continue
+        lower = row["group_lower"].strip().casefold()
+        higher = row["group_higher"].strip().casefold()
+        if (lower in S4_CONTROL) == (higher in S4_CONTROL):
+            attrition["not_case_vs_control"] += 1
+            continue
+        try:
+            qval = float(row["qval"])
+        except ValueError:
+            attrition["no_parseable_qval"] += 1
+            continue
+        if qval >= Q_THRESHOLD:
+            attrition["not_significant"] += 1
+            continue
+        keep.append({
+            "dataset": mapping[row["study"]],
+            "s4_study": row["study"],
+            "genus": match.group(1),
+            "qval": qval,
+            "direction": "depleted" if higher in S4_CONTROL else "enriched",
+            "method": row["method"].strip() or "as reported",
+            "multi_comp": row["multi_comp"].strip(),
+        })
+    return keep, attrition, mapping
+
+
 def load_identity() -> dict[str, dict[str, str]]:
     return {r["dataset"]: r for r in csv.DictReader(IDENTITY.open())}
 
@@ -193,6 +326,22 @@ def main() -> int:
     comparison_cache: dict[str, int] = {}
     disease_cache: dict[str, int] = {}
     taxon_cache: dict[str, int] = {}
+
+    def study_for(accession: str, dataset: str) -> int:
+        if accession not in study_cache:
+            study_cache[accession] = upsert_study(conn, {
+                "project_id": accession,
+                "title": f"MicrobiomeHD standardized re-analysis ({dataset})",
+                "description": (
+                    "Case-control 16S study re-processed by Duvallet et al. 2017 "
+                    "(PMID 29209090) through one standardized pipeline: de novo OTUs, "
+                    "RDP classifier, collapsed to genus, Kruskal-Wallis with "
+                    "Benjamini-Hochberg FDR."),
+                "data_type": "16S",
+                "source_database": "MicrobiomeHD",
+                "data_quality": "curated",
+            })
+        return study_cache[accession]
 
     def disease_id(name: str, mesh: str) -> int:
         if name not in disease_cache:
@@ -264,23 +413,11 @@ def main() -> int:
                 audit.append({"dataset": dataset, "study": accession, "disease": name,
                               "genus": genus, "q_value": abs(q),
                               "log2_fold_change": "" if effect is None else effect,
-                              "direction": "enriched" if q > 0 else "depleted"})
+                              "direction": "enriched" if q > 0 else "depleted",
+                              "source_file": "S1/S5"})
             continue
 
-        if accession not in study_cache:
-            study_cache[accession] = upsert_study(conn, {
-                "project_id": accession,
-                "title": f"MicrobiomeHD standardized re-analysis ({dataset})",
-                "description": (
-                    "Case-control 16S study re-processed by Duvallet et al. 2017 "
-                    "(PMID 29209090) through one standardized pipeline: de novo OTUs, "
-                    "RDP classifier, collapsed to genus, Kruskal-Wallis with "
-                    "Benjamini-Hochberg FDR."),
-                "data_type": "16S",
-                "source_database": "MicrobiomeHD",
-                "data_quality": "curated",
-            })
-        study_id = study_cache[accession]
+        study_id = study_for(accession, dataset)
 
         case_id = disease_id(name, mesh)
         if dataset not in comparison_cache:
@@ -334,8 +471,72 @@ def main() -> int:
             audit.append({"dataset": dataset, "study": accession, "disease": name,
                           "genus": genus, "q_value": abs(q),
                           "log2_fold_change": "" if effect is None else effect,
-                          "direction": "enriched" if q > 0 else "depleted"})
+                          "direction": "enriched" if q > 0 else "depleted",
+                          "source_file": "S1/S5"})
         cursor.close()
+
+    # --- file-S4: what the original publications reported ---------------------
+    lit, attrition, _lit_map = load_literature(datasets)
+    if lit:
+        print(f"\nS4 literature: {len(lit)} loadable rows from "
+              f"{len({r['dataset'] for r in lit})} studies")
+        for key, n in attrition.most_common():
+            stats[f"s4_excluded_{key}"] = n
+
+        genus_ok: dict[str, bool] = {}
+        for row in lit:
+            genus = row["genus"]
+            if genus not in genus_ok:
+                # Validate against the local dump: the file contains at least one
+                # typo ("Peptosreptococcus"), and loading it would invent a genus.
+                # Not auto-corrected -- a silent name fix is how the homonym
+                # lineages got into the curated table in the first place.
+                genus_ok[genus] = taxdump_has_prokaryote_genus(genus)
+                if not genus_ok[genus]:
+                    print(f"    !! {genus!r} does not resolve to a prokaryote genus - skipped")
+            if not genus_ok[genus]:
+                stats["s4_genus_unresolved"] += 1
+                continue
+            code = row["dataset"].split("_")[0]
+            name, mesh = DISEASE_FOR_CODE[code]
+            rec = identity.get(row["dataset"], {})
+            accession = f"PMID{rec['pmid']}" if rec.get("pmid") else rec.get("accession") or row["dataset"]
+            stats["s4_associations"] += 1
+            audit.append({"dataset": row["dataset"], "study": accession, "disease": name,
+                          "genus": genus, "q_value": row["qval"], "log2_fold_change": "",
+                          "direction": row["direction"], "source_file": "S4"})
+            if DRY_RUN:
+                continue
+            case_id = disease_id(name, mesh)
+            key = f"{row['dataset']}|{row['method']}"
+            if key not in comparison_cache:
+                comparison_cache[key] = _upsert_comparison(
+                    conn, study_for(accession, row["dataset"]), accession, health_id, HEALTH[0],
+                    case_id, name, positive_id=case_id, negative_id=health_id,
+                    method=f"as reported ({row['method']})", rank="genus",
+                    notes=(f"As reported in the publication for MicrobiomeHD dataset "
+                           f"{row['dataset']}, curated in file-S4; multiple-comparison "
+                           f"correction: {row['multi_comp'] or 'not stated'}. Distinct "
+                           f"from the standardized re-analysis comparison on this study."))
+            if genus not in taxon_cache:
+                taxon_cache[genus], existed = upsert_taxon(conn, {
+                    "genus": genus, "species": "", "taxonomic_rank": "genus",
+                    "source_database": "MicrobiomeHD"}, overwrite=False)
+                stats["taxa_already_present" if existed else "taxa_created"] += 1
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                INSERT INTO taxon_disease_associations
+                    (taxon_id, disease_id, comparison_id, direction, effect_type,
+                     effect_size, q_value, source_database)
+                VALUES (%s, %s, %s, %s, 'reported', NULL, %s, 'MicrobiomeHD')
+                ON DUPLICATE KEY UPDATE
+                    direction = VALUES(direction), q_value = VALUES(q_value)
+                """,
+                (taxon_cache[genus], case_id, comparison_cache[key],
+                 row["direction"], row["qval"]),
+            )
+            cursor.close()
 
     if DRY_RUN:
         print("\n*** DRY RUN - nothing written. Re-run with --apply ***")
@@ -352,13 +553,18 @@ def main() -> int:
                 "qvalues_present", "not_significant", "skipped_not_a_genus",
                 "associations", "effect_loaded", "effect_sentinel_skipped",
                 "effect_absent", "superseded_rows_removed",
-                "taxa_created", "taxa_already_present"):
+                "taxa_created", "taxa_already_present",
+                "s4_associations", "s4_genus_unresolved"):
+        print(f"    {key:26} {stats[key]}")
+    for key in sorted(k for k in stats if k.startswith("s4_excluded_")):
         print(f"    {key:26} {stats[key]}")
 
     if audit:
         AUDIT.parent.mkdir(parents=True, exist_ok=True)
         with AUDIT.open("w", newline="", encoding="utf-8") as fh:
-            writer = csv.DictWriter(fh, fieldnames=list(audit[0].keys()))
+            writer = csv.DictWriter(fh, fieldnames=[
+                "source_file", "dataset", "study", "disease", "genus",
+                "q_value", "log2_fold_change", "direction"])
             writer.writeheader()
             writer.writerows(audit)
         print(f"\naudit written to {AUDIT} ({len(audit)} rows)")

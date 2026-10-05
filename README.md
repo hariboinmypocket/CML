@@ -209,6 +209,44 @@ a separate table if they are ever wanted.
 38 further rows are dropped because the RDP classifier labels they carry are not
 organisms (`Clostridium_IV`, `Lachnospiracea_incertae_sedis` and similar).
 
+file-S4 is the authors' hand-curated record of what each **original paper**
+reported, which makes a third view available beside the re-analysis and this
+database's GMrepo evidence. It loads as `effect_type = 'reported'` on its own
+comparison per study, whose `method` names the publication's own test
+(`as reported (wilcoxon)`, `as reported (lefse)`, …), so it never pools with the
+standardized re-analysis on the same study. That is what makes the two
+comparable:
+
+```sql
+SELECT t.scientific_name, d.name,
+       MAX(CASE WHEN a.effect_type <> 'reported' THEN a.direction END) AS reanalysis,
+       MAX(CASE WHEN a.effect_type =  'reported' THEN a.direction END) AS as_published
+FROM taxon_disease_associations a
+JOIN taxa t ON t.id = a.taxon_id
+JOIN diseases d ON d.id = a.disease_id
+JOIN phenotype_comparisons c ON c.id = a.comparison_id
+JOIN studies s ON s.id = c.study_id
+WHERE a.source_database = 'MicrobiomeHD'
+GROUP BY t.id, d.id, s.id
+HAVING reanalysis IS NOT NULL AND as_published IS NOT NULL;
+```
+
+**S4 is notes, not a matrix, and only 30 of its 1,027 rows load — 3%.** Treat it
+as a sample of the literature, not a summary of it. The loader reports the
+attrition every run: 640 rows are not genus-level (OTU, species, phylum, family,
+and `taxa.genus` is NOT NULL so a family-level finding has no key), 209 belong
+to studies with no counterpart in the re-analysis, 94 name a family with an
+empty `g__`, 44 report no parseable q value, 8 are above threshold, and 1 is a
+disease-versus-disease comparison rather than case-versus-control.
+
+Study ids in S4 are abbreviated differently from the re-analysis
+(`ra_littman`, `ibd_hut`, `mhe_zhang`) and the repository documents no mapping,
+so only exact and unambiguous-prefix matches are used. The rest are skipped
+rather than matched on a shared author name — attaching a publication's claim to
+the wrong study is worse than omitting it. Genus names are checked against the
+NCBI dump before becoming taxa, which is how the source's `Peptosreptococcus`
+typo is caught; it is reported and skipped, never silently corrected.
+
 ## Data notes
 
 - MiMeDB taxonomic and metabolic text is normalized before matching. Species are matched case-insensitively by `(genus, species)`.
