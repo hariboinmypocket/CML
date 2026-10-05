@@ -252,6 +252,35 @@ into their species, and 1 is a disease-versus-disease comparison.
 Threshold notation (`<0.05`, `<0.001`) was measured and deliberately not parsed:
 every such row also fails another rule, so interpreting it recovers nothing.
 
+file-S2 is the meta-analysis's own conclusion: a genus is listed for a disease
+when it is significant at q < 0.05 in the same direction in at least two of that
+disease's datasets, for the five diseases with at least three datasets. It is the
+complement of S3 — consistent *within* one disease rather than *across* several —
+and because it names a (genus, disease) pair it is an association rather than a
+taxon annotation. It belongs to no single cohort, so it is attributed to the
+paper itself, which enters as study `PMID29209090` with `data_type =
+'meta-analysis'`, under `effect_type = 'consensus'` with no effect size or q
+value, since a consensus has neither. 71 calls load: 58 for *C. difficile*
+infection, 5 each for obesity and colorectal cancer, 3 for IBD.
+
+### Rejecting classifier labels
+
+RDP and SILVA emit labels that are not organisms, and every file here carries
+some: `Clostridium_IV`, `Lachnospiracea_incertae_sedis`,
+`Escherichia/Shigella` (two genera the classifier could not separate),
+`Ruminococcus2` (a reference-database cluster), `Clostridium_sensu_stricto`.
+One rule governs all of them, and it distinguishes creating from referencing:
+
+- A genus the database already holds is always accepted. Nothing is invented,
+  and the existing row keeps whatever identification it was loaded with.
+  *Raoultella* is why this matters — NCBI synonymised it into *Klebsiella*, so it
+  is no longer a genus-rank name in the dump, but it is a real organism already
+  present here with a tax ID, and refusing it would drop a real finding.
+- A genus not yet present must be a genus-rank name under Bacteria or Archaea in
+  the NCBI dump, and must not match the classifier-label pattern.
+
+Rejections are printed on every run rather than counted silently.
+
 Study ids in S4 are abbreviated differently from the re-analysis
 (`ra_littman`, `ibd_hut`, `mhe_zhang`) and the repository documents no mapping,
 so only exact and unambiguous-prefix matches are used. The rest are skipped

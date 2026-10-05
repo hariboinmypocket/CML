@@ -63,6 +63,7 @@ SOURCE = Path(os.environ.get("MICROBIOMEHD_DIR", "data/microbiomehd"))
 QVALUES = SOURCE / "file-S1.qvalues.txt"
 EFFECTS = SOURCE / "file-S5.effects.txt"
 LITERATURE = SOURCE / "file-S4.literature_results.txt"
+CONSENSUS = SOURCE / "file-S2.disease_specific_genera.txt"
 IDENTITY = SOURCE / "dataset_identity.csv"
 AUDIT = Path("data/microbiomehd_s1_audit.csv")
 
@@ -75,6 +76,8 @@ Required files are missing from {SOURCE}/. To fetch them:
     {RAW}/final/supp-files/file-S1.qvalues.txt
   curl -sS -o {SOURCE}/file-S5.effects.txt \\
     {RAW}/final/supp-files/file-S5.effects.txt
+  curl -sS -o {SOURCE}/file-S2.disease_specific_genera.txt \\
+    {RAW}/final/supp-files/file-S2.disease_specific_genera.txt
   curl -sS -o {SOURCE}/file-S4.literature_results.txt \\
     {RAW}/final/supp-files/file-S4.literature_results.txt
   curl -sS -o {SOURCE}/results_folders.yaml \\
@@ -113,8 +116,13 @@ RANK_PREFIX = {"k__": "superkingdom", "p__": "phylum", "c__": "class_name",
                "o__": "order_name", "f__": "family", "g__": "genus"}
 # RDP cluster labels and placeholder buckets, not organisms. Loading these as
 # taxa would invent genera that do not exist.
+# Labels the RDP and SILVA classifiers emit that are not organisms. A composite
+# like "Escherichia/Shigella" names two genera the classifier could not separate;
+# a numeric suffix ("Ruminococcus2") is a reference-database cluster, not a taxon;
+# "sensu_stricto" and "incertae_sedis" are placement statements.
 NOT_A_GENUS = re.compile(
-    r"(_incertae_sedis$|^Clostridium_[IVX]|_unclassified$|^unclassified|^$)", re.I)
+    r"(_incertae_sedis$|^Clostridium_[IVX]|_unclassified$|^unclassified|^$"
+    r"|_sensu_stricto|[/\\]|\d$|^Candidatus$)", re.I)
 
 
 def parse_lineage(label: str) -> dict[str, str]:
@@ -210,6 +218,82 @@ def taxdump_has_prokaryote_genus(name: str) -> bool:
     if not _prokaryote_genera:
         return True
     return clean_str(name).casefold() in _prokaryote_genera
+
+
+# The meta-analysis itself, as a study. S2's calls are the paper's conclusions
+# across its datasets rather than any one dataset's result, so they attach to the
+# publication, not to a cohort.
+PAPER = {
+    "accession": "PMID29209090",
+    "title": ("Meta-analysis of gut microbiome studies identifies disease-specific "
+              "and shared responses"),
+    "description": ("Duvallet, Gibbons, Gurry, Irizarry and Alm, Nature Communications "
+                    "8:1784 (2017). Cross-disease meta-analysis of 28 case-control 16S "
+                    "studies re-processed through one standardized pipeline."),
+}
+CONSENSUS_METHOD = "cross-study consensus (q<0.05 in >=2 datasets)"
+
+
+def load_consensus() -> list[dict]:
+    """file-S2: genera consistently associated with one disease.
+
+    A genus is listed for a disease when it is significant at q < 0.05 in the
+    same direction in at least two of that disease's datasets, for the five
+    diseases with at least three datasets. Conflicting calls cancel, so what
+    remains is a net direction.
+
+    This is the complement of S3: S2 is "consistent within one disease", S3 is
+    "consistent across several". Unlike S3 it names a (genus, disease) pair, so
+    it is an association rather than a taxon annotation -- but it is a consensus
+    over datasets, belonging to no single cohort, which is why it is attributed
+    to the paper itself rather than to one of the 28 studies.
+    """
+    if not CONSENSUS.exists():
+        return []
+    rows = list(csv.reader(CONSENSUS.open(), delimiter="\t"))
+    codes = rows[0][1:]
+    out: list[dict] = []
+    for row in rows[1:]:
+        match = re.search(r"g__([A-Za-z0-9_\-\[\]]+)", row[0])
+        if not match:
+            continue
+        genus = match.group(1).strip("[]")
+        for code, cell in zip(codes, row[1:]):
+            label = cell.strip().casefold()
+            if label not in ("health", "disease"):
+                continue
+            out.append({"genus": genus, "code": code, "label": label,
+                        "lineage": row[0]})
+    return out
+
+
+def genus_acceptable(connection, genus: str) -> tuple[bool, str]:
+    """Whether a genus name may be used, and why not when it may not.
+
+    Referencing a genus the database already holds is always fine -- nothing is
+    being invented, and the existing row carries whatever identification it was
+    loaded with. Raoultella is the case that matters: NCBI synonymised it into
+    Klebsiella so it is no longer a genus-rank scientific name in the dump, but
+    it is a real organism this database already holds with a tax ID, and
+    refusing it would drop a legitimate finding.
+
+    Creating a new genus is held to the dump: it must be a genus-rank name under
+    Bacteria or Archaea, and must not be a classifier label. Without this the S1
+    phase invented Ruminococcus2, Escherichia/shigella and
+    Clostridium_sensu_stricto.
+    """
+    cursor = connection.cursor()
+    cursor.execute(
+        "SELECT 1 FROM taxa WHERE genus = %s LIMIT 1", (clean_str(genus),))
+    exists = cursor.fetchone() is not None
+    cursor.close()
+    if exists:
+        return True, ""
+    if NOT_A_GENUS.search(genus):
+        return False, "classifier label, not an organism"
+    if not taxdump_has_prokaryote_genus(genus):
+        return False, "not a prokaryote genus in the NCBI dump"
+    return True, ""
 
 
 # Control-arm labels used across S4's hand-curated group columns.
@@ -349,6 +433,7 @@ def main() -> int:
 
     stats = Counter()
     audit: list[dict] = []
+    reported_bad: set[str] = set()
     study_cache: dict[str, int] = {}
     comparison_cache: dict[str, int] = {}
     disease_cache: dict[str, int] = {}
@@ -369,6 +454,16 @@ def main() -> int:
                 "data_quality": "curated",
             })
         return study_cache[accession]
+
+    def study_for_paper() -> int:
+        return upsert_study(conn, {
+            "project_id": PAPER["accession"],
+            "title": PAPER["title"],
+            "description": PAPER["description"],
+            "data_type": "meta-analysis",
+            "source_database": "MicrobiomeHD",
+            "data_quality": "curated",
+        })
 
     def disease_id(name: str, mesh: str) -> int:
         if name not in disease_cache:
@@ -402,7 +497,14 @@ def main() -> int:
                 continue
             lineage = parse_lineage(row[0])
             genus = lineage.get("genus", "")
-            if not genus or NOT_A_GENUS.search(genus):
+            if not genus:
+                stats["skipped_not_a_genus"] += 1
+                continue
+            ok, why = genus_acceptable(conn, genus)
+            if not ok:
+                if genus not in reported_bad:
+                    reported_bad.add(genus)
+                    print(f"    !! {genus!r} rejected: {why}")
                 stats["skipped_not_a_genus"] += 1
                 continue
             effect = None
@@ -518,9 +620,10 @@ def main() -> int:
                 # typo ("Peptosreptococcus"), and loading it would invent a genus.
                 # Not auto-corrected -- a silent name fix is how the homonym
                 # lineages got into the curated table in the first place.
-                genus_ok[genus] = taxdump_has_prokaryote_genus(genus)
-                if not genus_ok[genus]:
-                    print(f"    !! {genus!r} does not resolve to a prokaryote genus - skipped")
+                ok, why = genus_acceptable(conn, genus)
+                genus_ok[genus] = ok
+                if not ok:
+                    print(f"    !! {genus!r} rejected: {why}")
             if not genus_ok[genus]:
                 stats["s4_genus_unresolved"] += 1
                 continue
@@ -568,6 +671,65 @@ def main() -> int:
             )
             cursor.close()
 
+    # --- file-S2: the meta-analysis's own cross-study consensus ---------------
+    consensus = load_consensus()
+    if consensus:
+        print(f"\nS2 consensus: {len(consensus)} (genus, disease) calls")
+        paper_study = None if DRY_RUN else study_for_paper()
+        for call in consensus:
+            code = call["code"]
+            if code not in DISEASE_FOR_CODE:
+                stats["s2_unmapped_disease"] += 1
+                continue
+            genus = call["genus"]
+            ok, why = genus_acceptable(conn, genus)
+            if not ok:
+                if genus not in reported_bad:
+                    reported_bad.add(genus)
+                    print(f"    !! {genus!r} rejected: {why}")
+                stats["s2_genus_unresolved"] += 1
+                continue
+            name, mesh = DISEASE_FOR_CODE[code]
+            direction = "depleted" if call["label"] == "health" else "enriched"
+            stats["s2_associations"] += 1
+            audit.append({"dataset": f"consensus:{code}", "study": PAPER["accession"],
+                          "disease": name, "genus": genus, "q_value": "",
+                          "log2_fold_change": "", "direction": direction,
+                          "source_file": "S2"})
+            if DRY_RUN:
+                continue
+            case_id = disease_id(name, mesh)
+            key = f"consensus|{code}"
+            if key not in comparison_cache:
+                comparison_cache[key] = _upsert_comparison(
+                    conn, paper_study, PAPER["accession"], health_id, HEALTH[0],
+                    case_id, name, positive_id=case_id, negative_id=health_id,
+                    method=CONSENSUS_METHOD, rank="genus",
+                    notes=("Consensus across this disease's datasets in MicrobiomeHD "
+                           "file-S2, not a single cohort's result: significant at "
+                           "q < 0.05 in the same direction in at least two datasets, "
+                           "with conflicting calls cancelled."))
+            lineage = parse_lineage(call["lineage"])
+            cache_key = f"{genus}|"
+            if cache_key not in taxon_cache:
+                taxon = {"genus": genus, "species": "", "taxonomic_rank": "genus",
+                         "source_database": "MicrobiomeHD"}
+                taxon.update({k: v for k, v in lineage.items() if k != "genus"})
+                taxon_cache[cache_key], existed = upsert_taxon(conn, taxon, overwrite=False)
+                stats["taxa_already_present" if existed else "taxa_created"] += 1
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                INSERT INTO taxon_disease_associations
+                    (taxon_id, disease_id, comparison_id, direction, effect_type,
+                     effect_size, q_value, source_database)
+                VALUES (%s, %s, %s, %s, 'consensus', NULL, NULL, 'MicrobiomeHD')
+                ON DUPLICATE KEY UPDATE direction = VALUES(direction)
+                """,
+                (taxon_cache[cache_key], case_id, comparison_cache[key], direction),
+            )
+            cursor.close()
+
     if DRY_RUN:
         print("\n*** DRY RUN - nothing written. Re-run with --apply ***")
     else:
@@ -584,7 +746,8 @@ def main() -> int:
                 "associations", "effect_loaded", "effect_sentinel_skipped",
                 "effect_absent", "superseded_rows_removed",
                 "taxa_created", "taxa_already_present",
-                "s4_associations", "s4_genus_unresolved"):
+                "s4_associations", "s4_genus_unresolved",
+                "s2_associations", "s2_genus_unresolved", "s2_unmapped_disease"):
         print(f"    {key:26} {stats[key]}")
     for key in sorted(k for k in stats if k.startswith("s4_excluded_")):
         print(f"    {key:26} {stats[key]}")
