@@ -87,6 +87,11 @@ CREATE TABLE IF NOT EXISTS studies (
     description TEXT NULL,
     data_type VARCHAR(100) NULL,
     source_database VARCHAR(100) NOT NULL DEFAULT 'GMrepo',
+    -- Which metabolomics platform produced this study's metabolite levels, if
+    -- any. Levels are only interpretable within a platform, so this is what
+    -- keeps sample_metabolite_levels from being pooled across incompatible
+    -- instruments.
+    metabolomics_method VARCHAR(120) NULL,
     data_quality ENUM('curated', 'qualified', 'unknown') NOT NULL DEFAULT 'unknown',
     PRIMARY KEY (id),
     UNIQUE KEY uq_study_accession (project_accession)
@@ -190,6 +195,53 @@ CREATE TABLE IF NOT EXISTS sample_taxon_abundances (
     CONSTRAINT fk_abundance_sample FOREIGN KEY (sample_id) REFERENCES samples(id)
         ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT fk_abundance_taxon FOREIGN KEY (taxon_id) REFERENCES taxa(id)
+        ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- The metabolome axis.
+--
+-- Added for the Muller et al. 2022 collection (doi:10.1038/s41522-022-00345-5),
+-- which pairs faecal microbiome profiles with metabolite levels for 14 cohorts.
+-- Metabolites are a genuinely different feature class from taxa, not more rows
+-- of the same, and they obey none of the invariants sample_taxon_abundances
+-- does.
+--
+-- LEVELS ARE NOT COMPARABLE ACROSS STUDIES. Instruments, targeted versus
+-- untargeted designs, extraction protocols and units all differ between
+-- cohorts, and nothing sums to 1. A model may rank or correlate levels WITHIN a
+-- study, or compare a study's case arm against its own control arm, but pooling
+-- raw levels across studies is meaningless in a way that pooling relative
+-- abundances is not. studies.metabolomics_method records which platform
+-- produced a given study's numbers so that constraint stays visible.
+CREATE TABLE IF NOT EXISTS metabolites (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    -- Normalized to the 7-digit form: upstream carries both HMDB00002 and
+    -- HMDB0000002 for the same compound. Either identifier may be absent, and
+    -- MySQL permits repeated NULLs under a UNIQUE key, so a compound known only
+    -- to KEGG and one known only to HMDB both store cleanly.
+    hmdb_id VARCHAR(16) NULL,
+    kegg_id VARCHAR(10) NULL,
+    name VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_metabolite_hmdb (hmdb_id),
+    UNIQUE KEY uq_metabolite_kegg (kegg_id),
+    KEY ix_metabolite_name (name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS sample_metabolite_levels (
+    sample_id BIGINT UNSIGNED NOT NULL,
+    metabolite_id BIGINT UNSIGNED NOT NULL,
+    level DOUBLE NOT NULL,
+    -- Upstream flags annotations the original authors considered uncertain
+    -- (High.Confidence.Annotation=FALSE: 643 of 98,933 features). Carried
+    -- rather than filtered, because which confidence floor is acceptable is the
+    -- caller's decision, not the loader's.
+    high_confidence_annotation BOOLEAN NOT NULL DEFAULT TRUE,
+    PRIMARY KEY (sample_id, metabolite_id),
+    KEY ix_metabolite_level_metabolite (metabolite_id),
+    CONSTRAINT fk_metabolite_level_sample FOREIGN KEY (sample_id) REFERENCES samples(id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT fk_metabolite_level_metabolite FOREIGN KEY (metabolite_id) REFERENCES metabolites(id)
         ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -310,14 +362,32 @@ GROUP BY st.project_accession, st.source_database, st.data_quality;
 
 -- Evidence strength per (taxon, disease).
 --
--- 75% of pairs in this table rest on a single study, and 913 pairs have studies
+-- 75% of pairs in this table rest on a single study, and 911 pairs have studies
 -- that disagree on direction, but every association row looks identical in the
 -- base schema. This view exposes replication depth and directional agreement so
 -- a 15-study unanimous finding can be told apart from a one-off.
 --
--- Agreement is a RATIO, not a boolean: most disagreements here are lopsided
--- majorities with a single outlier (16 studies enriched vs 1 depleted is 94%
--- agreement, not a genuine controversy). Callers pick their own threshold.
+-- Agreement is a RATIO, not a boolean, so callers pick their own threshold. An
+-- earlier version of this comment claimed most disagreements are lopsided
+-- majorities with a single outlier. They are not: of the 2,285 replicated
+-- pairs, 1,374 agree outright, 485 agree above 60%, 39 are near ties and 387
+-- are EXACT ties where consensus_direction below is a coin flip.
+--
+-- Two further limits are not fixable inside this view, and
+-- taxon_disease_adjudication exists because of them:
+--
+--   It pools unlike contrasts. 2,340 of the 16,889 associations compare one
+--   disease against another rather than against Health. A case/control model
+--   needs the latter, and this view votes across both.
+--
+--   n_studies_enriched and n_studies_depleted are separate COUNT(DISTINCT
+--   study_id) expressions, so one study holding both a vs-Health and a
+--   disease-vs-disease contrast votes on BOTH sides. Faecalibacterium
+--   prausnitzii in ulcerative colitis comes out 'enriched' here for exactly
+--   that reason, reversing one of the field's most replicated findings.
+--
+-- For direction, read taxon_disease_adjudication. Use this view for replication
+-- depth.
 --
 -- Studies, not association rows, are the unit of agreement, so a single study
 -- contributing several comparisons cannot outvote several independent cohorts.

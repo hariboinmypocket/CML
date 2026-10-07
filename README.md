@@ -239,6 +239,81 @@ adjudication, which is real cohort heterogeneity and should not be handed to a
 model as a fact. Nothing in `taxon_disease_associations` is modified, so the
 verdict layer can be recomputed, audited, or ignored.
 
+### Muller 2022 microbiome-metabolome collection
+
+[Muller, Algavi & Borenstein 2022](https://doi.org/10.1038/s41522-022-00345-5)
+curated 14 human faecal cohorts -- 2,900 samples from 1,849 subjects -- with
+paired microbiome **and metabolome** profiles. It matters here for three reasons:
+it adds a feature class this database has none of, it is a second *sample-level*
+source (98.3% of samples come from GMrepo, and MicrobiomeHD contributes 20
+studies but no samples), and it arrives as plain TSV rather than through
+Bioconductor the way curatedMetagenomicData's profiles do.
+
+```bash
+python scripts/fetch_muller2022.py      # ~140MB into data/muller2022/ (gitignored)
+python scripts/map_gtdb_genera.py       # writes data/gtdb_ncbi_genus_map.csv
+```
+
+Sized honestly against the goal of filtering down to ML-ready samples: 2,900
+samples is +8.5% on 34,229, but after excluding `iHMP_IBDMDB_2019` (already here
+as PRJNA398089) and the two cohorts with no disease contrast, 2,077 case/control
+samples remain, and those collapse to **1,581 independent subjects** because 36%
+of samples are repeats. Against the deduplicated ML-ready cohort of 11,440 that
+is +13.8%. `Subject` is present in all 14 cohorts, which is better than the
+GMrepo bulk manages -- `samples.subject_id` is populated for only 479 of 34,229
+rows today.
+
+**Taxonomy is GTDB, and that is the whole difficulty.** Columns are full lineage
+strings, and the genus field is frequently a genome-bin accession, so the 12,263
+distinct labels are nowhere near 12,263 genera. `scripts/map_gtdb_genera.py`
+decides each label against the local NCBI taxdump and writes a reviewable row
+rather than resolving anything, because handing these strings to `resolve_name`
+is how `Ruminococcus2` and `Escherichia/shigella` were minted. By abundance mass:
+
+| decision | labels | mass |
+| --- | --- | --- |
+| `map` (NCBI genus already in `taxa`) | 2,075 | 88.84% |
+| `map_needs_taxon_row` (NCBI knows it, this DB does not) | 1,970 | 2.95% |
+| `reject_mag_bin` (`g__UBA1775`, `g__JABGPL01`) | 8,022 | 4.89% |
+| `reject_unclassified` (lineage stops above genus) | 126 | 3.24% |
+| `reject_gtdb_coined` (NCBI has never heard of it) | 70 | 0.08% |
+
+Four consequences for any loader, each measured rather than assumed:
+
+- **It must SUM, not insert per label.** 4,045 mapped labels collapse onto 3,333
+  NCBI genera; 339 targets receive more than one label (`Clostridium` receives
+  40, `Enterococcus` 11, `Ruminococcus` 7, `Bacteroides` 6) because GTDB splits
+  polyphyletic genera and marks fragments with letter suffixes. **52.19% of all
+  abundance mass sits in multi-label targets**, so last-write-wins would silently
+  discard half the data. Summing the fragments is also what makes the result
+  comparable with GMrepo's NCBI-profiled genera in the first place.
+- **Renormalize after dropping.** 8.21% of mass is rejected, so each sample needs
+  renormalizing to restore the per-rank sum-to-1 invariant -- the same treatment
+  `unclassified_fraction` already receives.
+- **Apply a mass floor before creating taxa rows.** Mapping everything would add
+  1,853 genus rows, and they start `Abyssibacter`, `Acaryochloris`,
+  `Acetohalobium` -- marine and environmental kraken2 noise, not gut flora. A
+  floor of 0.001% of total mass keeps 395 genera and **99.81% of mappable mass**
+  for only **126 new rows**. Cohort prevalence adds nothing; mass is the
+  discriminating filter.
+- **`Study.Group` needs a hand-written MeSH mapping per cohort**, and several are
+  undecodable from the data alone: `0`/`1` in SINHA_CRC_2016, `D`/`H`/`C` in
+  MARS_IBS_2020, `MP`/`HS` in YACHIDA_CRC_2019. `Adenoma` is absent from
+  `diseases` and is needed for KIM_ADENOMAS_2020.
+
+**Metabolite levels are not comparable across studies** -- instruments, targeted
+versus untargeted designs and units all differ, and nothing sums to 1, so
+`studies.metabolomics_method` records the platform and pooling raw levels across
+cohorts is invalid in a way that pooling relative abundances is not. Across the
+13 cohorts whose `mtb.tsv` is fetched (iHMP ships a 57.6MB zip), 3,048 of 17,066
+features carry a valid identifier, giving 1,206 distinct HMDB compounds of which
+**334 appear in 3 or more cohorts** -- which independently reproduces the paper's
+own 314-metabolite meta-analysis set. The remaining features are unannotated m/z
+peaks with no cross-study identity. Upstream identifier columns are lightly
+contaminated (MetaboAnalyst `METPA*` ids and KEGG `C#####` values in the HMDB
+column, KEGG DRUG `D#####` ids in the KEGG column), so a loader must validate
+`^HMDB\d{5,7}$` and `^C\d{5}$` rather than trust them.
+
 ### MicrobiomeHD standardized re-analysis
 
 [Duvallet et al. 2017](https://doi.org/10.1038/s41467-017-01973-8) (PMID 29209090)
