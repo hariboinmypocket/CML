@@ -182,6 +182,63 @@ HAVING COUNT(DISTINCT a.disease_id) > 1
 ORDER BY disease_count DESC, t.scientific_name;
 ```
 
+### Adjudicating directional conflicts
+
+2,285 (taxon, disease) pairs are reported by more than one study and the studies
+do not always agree: 387 are exact ties, where `v_taxon_disease_evidence`'s
+`consensus_direction` is a coin flip presented as a finding. `scripts/adjudicate_conflicts.py`
+settles what it can against evidence that vote never uses -- this database's own
+abundance matrix -- and records the rest as undecided.
+
+```bash
+python scripts/adjudicate_conflicts.py            # dry run, writes data/adjudication_audit.csv
+python scripts/adjudicate_conflicts.py --apply     # writes taxon_disease_adjudication
+```
+
+For each study holding both arms, the taxon's mean relative abundance in that
+study's cases is compared with its mean in that study's controls, giving one
+direction per study. Directions are then counted the same way association votes
+are. Two details decide whether the number means anything:
+
+- **Within-study, never pooled.** Pooling cases and controls across cohorts
+  agrees with the curated associations only 62% of the time, which is what
+  comparing across different protocols and sequencing runs produces.
+- **Absence is zero, not missing.** An undetected taxon has no row in
+  `sample_taxon_abundances`. Averaging only the rows that exist compares the
+  samples where a taxon was abundant against the samples where it was abundant.
+  The denominator is every sample in the arm profiled at that taxon's rank.
+
+**Only case/control contrasts vote.** 2,340 of the 16,889 associations compare
+one disease against another rather than against Health, and 745 of the
+replicated pairs mix the two kinds. `v_taxon_disease_evidence` votes across both
+as though they answered the same question, and it counts enriched and depleted
+studies with two separate `COUNT(DISTINCT study_id)` expressions, so a study
+holding both contrasts votes on both sides at once. *Faecalibacterium
+prausnitzii* in ulcerative colitis shows what that costs: four studies report it
+enriched in UC *versus Crohn disease*, two report it depleted *versus Health*,
+and the pooled view calls it enriched in UC -- reversing one of the most
+replicated findings in the field. The adjudicator rebuilds the association vote
+from vs-Health comparisons only, one vote per study, and stores the old pooled
+numbers beside it in `data/adjudication_audit.csv` for comparison.
+`assoc_contrast_scope` records which contrasts a pair actually had.
+
+Current outcome over the 2,285 pairs:
+
+| basis | pairs |
+| --- | --- |
+| `association_and_abundance_agree` | 1,620 |
+| `association_consensus` (abundance too thin to speak) | 186 |
+| `abundance_majority` (association tied, abundance decided) | 145 |
+| `association_consensus_abundance_disagrees` | 126 |
+| `abundance_only_no_case_control_association` | 22 |
+| `unresolved_*` | 186 |
+
+187 of the 387 dead-tied pairs gained a direction. A NULL `verdict` is a result,
+not a gap: *Prevotella* in ulcerative colitis stays 3-3 after abundance
+adjudication, which is real cohort heterogeneity and should not be handed to a
+model as a fact. Nothing in `taxon_disease_associations` is modified, so the
+verdict layer can be recomputed, audited, or ignored.
+
 ### MicrobiomeHD standardized re-analysis
 
 [Duvallet et al. 2017](https://doi.org/10.1038/s41467-017-01973-8) (PMID 29209090)

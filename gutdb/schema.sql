@@ -422,6 +422,51 @@ FROM (
 ) s;
 
 
+-- Where studies disagree on a taxon's direction, and what the abundance data
+-- says about it. Derived, not authoritative: taxon_disease_associations is left
+-- exactly as loaded, and this table records a verdict beside the evidence for it
+-- so it can be recomputed or ignored. Populated by scripts/adjudicate_conflicts.py.
+CREATE TABLE IF NOT EXISTS taxon_disease_adjudication (
+    taxon_id BIGINT UNSIGNED NOT NULL,
+    disease_id BIGINT UNSIGNED NOT NULL,
+    n_studies INT NOT NULL,
+    -- Which contrasts the curated associations for this pair actually use.
+    -- 2,340 of the 16,889 associations compare one disease against another
+    -- rather than against Health, and they answer a different question than a
+    -- case/control model asks, so only the vs-Health ones are allowed to vote.
+    -- 'mixed' means both kinds are present; 'disease_vs_disease' means no
+    -- case/control association exists and the verdict rests on abundance alone.
+    assoc_contrast_scope VARCHAR(20) NULL,
+    -- the vote taken from the curated associations, vs-Health contrasts only,
+    -- one vote per study
+    assoc_enriched INT NOT NULL,
+    assoc_depleted INT NOT NULL,
+    -- studies whose own vs-Health associations disagree with themselves; these
+    -- vote for neither side instead of voting twice
+    assoc_split_studies INT NOT NULL DEFAULT 0,
+    assoc_consensus VARCHAR(20) NULL,
+    assoc_agreement DECIMAL(4,3) NULL,
+    -- the vote taken from this database's own abundance measurements, one
+    -- direction per study that holds both arms, absence counted as zero
+    abundance_enriched INT NOT NULL,
+    abundance_depleted INT NOT NULL,
+    abundance_studies INT NOT NULL,
+    abundance_agreement DECIMAL(4,3) NULL,
+    -- NULL verdict means the evidence does not decide, which is a result rather
+    -- than a gap: some pairs are genuinely heterogeneous across cohorts.
+    verdict ENUM('enriched', 'depleted') NULL,
+    basis VARCHAR(60) NOT NULL,
+    PRIMARY KEY (taxon_id, disease_id),
+    KEY ix_adjudication_verdict (verdict),
+    KEY ix_adjudication_basis (basis),
+    KEY ix_adjudication_scope (assoc_contrast_scope),
+    CONSTRAINT fk_adjudication_taxon FOREIGN KEY (taxon_id) REFERENCES taxa(id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT fk_adjudication_disease FOREIGN KEY (disease_id) REFERENCES diseases(id)
+        ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
 -- Rank-safe access to the abundance matrix.
 --
 -- A sample can carry more than one taxonomic rank: genus for every sample, and
