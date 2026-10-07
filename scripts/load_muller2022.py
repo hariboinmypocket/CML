@@ -34,16 +34,20 @@ Four kinds of double-counting were found in the data and are all refused:
   Samples carry one row per (sample, taxon), so repeated runs of one subject stay
   distinguishable through subject_id rather than being merged.
 
-Two cohort arms are loaded WITHOUT a disease label, pending a judgement this
-script should not make:
+Two post-surgical arms get phenotypes of their own rather than the disease that
+led to the operation, because in both the lesion has been removed:
 
-  YACHIDA_CRC_2019 'HS' (30 samples) is a group code the metadata does not
-  decode and the paper is needed for.
+  ERAWIJANTARI 'Gastrectomy' (42 samples) -> Gastrectomy (D005743). The
+  collection's Supplementary Table 1 describes these participants as having "a
+  history of gastrectomy for gastric cancer and no signs of gastric cancer
+  recurrence", so Stomach Neoplasms would assert an active tumour that is absent.
 
-  ERAWIJANTARI 'Gastrectomy' (42 samples) is a post-resection state, not an
-  active tumour -- Surgery_Type confirms subtotal and total gastrectomies -- so
-  labelling it Stomach Neoplasms would assert something false. The 54 controls
-  load normally.
+  YACHIDA_CRC_2019 'HS' (30 samples) -> Colectomy (D003082). HS is "normal with
+  a history of colorectal surgery".
+
+Neither becomes Health: a resected gut is the confounder Erawijantari 2020 was
+written to document, and 72 post-surgical samples in the control pool would bias
+every contrast drawn against it.
 
 Dry run by default; pass --apply to write.
 """
@@ -109,7 +113,21 @@ PHENOTYPES: dict[str, dict[str, str | None]] = {
         "Stage_I_II": "Colorectal Neoplasms",
         "Stage_III_IV": "Colorectal Neoplasms",
         "MP": "Adenoma",
-        "HS": UNLABELLED,
+        # HS is "normal with a history of colorectal surgery": the ninth group
+        # in Yachida's cohort, held out of the paper's five-group progression
+        # analysis (which covered 576 of 616 participants). The data agrees --
+        # no Stage, no Tumor location, 30 subjects in no other arm -- and
+        # Supplementary Table 1 counts them among the 220 cases rather than the
+        # 127 controls.
+        #
+        # They must NOT become Health. A resected colon is precisely the
+        # confounder the companion paper from this group, Erawijantari 2020,
+        # exists to document, so folding 30 post-surgical guts into the control
+        # pool would quietly bias every contrast drawn against it. Colectomy
+        # (D003082) is the closest operative term and sits in the same E04.210
+        # branch as Gastrectomy; the source says "colorectal surgery" without
+        # naming the procedure, so rectal resections are included under it too.
+        "HS": "Colectomy",
     },
     "ERAWIJANTARI_GASTRIC_CANCER_2020": {
         "Healthy": "Health",
@@ -152,7 +170,8 @@ PHENOTYPES: dict[str, dict[str, str | None]] = {
 # Gastrectomy is a procedure rather than a disease, but `diseases` already
 # functions as a phenotype table -- 'Health' is not a disease either -- and a
 # post-resection gut is a phenotype a model can legitimately be asked about.
-NEW_DISEASES = {"Adenoma": "D000236", "Gastrectomy": "D005743"}
+NEW_DISEASES = {"Adenoma": "D000236", "Gastrectomy": "D005743",
+                "Colectomy": "D003082"}
 
 HMDB_RE = re.compile(r"^HMDB\d{5,7}$")
 KEGG_RE = re.compile(r"^C\d{5}$")
