@@ -351,12 +351,31 @@ Neoplasms would assert an active cancer that is not there. The paper is indexed
 under both MeSH terms and the exposure under study is the procedure. `diseases`
 already functions as a phenotype table -- `Health` is not a disease either.
 
-YACHIDA's `HS` arm (30 samples) still loads **without** a label. The metadata
-does not decode the code and it is not defined in the collection's wiki or the
-paper's abstract, but the data rules out the obvious guesses: HS samples carry no
-`Stage` and no `Tumor location`, exactly like `Healthy` and `MP` and unlike every
-cancer arm, so it is neither a carcinoma nor an adenoma group. Labelling it would
-be a guess; `disease_id` stays NULL until the group is confirmed.
+YACHIDA's `HS` arm (30 samples) still loads **without** a label, and the
+following were checked before giving up on it, so they need not be checked again:
+the cohort metadata, the collection's wiki (Home, Data overview), Supplementary
+Tables 1-4 of the collection paper, the
+[Yachida 2019 abstract](https://doi.org/10.1038/s41591-019-0458-7), and the same
+group's review ([Mizutani 2020](https://doi.org/10.1111/cas.14298)). None defines
+`HS`. What is established:
+
+- The curators count **HS among the cases**: Supplementary Table 1 gives YACHIDA
+  127 controls and 220 cases, and `Healthy` is exactly 127, while
+  27 + 69 + 54 + 40 + 30 = 220.
+- HS carries **no `Stage` and no `Tumor location`**, unlike every staged arm.
+- 30 samples from 30 distinct subjects, overlapping no other group. No subject
+  anywhere in this cohort has more than one sample.
+- The paper's progression analysis used 576 of 616 participants across five
+  groups (healthy 251, MP 67, S0 73, SI/II 111, SIII/IV 74), leaving ~40
+  unaccounted for -- consistent with HS being held out of it.
+- Mizutani 2020 notes that for 28 stage I-III patients, samples were taken
+  "before and after surgical tumor resection", which is numerically close. That
+  suggested HS might be the post-resection samples, but the prediction it makes
+  -- HS subjects also appearing in a staged arm -- is false here.
+
+A case group of unknown definition cannot be given a disease, so `disease_id`
+stays NULL. The 30 samples still contribute abundance and metabolite rows; they
+are simply excluded from case/control contrasts.
 
 One genus is refused outright: GTDB uses **`Copromorpha`** for a bacterium, and
 the only NCBI taxid of that name (1181387) is a moth, so the domain guard in
