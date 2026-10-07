@@ -252,7 +252,19 @@ Bioconductor the way curatedMetagenomicData's profiles do.
 ```bash
 python scripts/fetch_muller2022.py      # ~140MB into data/muller2022/ (gitignored)
 python scripts/map_gtdb_genera.py       # writes data/gtdb_ncbi_genus_map.csv
+python scripts/load_muller2022.py       # dry run
+python scripts/load_muller2022.py --apply
+python scripts/adjudicate_conflicts.py --apply   # new abundance evidence
 ```
+
+Loaded: **2,464 samples, 491,507 abundance rows, 514,359 metabolite levels over
+1,222 compounds**, across 13 cohorts. GMrepo's share of samples falls from 98.3%
+to **91.7%**, the deduplicated ML-ready cohort rises from 11,440 to **13,328**,
+and `samples.subject_id` goes from 479 populated rows to 2,943. Re-adjudicating
+afterwards gave **401 pairs more abundance evidence and flipped no direction at
+all** -- 13 cohorts processed by a different pipeline (kraken2/GTDB rather than
+GMrepo) reversed nothing, which is the strongest check on the adjudicator so
+far.
 
 Sized honestly against the goal of filtering down to ML-ready samples: 2,900
 samples is +8.5% on 34,229, but after excluding `iHMP_IBDMDB_2019` (already here
@@ -296,10 +308,51 @@ Four consequences for any loader, each measured rather than assumed:
   floor of 0.001% of total mass keeps 395 genera and **99.81% of mappable mass**
   for only **126 new rows**. Cohort prevalence adds nothing; mass is the
   discriminating filter.
-- **`Study.Group` needs a hand-written MeSH mapping per cohort**, and several are
-  undecodable from the data alone: `0`/`1` in SINHA_CRC_2016, `D`/`H`/`C` in
-  MARS_IBS_2020, `MP`/`HS` in YACHIDA_CRC_2019. `Adenoma` is absent from
-  `diseases` and is needed for KIM_ADENOMAS_2020.
+- **`Study.Group` needs a hand-written MeSH mapping per cohort**, in
+  `PHENOTYPES`. `1`=CRC in SINHA_CRC_2016; `D`/`H`/`C`=IBS-D/Healthy/IBS-C in
+  MARS_IBS_2020, both IBS arms collapsing to one MeSH disease because the schema
+  has no subtype field; `MP`=polyps in YACHIDA_CRC_2019. `Adenoma` (D000236) is
+  created on load.
+
+Four kinds of double-counting are refused, three of which only the data
+revealed:
+
+- **`iHMP_IBDMDB_2019` is skipped entirely** -- already here as PRJNA398089 from
+  GMrepo, so its 382 samples are not new.
+- **53 samples appear in both YACHIDA_CRC_2019 and ERAWIJANTARI_GASTRIC_CANCER_2020**,
+  flagged by the collection itself. All 53 are Healthy controls. They are dropped
+  from YACHIDA, which keeps 74 and a working contrast; dropping them from
+  ERAWIJANTARI would leave it with one. Their subject ids differ only by a
+  suffix (`10025` against `10025.Healthy`), **so a dedup keyed on `subject_id`
+  would not have caught them** -- the suffix is stripped on load.
+- **Explicit zeros are dropped, not stored.** The GTDB tables are dense and write
+  `0.0` for every absent genus, which would have added 233,965 rows meaning
+  "measured as absent" to a table where absence is the absence of a row. That
+  distinction is load bearing: the adjudicator counts a missing row as zero, so
+  stored zeros would leave means unchanged but make every prevalence count wrong.
+- **Metabolite columns sharing one identifier within a cohort are dropped and
+  reported** (221 columns). Two causes are indistinguishable from the data: the
+  same analyte measured twice (`HILIC_NEG_alanine` beside `HILIC_POS_alanine`),
+  and an upstream annotation error -- ERAWIJANTARI gives both `C00197_3PG` and
+  `C00661_G3P` the identifier HMDB0000807, though 3-phosphoglycerate and
+  glycerol-3-phosphate are different molecules. Averaging would invent a value
+  across two compounds; last-write-wins would discard a measurement silently.
+  The check runs on the resolved `metabolites.id`, not on the identifier string,
+  because a column carrying only an HMDB id and one carrying only a KEGG id can
+  resolve to the same row.
+
+Two arms load **without** a disease label, pending a judgement the loader should
+not make: YACHIDA's `HS` (30 samples), a code the metadata does not decode, and
+ERAWIJANTARI's `Gastrectomy` (42 samples), a post-resection state rather than an
+active tumour -- `Surgery_Type` confirms subtotal and total gastrectomies -- so
+calling it Stomach Neoplasms would assert something false. Its 54 controls load
+normally.
+
+One genus is refused outright: GTDB uses **`Copromorpha`** for a bacterium, and
+the only NCBI taxid of that name (1181387) is a moth, so the domain guard in
+`ensure_genera` rejects it. It is dropped *before* renormalizing -- filtering
+afterwards would leave its 0.05% of mass in the denominator with no row to carry
+it, and every affected sample would fail the per-rank sum-to-1 invariant.
 
 **Metabolite levels are not comparable across studies** -- instruments, targeted
 versus untargeted designs and units all differ, and nothing sums to 1, so
