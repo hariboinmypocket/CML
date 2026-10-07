@@ -61,7 +61,6 @@ from gutdb.ncbi import TaxonomyClient
 from gutdb.transform import normalize_phylum, parse_scientific_name, same_epithet, taxon_key
 
 DRY_RUN = "--apply" not in sys.argv
-AUDIT = Path("data/db_hygiene_audit.csv")
 EMAIL = os.environ.get("NCBI_EMAIL") or next(
     (a.split("=", 1)[1] for a in sys.argv if a.startswith("--email=")), None
 )
@@ -442,13 +441,16 @@ def main() -> int:
         for key, value in stats.items():
             print(f"    {key:28} {value}")
 
+    # The per-change detail is printed above and nowhere else. It used to be
+    # written to data/db_hygiene_audit.csv as well, which was removed: the file
+    # recorded the sample-level fixes only in aggregate ("52 samples", "41
+    # samples") and never which samples, so it could not be used to reverse or
+    # verify anything the commit message did not already state. Worse, it was
+    # rewritten on every run, so a `--only=2` pass clobbered the record of the
+    # other four steps and left a file that read as though those had never
+    # happened.
     if audit:
-        AUDIT.parent.mkdir(parents=True, exist_ok=True)
-        with AUDIT.open("w", newline="", encoding="utf-8") as fh:
-            writer = csv.DictWriter(fh, fieldnames=list(audit[0].keys()))
-            writer.writeheader()
-            writer.writerows(audit)
-        print(f"\naudit written to {AUDIT} ({len(audit)} entries)")
+        print(f"\n{len(audit)} changes, detailed above")
 
     cur.close()
     conn.close()

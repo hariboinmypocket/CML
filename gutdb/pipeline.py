@@ -1236,6 +1236,32 @@ def sync_gmrepo_phenotypes(connection: MySQLConnection, client: GMrepoClient) ->
         raise
 
 
+def _plausible_bmi(value: float | None) -> float | None:
+    """Reject a BMI that cannot be a measurement.
+
+    GMrepo records absent BMI as 0 for some cohorts -- 52 rows of PRJEB6172,
+    whose real BMIs run 16.3 to 31.8. Loading 0 as a value makes a missing
+    measurement look like an impossible one, and the sentinel came back every
+    time that export was reloaded, so it is rejected here rather than cleaned up
+    afterwards.
+    """
+    if value is None or value <= 0 or value > 200:
+        return None
+    return value
+
+
+def _plausible_age(value: float | None) -> float | None:
+    """Reject an age that cannot be a measurement.
+
+    Zero is kept: it is a real birth-day sample in PRJNA716780, which holds 47
+    samples under two years old. Negative and absurd values are not -- GMrepo
+    serves -88 for two runs of PRJEB42155 and 119 for one of PRJNA521587.
+    """
+    if value is None or value < 0 or value > 110:
+        return None
+    return value
+
+
 def load_samples(connection: MySQLConnection, path: str | Path) -> LoadStats:
     """Load normalized clinical/run metadata exported from GMrepo or assembled locally."""
     stats = LoadStats()
@@ -1279,8 +1305,8 @@ def load_samples(connection: MySQLConnection, path: str | Path) -> LoadStats:
                     first_value(row, "sample_id", "gmrepo_sample_id") or None,
                     run_accession,
                     first_value(row, "sex", "gender") or None,
-                    nullable_float(first_value(row, "age_years", "age")),
-                    nullable_float(first_value(row, "bmi")),
+                    _plausible_age(nullable_float(first_value(row, "age_years", "age"))),
+                    _plausible_bmi(nullable_float(first_value(row, "bmi"))),
                     first_value(row, "country", "population") or None,
                     first_value(row, "qc_status", "QCStatus", "quality") or None,
                     first_value(row, "body_site", "body site", "sample_type") or None,
