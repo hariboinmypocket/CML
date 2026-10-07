@@ -543,6 +543,53 @@ def upsert_study(connection: MySQLConnection, row: Mapping[str, Any]) -> int:
     return study_id
 
 
+def _stable_method(
+    connection: MySQLConnection,
+    project: str,
+    phenotype_a: str,
+    phenotype_b: str,
+    rank: str,
+    declared: str,
+) -> str:
+    """Resolve the method for a comparison without inventing a new identity.
+
+    `method` is part of comparison_key, and it has to be, because one study can
+    legitimately hold two analyses of the same arms: MicrobiomeHD's standardized
+    re-analysis of PMID 25432777 sits beside that paper's own reported result,
+    and collapsing them would destroy the comparison between re-analysis and
+    publication that the two were loaded to enable.
+
+    What it must not do is change value for the same data. It used to fall back
+    to `effect_type` when a file declared no method, so when the PRJNA705217
+    marker export lost its method column it resolved to "LDA" where the first
+    load had recorded "LEfSe" -- a second comparison key for one comparison, and
+    all 34 of its IBS associations duplicated beneath it.
+
+    A file that declares a method is taken at its word. One that does not reuses
+    the method already recorded for this study, arms and rank, so a reload
+    attaches to the comparison it attached to before.
+    """
+    declared = clean_str(declared)
+    if declared:
+        return declared
+    cursor = connection.cursor()
+    cursor.execute(
+        """SELECT c.method FROM phenotype_comparisons c
+           JOIN studies s ON s.id = c.study_id
+           JOIN diseases da ON da.id = c.phenotype_a_id
+           JOIN diseases db ON db.id = c.phenotype_b_id
+           WHERE s.project_accession = %s AND da.name = %s AND db.name = %s
+             AND c.taxonomic_level = %s AND c.method IS NOT NULL
+           ORDER BY c.id LIMIT 1""",
+        (project, phenotype_a, phenotype_b, rank),
+    )
+    existing = cursor.fetchone()
+    cursor.close()
+    if existing and clean_str(existing[0]):
+        return clean_str(existing[0])
+    return "LEfSe"
+
+
 def _upsert_comparison(
     connection: MySQLConnection,
     study_id: int,
@@ -635,7 +682,10 @@ def load_associations(
             rank = row_rank
             if rank not in {"species", "genus", "mixed"}:
                 rank = "species"
-            method = first_value(row, "method", "effect_type") or "LEfSe"
+            method = _stable_method(
+                connection, project_id, phenotype_a, phenotype_b, rank,
+                first_value(row, "method"),
+            )
             comparison_id = _upsert_comparison(
                 connection, study_id, project_id, a_id, phenotype_a, b_id, phenotype_b,
                 positive_id, negative_id, method, rank,
