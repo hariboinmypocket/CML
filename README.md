@@ -341,12 +341,22 @@ revealed:
   because a column carrying only an HMDB id and one carrying only a KEGG id can
   resolve to the same row.
 
-Two arms load **without** a disease label, pending a judgement the loader should
-not make: YACHIDA's `HS` (30 samples), a code the metadata does not decode, and
-ERAWIJANTARI's `Gastrectomy` (42 samples), a post-resection state rather than an
-active tumour -- `Surgery_Type` confirms subtotal and total gastrectomies -- so
-calling it Stomach Neoplasms would assert something false. Its 54 controls load
-normally.
+ERAWIJANTARI's `Gastrectomy` arm (42 samples) gets its own phenotype,
+`Gastrectomy` (MeSH D005743), rather than Stomach Neoplasms.
+[Erawijantari et al. 2020](https://doi.org/10.1136/gutjnl-2019-319188) studied
+"participants with a history of gastrectomy for gastric cancer" and asked what
+the *surgery* did to the microbiome; `Surgery_Type` confirms subtotal and total
+gastrectomies, so the tumour is resected and calling these samples Stomach
+Neoplasms would assert an active cancer that is not there. The paper is indexed
+under both MeSH terms and the exposure under study is the procedure. `diseases`
+already functions as a phenotype table -- `Health` is not a disease either.
+
+YACHIDA's `HS` arm (30 samples) still loads **without** a label. The metadata
+does not decode the code and it is not defined in the collection's wiki or the
+paper's abstract, but the data rules out the obvious guesses: HS samples carry no
+`Stage` and no `Tumor location`, exactly like `Healthy` and `MP` and unlike every
+cancer arm, so it is neither a carcinoma nor an adenoma group. Labelling it would
+be a guess; `disease_id` stays NULL until the group is confirmed.
 
 One genus is refused outright: GTDB uses **`Copromorpha`** for a bacterium, and
 the only NCBI taxid of that name (1181387) is a moth, so the domain guard in

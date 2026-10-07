@@ -113,7 +113,14 @@ PHENOTYPES: dict[str, dict[str, str | None]] = {
     },
     "ERAWIJANTARI_GASTRIC_CANCER_2020": {
         "Healthy": "Health",
-        "Gastrectomy": UNLABELLED,
+        # Erawijantari 2020 (doi:10.1136/gutjnl-2019-319188) studied "participants
+        # with a history of gastrectomy for gastric cancer" against controls, and
+        # asked what the SURGERY did to the microbiome. Surgery_Type confirms
+        # subtotal and total gastrectomies, so the tumour has been resected and
+        # labelling these samples Stomach Neoplasms would assert an active cancer
+        # that is not there. The paper is indexed under both Gastrectomy and
+        # Stomach Neoplasms; the exposure under study is the former.
+        "Gastrectomy": "Gastrectomy",
     },
     "FRANZOSA_IBD_2019": {
         "CD": "Crohn Disease", "UC": "Colitis, Ulcerative", "Control": "Health"},
@@ -142,7 +149,10 @@ PHENOTYPES: dict[str, dict[str, str | None]] = {
 }
 
 # MeSH ids for rows this loader may have to create.
-NEW_DISEASES = {"Adenoma": "D000236"}
+# Gastrectomy is a procedure rather than a disease, but `diseases` already
+# functions as a phenotype table -- 'Health' is not a disease either -- and a
+# post-resection gut is a phenotype a model can legitimately be asked about.
+NEW_DISEASES = {"Adenoma": "D000236", "Gastrectomy": "D005743"}
 
 HMDB_RE = re.compile(r"^HMDB\d{5,7}$")
 KEGG_RE = re.compile(r"^C\d{5}$")
