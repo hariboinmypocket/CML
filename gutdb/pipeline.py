@@ -1983,10 +1983,21 @@ def enrich_cmd_demographics(
                         stats.updated += 1
 
                     if audit_csv:
+                        # Record the note only when it says something the row does
+                        # not already show. "unit=year" and "empty" restate
+                        # cmd_age_years being filled or blank, and filled every row
+                        # of a year-only cohort with noise. A rejection
+                        # ("out_of_range:140.0", "unknown_unit:decades") or a real
+                        # unit conversion ("unit=month") is not recoverable from the
+                        # value, so those are kept.
+                        informative_note = (
+                            "" if age_note in ("empty", "unit=year") else age_note
+                        )
                         audit_rows.append({
                             "run_accession": accession, "cmd_study": study,
                             "cmd_sex": sex or "", "cmd_age_years": age if age is not None else "",
-                            "age_note": age_note, "cmd_bmi": bmi if bmi is not None else "",
+                            "age_note": informative_note,
+                            "cmd_bmi": bmi if bmi is not None else "",
                             "filled_sex": set_sex or "", "filled_age": set_age or "",
                             "filled_bmi": set_bmi or "",
                         })
