@@ -388,12 +388,57 @@ YACHIDA holds 74 Health, 150 Colorectal Neoplasms, 40 Adenoma and 30 Colectomy;
 ERAWIJANTARI holds 54 Health and 42 Gastrectomy. No sample in the database now
 lacks a phenotype.
 
-**Not loaded, but present in the metadata:** YACHIDA carries `Brinkman Index`
-(smoking) and `Alcohol` per subject, and the paper reports that Brinkman's index
-differs systematically across the groups -- advanced stages smoke less than early
-stages, and HS lower still. That is a confounder correlated with the label, and
-`samples` has no column for it, so it is currently discarded rather than
-modelled.
+### Sparse per-sample metadata
+
+Cohorts report traits that matter for confound control but that almost nothing
+else reports: smoking, alcohol, blood pressure, comorbidities, surgery type. In
+this collection alone that is **43,406 values over 362 distinct column names**,
+and ERAWIJANTARI contributes 41 clinical columns by itself. Widening `samples`
+was the wrong shape -- smoking would be populated for 1,011 of 36,693 rows, under
+3%, so the honest version of that plan is 362 columns at 95-99% NULL.
+
+`sample_attributes` holds them sparsely instead, so **absence is the absence of a
+row** exactly as in `sample_taxon_abundances`. There are no empty cells by
+construction, and the table is ~43k rows against that one's 3.07M. `value` keeps
+the source's string; `value_numeric` is populated for the 9,169 that parse as
+numbers, so a numeric trait can be aggregated without casting.
+
+**Values are not comparable across studies, and often not commensurable.**
+Smoking arrives four ways:
+
+| attribute | cohort | n | range |
+| --- | --- | --- | --- |
+| `Brinkman Index` | YACHIDA_CRC_2019 | 294 | `0` .. `980` (a pack-year product) |
+| `Chem ID / Smoking history` | KIM_ADENOMAS_2020 | 240 | `Missing` .. `Smoke` |
+| `Tobacco_Use` | POYET_BIO_ML_2019 | 163 | `1-2 per week` .. `Yes` |
+| `SmokingStatus` | ERAWIJANTARI_GC_2020 | 96 | `NotSmoking` .. `Unknown` |
+
+Nothing is harmonized on the way in, because harmonizing means discarding the
+original scale, and confound control belongs inside a study anyway -- which is
+where `adjudicate_conflicts.py` already does its comparisons. Filter by study
+before trusting an attribute name to mean one thing. Column names are kept
+verbatim including R `make.names` artifacts (`Weight..kg.`, and `Gout...22`
+beside `Gout...46`, two different gout columns the source named identically), so
+a value traces back to the file it came from. 21 values (0.05%) are in-band
+missing markers -- `Unknown`, `?`, `Missing` -- kept because an explicit unknown
+is a recorded answer rather than a question never asked, so a consumer should
+filter them.
+
+Two things this bought immediately. The paper reports Brinkman's index differing
+systematically by group, and that reproduces straight out of the table -- HS
+lowest, as described. More usefully, **the MeSH labels collapse YACHIDA's
+`Stage_0`/`Stage_I_II`/`Stage_III_IV` into one `Colorectal Neoplasms` arm, but
+`Stage` survived as an attribute**, so a stage-resolved analysis is still
+available without reloading:
+
+```sql
+SELECT stg.value AS stage, COUNT(*), ROUND(AVG(brk.value_numeric), 1)
+FROM sample_attributes stg
+JOIN sample_attributes brk ON brk.sample_id = stg.sample_id
+                          AND brk.attribute = 'Brinkman Index'
+WHERE stg.attribute = 'Stage'
+GROUP BY stg.value;
+```
 
 One genus is refused outright: GTDB uses **`Copromorpha`** for a bacterium, and
 the only NCBI taxid of that name (1181387) is a moth, so the domain guard in

@@ -49,6 +49,13 @@ Neither becomes Health: a resected gut is the confounder Erawijantari 2020 was
 written to document, and 72 post-surgical samples in the control pool would bias
 every contrast drawn against it.
 
+Per-sample metadata that has no column in `samples` -- smoking, alcohol, blood
+pressure, comorbidities, surgery type -- goes to sample_attributes as sparse
+rows rather than widening the table. 43,700 values are spread over 366 distinct
+column names here, and smoking alone would be populated for under 3% of the
+database's samples, so 366 columns at 95-99% NULL is the alternative. Names and
+scales are kept verbatim and unharmonized: see that table's comment.
+
 Dry run by default; pass --apply to write.
 """
 from __future__ import annotations
@@ -196,6 +203,20 @@ PHENOTYPES: dict[str, dict[str, str | None]] = {
 NEW_DISEASES = {"Adenoma": "D000236", "Gastrectomy": "D005743",
                 "Colectomy": "D003082"}
 
+# Metadata columns that already have a home in `samples` or `studies`, plus the
+# collection's own bookkeeping flags. Everything else becomes a sample attribute.
+ATTR_SKIP = {
+    "Dataset", "Sample", "Subject", "Study.Group",   # -> study_id, run_accession, subject_id, disease_id
+    "Age", "Age.Units", "Gender", "BMI",             # -> age_years, sex, bmi
+    "DOI", "Publication.Name",                       # study-level, not per sample
+    "Run",                                           # -> run_accession
+}
+# Values that mean "no answer". 'Unknown' is deliberately NOT here: an explicit
+# unknown is a recorded answer and differs from a question never asked, which is
+# the same reason age_note keeps 'not_collected'.
+ATTR_EMPTY = {"", "NA", "na", "NaN", "None", "-", "nan"}
+ATTR_VALUE_MAX = 512
+
 HMDB_RE = re.compile(r"^HMDB\d{5,7}$")
 KEGG_RE = re.compile(r"^C\d{5}$")
 RUN_ACC_RE = re.compile(r"^(SRR|ERR|DRR)\w+$")
@@ -274,6 +295,38 @@ def subject_id(study: str, row: dict) -> str:
     if study == "ERAWIJANTARI_GASTRIC_CANCER_2020" and "." in value:
         return value.split(".", 1)[0]
     return value
+
+
+def attribute_rows(sample_id: int, row: dict,
+                   truncated: list[tuple[str, int]]) -> list[tuple]:
+    """Sparse (attribute, value) pairs for one sample.
+
+    Column names are kept exactly as the source writes them, R mangling and all,
+    so a value can always be traced back to the file and column it came from.
+    Nothing is harmonized across cohorts: four cohorts report smoking under four
+    names on four scales, and collapsing them would throw away the scale.
+    """
+    out = []
+    for column, raw in row.items():
+        if column in ATTR_SKIP or column.startswith("Shared.w"):
+            continue
+        value = clean(raw)
+        if value in ATTR_EMPTY:
+            continue
+        if len(value) > ATTR_VALUE_MAX:
+            truncated.append((column, len(value)))
+            value = value[:ATTR_VALUE_MAX]
+        numeric = None
+        try:
+            candidate = float(value)
+        except ValueError:
+            pass
+        else:
+            # Reject inf/nan, which float() accepts and MySQL will not store.
+            if candidate == candidate and abs(candidate) != float("inf"):
+                numeric = candidate
+        out.append((sample_id, column[:80], value, numeric))
+    return out
 
 
 def ensure_diseases(cur) -> dict[str, int]:
@@ -534,7 +587,9 @@ def main() -> int:
 
     met_cache: dict[str, int] = {}
     totals = defaultdict(int)
-    print(f"\n{'cohort':34} {'samples':>8} {'abund':>9} {'mtb lvls':>9} {'kept%':>7}  platform")
+    truncated: list[tuple[str, int]] = []
+    print(f"\n{'cohort':34} {'samples':>8} {'abund':>9} {'mtb lvls':>9} {'attrs':>8} "
+          f"{'kept%':>7}  platform")
     for study_dir in cohorts:
         study = study_dir.name
         table = PHENOTYPES.get(study)
@@ -584,7 +639,7 @@ def main() -> int:
                     for col in cols:
                         met_ids.pop(col, None)
 
-        n_samples = n_abund = n_levels = 0
+        n_samples = n_abund = n_levels = n_attr = 0
         skipped_group = dropped_shared = unlabelled = 0
         for row in meta:
             sample = clean(row.get("Sample"))
@@ -628,6 +683,16 @@ def main() -> int:
                        ON DUPLICATE KEY UPDATE relative_abundance = VALUES(relative_abundance)""",
                     rows_ab)
                 n_abund += len(rows_ab)
+                rows_attr = attribute_rows(sample_id, row, truncated)
+                if rows_attr:
+                    cur.executemany(
+                        """INSERT INTO sample_attributes
+                             (sample_id, attribute, value, value_numeric)
+                           VALUES (%s,%s,%s,%s)
+                           ON DUPLICATE KEY UPDATE value = VALUES(value),
+                               value_numeric = VALUES(value_numeric)""",
+                        rows_attr)
+                    n_attr += len(rows_attr)
                 if sample in levels and met_ids:
                     rows_mt = [(sample_id, met_ids[c], v, compounds[c]["high_confidence"])
                                for c, v in levels[sample].items() if met_ids.get(c, 0) > 0]
@@ -641,11 +706,13 @@ def main() -> int:
             else:
                 n_abund += sum(1 for g in profile if g in genera)
                 n_levels += len(levels.get(sample, {}))   # upper bound: see note
+                n_attr += len(attribute_rows(0, row, truncated))
             n_samples += 1
 
         totals["samples"] += n_samples
         totals["abundances"] += n_abund
         totals["levels"] += n_levels
+        totals["attributes"] += n_attr
         totals["unlabelled"] += unlabelled
         totals["dropped_shared"] += dropped_shared
         totals["skipped_group"] += skipped_group
@@ -660,14 +727,19 @@ def main() -> int:
             dropped_cols = sum(len(v) for v in collided.values())
             totals["collided_metabolites"] += dropped_cols
             notes.append(f"-{dropped_cols} mtb id clashes")
-        print(f"{study:34} {n_samples:>8} {n_abund:>9} {n_levels:>9} "
+        print(f"{study:34} {n_samples:>8} {n_abund:>9} {n_levels:>9} {n_attr:>8} "
               f"{100*kept_share:>6.1f}%  {platform}"
               + (f"  ({', '.join(notes)})" if notes else ""))
 
     if not DRY_RUN:
         conn.commit()
     print(f"\nsamples {totals['samples']:,}   abundance rows {totals['abundances']:,}   "
-          f"metabolite levels {totals['levels']:,}")
+          f"metabolite levels {totals['levels']:,}   "
+          f"sample attributes {totals['attributes']:,}")
+    if truncated:
+        worst = sorted(set(truncated), key=lambda x: -x[1])[:3]
+        print(f"values truncated to {ATTR_VALUE_MAX} chars: {len(truncated)}  "
+              f"longest: {worst}")
     print(f"unlabelled (disease_id NULL): {totals['unlabelled']}   "
           f"dropped as shared: {totals['dropped_shared']}   "
           f"skipped by group: {totals['skipped_group']}")

@@ -198,6 +198,50 @@ CREATE TABLE IF NOT EXISTS sample_taxon_abundances (
         ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+-- Sparse per-sample metadata that does not deserve a column.
+--
+-- Cohorts carry traits that matter for confound control but that almost no
+-- other cohort reports: smoking, alcohol, blood pressure, comorbidities,
+-- surgery type. Across the Muller 2022 collection alone that is 43,700
+-- populated values spread over 366 distinct column names, and ERAWIJANTARI
+-- contributes 41 clinical columns by itself. Widening `samples` to hold them
+-- would mean 366 columns at 95-99% NULL each -- smoking alone would be
+-- populated for 1,011 of 36,693 samples, under 3%.
+--
+-- So absence is the absence of a row, exactly as in sample_taxon_abundances.
+-- There are no empty cells here by construction, and the whole table is ~44k
+-- rows against that one's 3.07M.
+--
+-- VALUES ARE NOT COMPARABLE ACROSS STUDIES, and often not even commensurable.
+-- Smoking arrives as `Brinkman Index` (a pack-year product), `SmokingStatus`
+-- (categorical), `Tobacco_Use` and `smoking status` -- four names, four scales,
+-- one concept. Nothing is harmonized on the way in, because harmonizing would
+-- mean discarding the original scale, and the use case is per-cohort anyway:
+-- confound control belongs inside a study, which is also where
+-- scripts/adjudicate_conflicts.py does its comparisons. Filter by study before
+-- trusting an attribute name to mean one thing.
+CREATE TABLE IF NOT EXISTS sample_attributes (
+    sample_id BIGINT UNSIGNED NOT NULL,
+    -- The source's own column name, kept verbatim rather than cleaned. Some are
+    -- R make.names artifacts (`Weight..kg.`, `Gout...22` and `Gout...46`, which
+    -- are two different gout columns the source named identically); renaming
+    -- them would break the link back to the file a value came from.
+    attribute VARCHAR(80) NOT NULL,
+    -- 512 rather than 255: the longest value in the Muller collection is a
+    -- 289-character clinical course note. Loaders report truncation instead of
+    -- silently cutting.
+    value VARCHAR(512) NOT NULL,
+    -- Populated only when `value` parses as a number, which is true of 21% of
+    -- them. Lets a numeric trait be filtered and aggregated without casting
+    -- strings, while categorical answers stay in `value` untouched.
+    value_numeric DOUBLE NULL,
+    PRIMARY KEY (sample_id, attribute),
+    KEY ix_sample_attribute (attribute),
+    KEY ix_sample_attribute_numeric (attribute, value_numeric),
+    CONSTRAINT fk_sample_attribute_sample FOREIGN KEY (sample_id) REFERENCES samples(id)
+        ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 -- The metabolome axis.
 --
 -- Added for the Muller et al. 2022 collection (doi:10.1038/s41522-022-00345-5),
