@@ -892,8 +892,27 @@ def _parse_gmrepo_phenotypes(value: Any) -> list[dict[str, Any]]:
 
 
 def _choose_sample_phenotype(value: Any) -> tuple[str, str]:
+    """Pick the phenotype a run belongs to, or nothing when GMrepo is ambiguous.
+
+    Preferring the non-Health term is right while GMrepo lists the one phenotype
+    that applies to a run. It now lists every phenotype associated with the run,
+    so a control in a low-birth-weight cohort arrives as
+    [Health, Infant Low Birth Weight] and this would call it a case. A re-sync on
+    that basis relabelled roughly 14,000 controls as cases, which silently
+    destroys the case/control structure every comparison in this database rests
+    on -- and it fails open, because a wrong label looks exactly like a right one.
+
+    There is no field in the runs endpoint that says which arm a run is in, so
+    an ambiguous list yields nothing rather than a guess. load_samples upserts
+    disease_id through COALESCE, so an existing label survives and a genuinely
+    new sample is left unlabelled instead of mislabelled.
+    """
     phenotypes = _parse_gmrepo_phenotypes(value)
     if not phenotypes:
+        return "", ""
+    terms = [clean_str(row.get("term")) for row in phenotypes]
+    has_health = any(term.casefold() == "health" for term in terms)
+    if len(phenotypes) > 1 and has_health:
         return "", ""
     chosen = next(
         (

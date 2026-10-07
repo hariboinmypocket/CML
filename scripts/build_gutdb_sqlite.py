@@ -43,7 +43,16 @@ SAMPLES_FILE = os.path.join(PROJECT, "data/gmrepo_project_samples.csv")
 # constant columns; see Loader.comparison.
 CONTROL_PHENOTYPE = "Health"
 CONTROL_MESH_ID = "D006262"
-ABUNDANCE_FILE = os.path.join(PROJECT, "data/gmrepo_species_abundances.csv")
+# Both abundance layers. The build loaded only the species file, which is why
+# v_abundance_genus was empty and why 21,581 of its samples had no features at
+# all: a 16S study resolves to genus and never appears in the species export.
+# The two layers are independent -- each sums to 1 within its own rank, and a
+# genus row and a species row for one sample have different taxon_ids, so they
+# coexist under the (sample_id, taxon_id) primary key.
+ABUNDANCE_FILES = [
+    os.path.join(PROJECT, "data/gmrepo_species_abundances.csv"),
+    os.path.join(PROJECT, "data/gmrepo_all_abundances.csv"),
+]
 
 
 ENERGY_MODE_SYNONYMS = {"respirer": "respirator"}
@@ -178,6 +187,17 @@ class Loader:
 
     def taxon_from_name(self, scientific_name, rank="", ncbi_tax_id="",
                         source_database="GMrepo") -> int | None:
+        # A source that declares rank='genus' is describing a genus even when
+        # the name reads as a binomial: GMrepo's genus export lists
+        # "[Bacteroides] pectinophilus" at genus rank. Splitting that into
+        # (Bacteroides, pectinophilus) matched the existing SPECIES taxon, so the
+        # row joined the species layer -- taking its abundance out of the genus
+        # layer, which then summed to 0.884 instead of 1.0 while the species
+        # layer for that sample summed to 0.116. 528 samples were affected.
+        if T.clean_str(rank).casefold() == "genus":
+            return self.taxon(scientific_name, "", rank="genus",
+                              ncbi_tax_id=ncbi_tax_id,
+                              source_database=source_database)
         genus, species = T.parse_scientific_name(scientific_name)
         if not genus:
             return None
@@ -431,11 +451,11 @@ class Loader:
         self.finish_run(run, read, ins, 0, skip)
         return read, ins, skip
 
-    def load_abundances(self) -> tuple[int, int, int]:
-        run = self.start_run("gmrepo_species_abundances", ABUNDANCE_FILE)
+    def load_abundances(self, path: str) -> tuple[int, int, int]:
+        run = self.start_run(os.path.basename(path), path)
         read = ins = skip = 0
         batch: list[tuple] = []
-        for row in read_rows(ABUNDANCE_FILE):
+        for row in read_rows(path):
             read += 1
             sample_id = self.sample_ids.get(T.clean_str(row.get("run_id")))
             abundance = T.nullable_float(row.get("relative_abundance"))
@@ -462,9 +482,15 @@ class Loader:
         if not batch:
             return 0
         before = self.con.total_changes
+        # Two source rows can map to one taxon once names are normalized, and
+        # INSERT OR IGNORE silently dropped the second -- losing its share and
+        # leaving the sample's rank group short of 1.0. The MySQL loader sums
+        # them; this now does too.
         self.con.executemany(
-            "INSERT OR IGNORE INTO sample_taxon_abundances (sample_id, taxon_id,"
-            " relative_abundance) VALUES (?, ?, ?)",
+            "INSERT INTO sample_taxon_abundances (sample_id, taxon_id,"
+            " relative_abundance) VALUES (?, ?, ?)"
+            " ON CONFLICT(sample_id, taxon_id) DO UPDATE SET"
+            " relative_abundance = relative_abundance + excluded.relative_abundance",
             batch,
         )
         self.con.commit()
@@ -491,8 +517,28 @@ def main() -> None:
     read, ins, skip = loader.load_samples()
     print(f"samples: read={read} inserted={ins} skipped={skip}")
 
-    read, ins, skip = loader.load_abundances()
-    print(f"abundances: read={read} inserted={ins} skipped={skip}")
+    for abundance_file in ABUNDANCE_FILES:
+        if not os.path.exists(abundance_file):
+            print(f"{os.path.basename(abundance_file)}: absent, skipped")
+            continue
+        read, ins, skip = loader.load_abundances(abundance_file)
+        print(f"{os.path.basename(abundance_file)}: read={read} inserted={ins} skipped={skip}")
+
+    # Drop samples that carry no abundance at all. A sample with metadata and no
+    # profile contributes nothing to any query here -- v_ml_ready_samples scores
+    # it has_features = 0 and every analysis excludes it -- so it is weight
+    # without content in a file meant to be queried standalone.
+    #
+    # Deliberately keyed on features, not on demographics: 18,163 samples lack
+    # sex or age yet hold full profiles, and filtering on demographics instead
+    # would discard 62% of the abundance matrix and leave 58 of 136 diseases
+    # with no samples. MySQL keeps every row either way; this prunes only the
+    # mirror, and `gmrepo_project_samples.csv` stays a complete loader input.
+    pruned = con.execute(
+        """DELETE FROM samples
+           WHERE id NOT IN (SELECT DISTINCT sample_id FROM sample_taxon_abundances)"""
+    ).rowcount
+    print(f"samples pruned for having no abundance: {pruned}")
 
     con.commit()
     con.execute("ANALYZE")
