@@ -53,3 +53,8 @@ tmp/
 # MicrobiomeHD upstream files (Duvallet et al. 2017) - fetched, not ours to
 # redistribute; scripts/load_microbiomehd.py prints the curl commands
 data/microbiomehd/
+
+# Muller et al. 2022 curated microbiome-metabolome collection
+# (doi:10.1038/s41522-022-00345-5) - fetched by scripts/fetch_muller2022.py,
+# upstream data rather than ours to redistribute.
+data/muller2022/
