@@ -107,18 +107,41 @@ PHENOTYPES: dict[str, dict[str, str | None]] = {
         "C": "Irritable Bowel Syndrome",
         "H": "Health",
     },
+    # Yachida 2019 classified 616 subjects into NINE groups by colonoscopic and
+    # histological findings, which the collection collapses to six labels:
+    #
+    #   (1) normal, no remarkable findings          -> 'Healthy'
+    #   (2) a few polyps, up to two small (<5mm)    -> 'Healthy'
+    #   (3) MP: multiple polypoid adenomas, low-grade dysplasia, >=3 and mostly
+    #       >=5, conventional type only (tubular, tubulovillous, villous) and
+    #       explicitly NOT serrated adenomas       -> 'MP'
+    #   (4) intramucosal carcinoma: polypoid adenoma(s) with HIGH-grade
+    #       dysplasia, stage 0/pTis CRC            -> 'Stage_0'
+    #   (5)-(6) stage I, stage II CRC              -> 'Stage_I_II'
+    #   (7)-(8) stage III, stage IV CRC (UICC 8th) -> 'Stage_III_IV'
+    #   (9) normal with a history of colorectal surgery -> 'HS'
+    #
+    # CAVEAT ON THE CONTROLS. The paper defines groups (1) AND (2) as the healthy
+    # controls, so 'Healthy' here includes subjects carrying up to two polyps
+    # under 5mm. Nothing in the collection's metadata separates them -- Stage and
+    # Tumor location are '-' for the whole arm -- so this cannot be undone at
+    # load time, and it is a property of every contrast drawn against these
+    # controls. It matters beyond this cohort: 53 of the 127 are also the entire
+    # control arm of ERAWIJANTARI_GASTRIC_CANCER_2020.
+    #
+    # Stage_0 is a carcinoma in situ, not an adenoma, so it joins the neoplasm
+    # arm; MP is low-grade-dysplasia adenoma and does not.
     "YACHIDA_CRC_2019": {
         "Healthy": "Health",
         "Stage_0": "Colorectal Neoplasms",
         "Stage_I_II": "Colorectal Neoplasms",
         "Stage_III_IV": "Colorectal Neoplasms",
         "MP": "Adenoma",
-        # HS is "normal with a history of colorectal surgery": the ninth group
-        # in Yachida's cohort, held out of the paper's five-group progression
-        # analysis (which covered 576 of 616 participants). The data agrees --
-        # no Stage, no Tumor location, 30 subjects in no other arm -- and
-        # Supplementary Table 1 counts them among the 220 cases rather than the
-        # 127 controls.
+        # HS is group (9), "normal with a history of colorectal surgery". It is
+        # NOT the 28 stage I-III patients the paper sampled before and after
+        # surgery: those are a separate subset, and no subject in this
+        # collection has more than one sample. Supplementary Table 1 counts HS
+        # among the 220 cases rather than the 127 controls.
         #
         # They must NOT become Health. A resected colon is precisely the
         # confounder the companion paper from this group, Erawijantari 2020,

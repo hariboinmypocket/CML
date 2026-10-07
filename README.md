@@ -351,18 +351,34 @@ Neoplasms would assert an active cancer that is not there. The paper is indexed
 under both MeSH terms and the exposure under study is the procedure. `diseases`
 already functions as a phenotype table -- `Health` is not a disease either.
 
-YACHIDA's `HS` arm (30 samples) is **normal with a history of colorectal
-surgery** -- the ninth group in Yachida's cohort, held out of the paper's
-five-group progression analysis, which covered 576 of 616 participants. It maps
-to `Colectomy` (MeSH D003082), the closest operative term and the same E04.210
-branch as `Gastrectomy`; the source says "colorectal surgery" without naming the
-procedure, so rectal resections fall under this label too.
+YACHIDA's six group labels collapse the paper's **nine** clinical categories:
 
-The code is defined in neither the cohort metadata, the collection's wiki,
-Supplementary Tables 1-4, the Yachida abstract, nor the group's 2020 review, but
-everything observable agrees with it: no `Stage`, no `Tumor location`, 30
-subjects appearing in no other arm, and Supplementary Table 1 counting them among
-the 220 cases rather than the 127 controls.
+| paper's group | collection label | loaded as |
+| --- | --- | --- |
+| (1) normal, no remarkable findings | `Healthy` | Health |
+| (2) a few polyps, up to two small (<5 mm) | `Healthy` | Health |
+| (3) MP: >=3 (mostly >=5) polypoid adenomas, low-grade dysplasia, conventional type only, **not** serrated | `MP` | Adenoma |
+| (4) intramucosal carcinoma: polypoid adenoma(s) with **high-grade** dysplasia, stage 0/pTis | `Stage_0` | Colorectal Neoplasms |
+| (5)-(6) stage I, stage II CRC | `Stage_I_II` | Colorectal Neoplasms |
+| (7)-(8) stage III, stage IV CRC (UICC 8th ed.) | `Stage_III_IV` | Colorectal Neoplasms |
+| (9) normal with a history of colorectal surgery | `HS` | Colectomy (D003082) |
+
+`Stage_0` is a carcinoma in situ rather than an adenoma, so it joins the neoplasm
+arm while `MP`, which is low-grade-dysplasia adenoma, does not. `HS` is group
+(9), and it is **not** the 28 stage I-III patients the paper sampled before and
+after surgery -- those are a separate subset, and no subject in this collection
+has more than one sample. It maps to `Colectomy`, the closest operative MeSH
+term and the same `E04.210` branch as `Gastrectomy`; the source says "colorectal
+surgery" without naming the procedure, so rectal resections fall under this
+label too.
+
+**Caveat on the controls, which outlives this cohort.** The paper defines groups
+(1) *and* (2) as the healthy controls, so `Healthy` includes subjects carrying up
+to two polyps under 5 mm. Nothing in the collection's metadata separates them --
+`Stage` and `Tumor location` are `-` across the whole arm -- so it cannot be
+undone at load time and is a property of every contrast drawn against these
+controls. It reaches further than YACHIDA: 53 of those 127 are also the **entire**
+control arm of ERAWIJANTARI_GASTRIC_CANCER_2020.
 
 **Neither post-surgical arm becomes `Health`.** A resected gut is precisely the
 confounder [Erawijantari 2020](https://doi.org/10.1136/gutjnl-2019-319188) was
@@ -371,6 +387,13 @@ every contrast drawn against it. They sit beside their cohort's controls instead
 YACHIDA holds 74 Health, 150 Colorectal Neoplasms, 40 Adenoma and 30 Colectomy;
 ERAWIJANTARI holds 54 Health and 42 Gastrectomy. No sample in the database now
 lacks a phenotype.
+
+**Not loaded, but present in the metadata:** YACHIDA carries `Brinkman Index`
+(smoking) and `Alcohol` per subject, and the paper reports that Brinkman's index
+differs systematically across the groups -- advanced stages smoke less than early
+stages, and HS lower still. That is a confounder correlated with the label, and
+`samples` has no column for it, so it is currently discarded rather than
+modelled.
 
 One genus is refused outright: GTDB uses **`Copromorpha`** for a bacterium, and
 the only NCBI taxid of that name (1181387) is a moth, so the domain guard in
