@@ -44,6 +44,7 @@ from .transform import (
     clean_str,
     normalize_pathogen_flag,
     normalize_phylum,
+    normalize_platform,
     normalize_yes_no,
     collapse_energy_modes,
     collapse_food_sources,
@@ -461,6 +462,25 @@ def upsert_disease(
     return disease_id
 
 
+def _platform_for(
+    connection: MySQLConnection, project: str, incoming: str
+) -> str | None:
+    """Reconcile a study's platform with what is already recorded for it."""
+    if not incoming:
+        return None
+    cursor = connection.cursor()
+    cursor.execute(
+        "SELECT data_type FROM studies WHERE project_accession = %s", (project,))
+    existing = cursor.fetchone()
+    cursor.close()
+    current = clean_str(existing[0]) if existing and existing[0] else ""
+    if not current or current == incoming:
+        return incoming
+    if current == "mixed":
+        return "mixed"
+    return "mixed"
+
+
 def upsert_study(connection: MySQLConnection, row: Mapping[str, Any]) -> int:
     project = first_value(row, "project_id", "project_accession", "project", "study_id")
     if not project:
@@ -482,7 +502,14 @@ def upsert_study(connection: MySQLConnection, row: Mapping[str, Any]) -> int:
             project,
             first_value(row, "project_title", "title") or None,
             first_value(row, "project_description", "description") or None,
-            first_value(row, "data_type", "experiment_type") or None,
+            # Platform is normalized, and a study whose runs disagree becomes
+            # 'mixed' rather than taking whichever row happened to be written
+            # last. Ten GMrepo projects hold both amplicon and shotgun runs, and
+            # last-write-wins had been labelling each of them by one half: the
+            # amplicon runs of a study stamped mNGS then looked like shotgun
+            # samples with no taxonomic profile.
+            _platform_for(connection, project,
+                          normalize_platform(first_value(row, "data_type", "experiment_type"))),
             first_value(row, "source_database") or "GMrepo",
             first_value(row, "data_quality") if first_value(row, "data_quality") in {"curated", "qualified"} else "unknown",
         ),
@@ -846,7 +873,7 @@ def sync_all_gmrepo_comparisons(
 
 GMREPO_SAMPLE_FIELDS = [
     "project_id", "data_type", "data_quality", "run_id", "sample_id", "disease_name",
-    "mesh_id", "sex", "age_years", "country", "qc_status", "instrument_model",
+    "mesh_id", "sex", "age_years", "bmi", "country", "qc_status", "instrument_model",
     "nr_reads_sequenced", "longitude", "latitude", "phenotypes", "nr_phenotypes",
 ]
 
@@ -894,7 +921,11 @@ def sync_gmrepo_samples(
 ) -> tuple[LoadStats, dict[str, int]]:
     """Fetch GMrepo run/sample metadata for every imported study project."""
     projects = _study_projects(connection)
-    rows: list[dict[str, Any]] = []
+    # GMrepo returns each run twice from getAllRunsByProjectIDAsync, the two
+    # records differing only in an internal id, so the export is keyed on run_id
+    # rather than appended to. Without this every run appears twice: a re-sync
+    # produced 67,160 rows for 33,580 runs.
+    by_run: dict[str, dict[str, Any]] = {}
     for project_id in projects:
         skip = 0
         while True:
@@ -903,7 +934,10 @@ def sync_gmrepo_samples(
                 break
             for raw in page:
                 disease_name, mesh_id = _choose_sample_phenotype(raw.get("phenotypes"))
-                rows.append(
+                run_id = clean_str(raw.get("run_id"))
+                if not run_id or run_id in by_run:
+                    continue
+                by_run[run_id] = (
                     {
                         "project_id": clean_str(raw.get("project_id")) or project_id,
                         "data_type": clean_str(raw.get("experiment_type")),
@@ -914,6 +948,10 @@ def sync_gmrepo_samples(
                         "mesh_id": mesh_id,
                         "sex": clean_str(raw.get("sex")),
                         "age_years": raw.get("host_age"),
+                        # GMrepo exposes BMI and the export used to drop it,
+                        # leaving values on the server for studies where this
+                        # database had none.
+                        "bmi": raw.get("BMI"),
                         "country": clean_str(raw.get("country")),
                         "qc_status": raw.get("QCStatus"),
                         "instrument_model": clean_str(raw.get("instrument_model")),
@@ -928,6 +966,7 @@ def sync_gmrepo_samples(
                 break
             skip += limit
 
+    rows = list(by_run.values())
     destination = Path(output_path)
     destination.parent.mkdir(parents=True, exist_ok=True)
     with destination.open("w", encoding="utf-8", newline="") as handle:

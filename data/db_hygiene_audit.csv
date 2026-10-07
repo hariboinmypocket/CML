@@ -1,11 +1,2 @@
 step,target,before,after,note
-6_arthropoda,taxon 32 Bacillus muralis,"phylum Arthropoda, no taxid","Peribacillus muralis, taxid 264697, phylum Firmicutes","renamed: epithet survives the genus change, so same organism"
-6_arthropoda,taxon 54 Victoria amazonica,"phylum Arthropoda, taxid 85961",phylum Streptophyta,tax ID was already correct; only the stored lineage was wrong
-6_arthropoda,taxon 100 Bacillus asahii,"phylum Arthropoda, no taxid","Peribacillus asahii, taxid 228899, phylum Firmicutes","renamed: epithet survives the genus change, so same organism"
-6_arthropoda,taxon 261 Bacillus ginsengihumi,"phylum Arthropoda, no taxid","phylum Firmicutes (genus lineage, tax ID left NULL)",species epithet did not survive; genus lineage only
-6_arthropoda,taxon 327 Bacillus foraminis,"phylum Arthropoda, no taxid","Mesobacillus foraminis, taxid 279826, phylum Firmicutes","renamed: epithet survives the genus change, so same organism"
-6_arthropoda,taxon 470 Bacillus humi,"phylum Arthropoda, no taxid","Ferdinandcohnia humi, taxid 263474, phylum Firmicutes","renamed: epithet survives the genus change, so same organism"
-6_arthropoda,taxon 520 Bacillus firmus,"phylum Arthropoda, no taxid, no data",deleted,"stale duplicate of row 1003 'Cytobacillus firmus', which already holds tax ID 1399 and the correct lineage"
-6_arthropoda,taxon 523 Bacillus horti,"phylum Arthropoda, no taxid","Caldalkalibacillus horti, taxid 77523, phylum Firmicutes","renamed: epithet survives the genus change, so same organism"
-6_arthropoda,taxon 544 Bacillus selenatarsenatis,"phylum Arthropoda, no taxid","Mesobacillus selenatarsenatis, taxid 388741, phylum Firmicutes","renamed: epithet survives the genus change, so same organism"
-6_arthropoda,taxon 566 Bacillus aurantiacus,"phylum Arthropoda, no taxid","Alteribacter aurantiacus, taxid 254410, phylum Firmicutes","renamed: epithet survives the genus change, so same organism"
+2_sentinel,3 samples,"age_years out of [0,110]",NULL,-88 in a cohort aged 3-28; 119 where the next oldest is 71

@@ -254,6 +254,35 @@ def same_epithet(first: Any, second: Any) -> bool:
     return len(stem_one) >= 4 and stem_one == stem_two
 
 
+PLATFORM_SYNONYMS = {
+    "16s": "16S",
+    "16s rrna": "16S",
+    "amplicon": "16S",
+    "mngs": "mNGS",
+    "metagenomics": "mNGS",
+    "shotgun metagenomics": "mNGS",
+    "wgs": "mNGS",
+    "meta-analysis": "meta-analysis",
+}
+
+
+def normalize_platform(value: Any) -> str:
+    """Fold a study's sequencing platform onto one of 16S / mNGS.
+
+    The distinction drives the whole species-vs-genus feature space, so it has
+    to be one value per platform. GMrepo has reported this field as both
+    "16S"/"mNGS" and "AMPLICON"/"Metagenomics" at different times, and a
+    re-sync that wrote the second spelling silently split 229 16S studies into
+    191 AMPLICON plus 48 16S -- enough to drop a third of them out of a
+    `--data-type 16S` filter without any error. Normalizing on the way in means
+    the vocabulary cannot drift again whatever the upstream calls it.
+    """
+    text = clean_str(value)
+    if not text:
+        return ""
+    return PLATFORM_SYNONYMS.get(text.casefold(), text)
+
+
 def normalize_yes_no(value: Any) -> str:
     """Normalize a MiMeDB yes/no trait, discarding uncertain calls.
 

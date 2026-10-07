@@ -12,6 +12,7 @@ from gutdb.transform import (
     extract_species_epithet,
     normalize_genus,
     normalize_phylum,
+    normalize_platform,
     parse_scientific_name,
     same_epithet,
 )
@@ -116,6 +117,26 @@ class SameEpithetTests(unittest.TestCase):
     def test_empty_never_matches(self):
         for pair in (("", "ramosa"), ("ramosa", ""), ("", "")):
             self.assertFalse(same_epithet(*pair))
+
+
+class NormalizePlatformTests(unittest.TestCase):
+    def test_amplicon_spellings_fold_to_16S(self):
+        for value in ("16S", "16S rRNA", "AMPLICON", "amplicon"):
+            self.assertEqual(normalize_platform(value), "16S")
+
+    def test_shotgun_spellings_fold_to_mNGS(self):
+        for value in ("mNGS", "Metagenomics", "shotgun metagenomics", "WGS"):
+            self.assertEqual(normalize_platform(value), "mNGS")
+
+    def test_unknown_platform_survives(self):
+        # An unanticipated platform is kept rather than coerced, so it shows up
+        # as itself instead of silently joining 16S or mNGS.
+        self.assertEqual(normalize_platform("Nanopore"), "Nanopore")
+        self.assertEqual(normalize_platform("meta-analysis"), "meta-analysis")
+
+    def test_blank(self):
+        self.assertEqual(normalize_platform(""), "")
+        self.assertEqual(normalize_platform(None), "")
 
 
 class NormalizePhylumTests(unittest.TestCase):
