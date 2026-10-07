@@ -80,11 +80,34 @@ def open_dict_rows(path: str | Path) -> Iterator[dict[str, str]]:
     with source.open("r", encoding="utf-8-sig", newline="") as handle:
         sample = handle.read(8192)
         handle.seek(0)
-        try:
-            dialect = csv.Sniffer().sniff(sample, delimiters=",\t;|")
-        except csv.Error:
-            dialect = csv.excel_tab if source.suffix.lower() in {".tsv", ".tab"} else csv.excel
+        # Trust the extension before guessing. Sniffer infers the delimiter from
+        # the first 8KB and picks a character that merely appears often, so a
+        # free-text notes column containing semicolons or pipes can make it read
+        # a comma-separated file with the wrong delimiter. That is how all 15
+        # rows of literature_preeclampsia_markers.csv loaded with their columns
+        # shifted, putting a sentence from `notes` into source_database -- and it
+        # fails silently, because every field still has a value.
+        suffix = source.suffix.lower()
+        if suffix in {".tsv", ".tab"}:
+            dialect: Any = csv.excel_tab
+        elif suffix == ".csv":
+            dialect = csv.excel
+        else:
+            try:
+                dialect = csv.Sniffer().sniff(sample, delimiters=",\t;|")
+            except csv.Error:
+                dialect = csv.excel
         reader = csv.DictReader(handle, dialect=dialect)
+        # A single-field header means the chosen delimiter is absent from the
+        # file, so fall back to sniffing rather than loading one giant column.
+        if reader.fieldnames is not None and len(reader.fieldnames) == 1:
+            handle.seek(0)
+            try:
+                reader = csv.DictReader(
+                    handle, dialect=csv.Sniffer().sniff(sample, delimiters=",\t;|"))
+            except csv.Error:
+                handle.seek(0)
+                reader = csv.DictReader(handle, dialect=dialect)
         if not reader.fieldnames:
             raise ValueError(f"{source} has no header row")
         yield from reader
@@ -652,16 +675,25 @@ def load_associations(
                 """
                 INSERT INTO taxon_disease_associations
                     (taxon_id, disease_id, comparison_id, direction, effect_type, effect_size,
-                     source_database)
-                VALUES (%s, %s, %s, %s, %s, %s, %s)
+                     p_value, q_value, source_database)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                 ON DUPLICATE KEY UPDATE
                     direction = VALUES(direction),
                     effect_size = IF(%s, VALUES(effect_size), COALESCE(effect_size, VALUES(effect_size))),
+                    p_value = COALESCE(VALUES(p_value), p_value),
+                    q_value = COALESCE(VALUES(q_value), q_value),
                     source_database = VALUES(source_database)
                 """,
                 (
                     taxon_id, disease_id, comparison_id, direction,
                     first_value(row, "effect_type") or "LDA", lda,
+                    # The hand-curated marker files carry these and they were
+                    # being dropped: 59 p values and 42 q values across the 15
+                    # files. The columns existed only after p_value/q_value were
+                    # added for MicrobiomeHD, so wiring them here is what makes
+                    # that schema addition reach the literature set too.
+                    nullable_float(first_value(row, "p_value", "pvalue", "p")),
+                    nullable_float(first_value(row, "q_value", "qvalue", "fdr", "q")),
                     first_value(row, "source_database") or "GMrepo",
                     overwrite,
                 ),

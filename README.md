@@ -52,7 +52,7 @@ To intentionally replace existing taxon attributes/statistics, add `--overwrite`
 
 ## 3. Add more GMrepo projects
 
-GMrepo's documented API exposes phenotype, run, and abundance endpoints, while project marker tables can be downloaded as TSV from the project/comparison page. Normalize a marker export to the headers in [data/gmrepo_associations_template.csv](data/gmrepo_associations_template.csv), then run:
+GMrepo's documented API exposes phenotype, run, and abundance endpoints, while project marker tables can be downloaded as TSV from the project/comparison page. Normalize a marker export to the columns below, then run:
 
 ```bash
 python populate_database.py load-associations path/to/markers.tsv
@@ -68,27 +68,48 @@ The required association fields are:
 
 Always populate `negative_enriched_in` and `positive_enriched_in` when importing signed effect sizes. A negative LDA score is not intrinsically “protective”; its meaning depends on the comparison order.
 
-The parser accepts CSV or TSV and recognizes common alternate headers such as `marker_taxon`, `effect_size`, `pvalue`, `fdr`, and `experiment_type`.
+`p_value` and `q_value` are read where a source reports them, under those names
+or `pvalue`/`p` and `qvalue`/`fdr`/`q`. They are independent of `effect_size`
+rather than derived from it: GMrepo's export carries an LDA score and no
+significance, while a hand-curated marker file often carries the reverse.
+
+The parser accepts CSV or TSV and recognizes common alternate headers such as
+`marker_taxon`, `effect_size`, `experiment_type`, and `direction`.
 
 ### Clinical sample metadata
 
-Normalize GMrepo project/run metadata to [data/gmrepo_samples_template.csv](data/gmrepo_samples_template.csv):
+Normalize GMrepo project/run metadata to these columns:
 
 ```bash
 python populate_database.py load-samples path/to/project_samples.tsv
 ```
 
-Required fields are `project_id` and `run_id`. Disease, MeSH ID, age, sex, country, and QC status are optional.
+Required: `project_id`, `run_id`. Optional: `sample_id`, `disease_name`, `mesh_id`,
+`sex`, `age_years`, `bmi`, `country`, `qc_status`, `body_site`. Each also accepts
+aliases — `project_accession` for `project_id`, `run_accession` for `run_id`,
+`gender` for `sex`, `age` for `age_years`, `disease`/`phenotype` for
+`disease_name`.
+
+`age_years` and `bmi` are checked on the way in: a BMI of 0 or above 200 and an
+age below 0 or above 110 are stored as NULL, because GMrepo serves those as
+missing-value sentinels. Age 0 is kept — it is a real birth-day sample in at
+least one infant cohort.
 
 ### Sample-level relative abundance
 
-Convert abundance data to long format using [data/gmrepo_abundances_template.csv](data/gmrepo_abundances_template.csv), load samples first, then run:
+Convert abundance data to the long format below, load samples first, then run:
 
 ```bash
 python populate_database.py load-abundances path/to/abundances.tsv
 ```
 
-Required fields are `run_id`, `scientific_name`, and `relative_abundance`.
+Required: `run_id`, `scientific_name`, `relative_abundance`. Optional:
+`taxonomic_rank`, `ncbi_tax_id`, `source_database`. A declared
+`taxonomic_rank` of `genus` is honoured even when the name reads as a binomial,
+which is how GMrepo labels entries like `[Bacteroides] pectinophilus`.
+
+Genus and species are independent layers: each must sum to 1 within its own
+rank for a given sample, and `validate` checks that.
 
 ### Sync GMrepo phenotype names and MeSH IDs
 
