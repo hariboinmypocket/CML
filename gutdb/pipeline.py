@@ -1295,7 +1295,10 @@ def load_abundances(connection: MySQLConnection, path: str | Path) -> LoadStats:
 
 def _write_demographics_audit(path: str | Path, rows: list[dict[str, Any]]) -> None:
     fieldnames = [
-        "run_accession", "sex", "age_years", "age_note", "bmi", "has_biosample_attrs",
+        # has_biosample_attrs was dropped: a row is only written when NCBI
+        # returned attributes for that run, so the flag was hardcoded True at
+        # both write sites and said only "this row exists".
+        "run_accession", "sex", "age_years", "age_note", "bmi",
     ]
     destination = Path(path)
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -1394,7 +1397,7 @@ def enrich_sample_demographics(
                     if audit_csv:
                         audit_rows.append({
                             "run_accession": run_accession, "sex": "", "age_years": "",
-                            "age_note": age_note, "bmi": "", "has_biosample_attrs": True,
+                            "age_note": age_note, "bmi": "",
                         })
                     continue
 
@@ -1421,7 +1424,6 @@ def enrich_sample_demographics(
                         "age_years": age_value if age_value is not None else "",
                         "age_note": age_note,
                         "bmi": bmi_value if bmi_value is not None else "",
-                        "has_biosample_attrs": True,
                     })
 
         if audit_csv:
