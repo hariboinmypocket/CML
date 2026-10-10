@@ -1,12 +1,29 @@
-"""Query the SQLite gut-microbiome-disease database and export result tables."""
+"""Query the gut-microbiome-disease database and export result tables.
+
+Reads MySQL by default, which is the authoritative store. Pass --sqlite to read
+the mirror instead.
+
+The mirror used to be the default, and that was the wrong choice for anything
+quoted anywhere: it is built from the CSVs in data/, so sources loaded straight
+into MySQL never reach it. When this was changed it sat 13,199 samples and
+1,022,325 abundance rows behind, with no build path that could close the gap.
+Three of these tables (q3, q4, q7) also read views whose direction logic was
+corrected on 2026-10-10, so any copy of them produced before that date reports
+directions that have since been reversed.
+"""
 from __future__ import annotations
 
 import os
 import sqlite3
+import sys
+
 import numpy as np
 import pandas as pd
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 DB = os.environ.get("GUTDB_SQLITE", "gut_microbiome.sqlite")
+USE_SQLITE = "--sqlite" in sys.argv
 
 QUERIES: dict[str, str] = {
     # 1. What is in the database, by source and direction.
@@ -47,7 +64,8 @@ QUERIES: dict[str, str] = {
     #    disease-discriminating features.
     "q3_pan_disease_taxa": """
         SELECT scientific_name, taxonomic_rank, phylum, n_diseases, n_associations,
-               n_studies, n_enriched, n_depleted, specificity_class, depleted_fraction
+               n_studies, n_enriched, n_depleted, n_other_contrast,
+               specificity_class, depleted_fraction
         FROM v_taxon_specificity
         WHERE n_diseases >= 5
         ORDER BY n_diseases DESC, n_associations DESC
@@ -55,7 +73,9 @@ QUERIES: dict[str, str] = {
     # 4. Replicated (taxon, disease) pairs and the ones where studies disagree.
     "q4_replicated_evidence": """
         SELECT scientific_name, disease_name, mesh_id, n_studies, n_associations,
-               n_studies_enriched, n_studies_depleted, consensus_direction,
+               contrast_scope, n_studies_case_control,
+               n_studies_enriched, n_studies_depleted, n_studies_split,
+               n_studies_other_contrast, consensus_direction,
                agreement_ratio, has_conflict, mean_abs_effect_size, n_sources
         FROM v_taxon_disease_evidence
         WHERE n_studies >= 2
@@ -98,6 +118,14 @@ QUERIES: dict[str, str] = {
 #    abundance data, compare its mean relative abundance in case samples of that
 #    disease against Health samples. Abundances are species-rank only here, so
 #    the comparison is rank-clean.
+#
+#    READ THE RESULT WITH CARE. This pools case and control samples ACROSS
+#    studies, and that is what drives its concordance rate: 62.1% here against
+#    91.7% for the same two data sources compared WITHIN each study, which is
+#    what taxon_disease_adjudication does. The 29-point gap is cohort,
+#    protocol and sequencing-run heterogeneity, not disagreement between the
+#    curated associations and the measurements. Quote 62% as a statement about
+#    pooling; quote the adjudication table for how well the two actually agree.
 CONCORDANCE_SQL = """
 WITH case_ab AS (
     SELECT sp.taxon_id, s.disease_id,
@@ -137,12 +165,23 @@ WHERE e.taxonomic_rank = 'species'
 """
 
 
+def open_source():
+    """The database these tables are read from, and a label for the banner."""
+    if USE_SQLITE:
+        return sqlite3.connect(DB), f"sqlite mirror ({DB})"
+    from gutdb.config import Settings
+    from gutdb.db import connect
+    return connect(Settings.from_env(".env")), "MySQL (authoritative)"
+
+
 def main() -> dict[str, pd.DataFrame]:
-    con = sqlite3.connect(DB)
+    con, label = open_source()
+    print(f"source: {label}")
     results = {name: pd.read_sql_query(sql, con) for name, sql in QUERIES.items()}
     conc = pd.read_sql_query(CONCORDANCE_SQL, con)
     # log2 fold change computed here rather than in SQL: SQLite's LOG() is only
-    # present in builds compiled with the math extension.
+    # present in builds compiled with the math extension, so doing it in pandas
+    # keeps both sources producing the same column.
     pseudo = 1e-6
     conc["log2_fold_change"] = np.log2(
         (conc["mean_abundance_case"] + pseudo) / (conc["mean_abundance_health"] + pseudo)

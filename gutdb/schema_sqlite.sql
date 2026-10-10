@@ -234,61 +234,110 @@ GROUP BY st.project_accession, st.source_database, st.data_quality;
 
 -- Evidence strength per (taxon, disease). Studies, not association rows, are the
 -- unit of agreement, and agreement is a ratio rather than a boolean.
+-- Evidence strength per (taxon, disease). Mirrors gutdb/schema.sql; read that
+-- file's comment for why the direction vote is restricted the way it is.
+--
+-- In short: only case/control contrasts may vote, because "enriched in UC
+-- relative to Crohn disease" does not answer a case/control question, and one
+-- study casts one vote, because two independent COUNT(DISTINCT study_id)
+-- expressions let a study holding both directions count on both sides. The
+-- earlier version of this view did neither and reported 33 directions
+-- backwards, Faecalibacterium prausnitzii in ulcerative colitis among them.
 DROP VIEW IF EXISTS v_taxon_disease_evidence;
 CREATE VIEW v_taxon_disease_evidence AS
-SELECT
-    e.taxon_id,
-    e.scientific_name,
-    e.taxonomic_rank,
-    e.phylum,
-    e.disease_id,
-    e.disease_name,
-    e.mesh_id,
-    e.n_associations,
-    e.n_studies,
-    e.n_studies_enriched,
-    e.n_studies_depleted,
-    e.n_sources,
-    e.mean_abs_effect_size,
-    CASE
-        WHEN e.n_studies_enriched > e.n_studies_depleted THEN 'enriched'
-        WHEN e.n_studies_depleted > e.n_studies_enriched THEN 'depleted'
-        WHEN (e.n_studies_enriched + e.n_studies_depleted) = 0 THEN NULL
-        ELSE 'tied'
-    END AS consensus_direction,
-    CASE
-        WHEN (e.n_studies_enriched + e.n_studies_depleted) > 0
-        THEN ROUND(
-            MAX(e.n_studies_enriched, e.n_studies_depleted) * 1.0
-            / (e.n_studies_enriched + e.n_studies_depleted), 3)
-    END AS agreement_ratio,
-    CASE WHEN e.n_studies_enriched > 0 AND e.n_studies_depleted > 0
-         THEN 1 ELSE 0 END AS has_conflict
-FROM (
-    SELECT
-        a.taxon_id,
-        t.scientific_name,
-        t.taxonomic_rank,
-        t.phylum,
-        a.disease_id,
-        d.name AS disease_name,
-        d.mesh_id,
-        COUNT(*) AS n_associations,
-        COUNT(DISTINCT c.study_id) AS n_studies,
-        COUNT(DISTINCT CASE WHEN a.direction = 'enriched' THEN c.study_id END) AS n_studies_enriched,
-        COUNT(DISTINCT CASE WHEN a.direction = 'depleted' THEN c.study_id END) AS n_studies_depleted,
-        COUNT(DISTINCT a.source_database) AS n_sources,
-        ROUND(AVG(ABS(a.effect_size)), 3) AS mean_abs_effect_size
+WITH assoc AS (
+    SELECT a.taxon_id,
+           a.disease_id,
+           c.study_id,
+           a.direction,
+           a.effect_size,
+           a.source_database,
+           COALESCE(pa.name = 'Health' OR pb.name = 'Health', 0) AS vs_health
     FROM taxon_disease_associations a
-    JOIN taxa t ON t.id = a.taxon_id
-    JOIN diseases d ON d.id = a.disease_id
     JOIN phenotype_comparisons c ON c.id = a.comparison_id
-    GROUP BY a.taxon_id, t.scientific_name, t.taxonomic_rank, t.phylum,
-             a.disease_id, d.name, d.mesh_id
-) e;
+    LEFT JOIN diseases pa ON pa.id = c.phenotype_a_id
+    LEFT JOIN diseases pb ON pb.id = c.phenotype_b_id
+),
+per_study AS (
+    SELECT taxon_id,
+           disease_id,
+           study_id,
+           MAX(vs_health) AS has_case_control,
+           CASE
+               WHEN MAX(vs_health) = 0 THEN 'other_contrast'
+               WHEN COUNT(DISTINCT CASE WHEN vs_health = 1 THEN direction END) > 1 THEN 'split'
+               ELSE MAX(CASE WHEN vs_health = 1 THEN direction END)
+           END AS vote
+    FROM assoc
+    GROUP BY taxon_id, disease_id, study_id
+),
+votes AS (
+    SELECT taxon_id,
+           disease_id,
+           SUM(CASE WHEN vote = 'enriched' THEN 1 ELSE 0 END) AS n_studies_enriched,
+           SUM(CASE WHEN vote = 'depleted' THEN 1 ELSE 0 END) AS n_studies_depleted,
+           SUM(CASE WHEN vote = 'split' THEN 1 ELSE 0 END) AS n_studies_split,
+           SUM(CASE WHEN vote = 'other_contrast' THEN 1 ELSE 0 END) AS n_studies_other_contrast,
+           SUM(has_case_control) AS n_studies_case_control
+    FROM per_study
+    GROUP BY taxon_id, disease_id
+),
+totals AS (
+    SELECT taxon_id,
+           disease_id,
+           COUNT(*) AS n_associations,
+           COUNT(DISTINCT study_id) AS n_studies,
+           COUNT(DISTINCT source_database) AS n_sources,
+           ROUND(AVG(ABS(effect_size)), 3) AS mean_abs_effect_size,
+           CASE
+               WHEN MIN(vs_health) = 1 THEN 'vs_health'
+               WHEN MAX(vs_health) = 0 THEN 'disease_vs_disease'
+               ELSE 'mixed'
+           END AS contrast_scope
+    FROM assoc
+    GROUP BY taxon_id, disease_id
+)
+SELECT t.id AS taxon_id,
+       t.scientific_name,
+       t.taxonomic_rank,
+       t.phylum,
+       d.id AS disease_id,
+       d.name AS disease_name,
+       d.mesh_id,
+       o.n_associations,
+       o.n_studies,
+       o.n_sources,
+       o.mean_abs_effect_size,
+       o.contrast_scope,
+       v.n_studies_case_control,
+       v.n_studies_enriched,
+       v.n_studies_depleted,
+       v.n_studies_split,
+       v.n_studies_other_contrast,
+       CASE
+           WHEN v.n_studies_enriched > v.n_studies_depleted THEN 'enriched'
+           WHEN v.n_studies_depleted > v.n_studies_enriched THEN 'depleted'
+           WHEN (v.n_studies_enriched + v.n_studies_depleted) = 0 THEN NULL
+           ELSE 'tied'
+       END AS consensus_direction,
+       CASE
+           WHEN (v.n_studies_enriched + v.n_studies_depleted) > 0
+           THEN ROUND(
+               MAX(v.n_studies_enriched, v.n_studies_depleted) * 1.0
+               / (v.n_studies_enriched + v.n_studies_depleted), 3)
+       END AS agreement_ratio,
+       CASE WHEN v.n_studies_enriched > 0 AND v.n_studies_depleted > 0
+            THEN 1 ELSE 0 END AS has_conflict
+FROM totals o
+JOIN votes v ON v.taxon_id = o.taxon_id AND v.disease_id = o.disease_id
+JOIN taxa t ON t.id = o.taxon_id
+JOIN diseases d ON d.id = o.disease_id;
 
 -- How disease-specific is each taxon? depleted_fraction near 1 across many
 -- diseases is the signature of a general dysbiosis marker, not a specific one.
+-- It counts case/control associations only, for the same reason as above:
+-- pooling both kinds moved this fraction by over 10 percentage points for 85 of
+-- the 821 taxa with three or more associations.
 DROP VIEW IF EXISTS v_taxon_specificity;
 CREATE VIEW v_taxon_specificity AS
 SELECT
@@ -301,6 +350,7 @@ SELECT
     s.n_studies,
     s.n_enriched,
     s.n_depleted,
+    s.n_other_contrast,
     CASE
         WHEN s.n_diseases = 1 THEN 'single_disease'
         WHEN s.n_diseases <= 5 THEN 'narrow'
@@ -320,13 +370,22 @@ FROM (
         COUNT(DISTINCT a.disease_id) AS n_diseases,
         COUNT(*) AS n_associations,
         COUNT(DISTINCT c.study_id) AS n_studies,
-        SUM(CASE WHEN a.direction = 'enriched' THEN 1 ELSE 0 END) AS n_enriched,
-        SUM(CASE WHEN a.direction = 'depleted' THEN 1 ELSE 0 END) AS n_depleted
+        SUM(CASE WHEN a.direction = 'enriched'
+                  AND COALESCE(pa.name = 'Health' OR pb.name = 'Health', 0) = 1
+                 THEN 1 ELSE 0 END) AS n_enriched,
+        SUM(CASE WHEN a.direction = 'depleted'
+                  AND COALESCE(pa.name = 'Health' OR pb.name = 'Health', 0) = 1
+                 THEN 1 ELSE 0 END) AS n_depleted,
+        SUM(CASE WHEN COALESCE(pa.name = 'Health' OR pb.name = 'Health', 0) = 0
+                 THEN 1 ELSE 0 END) AS n_other_contrast
     FROM taxon_disease_associations a
     JOIN taxa t ON t.id = a.taxon_id
     JOIN phenotype_comparisons c ON c.id = a.comparison_id
+    LEFT JOIN diseases pa ON pa.id = c.phenotype_a_id
+    LEFT JOIN diseases pb ON pb.id = c.phenotype_b_id
     GROUP BY a.taxon_id, t.scientific_name, t.taxonomic_rank, t.phylum
 ) s;
+
 
 -- Rank-safe access to the abundance matrix: abundances sum to 1 WITHIN a rank,
 -- not across a sample, so rank-filtered access is the only correct path.
