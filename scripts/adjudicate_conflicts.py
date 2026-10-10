@@ -15,18 +15,16 @@ the same way the association votes are.
 Four decisions shape it.
 
 Only case/control contrasts vote. 2,340 of the 16,889 associations compare one
-disease against another rather than against Health, and 745 of the replicated
-pairs mix the two kinds. v_taxon_disease_evidence votes across both as though
-they answered the same question. Faecalibacterium prausnitzii in ulcerative
-colitis is the clearest casualty: four studies report it enriched in UC *versus
-Crohn disease*, two report it depleted *versus Health*, and the pooled vote
-calls it enriched in UC -- reversing one of the most replicated findings in the
-field. Worse, the view counts enriched and depleted studies with two separate
-COUNT(DISTINCT study_id) expressions, so PRJEB42155, which holds both of those
-contrasts, votes on both sides at once. The association vote here is therefore
-rebuilt from the comparisons where one arm is Health, one vote per study, which
-is the same question the abundance arm answers. Pairs whose associations are all
-disease-vs-disease keep their evidence recorded but get no association vote.
+disease against another rather than against Health, and 1,035 of the replicated
+pairs mix the two kinds. An earlier v_taxon_disease_evidence voted across both as
+though they answered the same question, which is how Faecalibacterium prausnitzii
+in ulcerative colitis came out 'enriched': four studies report it enriched in UC
+*versus Crohn disease* and two report it depleted *versus Health*. That view now
+applies the same restriction this script does, so the association vote is
+computed here a second time, independently, and the two are compared on every
+pair -- a cross-check that is cheap to keep and would catch either one drifting.
+Pairs whose associations are all disease-vs-disease keep their evidence recorded
+but get no association vote.
 
 Within-study, never pooled. q7 pools case and control samples across studies
 and finds only 62% concordance with the curated associations, which is what
@@ -279,6 +277,12 @@ def main() -> int:
     rows: list[dict] = []
     basis_counts: Counter = Counter()
     scope_counts: Counter = Counter()
+    # v_taxon_disease_evidence now applies the same two rules this script does,
+    # so its counts and the ones computed here should agree on every pair. They
+    # are derived independently -- SQL in the view, Python here -- so a
+    # disagreement means one of them has drifted, and saying so is worth more
+    # than quietly preferring either.
+    view_disagreements: list[str] = []
     for (taxon_id, name, rank, disease_id, disease, n_studies,
          pooled_enr, pooled_dep, pooled_consensus, pooled_agreement) in pairs:
         key = (taxon_id, disease_id)
@@ -293,6 +297,14 @@ def main() -> int:
         else:
             scope = "none"
         scope_counts[scope] += 1
+        view_cons = None if pooled_consensus == "tied" else pooled_consensus
+        if (int(pooled_enr) != assoc["assoc_enriched"]
+                or int(pooled_dep) != assoc["assoc_depleted"]
+                or view_cons != assoc["assoc_consensus"]):
+            view_disagreements.append(
+                f"{name} / {disease}: view {pooled_enr}/{pooled_dep} {view_cons}, "
+                f"computed {assoc['assoc_enriched']}/{assoc['assoc_depleted']} "
+                f"{assoc['assoc_consensus']}")
         ab = abundance_vote(taxon_id, disease_id, rank, arm_size, taxon_sum, health_id)
         verdict, basis = adjudicate(assoc, ab)
         basis_counts[basis] += 1
@@ -301,11 +313,21 @@ def main() -> int:
             "disease_id": disease_id, "disease_name": disease,
             "n_studies": n_studies, "assoc_contrast_scope": scope,
             **assoc, **ab, "verdict": verdict, "basis": basis,
-            "pooled_view_enriched": pooled_enr, "pooled_view_depleted": pooled_dep,
-            "pooled_view_consensus": pooled_consensus,
-            "pooled_view_agreement": pooled_agreement,
+            "view_enriched": pooled_enr, "view_depleted": pooled_dep,
+            "view_consensus": pooled_consensus,
+            "view_agreement": pooled_agreement,
         })
     print(f"adjudicated in {time.time() - started:.0f}s")
+    if view_disagreements:
+        print(f"\n!! v_taxon_disease_evidence disagrees with this script on "
+              f"{len(view_disagreements)} of {len(pairs)} pairs:")
+        for line in view_disagreements[:10]:
+            print(f"     {line}")
+        if len(view_disagreements) > 10:
+            print(f"     ... and {len(view_disagreements) - 10} more")
+    else:
+        print(f"view cross-check: v_taxon_disease_evidence agrees on all "
+              f"{len(pairs)} pairs")
 
     if not DRY_RUN:
         work.execute("DELETE FROM taxon_disease_adjudication")

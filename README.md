@@ -182,6 +182,58 @@ HAVING COUNT(DISTINCT a.disease_id) > 1
 ORDER BY disease_count DESC, t.scientific_name;
 ```
 
+### Correcting the evidence view
+
+`v_taxon_disease_evidence` reported **wrong directions** until 2026-10-10, and
+anything that read `consensus_direction` from it inherited them. Two rules were
+broken:
+
+- **It pooled unlike contrasts.** Disease-vs-disease comparisons voted alongside
+  disease-vs-Health ones, as though "enriched in UC relative to Crohn disease"
+  answered a case/control question.
+- **One study could vote twice.** `n_studies_enriched` and `n_studies_depleted`
+  were two independent `COUNT(DISTINCT study_id)` expressions, so a study holding
+  both an enriched and a depleted association counted on *both* sides.
+
+The view now restricts the direction vote to case/control contrasts at one vote
+per study, exposes `contrast_scope`, `n_studies_case_control`, `n_studies_split`
+and `n_studies_other_contrast`, and returns `consensus_direction = NULL` for the
+753 pairs whose associations are *all* disease-vs-disease. Replication depth
+(`n_associations`, `n_studies`, `n_sources`) still counts every contrast, because
+a disease-vs-disease result is a real result -- it just cannot answer a
+case/control question.
+
+What changed, over the 2,285 replicated pairs:
+
+| change | pairs |
+| --- | --- |
+| `tied` → decided | 118 |
+| decided → `tied` (a genuine tie, previously hidden) | 41 |
+| **direction reversed outright** | **33** |
+| → `NULL` (no case/control evidence exists) | 34 |
+| unchanged | 2,059 |
+
+All 226 changed pairs are `mixed` or `disease_vs_disease` scope; no pure
+`vs_health` pair moved. The 33 reversals are **27 in ulcerative colitis and 6 in
+Crohn disease** -- the diseases with the most disease-vs-disease comparisons --
+and they are mostly butyrate-producing commensals whose depletion in IBD is
+textbook: *Faecalibacterium*, *Lachnospira*, *Agathobacter rectalis*, *Dorea*,
+*Ruminococcus*. The abundance matrix in this same database independently backs
+the corrected direction over the old one **24 times to 7**, with 2 inconclusive.
+
+Measured honestly, the second rule currently changes nothing: no study reports
+both directions among its own vs-Health associations, so `n_studies_split` is 0
+for all 11,472 pairs and every behaviour change traces to the contrast
+restriction. It is kept as a guard, not a fix.
+
+`v_taxon_specificity.depleted_fraction` had the same contrast-mixing defect and
+is corrected the same way. Pooling both kinds moved it by more than 10
+percentage points for 85 of the 821 taxa with three or more associations, and by
+more than 25 points for 21 of them (worst case 0.40) -- enough to turn a general
+dysbiosis marker into an apparently specific one. Its breadth columns stay
+association-level on purpose: specificity asks how widely a taxon has been
+reported, not how cohorts voted on one disease.
+
 ### Adjudicating directional conflicts
 
 2,285 (taxon, disease) pairs are reported by more than one study and the studies
@@ -209,18 +261,21 @@ are. Two details decide whether the number means anything:
   The denominator is every sample in the arm profiled at that taxon's rank.
 
 **Only case/control contrasts vote.** 2,340 of the 16,889 associations compare
-one disease against another rather than against Health, and 745 of the
-replicated pairs mix the two kinds. `v_taxon_disease_evidence` votes across both
-as though they answered the same question, and it counts enriched and depleted
-studies with two separate `COUNT(DISTINCT study_id)` expressions, so a study
-holding both contrasts votes on both sides at once. *Faecalibacterium
-prausnitzii* in ulcerative colitis shows what that costs: four studies report it
-enriched in UC *versus Crohn disease*, two report it depleted *versus Health*,
-and the pooled view calls it enriched in UC -- reversing one of the most
-replicated findings in the field. The adjudicator rebuilds the association vote
-from vs-Health comparisons only, one vote per study, and stores the old pooled
-numbers beside it in `data/adjudication_audit.csv` for comparison.
+one disease against another rather than against Health. "Enriched in UC relative
+to Crohn disease" and "enriched in UC relative to health" are different claims,
+and a case/control model needs the second. The association vote is therefore
+built from vs-Health comparisons only, one vote per study, and
 `assoc_contrast_scope` records which contrasts a pair actually had.
+
+This was originally a workaround for a defect in `v_taxon_disease_evidence`,
+which pooled both kinds and let a study vote on both sides at once -- it reported
+*Faecalibacterium prausnitzii* as enriched in ulcerative colitis, reversing one
+of the field's most replicated findings. **That view is now fixed** (see
+[Correcting the evidence view](#correcting-the-evidence-view)), so the rule here
+is no longer a workaround but a second, independent implementation: the
+adjudicator recomputes the vote in Python and compares it against the view's SQL
+on every pair, printing `view cross-check: ... agrees on all 2285 pairs` when
+they match. Either one drifting shows up immediately.
 
 Current outcome over the 2,285 pairs:
 

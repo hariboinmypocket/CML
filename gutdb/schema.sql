@@ -406,90 +406,161 @@ GROUP BY st.project_accession, st.source_database, st.data_quality;
 
 -- Evidence strength per (taxon, disease).
 --
--- 75% of pairs in this table rest on a single study, and 911 pairs have studies
--- that disagree on direction, but every association row looks identical in the
+-- 80% of pairs in this table rest on a single study, and the studies behind the
+-- rest do not always agree, but every association row looks identical in the
 -- base schema. This view exposes replication depth and directional agreement so
 -- a 15-study unanimous finding can be told apart from a one-off.
 --
--- Agreement is a RATIO, not a boolean, so callers pick their own threshold. An
--- earlier version of this comment claimed most disagreements are lopsided
--- majorities with a single outlier. They are not: of the 2,285 replicated
--- pairs, 1,374 agree outright, 485 agree above 60%, 39 are near ties and 387
--- are EXACT ties where consensus_direction below is a coin flip.
+-- TWO RULES DECIDE WHETHER A DIRECTION HERE MEANS ANYTHING, and an earlier
+-- version of this view broke both. It reported Faecalibacterium prausnitzii as
+-- ENRICHED in ulcerative colitis, reversing one of the most replicated findings
+-- in the field, and it was not alone: enforcing the first rule below reversed 33
+-- directions, 27 of them in ulcerative colitis and 6 in Crohn disease, almost
+-- all of them butyrate-producing commensals whose depletion in IBD is textbook
+-- (Faecalibacterium, Lachnospira, Agathobacter rectalis, Dorea, Ruminococcus).
+-- The abundance matrix in this same database independently backs the corrected
+-- direction over the old one 24 times to 7.
 --
--- Two further limits are not fixable inside this view, and
--- taxon_disease_adjudication exists because of them:
+--   Only case/control contrasts may vote. 2,340 of the 16,889 associations
+--   compare one disease against another rather than against Health. "Enriched
+--   in UC relative to Crohn disease" and "enriched in UC relative to health"
+--   are different claims, and a model trained on case/control data needs the
+--   second. Pairs whose associations are ALL disease-vs-disease therefore get
+--   consensus_direction = NULL rather than a direction built from the wrong
+--   question; contrast_scope says which situation a pair is in.
 --
---   It pools unlike contrasts. 2,340 of the 16,889 associations compare one
---   disease against another rather than against Health. A case/control model
---   needs the latter, and this view votes across both.
+--   One study casts one vote. n_studies_enriched and n_studies_depleted used to
+--   be two independent COUNT(DISTINCT study_id) expressions, so a study holding
+--   both an enriched and a depleted association was counted in BOTH sides at
+--   once. A study that disagrees with itself now lands in n_studies_split and
+--   votes for neither.
 --
---   n_studies_enriched and n_studies_depleted are separate COUNT(DISTINCT
---   study_id) expressions, so one study holding both a vs-Health and a
---   disease-vs-disease contrast votes on BOTH sides. Faecalibacterium
---   prausnitzii in ulcerative colitis comes out 'enriched' here for exactly
---   that reason, reversing one of the field's most replicated findings.
+--   Measured honestly, this second rule currently changes NOTHING: no study in
+--   the database reports both directions among its own vs-Health associations,
+--   so n_studies_split is 0 for all 11,472 pairs and every one of the 226
+--   behaviour changes below traces to the contrast restriction instead. It is
+--   kept as a guard rather than a fix -- two comparison methods inside one
+--   study could disagree tomorrow, and the old expression would have silently
+--   counted that study twice.
 --
--- For direction, read taxon_disease_adjudication. Use this view for replication
--- depth.
+-- What the contrast restriction actually changed, over the 2,285 replicated
+-- pairs: 118 that read 'tied' became decided, 41 that read as decided turned
+-- out to be genuine ties, 33 reversed outright, and 34 lost their direction
+-- entirely because every association behind them was disease-vs-disease. Every
+-- one of those 226 pairs is 'mixed' or 'disease_vs_disease' scope; no pure
+-- vs_health pair moved.
 --
--- Studies, not association rows, are the unit of agreement, so a single study
--- contributing several comparisons cannot outvote several independent cohorts.
+-- Replication depth (n_associations, n_studies, n_sources) still counts every
+-- contrast, because a disease-vs-disease result is a real result; it just
+-- cannot answer a case/control question.
+--
+-- Agreement is a RATIO, not a boolean, so callers pick their own threshold. Of
+-- the 2,285 replicated pairs, 387 were exact ties under the old pooled vote and
+-- 265 remain exact ties under this one, where consensus_direction is 'tied' and
+-- genuinely undecided. taxon_disease_adjudication carries those further by
+-- bringing this database's own abundance measurements to bear; this view stays
+-- purely a summary of what the curated associations say.
 CREATE OR REPLACE VIEW v_taxon_disease_evidence AS
-SELECT
-    e.taxon_id,
-    e.scientific_name,
-    e.taxonomic_rank,
-    e.phylum,
-    e.disease_id,
-    e.disease_name,
-    e.mesh_id,
-    e.n_associations,
-    e.n_studies,
-    e.n_studies_enriched,
-    e.n_studies_depleted,
-    e.n_sources,
-    e.mean_abs_effect_size,
-    CASE
-        WHEN e.n_studies_enriched > e.n_studies_depleted THEN 'enriched'
-        WHEN e.n_studies_depleted > e.n_studies_enriched THEN 'depleted'
-        WHEN (e.n_studies_enriched + e.n_studies_depleted) = 0 THEN NULL
-        ELSE 'tied'
-    END AS consensus_direction,
-    CASE
-        WHEN (e.n_studies_enriched + e.n_studies_depleted) > 0
-        THEN ROUND(
-            GREATEST(e.n_studies_enriched, e.n_studies_depleted)
-            / (e.n_studies_enriched + e.n_studies_depleted), 3)
-    END AS agreement_ratio,
-    (e.n_studies_enriched > 0 AND e.n_studies_depleted > 0) AS has_conflict
-FROM (
-    SELECT
-        a.taxon_id,
-        t.scientific_name,
-        t.taxonomic_rank,
-        t.phylum,
-        a.disease_id,
-        d.name AS disease_name,
-        d.mesh_id,
-        COUNT(*) AS n_associations,
-        COUNT(DISTINCT c.study_id) AS n_studies,
-        COUNT(DISTINCT CASE WHEN a.direction = 'enriched' THEN c.study_id END) AS n_studies_enriched,
-        COUNT(DISTINCT CASE WHEN a.direction = 'depleted' THEN c.study_id END) AS n_studies_depleted,
-        COUNT(DISTINCT a.source_database) AS n_sources,
-        ROUND(AVG(ABS(a.effect_size)), 3) AS mean_abs_effect_size
+WITH assoc AS (
+    -- Every association, tagged with whether its comparison is case/control.
+    -- COALESCE because a comparison may carry no phenotype ids at all, and
+    -- NULL OR NULL is NULL rather than false.
+    SELECT a.taxon_id,
+           a.disease_id,
+           c.study_id,
+           a.direction,
+           a.effect_size,
+           a.source_database,
+           COALESCE(pa.name = 'Health' OR pb.name = 'Health', 0) AS vs_health
     FROM taxon_disease_associations a
-    JOIN taxa t ON t.id = a.taxon_id
-    JOIN diseases d ON d.id = a.disease_id
     JOIN phenotype_comparisons c ON c.id = a.comparison_id
-    GROUP BY a.taxon_id, t.scientific_name, t.taxonomic_rank, t.phylum,
-             a.disease_id, d.name, d.mesh_id
-) e;
+    LEFT JOIN diseases pa ON pa.id = c.phenotype_a_id
+    LEFT JOIN diseases pb ON pb.id = c.phenotype_b_id
+),
+per_study AS (
+    -- One row per (taxon, disease, study), carrying that study's single vote.
+    -- A study whose own case/control associations disagree with itself is
+    -- 'split' and votes for neither side, instead of being counted on both.
+    SELECT taxon_id,
+           disease_id,
+           study_id,
+           MAX(vs_health) AS has_case_control,
+           CASE
+               WHEN MAX(vs_health) = 0 THEN 'other_contrast'
+               WHEN COUNT(DISTINCT CASE WHEN vs_health THEN direction END) > 1 THEN 'split'
+               ELSE MAX(CASE WHEN vs_health THEN direction END)
+           END AS vote
+    FROM assoc
+    GROUP BY taxon_id, disease_id, study_id
+),
+votes AS (
+    SELECT taxon_id,
+           disease_id,
+           SUM(vote = 'enriched') AS n_studies_enriched,
+           SUM(vote = 'depleted') AS n_studies_depleted,
+           SUM(vote = 'split') AS n_studies_split,
+           SUM(vote = 'other_contrast') AS n_studies_other_contrast,
+           SUM(has_case_control = 1) AS n_studies_case_control
+    FROM per_study
+    GROUP BY taxon_id, disease_id
+),
+totals AS (
+    SELECT taxon_id,
+           disease_id,
+           COUNT(*) AS n_associations,
+           COUNT(DISTINCT study_id) AS n_studies,
+           COUNT(DISTINCT source_database) AS n_sources,
+           ROUND(AVG(ABS(effect_size)), 3) AS mean_abs_effect_size,
+           CASE
+               WHEN MIN(vs_health) = 1 THEN 'vs_health'
+               WHEN MAX(vs_health) = 0 THEN 'disease_vs_disease'
+               ELSE 'mixed'
+           END AS contrast_scope
+    FROM assoc
+    GROUP BY taxon_id, disease_id
+)
+SELECT t.id AS taxon_id,
+       t.scientific_name,
+       t.taxonomic_rank,
+       t.phylum,
+       d.id AS disease_id,
+       d.name AS disease_name,
+       d.mesh_id,
+       -- Replication depth counts EVERY contrast: a disease-vs-disease result
+       -- is still a result, it just cannot vote on a case/control direction.
+       o.n_associations,
+       o.n_studies,
+       o.n_sources,
+       o.mean_abs_effect_size,
+       o.contrast_scope,
+       -- Direction counts case/control studies ONLY, one vote each.
+       v.n_studies_case_control,
+       v.n_studies_enriched,
+       v.n_studies_depleted,
+       v.n_studies_split,
+       v.n_studies_other_contrast,
+       CASE
+           WHEN v.n_studies_enriched > v.n_studies_depleted THEN 'enriched'
+           WHEN v.n_studies_depleted > v.n_studies_enriched THEN 'depleted'
+           WHEN (v.n_studies_enriched + v.n_studies_depleted) = 0 THEN NULL
+           ELSE 'tied'
+       END AS consensus_direction,
+       CASE
+           WHEN (v.n_studies_enriched + v.n_studies_depleted) > 0
+           THEN ROUND(
+               GREATEST(v.n_studies_enriched, v.n_studies_depleted)
+               / (v.n_studies_enriched + v.n_studies_depleted), 3)
+       END AS agreement_ratio,
+       (v.n_studies_enriched > 0 AND v.n_studies_depleted > 0) AS has_conflict
+FROM totals o
+JOIN votes v ON v.taxon_id = o.taxon_id AND v.disease_id = o.disease_id
+JOIN taxa t ON t.id = o.taxon_id
+JOIN diseases d ON d.id = o.disease_id;
 
 
 -- How disease-specific is each taxon?
 --
--- Faecalibacterium is depleted across 74 different diseases: a strong
+-- Faecalibacterium is depleted across dozens of different diseases: a strong
 -- disease-vs-health marker and a near-useless disease-vs-disease one. That
 -- distinction is invisible in the base tables, and picking such a taxon as a
 -- discriminative feature is a silent modelling error rather than a loud one.
@@ -497,6 +568,20 @@ FROM (
 -- depleted_fraction near 1 across many diseases is the signature of a general
 -- dysbiosis marker (loss of a commensal in illness generally) rather than
 -- anything specific to one condition.
+--
+-- depleted_fraction counts CASE/CONTROL associations only, for the same reason
+-- v_taxon_disease_evidence does: "depleted in UC relative to Crohn disease"
+-- says nothing about depletion in illness. Pooling both kinds moved this
+-- fraction by more than 10 percentage points for 85 of the 821 taxa with at
+-- least three associations, and by more than 25 points for 21 of them, with a
+-- worst case of 0.40 -- enough to turn a dysbiosis marker into an apparently
+-- specific one or the reverse. It is NULL where a taxon has no case/control
+-- association at all.
+--
+-- The breadth columns (n_diseases, n_associations, n_studies) still count every
+-- contrast, and these counts are association-level rather than one-vote-per-
+-- study on purpose: specificity is a question about how widely a taxon has been
+-- reported, not about how cohorts voted on one disease.
 CREATE OR REPLACE VIEW v_taxon_specificity AS
 SELECT
     s.taxon_id,
@@ -508,6 +593,7 @@ SELECT
     s.n_studies,
     s.n_enriched,
     s.n_depleted,
+    s.n_other_contrast,
     CASE
         WHEN s.n_diseases = 1 THEN 'single_disease'
         WHEN s.n_diseases <= 5 THEN 'narrow'
@@ -527,11 +613,16 @@ FROM (
         COUNT(DISTINCT a.disease_id) AS n_diseases,
         COUNT(*) AS n_associations,
         COUNT(DISTINCT c.study_id) AS n_studies,
-        SUM(a.direction = 'enriched') AS n_enriched,
-        SUM(a.direction = 'depleted') AS n_depleted
+        SUM(a.direction = 'enriched'
+            AND COALESCE(pa.name = 'Health' OR pb.name = 'Health', 0)) AS n_enriched,
+        SUM(a.direction = 'depleted'
+            AND COALESCE(pa.name = 'Health' OR pb.name = 'Health', 0)) AS n_depleted,
+        SUM(COALESCE(pa.name = 'Health' OR pb.name = 'Health', 0) = 0) AS n_other_contrast
     FROM taxon_disease_associations a
     JOIN taxa t ON t.id = a.taxon_id
     JOIN phenotype_comparisons c ON c.id = a.comparison_id
+    LEFT JOIN diseases pa ON pa.id = c.phenotype_a_id
+    LEFT JOIN diseases pb ON pb.id = c.phenotype_b_id
     GROUP BY a.taxon_id, t.scientific_name, t.taxonomic_rank, t.phylum
 ) s;
 
