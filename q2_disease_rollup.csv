@@ -1,0 +1,158 @@
+disease_name,mesh_id,n_associations,n_taxa,n_studies,n_enriched,n_depleted,mean_abs_effect,n_samples
+Crohn Disease,D003424,2195,663,15,845.0,1350.0,3.15,1960
+"Colitis, Ulcerative",D003093,1555,565,12,723.0,832.0,3.09,1243
+Colorectal Neoplasms,D015179,1499,555,24,714.0,785.0,3.23,1767
+COVID-19,D000086382,683,399,9,243.0,440.0,3.28,733
+"Kidney Failure, Chronic",D007676,642,392,3,346.0,296.0,3.03,707
+"Renal Insufficiency, Chronic",D051436,453,324,7,296.0,157.0,3.11,535
+Diarrhea,D003967,429,327,4,96.0,333.0,3.16,302
+"Fatigue Syndrome, Chronic",D015673,426,233,3,169.0,257.0,2.91,621
+Clostridium Infections,D003015,408,310,5,164.0,244.0,3.25,236
+Neuroblastoma,D009447,353,282,2,131.0,222.0,3.14,95
+Parkinson Disease,D010300,337,259,10,189.0,148.0,3.13,484
+Hypertension,D006973,326,326,1,154.0,172.0,3.09,50
+Obesity,D009765,286,248,9,185.0,101.0,2.99,238
+Cholangiocarcinoma,D018281,274,215,1,108.0,166.0,3.13,19
+"Arthritis, Rheumatoid",D001172,264,226,5,142.0,122.0,3.22,250
+Inflammatory Bowel Diseases,D015212,258,171,8,100.0,158.0,3.32,120
+Irritable Bowel Syndrome,D043183,255,218,4,114.0,141.0,3.14,840
+Cystic Fibrosis,D003550,248,248,1,67.0,181.0,3.15,52
+HIV Infections,D015658,236,168,10,118.0,118.0,3.23,509
+Autism Spectrum Disorder,D000067877,202,176,7,66.0,136.0,2.94,358
+"Carcinoma, Hepatocellular",D006528,202,165,2,120.0,82.0,3.22,44
+Fibromyalgia,D005356,186,181,2,82.0,104.0,3.26,94
+"Hand, Foot and Mouth Disease",D006232,153,142,2,58.0,95.0,3.39,34
+Liver Cirrhosis,D008103,140,108,2,88.0,52.0,3.04,45
+Non-alcoholic Fatty Liver Disease,D065626,137,115,4,63.0,74.0,3.25,316
+"Diabetes Mellitus, Type 2",D003924,127,83,10,76.0,51.0,3.68,354
+Spinal Cord Injuries,D013119,125,105,2,53.0,72.0,3.2,75
+Psoriasis,D011565,121,108,3,22.0,99.0,3.06,158
+Campylobacter Infections,D002169,114,114,1,33.0,81.0,3.48,26
+"Depressive Disorder, Major",D003865,111,105,3,54.0,57.0,3.16,134
+Multiple Sclerosis,D009103,111,99,6,77.0,34.0,3.22,575
+Anorexia,D000855,110,110,1,19.0,91.0,3.27,50
+Intestinal Polyps,D007417,109,103,1,46.0,63.0,3.0,30
+"Diabetes Mellitus, Type 1",D003922,106,94,6,50.0,56.0,3.23,748
+"Hemangioma, Cavernous",D006392,106,106,1,11.0,95.0,3.22,127
+"Diabetes, Gestational",D016640,91,82,3,37.0,54.0,3.39,204
+"Dermatitis, Atopic",D003876,89,89,1,24.0,65.0,3.07,226
+Polycystic Ovary Syndrome,D011085,89,87,2,33.0,56.0,3.36,106
+Breast Neoplasms,D001943,88,77,2,33.0,55.0,2.94,664
+Myasthenia Gravis,D009157,88,81,3,31.0,57.0,3.27,127
+Biliary Atresia,D001656,87,87,1,19.0,68.0,3.42,62
+"Carcinoma, Renal Cell",D002292,81,81,1,65.0,16.0,2.73,51
+Cholestasis,D002779,75,69,2,35.0,40.0,3.28,69
+"Leukemia, Myeloid, Acute",D015470,75,75,1,30.0,45.0,3.02,60
+"Liver Cirrhosis, Alcoholic",D008104,71,50,1,45.0,26.0,3.68,17
+Prostatic Neoplasms,D011471,70,65,3,12.0,58.0,3.04,314
+Dwarfism,D004392,67,63,2,29.0,38.0,3.15,76
+Asthma,D001249,66,64,3,37.0,29.0,3.23,255
+"Purpura, Thrombocytopenic, Idiopathic",D016553,64,58,2,47.0,17.0,3.35,45
+Gastroesophageal Reflux,D005764,62,62,1,39.0,23.0,3.33,10
+Peutz-Jeghers Syndrome,D010580,61,56,2,21.0,40.0,2.93,262
+Anorexia Nervosa,D000856,60,54,2,35.0,25.0,3.13,153
+Hematologic Neoplasms,D019337,60,60,1,19.0,41.0,3.49,29
+Hepatolenticular Degeneration,D006527,58,58,1,35.0,23.0,3.27,92
+Pancreatic Neoplasms,D010190,54,54,1,37.0,17.0,3.82,24
+Migraine Disorders,D008881,52,51,3,25.0,27.0,,0
+Gastrointestinal Diseases,D005767,51,38,2,26.0,25.0,3.88,117
+"Lupus Erythematosus, Systemic",D008180,51,43,3,27.0,24.0,3.59,62
+Cholelithiasis,D002769,50,50,1,5.0,45.0,3.51,42
+Lung Neoplasms,D008175,50,47,2,21.0,29.0,3.38,69
+Moyamoya Disease,D009072,50,50,1,29.0,21.0,3.24,60
+Caliciviridae Infections,D017250,49,49,1,10.0,39.0,3.83,31
+Amyotrophic Lateral Sclerosis,D000690,47,47,1,24.0,23.0,3.0,37
+Coronary Disease,D003327,46,44,2,21.0,25.0,3.39,48
+Sjogren's Syndrome,D012859,46,37,3,17.0,29.0,,0
+Vitiligo,D014820,46,41,4,16.0,30.0,4.31,0
+Sepsis,D018805,45,45,1,27.0,18.0,3.23,126
+"Hepatitis B, Chronic",D019694,44,42,1,23.0,21.0,3.23,58
+Hepatitis C,D006526,43,39,2,15.0,28.0,3.27,104
+"Fatty Liver, Alcoholic",D005235,42,40,1,21.0,21.0,3.51,21
+Schizophrenia,D012559,42,42,1,19.0,23.0,3.22,48
+Alzheimer Disease,D000544,40,36,3,9.0,31.0,3.39,150
+Celiac Disease,D002446,40,38,2,19.0,21.0,3.55,51
+Diabetic Retinopathy,D003930,40,38,2,29.0,11.0,3.91,53
+"Lymphoma, Large B-Cell, Diffuse",D016403,37,37,1,1.0,36.0,3.6,35
+Multiple System Atrophy,D019578,37,37,2,21.0,16.0,3.6,32
+Meningioma,D008579,35,26,1,15.0,20.0,3.76,18
+IgA Deficiency,D017098,34,34,2,12.0,22.0,3.08,207
+"Osteoporosis, Postmenopausal",D015663,34,33,2,15.0,19.0,3.23,79
+"Glomerulonephritis, IGA",D005922,31,31,1,23.0,8.0,3.29,14
+Diabetes Mellitus,D003920,30,27,2,17.0,13.0,3.82,69
+"Hepatitis, Autoimmune",D019693,30,30,1,14.0,16.0,3.68,37
+Stomach Neoplasms,D013274,30,30,2,22.0,8.0,,60
+Alcoholism,D000437,29,29,1,21.0,8.0,3.88,27
+"Hepatitis, Alcoholic",D006519,29,29,1,8.0,21.0,3.88,17
+Atrial Fibrillation,D001281,28,28,2,11.0,17.0,3.85,83
+Glioma,D005910,26,23,1,9.0,17.0,3.57,35
+Hidradenitis Suppurativa,D017497,25,25,1,9.0,16.0,3.71,59
+Anti-N-Methyl-D-Aspartate Receptor Encephalitis,D060426,24,24,1,10.0,14.0,3.7,58
+Retinal Artery Occlusion,D015356,24,24,1,12.0,12.0,3.2,29
+"Pancreatitis, Chronic",D050500,24,24,2,5.0,19.0,,0
+Schistosomiasis haematobia,D012553,23,23,1,15.0,8.0,3.45,24
+"Pulmonary Disease, Chronic Obstructive",D029424,23,23,3,18.0,5.0,,0
+"Colorectal Neoplasms, Hereditary Nonpolyposis",D003123,22,22,1,8.0,14.0,3.32,18
+Malaria,D008288,22,22,1,9.0,13.0,3.25,47
+Helicobacter Infections,D016481,21,21,1,10.0,11.0,3.38,80
+Psychotic Disorders,D011618,21,21,1,9.0,12.0,3.42,26
+"Spondylitis, Ankylosing",D013167,21,21,3,10.0,11.0,,0
+Brain Neoplasms,D001932,20,16,1,19.0,1.0,3.7,12
+Spondylarthritis,D025241,20,20,1,6.0,14.0,3.38,24
+Food Hypersensitivity,D005512,19,18,3,13.0,6.0,,0
+Autoimmune Diseases of the Nervous System,D020274,18,18,1,15.0,3.0,4.49,16
+"Depression, Postpartum",D019052,18,18,1,8.0,10.0,3.52,56
+"Rhinitis, Allergic",D065631,18,17,2,2.0,16.0,3.9,62
+"Arthritis, Juvenile",D001171,17,17,1,1.0,16.0,3.62,39
+Macular Degeneration,D008268,17,17,2,12.0,5.0,3.28,42
+Kidney Calculi,D007669,16,16,1,7.0,9.0,3.37,16
+Mental Disorders,D001523,16,16,1,4.0,12.0,3.42,60
+Gout,D006073,16,15,3,8.0,8.0,,0
+Growth Disorders,D006130,15,15,1,12.0,3.0,2.92,77
+Neuromyelitis Optica,D009471,15,14,2,10.0,5.0,3.75,124
+Tuberculosis,D014376,15,15,1,2.0,13.0,3.69,92
+Pre-Eclampsia,D011225,15,13,3,7.0,8.0,,0
+Central Serous Chorioretinopathy,D056833,14,14,1,5.0,9.0,3.27,19
+Feeding and Eating Disorders,D001068,14,14,1,8.0,6.0,3.66,35
+Respiratory Syncytial Virus Infections,D018357,14,14,1,5.0,9.0,3.41,58
+"Tuberculosis, Gastrointestinal",D014385,13,13,1,8.0,5.0,3.56,12
+"Liver Diseases, Alcoholic",D008108,12,9,1,10.0,2.0,3.57,11
+Growth Hormone-Secreting Pituitary Adenoma,D049912,12,12,1,10.0,2.0,3.35,28
+Mastitis,D008413,12,12,1,4.0,8.0,3.84,49
+Nervous System Diseases,D009422,12,12,1,4.0,8.0,3.82,18
+Osteoporosis,D010024,12,12,1,7.0,5.0,2.96,85
+Anxiety Disorders,D001008,12,11,4,5.0,7.0,,0
+Esophageal Neoplasms,D004938,11,11,1,8.0,3.0,3.99,15
+Graves Ophthalmopathy,D049970,11,11,1,4.0,7.0,3.29,30
+Prediabetic State,D011236,10,10,1,7.0,3.0,3.46,60
+Emergence Delirium,D000071257,10,10,1,6.0,4.0,3.5,20
+Narcolepsy,D009290,10,10,1,5.0,5.0,3.45,35
+Tic Disorders,D013981,10,10,1,5.0,5.0,3.87,21
+Appendicitis,D001064,9,9,1,2.0,7.0,3.82,12
+Endometriosis,D004715,9,9,1,3.0,6.0,3.58,28
+Flatulence,D005414,9,9,1,3.0,6.0,3.34,57
+Hypercholesterolemia,D006937,9,9,1,4.0,5.0,3.23,27
+Rett Syndrome,D015518,9,9,1,6.0,3.0,3.76,42
+Schistosomiasis japonica,D012554,9,9,1,5.0,4.0,3.76,11
+Depression,D003863,8,8,1,3.0,5.0,2.93,41
+Metaplasia,D008679,8,8,1,2.0,6.0,3.5,40
+Peptic Ulcer,D010437,8,8,2,2.0,6.0,,0
+Metabolic Syndrome,D024821,7,7,1,4.0,3.0,3.38,242
+Nephrotic Syndrome,D009404,7,7,1,1.0,6.0,4.37,26
+Premenstrual Syndrome,D011293,7,7,1,3.0,4.0,3.36,27
+Acne Vulgaris,D000152,6,6,1,1.0,5.0,2.8,31
+Digestive System Diseases,D004066,6,6,1,2.0,4.0,4.17,30
+Epilepsy,D004827,6,6,1,0.0,6.0,3.68,21
+"Hepatitis, Viral, Human",D006525,6,5,1,2.0,4.0,3.83,36
+"Infant, Low Birth Weight",D007230,6,6,1,1.0,5.0,4.25,12
+Menopause,D008593,6,6,1,1.0,5.0,3.63,50
+Attention Deficit Disorder with Hyperactivity,D001289,6,6,3,3.0,3.0,,0
+Amebiasis,D000562,5,5,1,2.0,3.0,4.36,11
+"Enterocolitis, Necrotizing",D020345,4,4,1,1.0,3.0,4.82,81
+Mucocutaneous Lymph Node Syndrome,D009080,4,4,1,0.0,4.0,2.8,60
+Bipolar Disorder,D001714,4,3,2,1.0,3.0,,0
+Gallstones,D042882,3,3,1,1.0,2.0,3.58,30
+Alopecia Areata,D000506,2,2,1,1.0,1.0,3.51,15
+Cushing Syndrome,D003480,2,2,1,1.0,1.0,5.58,15
+Esophagitis,D004941,2,2,1,1.0,1.0,4.03,11
+Hepatic Encephalopathy,D006501,1,1,1,1.0,0.0,4.89,0

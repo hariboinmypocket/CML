@@ -1,0 +1,256 @@
+scientific_name,taxonomic_rank,direction,effect_size,effect_type,project_accession,method,phenotype_a,phenotype_b,source_database
+Alistipes,genus,depleted,-4.79,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Bacteroides,genus,depleted,-4.67,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Bacteroides,genus,enriched,4.66,LDA,PRJNA637763,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Alistipes putredinis,species,depleted,-4.45,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Ruminococcus,genus,depleted,-4.31,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Segatella,genus,depleted,-4.3,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Alistipes onderdonkii,species,depleted,-4.2,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Ruminococcus,genus,depleted,-4.18,LDA,PRJNA637763,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Catenibacterium,genus,enriched,4.17,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Coprococcus eutactus,species,depleted,-4.17,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Segatella copri,species,depleted,-4.17,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Bacteroides ovatus,species,enriched,4.16,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Akkermansia,genus,depleted,-4.15,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Coprococcus,genus,depleted,-4.15,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Ruminococcus,genus,enriched,4.14,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Phocaeicola massiliensis,species,depleted,-4.14,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Fusicatenibacter,genus,depleted,-4.11,LDA,PRJNA637763,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Faecalibacterium,genus,depleted,-4.1,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Candidatus Cibiobacter qucibialis,species,depleted,-4.1,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Candidatus Cibionibacter quicibialis,species,depleted,-4.1,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Bacteroides,genus,enriched,4.07,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Alistipes,genus,depleted,-4.03,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Ruminococcus bromii,species,depleted,-4.01,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Mediterraneibacter,genus,enriched,3.99,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Eubacterium,genus,depleted,-3.99,LDA,PRJNA637763,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Faecalibacterium prausnitzii,species,depleted,-3.96,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Waltera,genus,depleted,-3.96,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Streptococcus,genus,enriched,3.94,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Candidatus Cibiobacter,genus,depleted,-3.94,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Waltera acetigignens,species,depleted,-3.94,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Lachnospira,genus,depleted,-3.93,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Collinsella,genus,depleted,-3.92,LDA,PRJNA637763,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Mediterraneibacter torques,species,enriched,3.9,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Alistipes finegoldii,species,depleted,-3.84,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Holdemanella,genus,enriched,3.83,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Bacteroides cellulosilyticus,species,depleted,-3.83,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Prevotella,genus,depleted,-3.81,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Lachnospira pectinoschiza,species,depleted,-3.8,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Collinsella,genus,enriched,3.79,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Bifidobacterium adolescentis,species,depleted,-3.76,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Phocaeicola dorei,species,enriched,3.73,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Akkermansia muciniphila,species,enriched,3.73,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Pseudoruminococcus,genus,depleted,-3.73,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Oliverpabstia,genus,depleted,-3.72,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Oscillibacter,genus,depleted,-3.72,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Akkermansia,genus,enriched,3.7,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Mediterraneibacter gnavus,species,enriched,3.68,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Dialister invisus,species,enriched,3.67,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Coprococcus eutactus,species,depleted,-3.67,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Anaerobutyricum,genus,enriched,3.66,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Blautia faecis,species,enriched,3.66,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Pseudoruminococcus massiliensis,species,depleted,-3.66,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Vescimonas,genus,depleted,-3.66,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Streptococcus salivarius,species,enriched,3.65,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Dialister,genus,enriched,3.65,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Oscillibacter,genus,depleted,-3.63,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Desulfovibrio,genus,enriched,3.62,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Vescimonas coprocola,species,depleted,-3.62,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Dialister,genus,depleted,-3.61,LDA,PRJNA637763,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Lachnospira eligens,species,depleted,-3.61,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Tyzzerella,genus,enriched,3.56,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Oliverpabstia intestinalis,species,depleted,-3.56,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Phocaeicola massiliensis,species,depleted,-3.55,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Wujia,genus,depleted,-3.54,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Bacteroides eggerthii,species,enriched,3.52,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Methanobrevibacter,genus,enriched,3.52,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Wujia chipingensis,species,depleted,-3.52,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Parabacteroides johnsonii,species,depleted,-3.52,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Eubacterium siraeum,species,depleted,-3.51,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Waltera,genus,depleted,-3.51,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Roseburia,genus,depleted,-3.51,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Vescimonas,genus,enriched,3.5,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Hominenteromicrobium mulieris,species,depleted,-3.5,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Odoribacter,genus,depleted,-3.5,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Escherichia,genus,enriched,3.48,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Phocaeicola coprocola,species,depleted,-3.48,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Faecalibacterium wellingii,species,depleted,-3.48,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Vescimonas coprocola,species,enriched,3.47,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Gemmiger formicilis,species,depleted,-3.47,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Faecalimonas nexilis,species,enriched,3.46,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Longicatena,genus,enriched,3.46,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Holdemanella,genus,depleted,-3.46,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Parasutterella,genus,depleted,-3.46,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Waltera acetigignens,species,depleted,-3.45,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Parasutterella,genus,depleted,-3.45,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Holdemanella porci,species,depleted,-3.44,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Mediterraneibacter,genus,depleted,-3.44,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Escherichia coli,species,enriched,3.43,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Blautia caecimuris,species,enriched,3.42,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Anaerobutyricum soehngenii,species,enriched,3.4,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Monoglobus,genus,depleted,-3.4,LDA,PRJNA637763,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Evtepia,genus,enriched,3.39,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Alistipes putredinis,species,depleted,-3.39,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Oscillibacter sp. er4,species,depleted,-3.39,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Roseburia faecis,species,depleted,-3.39,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Evtepia gabavorous,species,enriched,3.38,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Monoglobus,genus,enriched,3.38,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Bacteroides fragilis,species,enriched,3.38,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Lachnoclostridium,genus,enriched,3.38,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Ruthenibacterium,genus,enriched,3.36,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Escherichia,genus,enriched,3.36,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Phascolarctobacterium succinatutens,species,depleted,-3.35,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Monoglobus pectinilyticus,species,enriched,3.33,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Longicatena caecimuris,species,enriched,3.32,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Escherichia coli,species,enriched,3.32,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Roseburia sp. af02-12,species,depleted,-3.32,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Romboutsia,genus,enriched,3.31,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Faecalicatena,genus,depleted,-3.3,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Faecalibacterium butyricigenerans,species,depleted,-3.3,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Anaerostipes,genus,depleted,-3.28,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Xylanibacter brevis,species,depleted,-3.27,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Oscillibacter sp. msj-31,species,depleted,-3.27,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Faecalicatena fissicatena,species,depleted,-3.26,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Collinsella aerofaciens,species,depleted,-3.26,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Acidaminococcus,genus,enriched,3.25,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Collinsella stercoris,species,enriched,3.25,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Blautia glucerasea,species,enriched,3.24,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Phascolarctobacterium,genus,depleted,-3.24,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Blautia faecicola,species,enriched,3.22,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Ruthenibacterium lactatiformans,species,enriched,3.22,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Dorea longicatena,species,depleted,-3.22,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Acidaminococcus,genus,depleted,-3.21,LDA,PRJNA637763,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Eubacterium ramulus,species,depleted,-3.21,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Bacteroides thetaiotaomicron,species,enriched,3.16,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Sutterella,genus,depleted,-3.15,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Dorea phocaeensis,species,enriched,3.13,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Sutterella wadsworthensis,species,depleted,-3.13,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Halomonas,genus,enriched,3.12,LDA,PRJNA637763,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Bifidobacterium animalis,species,enriched,3.12,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Alistipes finegoldii,species,enriched,3.12,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Lactobacillus,genus,enriched,3.07,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Clostridium symbiosum,species,enriched,3.07,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Enterocloster clostridioformis,species,enriched,3.07,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Intestinibacter,genus,depleted,-3.04,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Gallintestinimicrobium propionicum,species,depleted,-3.04,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Agathobaculum,genus,depleted,-3.04,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Mediterraneibacter gnavus,species,depleted,-3.04,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Sutterella,genus,enriched,3.03,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Agathobaculum butyriciproducens,species,depleted,-3.03,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Barnesiella intestinihominis,species,depleted,-3.03,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Megamonas,genus,enriched,3.02,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Bifidobacterium catenulatum,species,enriched,3.02,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Clostridiales bacterium kle1615,species,depleted,-3.02,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Oscillibacter sp. msj-31,species,depleted,-3.02,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Muribaculaceae,genus,enriched,3.01,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Phocaeicola plebeius,species,enriched,3.01,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Bacillota bacterium,species,depleted,-3.01,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Streptococcus parasanguinis,species,enriched,3.0,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Thomasclavelia,genus,depleted,-3.0,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Parasutterella,genus,enriched,2.99,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Barnesiella,genus,depleted,-2.99,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Prevotella marseillensis,species,depleted,-2.99,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Prevotella dentalis,species,depleted,-2.99,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Faecalibacterium wellingii,species,depleted,-2.99,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Veillonella dispar,species,enriched,2.98,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Coprobacter,genus,depleted,-2.98,LDA,PRJNA637763,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Oscillibacter valericigenes,species,depleted,-2.98,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Alistipes ihumii,species,depleted,-2.98,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Lactobacillus gasseri,species,enriched,2.97,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Clostridium sp. at4,species,enriched,2.97,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Clostridium leptum,species,enriched,2.96,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Eggerthella,genus,enriched,2.96,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Ligilactobacillus,genus,enriched,2.95,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Eggerthella,genus,enriched,2.94,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Dorea sp. af36-15at,species,enriched,2.91,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Eggerthella lenta,species,enriched,2.91,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Eubacterium,genus,depleted,-2.91,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Parasutterella excrementihominis,species,enriched,2.9,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Phocaeicola coprophilus,species,depleted,-2.9,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Clostridium scindens,species,enriched,2.88,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Tannerellaceae,genus,enriched,2.87,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Leyella stercorea,species,depleted,-2.87,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Eisenbergiella,genus,enriched,2.86,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Bilophila,genus,depleted,-2.86,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Allisonella,genus,enriched,2.84,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Desulfovibrio piger,species,depleted,-2.84,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Gordonibacter,genus,enriched,2.83,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Ruminococcus sp. af41-9,species,depleted,-2.82,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Clostridium saudiense,species,enriched,2.8,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Roseburia,genus,depleted,-2.79,LDA,PRJNA637763,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Clostridiaceae bacterium af18-31lb,species,depleted,-2.77,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Gordonibacter pamelaeae,species,enriched,2.76,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Blautia hydrogenotrophica,species,enriched,2.75,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Prevotella pectinovora,species,depleted,-2.74,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Anaeroplasma,genus,depleted,-2.71,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Lachnoclostridium,genus,enriched,2.69,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Clostridiales bacterium,species,enriched,2.68,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Allofournierella,genus,depleted,-2.68,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Clostridium fessum,species,depleted,-2.67,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Negativibacillus,genus,enriched,2.66,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Massilimicrobiota,genus,enriched,2.64,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Limosilactobacillus,genus,enriched,2.63,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Pseudoflavonifractor,genus,enriched,2.63,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Alistipes communis,species,enriched,2.62,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Parabacteroides faecis,species,enriched,2.61,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Bacteroides clarus,species,enriched,2.6,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Longibaculum,genus,enriched,2.6,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Candidatus Borkfalkia ceftriaxoniphila,species,enriched,2.6,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Parabacteroides faecalis,species,depleted,-2.6,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Lentihominibacter,genus,depleted,-2.6,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Candidatus Borkfalkia,genus,depleted,-2.6,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Actinomyces,genus,enriched,2.58,LDA,PRJNA637763,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Thomasclavelia,genus,enriched,2.58,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Massilimicrobiota timonensis,species,enriched,2.56,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Lawsonibacter,genus,depleted,-2.56,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Sellimonas,genus,enriched,2.55,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Flavonifractor,genus,depleted,-2.55,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Lentihominibacter faecis,species,depleted,-2.55,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Longibaculum muris,species,enriched,2.54,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Mitsuokella,genus,depleted,-2.54,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Pseudomonas,genus,enriched,2.53,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Mitsuokella multacida,species,depleted,-2.53,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Lawsonibacter asaccharolyticus,species,depleted,-2.53,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Pseudoflavonifractor phocaeensis,species,enriched,2.52,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Coprobacillus,genus,enriched,2.51,LDA,PRJNA637763,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Clostridium sp. af36-4,species,depleted,-2.49,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Kineothrix,genus,depleted,-2.49,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Slackia isoflavoniconvertens,species,depleted,-2.48,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Collinsella sp. af08-23,species,enriched,2.47,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Enterocloster bolteae,species,enriched,2.43,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Sellimonas intestinalis,species,enriched,2.41,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Odoribacter,genus,depleted,-2.41,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Fusicatenibacter faecihominis,species,depleted,-2.4,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Limosilactobacillus portuensis,species,enriched,2.36,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Coprococcus catus,species,depleted,-2.36,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Clostridium innocuum,species,enriched,2.34,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Gordonibacter,genus,enriched,2.32,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Lachnospiraceae bacterium ep-sm-12s-s03,species,enriched,2.31,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Victivallis,genus,depleted,-2.31,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Bacteroides fluxus,species,depleted,-2.27,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Jutongia,genus,depleted,-2.25,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Jutongia hominis,species,depleted,-2.25,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Eubacterium sp. af34-35bh,species,depleted,-2.25,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Eisenbergiella,genus,depleted,-2.23,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Butyricimonas,genus,enriched,2.19,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Senegalimassilia,genus,enriched,2.18,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Muribaculum,genus,depleted,-2.18,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Hydrogenoanaerobacterium,genus,enriched,2.14,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Enterorhabdus,genus,depleted,-2.14,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Clostridia bacterium uc5.1-1e11,species,enriched,2.12,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Faecalitalea,genus,depleted,-2.12,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Clostridium sp. am29-11ac,species,enriched,2.11,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Amedibacterium intestinale,species,depleted,-2.11,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Roseburia zhanii,species,depleted,-2.1,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Roseburia zhanili,species,depleted,-2.1,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Blautia luti,species,depleted,-2.09,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Amedibacterium,genus,depleted,-2.09,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Anaerotignum lactatifermentans,species,depleted,-2.09,LDA,PRJNA705217,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Drancourtella massiliensis,species,depleted,-2.06,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Anaerovibrio,genus,depleted,-2.03,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Shuttleworthella,genus,enriched,2.02,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Clostridium sp. af27-2aa,species,enriched,2.01,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Parolsenella,genus,enriched,2.01,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Terrisporobacter,genus,depleted,-2.01,LDA,PRJNA682378,LEfSe,Health,Irritable Bowel Syndrome,GMrepo
+Anaerovibrio lipolyticus,species,depleted,-2.01,LDA,PRJEB37924,LEfSe,Health,Irritable Bowel Syndrome,GMrepo

@@ -30,15 +30,23 @@ Lit. Reviews/
 *.pptx
 *.potx
 
-# SQLite build outputs (scripts/build_gutdb_sqlite.py, cleanup_gutdb.py,
-# query_gutdb.py): all regenerable from the scripts, and the database itself is
-# ~68MB, past GitHub's warning threshold.
+# SQLite build outputs (scripts/build_gutdb_sqlite.py, cleanup_gutdb.py):
+# regenerable from the scripts, and the database itself is ~68MB, past GitHub's
+# warning threshold.
 gut_microbiome.sqlite
 gut_microbiome.sqlite-journal
-q[1-7]_*.csv
 coverage_before_after.csv
 cleanup_log.txt
 taxdump/
+
+# q1-q7 (scripts/query_gutdb.py) are deliberately TRACKED, though they are
+# regenerable. They used to be ignored on that basis, but the script now reads
+# MySQL, which changes under you within a session -- abundance rows went from
+# 11,884 to over 3M across one stretch of this project. Committing them pins the
+# snapshot a given figure or claim was built from, so a number in a slide can be
+# traced to a commit instead of to a database that has since moved. ~1MB total.
+#
+# Regenerate with: python scripts/query_gutdb.py
 
 # Local scratch
 tmp/

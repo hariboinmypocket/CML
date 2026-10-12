@@ -1,0 +1,591 @@
+scientific_name,taxonomic_rank,phylum,n_diseases,n_associations,n_studies,n_enriched,n_depleted,n_other_contrast,specificity_class,depleted_fraction
+Faecalibacterium,genus,Firmicutes,74,137,114,15.0,102.0,20.0,pan_disease,0.872
+Lachnospira,genus,Firmicutes,72,124,102,17.0,91.0,16.0,pan_disease,0.843
+Ruminococcus,genus,Firmicutes,66,115,104,14.0,97.0,4.0,pan_disease,0.874
+Anaerostipes,genus,Firmicutes,66,113,92,25.0,68.0,20.0,pan_disease,0.731
+Fusicatenibacter,genus,Firmicutes,65,112,97,9.0,95.0,8.0,pan_disease,0.913
+Bacteroides,genus,Bacteroidetes,63,119,101,60.0,45.0,14.0,pan_disease,0.429
+Prevotella,genus,Bacteroidetes,63,107,88,35.0,58.0,14.0,pan_disease,0.624
+Coprococcus,genus,Firmicutes,61,115,96,12.0,89.0,14.0,pan_disease,0.881
+Clostridium,genus,Firmicutes,61,86,73,23.0,51.0,12.0,pan_disease,0.689
+Alistipes,genus,Bacteroidetes,59,110,88,35.0,61.0,14.0,pan_disease,0.635
+Flavonifractor,genus,Firmicutes,59,93,79,61.0,24.0,8.0,pan_disease,0.282
+Dorea,genus,Firmicutes,58,96,83,15.0,71.0,10.0,pan_disease,0.826
+Eubacterium,genus,Firmicutes,58,92,79,12.0,70.0,10.0,pan_disease,0.854
+Romboutsia,genus,Firmicutes,57,86,78,10.0,68.0,8.0,pan_disease,0.872
+Bifidobacterium,genus,Actinobacteria,57,83,77,28.0,47.0,8.0,pan_disease,0.627
+Blautia,genus,Firmicutes,56,93,82,34.0,53.0,6.0,pan_disease,0.609
+Streptococcus,genus,Firmicutes,54,82,70,62.0,12.0,8.0,pan_disease,0.162
+Parasutterella,genus,Proteobacteria,53,78,69,18.0,54.0,6.0,pan_disease,0.75
+Enterococcus,genus,Firmicutes,52,78,65,57.0,7.0,14.0,pan_disease,0.109
+Veillonella,genus,Firmicutes,52,77,64,56.0,13.0,8.0,pan_disease,0.188
+Mediterraneibacter,genus,Firmicutes,52,74,58,43.0,17.0,14.0,pan_disease,0.283
+Roseburia,genus,Firmicutes,51,96,84,10.0,78.0,8.0,pan_disease,0.886
+Lachnoclostridium,genus,Firmicutes,51,80,68,44.0,30.0,6.0,pan_disease,0.405
+Parabacteroides,genus,Bacteroidetes,50,86,67,43.0,31.0,12.0,pan_disease,0.419
+Sutterella,genus,Proteobacteria,49,79,63,16.0,51.0,12.0,pan_disease,0.761
+Hungatella,genus,Firmicutes,49,75,66,59.0,12.0,4.0,pan_disease,0.169
+Phascolarctobacterium,genus,Firmicutes,49,72,66,21.0,47.0,4.0,pan_disease,0.691
+Eggerthella,genus,Actinobacteria,49,69,57,46.0,13.0,10.0,pan_disease,0.22
+Collinsella,genus,Actinobacteria,48,80,70,28.0,46.0,6.0,pan_disease,0.622
+Butyricicoccus,genus,Firmicutes,48,74,64,15.0,49.0,10.0,pan_disease,0.766
+Ligilactobacillus,genus,Firmicutes,48,60,51,36.0,20.0,4.0,pan_disease,0.357
+Dialister,genus,Firmicutes,47,76,65,19.0,47.0,10.0,pan_disease,0.712
+Holdemanella,genus,Firmicutes,47,65,63,22.0,39.0,4.0,pan_disease,0.639
+Thomasclavelia,genus,Firmicutes,46,84,68,66.0,8.0,10.0,pan_disease,0.108
+Monoglobus,genus,Firmicutes,46,73,58,12.0,47.0,14.0,pan_disease,0.797
+Odoribacter,genus,Bacteroidetes,45,77,65,22.0,45.0,10.0,pan_disease,0.672
+Oscillibacter,genus,Firmicutes,45,76,61,17.0,51.0,8.0,pan_disease,0.75
+Bilophila,genus,Thermodesulfobacteriota,44,68,54,29.0,33.0,6.0,pan_disease,0.532
+Actinomyces,genus,Actinobacteria,44,67,52,46.0,11.0,10.0,pan_disease,0.193
+Subdoligranulum,genus,Firmicutes,44,62,55,10.0,46.0,6.0,pan_disease,0.821
+Intestinibacter,genus,Firmicutes,44,60,53,18.0,34.0,8.0,pan_disease,0.654
+Sellimonas,genus,Firmicutes,41,53,44,34.0,11.0,8.0,pan_disease,0.244
+Fusobacterium,genus,Fusobacteria,40,86,70,64.0,8.0,14.0,pan_disease,0.111
+Eisenbergiella,genus,Firmicutes,40,63,56,53.0,8.0,2.0,pan_disease,0.131
+Limosilactobacillus,genus,Firmicutes,39,61,49,44.0,7.0,10.0,pan_disease,0.137
+Agathobacter,genus,Firmicutes,39,51,47,8.0,39.0,4.0,pan_disease,0.83
+Akkermansia,genus,Verrucomicrobia,38,62,51,24.0,30.0,8.0,pan_disease,0.556
+Megasphaera,genus,Firmicutes,38,57,50,28.0,23.0,6.0,pan_disease,0.451
+Anaerotruncus,genus,Firmicutes,38,55,49,37.0,14.0,4.0,pan_disease,0.275
+Desulfovibrio,genus,Thermodesulfobacteriota,37,61,49,21.0,30.0,10.0,pan_disease,0.588
+Turicibacter,genus,Firmicutes,37,60,50,15.0,35.0,10.0,pan_disease,0.7
+Megamonas,genus,Firmicutes,37,55,47,21.0,28.0,6.0,pan_disease,0.571
+Tyzzerella,genus,Firmicutes,37,50,43,18.0,28.0,4.0,pan_disease,0.609
+Colidextribacter,genus,Firmicutes,37,47,38,17.0,20.0,10.0,pan_disease,0.541
+Rothia,genus,Actinobacteria,37,44,37,30.0,6.0,8.0,pan_disease,0.167
+Alloprevotella,genus,Bacteroidetes,36,53,48,29.0,20.0,4.0,pan_disease,0.408
+Haemophilus,genus,Proteobacteria,36,48,36,12.0,26.0,10.0,pan_disease,0.684
+Barnesiella,genus,Bacteroidetes,35,68,59,16.0,48.0,4.0,pan_disease,0.75
+Butyricimonas,genus,Bacteroidetes,35,66,53,15.0,43.0,8.0,pan_disease,0.741
+Senegalimassilia,genus,Actinobacteria,35,48,40,17.0,25.0,6.0,pan_disease,0.595
+Negativibacillus,genus,Firmicutes,35,47,34,18.0,13.0,16.0,pan_disease,0.419
+Lactobacillus,genus,Firmicutes,34,59,46,42.0,9.0,8.0,pan_disease,0.176
+Paraprevotella,genus,Bacteroidetes,34,58,46,9.0,41.0,8.0,pan_disease,0.82
+Intestinimonas,genus,Firmicutes,34,54,45,25.0,19.0,10.0,pan_disease,0.432
+Adlercreutzia,genus,Actinobacteria,29,48,40,5.0,39.0,4.0,pan_disease,0.886
+Fusicatenibacter saccharivorans,species,Firmicutes,29,47,42,4.0,43.0,0.0,pan_disease,0.915
+Anaerobutyricum,genus,Firmicutes,29,42,36,8.0,32.0,2.0,pan_disease,0.8
+Gemella,genus,Firmicutes,28,50,43,40.0,6.0,4.0,pan_disease,0.13
+Escherichia,genus,Proteobacteria,28,42,34,34.0,2.0,6.0,pan_disease,0.056
+Mediterraneibacter gnavus,species,Firmicutes,27,43,33,27.0,6.0,10.0,pan_disease,0.182
+Acidaminococcus,genus,Firmicutes,27,39,34,20.0,13.0,6.0,pan_disease,0.394
+Bacteroides uniformis,species,Bacteroidetes,27,39,29,13.0,16.0,10.0,pan_disease,0.552
+Dorea longicatena,species,Firmicutes,27,39,35,4.0,33.0,2.0,pan_disease,0.892
+Muribaculaceae,genus,Bacteroidetes,27,31,31,8.0,23.0,0.0,pan_disease,0.742
+Anaerobutyricum hallii,species,Firmicutes,26,44,36,3.0,37.0,4.0,pan_disease,0.925
+Lachnospira eligens,species,Firmicutes,26,43,32,6.0,27.0,10.0,pan_disease,0.818
+Dysosmobacter,genus,Firmicutes,26,43,32,22.0,15.0,6.0,pan_disease,0.405
+Enterocloster bolteae,species,Firmicutes,26,42,35,33.0,3.0,6.0,pan_disease,0.083
+Holdemania,genus,Firmicutes,26,36,31,12.0,20.0,4.0,pan_disease,0.625
+Terrisporobacter,genus,Firmicutes,26,28,26,5.0,21.0,2.0,pan_disease,0.808
+Agathobacter rectalis,species,Firmicutes,25,52,41,4.0,42.0,6.0,pan_disease,0.913
+Lachnospira pectinoschiza,species,Firmicutes,25,43,36,7.0,32.0,4.0,pan_disease,0.821
+Clostridium symbiosum,species,Firmicutes,25,43,34,33.0,4.0,6.0,pan_disease,0.108
+Clostridium sp. am33-3,species,Firmicutes,25,40,34,5.0,31.0,4.0,pan_disease,0.861
+Catenibacterium,genus,Firmicutes,25,39,36,17.0,20.0,2.0,pan_disease,0.541
+Clostridiales bacterium,species,Firmicutes,25,38,30,16.0,14.0,8.0,pan_disease,0.467
+Ruthenibacterium lactatiformans,species,Firmicutes,25,38,33,25.0,9.0,4.0,pan_disease,0.265
+Anaerostipes hadrus,species,Firmicutes,25,37,32,10.0,23.0,4.0,pan_disease,0.697
+Mediterraneibacter torques,species,Firmicutes,25,36,29,22.0,8.0,6.0,pan_disease,0.267
+Odoribacter splanchnicus,species,Bacteroidetes,25,36,28,8.0,20.0,8.0,pan_disease,0.714
+Ruthenibacterium,genus,Firmicutes,25,36,32,25.0,9.0,2.0,pan_disease,0.265
+Phocaeicola,genus,Bacteroidetes,25,35,26,14.0,11.0,10.0,pan_disease,0.44
+Blautia wexlerae,species,Firmicutes,25,32,29,7.0,21.0,4.0,pan_disease,0.75
+Faecalibacterium prausnitzii,species,Firmicutes,24,49,40,4.0,37.0,8.0,pan_disease,0.902
+Methanobrevibacter,genus,Euryarchaeota,24,49,42,20.0,25.0,4.0,pan_disease,0.556
+Clostridiaceae bacterium af18-31lb,species,Firmicutes,24,46,37,2.0,40.0,4.0,pan_disease,0.952
+Clostridiaceae bacterium,species,Firmicutes,24,42,33,1.0,35.0,6.0,pan_disease,0.972
+Pseudoflavonifractor,genus,Firmicutes,24,39,30,13.0,16.0,10.0,pan_disease,0.552
+Dysosmobacter welbionis,species,Firmicutes,24,39,28,19.0,14.0,6.0,pan_disease,0.424
+Blautia faecis,species,Firmicutes,24,35,28,9.0,22.0,4.0,pan_disease,0.71
+Klebsiella,genus,Proteobacteria,24,35,33,25.0,8.0,2.0,pan_disease,0.242
+Campylobacter,genus,Campylobacterota,24,33,26,20.0,7.0,6.0,pan_disease,0.259
+Phocaeicola vulgatus,species,Bacteroidetes,24,30,22,15.0,5.0,10.0,pan_disease,0.25
+Enterocloster,genus,Firmicutes,23,45,35,36.0,1.0,8.0,pan_disease,0.027
+Roseburia inulinivorans,species,Firmicutes,23,44,31,2.0,32.0,10.0,pan_disease,0.941
+Roseburia faecis,species,Firmicutes,23,41,35,1.0,38.0,2.0,pan_disease,0.974
+Flavonifractor plautii,species,Firmicutes,23,40,32,27.0,9.0,4.0,pan_disease,0.25
+Bifidobacterium adolescentis,species,Actinobacteria,23,39,30,8.0,25.0,6.0,pan_disease,0.758
+Lawsonibacter,genus,Firmicutes,23,39,27,10.0,21.0,8.0,pan_disease,0.677
+Hungatella hathewayi,species,Firmicutes,23,38,32,30.0,6.0,2.0,pan_disease,0.167
+Lawsonibacter asaccharolyticus,species,Firmicutes,23,38,26,10.0,20.0,8.0,pan_disease,0.667
+Segatella copri,species,Bacteroidetes,23,37,30,6.0,25.0,6.0,pan_disease,0.806
+Hydrogenoanaerobacterium,genus,Firmicutes,23,37,28,10.0,17.0,10.0,pan_disease,0.63
+Parabacteroides merdae,species,Bacteroidetes,23,33,24,11.0,14.0,8.0,pan_disease,0.56
+Mitsuokella,genus,Firmicutes,23,33,30,10.0,21.0,2.0,pan_disease,0.677
+Clostridium innocuum,species,Firmicutes,23,31,27,24.0,5.0,2.0,pan_disease,0.172
+Allofournierella,genus,Firmicutes,23,30,26,10.0,16.0,4.0,pan_disease,0.615
+Blautia obeum,species,Firmicutes,22,42,29,6.0,26.0,10.0,pan_disease,0.813
+Blautia massiliensis (ex durand et al. 2017),species,Firmicutes,22,42,31,3.0,31.0,8.0,pan_disease,0.912
+Clostridiales bacterium kle1615,species,Firmicutes,22,39,32,5.0,34.0,0.0,pan_disease,0.872
+Escherichia coli,species,Proteobacteria,22,38,30,29.0,3.0,6.0,pan_disease,0.094
+Clostridium fessum,species,Firmicutes,22,38,31,5.0,31.0,2.0,pan_disease,0.861
+Oscillibacter sp. er4,species,Firmicutes,22,36,29,3.0,29.0,4.0,pan_disease,0.906
+Lacrimispora,genus,Firmicutes,22,35,29,7.0,22.0,6.0,pan_disease,0.759
+Lacrimispora amygdalina,species,Firmicutes,22,35,29,7.0,22.0,6.0,pan_disease,0.759
+Parasutterella excrementihominis,species,Proteobacteria,22,30,26,9.0,19.0,2.0,pan_disease,0.679
+Clostridium leptum,species,Firmicutes,22,30,24,14.0,14.0,2.0,pan_disease,0.5
+Tannerellaceae,genus,Bacteroidetes,22,29,23,11.0,12.0,6.0,pan_disease,0.522
+Bacteroides stercoris,species,Bacteroidetes,22,28,24,7.0,17.0,4.0,pan_disease,0.708
+Evtepia,genus,Firmicutes,22,27,24,11.0,14.0,2.0,pan_disease,0.56
+Christensenella,genus,Firmicutes,22,26,20,14.0,8.0,4.0,pan_disease,0.364
+Atopobium,genus,Actinobacteria,22,26,19,20.0,2.0,4.0,pan_disease,0.091
+Evtepia gabavorous,species,Firmicutes,22,25,23,11.0,12.0,2.0,pan_disease,0.522
+Coprococcus eutactus,species,Firmicutes,21,41,34,1.0,36.0,4.0,pan_disease,0.973
+Romboutsia timonensis,species,Firmicutes,21,37,31,6.0,25.0,6.0,pan_disease,0.806
+Blautia glucerasea,species,Firmicutes,21,36,31,10.0,22.0,4.0,pan_disease,0.688
+Bilophila wadsworthia,species,Thermodesulfobacteriota,21,35,25,16.0,13.0,6.0,pan_disease,0.448
+Eubacterium ventriosum,species,Firmicutes,21,34,27,7.0,23.0,4.0,pan_disease,0.767
+Vescimonas,genus,Firmicutes,21,32,26,11.0,17.0,4.0,pan_disease,0.607
+Eggerthella lenta,species,Actinobacteria,21,31,25,22.0,3.0,6.0,pan_disease,0.12
+Lachnospiraceae bacterium am48-27bh,species,Firmicutes,21,31,28,1.0,28.0,2.0,pan_disease,0.966
+Dialister invisus,species,Firmicutes,21,30,24,12.0,12.0,6.0,pan_disease,0.5
+Coprobacillus,genus,Firmicutes,21,30,26,20.0,8.0,2.0,pan_disease,0.286
+Lentihominibacter,genus,Firmicutes,21,28,24,9.0,17.0,2.0,pan_disease,0.654
+Gordonibacter,genus,Actinobacteria,21,28,24,13.0,15.0,0.0,pan_disease,0.536
+Streptococcus salivarius,species,Firmicutes,21,26,23,12.0,10.0,4.0,pan_disease,0.455
+Bacteroides xylanisolvens,species,Bacteroidetes,21,25,19,9.0,10.0,6.0,pan_disease,0.526
+Agathobaculum butyriciproducens,species,Firmicutes,20,46,39,3.0,41.0,2.0,broad,0.932
+Agathobaculum,genus,Firmicutes,20,44,38,3.0,39.0,2.0,broad,0.929
+Candidatus Cibiobacter,genus,Firmicutes,20,41,32,3.0,34.0,4.0,broad,0.919
+Candidatus Cibiobacter qucibialis,species,Firmicutes,20,41,32,3.0,34.0,4.0,broad,0.919
+Enterocloster aldenensis,species,Firmicutes,20,40,30,28.0,6.0,6.0,broad,0.176
+Alistipes putredinis,species,Bacteroidetes,20,37,27,6.0,25.0,6.0,broad,0.806
+Coprococcus comes,species,Firmicutes,20,37,29,2.0,31.0,4.0,broad,0.939
+Bacteroides fragilis,species,Bacteroidetes,20,34,27,24.0,6.0,4.0,broad,0.2
+Clostridium sp. am49-4bh,species,Firmicutes,20,34,29,3.0,29.0,2.0,broad,0.906
+Segatella,genus,Bacteroidetes,20,33,26,3.0,24.0,6.0,broad,0.889
+Oscillibacter valericigenes,species,Firmicutes,20,33,25,4.0,23.0,6.0,broad,0.852
+Alistipes onderdonkii,species,Bacteroidetes,20,32,23,11.0,15.0,6.0,broad,0.577
+Eubacterium ramulus,species,Firmicutes,20,32,28,3.0,27.0,2.0,broad,0.9
+Coprococcus catus,species,Firmicutes,20,31,26,4.0,23.0,4.0,broad,0.852
+Hominenteromicrobium mulieris,species,Firmicutes,20,31,26,5.0,22.0,4.0,broad,0.815
+Coprobacter,genus,Bacteroidetes,20,31,29,9.0,22.0,0.0,broad,0.71
+Intestinibacter bartlettii,species,Firmicutes,20,30,24,9.0,13.0,8.0,broad,0.591
+Alistipes ihumii,species,Bacteroidetes,20,28,21,7.0,13.0,8.0,broad,0.65
+Staphylococcus,genus,Firmicutes,20,27,24,20.0,5.0,2.0,broad,0.2
+Pseudomonas,genus,Proteobacteria,20,24,23,19.0,5.0,0.0,broad,0.208
+Slackia,genus,Actinobacteria,20,23,21,5.0,16.0,2.0,broad,0.762
+Gemmiger,genus,Firmicutes,19,48,38,9.0,37.0,2.0,broad,0.804
+Roseburia intestinalis,species,Firmicutes,19,39,28,4.0,27.0,8.0,broad,0.871
+Gemmiger formicilis,species,Firmicutes,19,39,31,6.0,31.0,2.0,broad,0.838
+Clostridium sp. am22-11ac,species,Firmicutes,19,39,30,8.0,25.0,6.0,broad,0.758
+Mediterraneibacter faecis,species,Firmicutes,19,37,30,8.0,25.0,4.0,broad,0.758
+Roseburia hominis,species,Firmicutes,19,36,28,3.0,27.0,6.0,broad,0.9
+Ruminococcus bicirculans (ex wegman et al. 2014),species,Firmicutes,19,36,26,6.0,22.0,8.0,broad,0.786
+Barnesiella intestinihominis,species,Bacteroidetes,19,35,26,9.0,20.0,6.0,broad,0.69
+Ruminococcus bromii,species,Firmicutes,19,33,24,3.0,24.0,6.0,broad,0.889
+Thomasclavelia ramosa,species,Firmicutes,19,33,26,28.0,1.0,4.0,broad,0.034
+Sutterella wadsworthensis,species,Proteobacteria,19,32,22,3.0,21.0,8.0,broad,0.875
+Faecalibacillus intestinalis,species,Firmicutes,19,32,26,8.0,20.0,4.0,broad,0.714
+Simiaoa,genus,Firmicutes,19,32,29,7.0,25.0,0.0,broad,0.781
+Victivallis,genus,Lentisphaerae,19,31,28,7.0,22.0,2.0,broad,0.759
+Allisonella,genus,Firmicutes,19,31,29,12.0,17.0,2.0,broad,0.586
+Phocaeicola massiliensis,species,Bacteroidetes,19,30,23,9.0,15.0,6.0,broad,0.625
+Collinsella aerofaciens,species,Actinobacteria,19,29,25,7.0,18.0,4.0,broad,0.72
+Fusicatenibacter faecihominis,species,Firmicutes,19,29,25,2.0,25.0,2.0,broad,0.926
+Dorea sp. af36-15at,species,Firmicutes,19,28,23,10.0,14.0,4.0,broad,0.583
+Solobacterium,genus,Firmicutes,19,28,24,22.0,4.0,2.0,broad,0.154
+Faecalitalea,genus,Firmicutes,19,27,18,8.0,9.0,10.0,broad,0.529
+Bacteroides thetaiotaomicron,species,Bacteroidetes,19,25,25,18.0,7.0,0.0,broad,0.28
+Acinetobacter,genus,Proteobacteria,19,24,19,14.0,6.0,4.0,broad,0.3
+Weissella,genus,Firmicutes,19,21,19,10.0,7.0,4.0,broad,0.412
+Peptostreptococcus,genus,Firmicutes,18,48,41,42.0,2.0,4.0,broad,0.045
+Oscillibacter sp. msj-31,species,Firmicutes,18,37,26,4.0,25.0,8.0,broad,0.862
+Waltera acetigignens,species,Firmicutes,18,36,28,5.0,27.0,4.0,broad,0.844
+Eubacterium siraeum,species,Firmicutes,18,36,27,3.0,27.0,6.0,broad,0.9
+Waltera,genus,,18,35,28,5.0,26.0,4.0,broad,0.839
+Peptoniphilus,genus,Firmicutes,18,34,26,24.0,2.0,8.0,broad,0.077
+Alistipes senegalensis,species,Bacteroidetes,18,34,22,4.0,20.0,10.0,broad,0.833
+Clostridiaceae bacterium marseille-q4143,species,Firmicutes,18,34,26,2.0,28.0,4.0,broad,0.933
+Porphyromonas,genus,Bacteroidetes,18,34,31,29.0,5.0,0.0,broad,0.147
+Faecalicatena,genus,Firmicutes,18,33,29,7.0,26.0,0.0,broad,0.788
+Faecalibacterium butyricigenerans,species,,18,32,27,6.0,26.0,0.0,broad,0.813
+Simiaoa sunii,species,Firmicutes,18,32,29,7.0,25.0,0.0,broad,0.781
+Anaerotignum,genus,Firmicutes,18,29,20,8.0,15.0,6.0,broad,0.652
+Megamonas funiformis,species,Firmicutes,18,28,22,8.0,16.0,4.0,broad,0.667
+Bacteroides eggerthii,species,Bacteroidetes,18,26,19,8.0,12.0,6.0,broad,0.6
+Parabacteroides distasonis,species,Bacteroidetes,18,26,22,17.0,5.0,4.0,broad,0.227
+Bacteroides nordii,species,Bacteroidetes,18,26,20,12.0,8.0,6.0,broad,0.4
+Bacteroides ovatus,species,Bacteroidetes,18,25,21,16.0,7.0,2.0,broad,0.304
+Blautia luti,species,Firmicutes,18,24,20,3.0,19.0,2.0,broad,0.864
+Enterocloster hominis (ex liu et al. 2021),species,Firmicutes,18,24,21,14.0,10.0,0.0,broad,0.417
+Lactococcus,genus,Firmicutes,18,22,21,10.0,10.0,2.0,broad,0.5
+Marvinbryantia,genus,Firmicutes,18,21,19,7.0,12.0,2.0,broad,0.632
+Corynebacterium,genus,Actinobacteria,18,21,19,15.0,4.0,2.0,broad,0.211
+Bifidobacterium longum,species,Actinobacteria,18,19,16,3.0,12.0,4.0,broad,0.8
+Enterorhabdus,genus,Actinobacteria,18,19,19,5.0,14.0,0.0,broad,0.737
+Parvimonas,genus,Firmicutes,17,41,35,34.0,3.0,4.0,broad,0.081
+Wujia,genus,Firmicutes,17,36,27,5.0,27.0,4.0,broad,0.844
+Wujia chipingensis,species,Firmicutes,17,36,27,5.0,27.0,4.0,broad,0.844
+Gallintestinimicrobium propionicum,species,,17,36,28,3.0,27.0,6.0,broad,0.9
+Dorea formicigenerans,species,Firmicutes,17,34,27,2.0,24.0,8.0,broad,0.923
+Alistipes shahii,species,Bacteroidetes,17,34,23,5.0,19.0,10.0,broad,0.792
+Clostridium sp. af36-4,species,Firmicutes,17,33,25,3.0,24.0,6.0,broad,0.889
+Faecalibacillus,genus,Firmicutes,17,30,26,3.0,25.0,2.0,broad,0.893
+Ruminococcus callidus,species,Firmicutes,17,29,21,3.0,22.0,4.0,broad,0.88
+Phocaeicola plebeius,species,Bacteroidetes,17,29,18,6.0,13.0,10.0,broad,0.684
+Mogibacterium,genus,Firmicutes,17,27,23,21.0,4.0,2.0,broad,0.16
+Anaerobutyricum soehngenii,species,Firmicutes,17,27,19,8.0,11.0,8.0,broad,0.579
+Alistipes communis,species,Bacteroidetes,17,27,20,2.0,21.0,4.0,broad,0.913
+Akkermansia muciniphila,species,Verrucomicrobia,17,26,19,9.0,13.0,4.0,broad,0.591
+Desulfovibrio piger,species,Thermodesulfobacteriota,17,26,21,3.0,21.0,2.0,broad,0.875
+Oliverpabstia,genus,Firmicutes,17,26,21,6.0,16.0,4.0,broad,0.727
+Oliverpabstia intestinalis,species,Firmicutes,17,26,20,7.0,15.0,4.0,broad,0.682
+Blautia caecimuris,species,Firmicutes,17,26,21,19.0,3.0,4.0,broad,0.136
+Clostridium sp. af20-17lb,species,Firmicutes,17,26,23,9.0,15.0,2.0,broad,0.625
+Cloacibacillus,genus,Synergistetes,17,25,21,14.0,5.0,6.0,broad,0.263
+Oxalobacter,genus,Proteobacteria,17,24,18,6.0,14.0,4.0,broad,0.7
+Frisingicoccus,genus,Firmicutes,17,23,16,11.0,4.0,8.0,broad,0.267
+Eisenbergiella tayi,species,Firmicutes,17,22,18,15.0,3.0,4.0,broad,0.167
+Bacteroides clarus,species,Bacteroidetes,17,21,19,6.0,11.0,4.0,broad,0.647
+Ralstonia,genus,Proteobacteria,17,20,17,10.0,8.0,2.0,broad,0.444
+Bacteroides caccae,species,Bacteroidetes,17,20,18,11.0,7.0,2.0,broad,0.389
+Sellimonas intestinalis,species,Firmicutes,17,20,17,11.0,7.0,2.0,broad,0.389
+Lacticaseibacillus,genus,Firmicutes,17,19,17,10.0,7.0,2.0,broad,0.412
+Howardella,genus,Firmicutes,17,19,17,11.0,8.0,0.0,broad,0.421
+Adlercreutzia equolifaciens,species,Actinobacteria,16,32,24,4.0,24.0,4.0,broad,0.857
+Lachnospiraceae bacterium,species,Firmicutes,16,31,26,1.0,28.0,2.0,broad,0.966
+Anaerotignum faecicola,species,Firmicutes,16,30,21,5.0,17.0,8.0,broad,0.773
+Phocaeicola coprocola,species,Bacteroidetes,16,29,21,5.0,18.0,6.0,broad,0.783
+Clostridium sp. af27-2aa,species,Firmicutes,16,29,26,3.0,24.0,2.0,broad,0.889
+Alistipes finegoldii,species,Bacteroidetes,16,28,18,5.0,15.0,8.0,broad,0.75
+Vescimonas coprocola,species,Firmicutes,16,28,22,7.0,17.0,4.0,broad,0.708
+Roseburia sp. af02-12,species,Firmicutes,16,26,24,5.0,21.0,0.0,broad,0.808
+Veillonella rogosae,species,Firmicutes,16,25,16,8.0,7.0,10.0,broad,0.467
+Lentihominibacter faecis,species,Firmicutes,16,23,17,4.0,13.0,6.0,broad,0.765
+Anaeromassilibacillus,genus,Firmicutes,16,21,17,11.0,6.0,4.0,broad,0.353
+Phascolarctobacterium faecium,species,Firmicutes,16,21,17,8.0,9.0,4.0,broad,0.529
+Anaerotruncus colihominis,species,Firmicutes,16,20,17,14.0,2.0,4.0,broad,0.125
+Clostridium sp. at4,species,Firmicutes,16,20,15,11.0,5.0,4.0,broad,0.313
+Merdimmobilis,genus,Firmicutes,16,20,18,9.0,7.0,4.0,broad,0.438
+Olsenella,genus,Actinobacteria,16,20,19,14.0,6.0,0.0,broad,0.3
+Faecalibacterium wellingii,species,Firmicutes,15,31,25,3.0,26.0,2.0,broad,0.897
+Blautia sp. mcc283,species,Firmicutes,15,29,21,7.0,16.0,6.0,broad,0.696
+Oscillospiraceae bacterium marseille-q3528,species,Firmicutes,15,25,20,2.0,19.0,4.0,broad,0.905
+Haemophilus parainfluenzae,species,Proteobacteria,15,24,16,4.0,12.0,8.0,broad,0.75
+Granulicatella,genus,Firmicutes,15,22,18,17.0,3.0,2.0,broad,0.15
+Holdemanella porci,species,Firmicutes,15,22,16,4.0,12.0,6.0,broad,0.75
+Dialister hominis,species,Firmicutes,15,22,19,3.0,17.0,2.0,broad,0.85
+Veillonella parvula,species,Firmicutes,15,21,14,16.0,1.0,4.0,broad,0.059
+Klebsiella pneumoniae,species,Proteobacteria,15,21,18,14.0,3.0,4.0,broad,0.176
+Clostridioides,genus,Firmicutes,15,20,15,16.0,0.0,4.0,broad,0.0
+Streptococcus anginosus,species,Firmicutes,15,19,13,14.0,1.0,4.0,broad,0.067
+Streptococcus parasanguinis,species,Firmicutes,15,19,15,14.0,3.0,2.0,broad,0.176
+Turicibacter bilis,species,Firmicutes,15,19,16,5.0,10.0,4.0,broad,0.667
+Sphingomonas,genus,Proteobacteria,15,19,13,12.0,3.0,4.0,broad,0.2
+Eubacterium sp. af34-35bh,species,Firmicutes,15,18,17,3.0,15.0,0.0,broad,0.833
+Pyramidobacter,genus,Synergistetes,15,18,15,13.0,3.0,2.0,broad,0.188
+Candidatus Gastranaerophilales,genus,Candidatus Melainabacteria,15,17,16,6.0,11.0,0.0,broad,0.647
+Lachnospiraceae bacterium om04-12bh,species,Firmicutes,15,17,15,4.0,13.0,0.0,broad,0.765
+Faecalicatena fissicatena,species,Firmicutes,14,34,26,1.0,31.0,2.0,broad,0.969
+Enterocloster clostridioformis,species,Firmicutes,14,32,23,21.0,3.0,8.0,broad,0.125
+Paraprevotella clara,species,Bacteroidetes,14,28,20,3.0,19.0,6.0,broad,0.864
+Lachnospira hominis (ex liu et al. 2021),species,Firmicutes,14,25,20,2.0,21.0,2.0,broad,0.913
+Phocaeicola dorei,species,Bacteroidetes,14,24,19,12.0,8.0,4.0,broad,0.4
+Clostridiaceae bacterium marseille-q4149,species,Firmicutes,14,24,17,5.0,13.0,6.0,broad,0.722
+Roseburia lenta,species,Firmicutes,14,24,20,2.0,20.0,2.0,broad,0.909
+Methanobrevibacter smithii,species,Euryarchaeota,14,23,17,8.0,11.0,4.0,broad,0.579
+Faecalimonas nexilis,species,Firmicutes,14,22,15,16.0,2.0,4.0,broad,0.111
+Bifidobacterium pseudocatenulatum,species,Actinobacteria,14,21,16,3.0,12.0,6.0,broad,0.8
+Enterocloster citroniae,species,Firmicutes,14,21,16,13.0,2.0,6.0,broad,0.133
+Blautia stercoris,species,Firmicutes,14,21,18,2.0,17.0,2.0,broad,0.895
+Bacteroides intestinalis,species,Bacteroidetes,14,20,16,5.0,13.0,2.0,broad,0.722
+Blautia hansenii,species,Firmicutes,14,20,16,13.0,5.0,2.0,broad,0.278
+Longicatena caecimuris,species,Firmicutes,14,20,16,15.0,3.0,2.0,broad,0.167
+Longicatena,genus,Firmicutes,14,20,16,15.0,3.0,2.0,broad,0.167
+Coprobacter fastidiosus,species,Bacteroidetes,14,18,13,7.0,9.0,2.0,broad,0.563
+Mediterraneibacter glycyrrhizinilyticus,species,Firmicutes,14,18,15,11.0,5.0,2.0,broad,0.313
+Enterobacter,genus,Proteobacteria,14,18,17,12.0,4.0,2.0,broad,0.25
+Candidatus Izemoplasmatales,genus,Tenericutes,14,16,12,6.0,6.0,4.0,broad,0.5
+Parolsenella,genus,Actinobacteria,14,15,14,8.0,5.0,2.0,broad,0.385
+Jutongia,genus,Firmicutes,13,26,22,3.0,21.0,2.0,broad,0.875
+Phascolarctobacterium succinatutens,species,Firmicutes,13,25,17,4.0,15.0,6.0,broad,0.789
+Anaerococcus,genus,Firmicutes,13,24,22,19.0,3.0,2.0,broad,0.136
+Bacteroides finegoldii,species,Bacteroidetes,13,22,15,6.0,10.0,6.0,broad,0.625
+Eubacteriaceae bacterium,species,Firmicutes,13,22,17,2.0,18.0,2.0,broad,0.9
+Leyella stercorea,species,Bacteroidetes,13,21,15,6.0,11.0,4.0,broad,0.647
+Alistipes sp. af17-16,species,Bacteroidetes,13,20,15,6.0,12.0,2.0,broad,0.667
+Clostridium sp. af12-28,species,Firmicutes,13,20,14,3.0,13.0,4.0,broad,0.813
+Intestinimonas massiliensis (ex afouda et al. 2020),species,Firmicutes,13,20,16,12.0,4.0,4.0,broad,0.25
+Clostridium scindens,species,Firmicutes,13,19,15,16.0,1.0,2.0,broad,0.059
+Prevotella marseillensis,species,Bacteroidetes,13,18,14,3.0,11.0,4.0,broad,0.786
+Veillonella dispar,species,Firmicutes,13,17,12,12.0,1.0,4.0,broad,0.077
+Anaeromassilibacillus senegalensis,species,Firmicutes,13,17,13,6.0,7.0,4.0,broad,0.538
+Intestinimonas butyriciproducens,species,Firmicutes,13,16,16,10.0,6.0,0.0,broad,0.375
+Bacteroides salyersiae,species,Bacteroidetes,13,15,12,3.0,10.0,2.0,broad,0.769
+Ligilactobacillus salivarius,species,Firmicutes,13,15,12,11.0,2.0,2.0,broad,0.154
+Streptococcus mitis,species,Firmicutes,13,15,13,9.0,4.0,2.0,broad,0.308
+Succinivibrio,genus,Proteobacteria,13,14,14,5.0,9.0,0.0,broad,0.643
+Clostridiaceae bacterium marseille-q4145,species,Firmicutes,13,14,14,0.0,14.0,0.0,broad,1.0
+Thomasclavelia spiroformis,species,Firmicutes,13,14,13,12.0,2.0,0.0,broad,0.143
+Oscillospiraceae bacterium,species,Firmicutes,12,26,19,5.0,17.0,4.0,broad,0.773
+Faecalimonas,genus,Firmicutes,12,24,15,12.0,4.0,8.0,broad,0.25
+Faecalimonas umbilicata,species,Firmicutes,12,24,15,12.0,4.0,8.0,broad,0.25
+Eisenbergiella massiliensis,species,Firmicutes,12,19,17,18.0,1.0,0.0,broad,0.053
+Holdemanella biformis,species,Firmicutes,12,18,13,4.0,8.0,6.0,broad,0.667
+Veillonella atypica,species,Firmicutes,12,18,12,12.0,0.0,6.0,broad,0.0
+Anaerotignum lactatifermentans,species,Firmicutes,12,18,12,8.0,4.0,6.0,broad,0.333
+Hydrogenoanaerobacterium saccharovorans,species,Firmicutes,12,17,14,3.0,12.0,2.0,broad,0.8
+Phocaeicola coprophilus,species,Bacteroidetes,12,16,14,3.0,11.0,2.0,broad,0.786
+Anaeroglobus,genus,,12,16,10,4.0,4.0,8.0,broad,0.5
+Mogibacterium kristiansenii,species,Firmicutes,12,16,8,5.0,3.0,8.0,broad,0.375
+Faecalibacillus faecis,species,Firmicutes,12,16,13,4.0,10.0,2.0,broad,0.714
+Jutongia huaianensis,species,Firmicutes,12,16,14,1.0,15.0,0.0,broad,0.938
+Peptococcus,genus,Firmicutes,12,15,15,6.0,9.0,0.0,broad,0.6
+Finegoldia,genus,Firmicutes,12,15,14,12.0,3.0,0.0,broad,0.2
+Blautia faecicola,species,Firmicutes,12,15,14,3.0,10.0,2.0,broad,0.769
+Streptococcus thermophilus,species,Firmicutes,12,13,12,3.0,8.0,2.0,broad,0.727
+Fenollaria,genus,Firmicutes,12,13,12,7.0,4.0,2.0,broad,0.364
+Neisseria,genus,Proteobacteria,12,13,10,10.0,1.0,2.0,broad,0.091
+Dielma,genus,Firmicutes,12,12,11,9.0,3.0,0.0,broad,0.25
+Ruminococcus lactaris,species,Firmicutes,11,27,18,1.0,18.0,8.0,broad,0.947
+Bifidobacterium dentium,species,Actinobacteria,11,23,15,16.0,1.0,6.0,broad,0.059
+Alistipes indistinctus,species,Bacteroidetes,11,22,14,7.0,7.0,8.0,broad,0.5
+Segatella hominis,species,Bacteroidetes,11,21,14,4.0,11.0,6.0,broad,0.733
+Bacteroides cellulosilyticus,species,Bacteroidetes,11,18,14,7.0,7.0,4.0,broad,0.5
+Cloacibacillus evryensis,species,Synergistetes,11,18,13,11.0,1.0,6.0,broad,0.083
+Negativibacillus massiliensis,species,Firmicutes,11,17,12,7.0,4.0,6.0,broad,0.364
+Bifidobacterium bifidum,species,Actinobacteria,11,16,12,7.0,5.0,4.0,broad,0.417
+Ellagibacter,genus,Actinobacteria,11,16,13,2.0,10.0,4.0,broad,0.833
+Clostridiaceae bacterium marseille-q3526,species,Firmicutes,11,15,12,3.0,8.0,4.0,broad,0.727
+Ellagibacter isourolithinifaciens,species,Actinobacteria,11,15,12,2.0,9.0,4.0,broad,0.818
+Streptococcus vestibularis,species,Firmicutes,11,14,10,10.0,2.0,2.0,broad,0.167
+Bacterium 210917-dfi.7.65,species,,11,14,13,6.0,8.0,0.0,broad,0.571
+Eubacterium sp. af16-48,species,Firmicutes,11,14,12,5.0,7.0,2.0,broad,0.583
+Senegalimassilia anaerobia,species,Actinobacteria,11,14,10,2.0,8.0,4.0,broad,0.8
+Candidatus Saccharimonadales,genus,Candidatus Saccharimonadota,11,14,7,6.0,2.0,6.0,broad,0.25
+Pseudoflavonifractor phocaeensis,species,Firmicutes,11,13,10,4.0,5.0,4.0,broad,0.556
+Blastocystis,genus,,11,13,13,0.0,13.0,0.0,broad,1.0
+Butyricimonas paravirosa,species,Bacteroidetes,11,13,10,5.0,6.0,2.0,broad,0.545
+Butyricimonas faecihominis,species,Bacteroidetes,11,13,10,2.0,9.0,2.0,broad,0.818
+Clostridia bacterium uc5.1-1d1,species,Firmicutes,11,13,10,7.0,4.0,2.0,broad,0.364
+Victivallis vadensis,species,Lentisphaerae,11,12,9,2.0,6.0,4.0,broad,0.75
+Amedibacillus dolichus,species,Firmicutes,11,12,9,2.0,6.0,4.0,broad,0.75
+Pseudoruminococcus,genus,,11,12,11,2.0,10.0,0.0,broad,0.833
+Limosilactobacillus mucosae,species,Firmicutes,11,12,9,6.0,4.0,2.0,broad,0.4
+Lawsonibacter hominis,species,Firmicutes,11,11,9,5.0,4.0,2.0,broad,0.444
+Fusobacterium nucleatum,species,Fusobacteria,10,25,16,17.0,0.0,8.0,broad,0.0
+Dialister pneumosintes,species,Firmicutes,10,23,17,19.0,0.0,4.0,broad,0.0
+Parabacteroides goldsteinii,species,Bacteroidetes,10,21,15,7.0,10.0,4.0,broad,0.588
+Enterococcus faecium,species,Firmicutes,10,16,11,12.0,0.0,4.0,broad,0.0
+Allisonella histaminiformans,species,Firmicutes,10,16,14,5.0,9.0,2.0,broad,0.643
+Blautia producta,species,Firmicutes,10,15,9,11.0,0.0,4.0,broad,0.0
+Butyricimonas virosa,species,Bacteroidetes,10,15,11,2.0,7.0,6.0,broad,0.778
+Candidatus Borkfalkia,genus,Firmicutes,10,15,12,3.0,10.0,2.0,broad,0.769
+Blautia hydrogenotrophica,species,Firmicutes,10,14,11,5.0,5.0,4.0,broad,0.5
+Kineothrix,genus,Firmicutes,10,14,13,1.0,13.0,0.0,broad,0.929
+Ruminococcus sp. af13-28,species,Firmicutes,10,14,11,4.0,6.0,4.0,broad,0.6
+Candidatus Borkfalkia ceftriaxoniphila,species,Firmicutes,10,14,12,4.0,8.0,2.0,broad,0.667
+Pediococcus,genus,Firmicutes,10,14,10,7.0,3.0,4.0,broad,0.3
+Coprobacillus cateniformis,species,Firmicutes,10,13,10,9.0,2.0,2.0,broad,0.182
+Streptococcus oralis,species,Firmicutes,10,13,8,9.0,0.0,4.0,broad,0.0
+Citrobacter,genus,Proteobacteria,10,13,11,7.0,4.0,2.0,broad,0.364
+Collinsella bouchesdurhonensis,species,Actinobacteria,10,13,8,2.0,5.0,6.0,broad,0.714
+Anaerofilum,genus,Firmicutes,10,12,10,3.0,7.0,2.0,broad,0.7
+Leuconostoc,genus,Firmicutes,10,12,9,7.0,3.0,2.0,broad,0.3
+Methanosphaera,genus,Methanobacteriota,10,12,8,1.0,7.0,4.0,broad,0.875
+Clostridium sp. 1001270j_160509_d11,species,Firmicutes,10,12,12,3.0,9.0,0.0,broad,0.75
+Sarcina,genus,Firmicutes,10,11,10,7.0,4.0,0.0,broad,0.364
+Fusobacterium mortiferum,species,Fusobacteria,10,11,10,8.0,3.0,0.0,broad,0.273
+Holdemania filiformis,species,Firmicutes,10,11,9,3.0,6.0,2.0,broad,0.667
+Lactobacillus gasseri,species,Firmicutes,10,11,8,7.0,2.0,2.0,broad,0.222
+Pseudoruminococcus massiliensis,species,Firmicutes,10,11,10,2.0,9.0,0.0,broad,0.818
+Rhodococcus,genus,Actinobacteria,10,11,8,4.0,5.0,2.0,broad,0.556
+Roseburia sp. am59-24xd,species,Firmicutes,10,11,10,3.0,8.0,0.0,broad,0.727
+Oscillospira,genus,Firmicutes,10,11,11,1.0,10.0,0.0,broad,0.909
+Amedibacillus,genus,Firmicutes,10,11,8,1.0,6.0,4.0,broad,0.857
+Clostridium lentum,species,Firmicutes,10,11,11,2.0,9.0,0.0,broad,0.818
+Cutibacterium,genus,Actinobacteria,10,10,10,10.0,0.0,0.0,broad,0.0
+Megasphaera micronuciformis,species,Firmicutes,9,14,10,11.0,1.0,2.0,broad,0.083
+Jutongia hominis,species,Firmicutes,9,14,12,4.0,8.0,2.0,broad,0.667
+Monoglobus pectinilyticus,species,Firmicutes,9,14,9,6.0,4.0,4.0,broad,0.4
+Phascolarctobacterium sp. et69,species,Firmicutes,9,14,10,2.0,8.0,4.0,broad,0.8
+Acidaminococcus intestini,species,Firmicutes,9,13,9,4.0,5.0,4.0,broad,0.556
+Mesosutterella,genus,Proteobacteria,9,13,13,5.0,8.0,0.0,broad,0.615
+Mesosutterella multiformis,species,Proteobacteria,9,13,13,5.0,8.0,0.0,broad,0.615
+Paratractidigestivibacter,genus,Actinobacteria,9,13,9,3.0,6.0,4.0,broad,0.667
+Rothia mucilaginosa,species,Actinobacteria,9,12,9,6.0,2.0,4.0,broad,0.25
+Clostridium perfringens,species,Firmicutes,9,12,9,5.0,3.0,4.0,broad,0.375
+Proteus,genus,Proteobacteria,9,12,12,9.0,3.0,0.0,broad,0.25
+Bifidobacterium catenulatum,species,Actinobacteria,9,12,10,2.0,8.0,2.0,broad,0.8
+Alistipes dispar,species,Bacteroidetes,9,12,8,5.0,3.0,4.0,broad,0.375
+Streptococcus gordonii,species,Firmicutes,9,11,8,8.0,1.0,2.0,broad,0.111
+Enterobacter roggenkampii,species,Proteobacteria,9,11,11,7.0,4.0,0.0,broad,0.364
+Enterocloster lavalensis,species,Firmicutes,9,11,10,8.0,3.0,0.0,broad,0.273
+Colidextribacter sp. 210702-dfi.3.9,species,Firmicutes,9,11,9,5.0,4.0,2.0,broad,0.444
+Coprobacter secundus,species,Bacteroidetes,9,11,11,1.0,10.0,0.0,broad,0.909
+Mitsuokella multacida,species,Firmicutes,9,10,10,1.0,9.0,0.0,broad,0.9
+Caproiciproducens,genus,Firmicutes,9,10,8,3.0,5.0,2.0,broad,0.625
+Candidatus Saccharimonadaceae,genus,Candidatus Saccharimonadota,9,10,6,5.0,1.0,4.0,broad,0.167
+Catenibacterium sp. am22-15,species,Firmicutes,9,10,8,2.0,6.0,2.0,broad,0.75
+Blautia sp. of03-15bh,species,Firmicutes,9,10,8,0.0,8.0,2.0,broad,1.0
+Ruminococcus bovis,species,Firmicutes,9,10,10,1.0,9.0,0.0,broad,0.9
+Parabacteroides gordonii,species,Bacteroidetes,9,9,7,4.0,1.0,4.0,broad,0.2
+Enterocloster asparagiformis,species,Firmicutes,9,9,8,8.0,1.0,0.0,broad,0.111
+Brevundimonas,genus,Proteobacteria,9,9,8,4.0,5.0,0.0,broad,0.556
+Leptotrichia,genus,Fusobacteria,8,12,11,10.0,0.0,2.0,broad,0.0
+Bacteroides faecis,species,Bacteroidetes,8,12,10,2.0,10.0,0.0,broad,0.833
+Veillonellaceae,genus,Firmicutes,8,12,12,11.0,1.0,0.0,broad,0.083
+Clostridium saudiense,species,Firmicutes,8,11,11,7.0,4.0,0.0,broad,0.364
+Paratractidigestivibacter faecalis,species,Actinobacteria,8,11,7,3.0,4.0,4.0,broad,0.571
+Morganella,genus,Proteobacteria,8,11,8,6.0,1.0,4.0,broad,0.143
+Claveliimonas bilis,species,,8,11,10,9.0,2.0,0.0,broad,0.182
+Prevotellamassilia,genus,Bacteroidetes,8,11,9,1.0,8.0,2.0,broad,0.889
+Prevotellamassilia timonensis,species,Bacteroidetes,8,11,9,1.0,8.0,2.0,broad,0.889
+Bifidobacterium animalis,species,Actinobacteria,8,10,8,4.0,4.0,2.0,broad,0.5
+Prevotella dentalis,species,Bacteroidetes,8,10,8,2.0,6.0,2.0,broad,0.75
+Asteroleplasma,genus,Tenericutes,8,10,8,1.0,9.0,0.0,broad,0.9
+Intestinimonas sp. msj-38,species,Firmicutes,8,10,9,3.0,5.0,2.0,broad,0.625
+Roseburia zhanii,species,Firmicutes,8,10,9,1.0,9.0,0.0,broad,0.9
+Aggregatibacter,genus,Proteobacteria,8,10,7,6.0,0.0,4.0,broad,0.0
+Bacteroides pectinophilus,species,Firmicutes,8,10,9,1.0,9.0,0.0,broad,0.9
+Enterobacter hormaechei,species,Proteobacteria,8,9,9,6.0,3.0,0.0,broad,0.333
+Limosilactobacillus fermentum,species,Firmicutes,8,9,5,6.0,1.0,2.0,broad,0.143
+Parabacteroides johnsonii,species,Bacteroidetes,8,9,8,2.0,7.0,0.0,broad,0.778
+Streptococcus mutans,species,Firmicutes,8,9,5,5.0,0.0,4.0,broad,0.0
+Mitsuokella jalaludinii,species,Firmicutes,8,9,6,2.0,3.0,4.0,broad,0.6
+Ruminococcus sp. af41-9,species,Firmicutes,8,9,8,0.0,9.0,0.0,broad,1.0
+Amedibacterium intestinale,species,Firmicutes,8,9,7,3.0,4.0,2.0,broad,0.571
+Amedibacterium,genus,Firmicutes,8,9,7,3.0,4.0,2.0,broad,0.571
+Hydrogeniiclostridium,genus,Firmicutes,8,9,7,3.0,4.0,2.0,broad,0.571
+Hydrogeniiclostridium mannosilyticum,species,Firmicutes,8,9,7,3.0,4.0,2.0,broad,0.571
+Anaerovibrio,genus,Firmicutes,8,8,8,2.0,6.0,0.0,broad,0.75
+Parabacteroides faecis,species,Bacteroidetes,8,8,7,6.0,2.0,0.0,broad,0.25
+Varibaculum,genus,Actinobacteria,8,8,7,6.0,2.0,0.0,broad,0.25
+Cupriavidus,genus,Proteobacteria,8,8,7,6.0,2.0,0.0,broad,0.25
+Robinsoniella,genus,Firmicutes,8,8,7,6.0,2.0,0.0,broad,0.25
+Peptostreptococcus stomatis,species,Firmicutes,7,15,13,11.0,2.0,2.0,broad,0.154
+Prevotella sp. 885,species,Bacteroidetes,7,14,9,6.0,4.0,4.0,broad,0.4
+Parvimonas micra,species,Firmicutes,7,13,11,8.0,3.0,2.0,broad,0.273
+Fusobacterium ulcerans,species,Fusobacteria,7,11,7,7.0,0.0,4.0,broad,0.0
+Klebsiella quasipneumoniae,species,Proteobacteria,7,11,9,5.0,4.0,2.0,broad,0.444
+Selenomonas,genus,Firmicutes,7,11,9,8.0,1.0,2.0,broad,0.111
+Butyrivibrio,genus,Firmicutes,7,10,7,0.0,8.0,2.0,broad,1.0
+Bifidobacterium breve,species,Actinobacteria,7,10,6,8.0,0.0,2.0,broad,0.0
+Streptococcus australis,species,Firmicutes,7,10,8,5.0,3.0,2.0,broad,0.375
+Schaalia,genus,Actinobacteria,7,10,8,7.0,1.0,2.0,broad,0.125
+Eshraghiella crossota,species,Firmicutes,7,10,7,0.0,8.0,2.0,broad,1.0
+Anaerofustis,genus,Firmicutes,7,9,7,7.0,0.0,2.0,broad,0.0
+Pseudoflavonifractor capillosus,species,Firmicutes,7,9,9,7.0,2.0,0.0,broad,0.222
+Mediterraneibacter sp. nsj-151,species,Firmicutes,7,9,7,2.0,5.0,2.0,broad,0.714
+Anaerotruncus massiliensis (ex togo et al. 2019),species,Firmicutes,7,9,7,5.0,2.0,2.0,broad,0.286
+Enorma,genus,Actinobacteria,7,9,6,2.0,3.0,4.0,broad,0.6
+Butyricimonas faecalis,species,Bacteroidetes,7,9,9,0.0,9.0,0.0,broad,1.0
+Comamonas,genus,Proteobacteria,7,8,8,5.0,3.0,0.0,broad,0.375
+Treponema,genus,Spirochaetes,7,8,8,3.0,5.0,0.0,broad,0.625
+Collinsella tanakaei,species,Actinobacteria,7,8,6,3.0,3.0,2.0,broad,0.5
+Enterococcus faecalis,species,Firmicutes,7,8,6,5.0,1.0,2.0,broad,0.167
+Dialister succinatiphilus,species,Firmicutes,7,8,7,1.0,5.0,2.0,broad,0.833
+Klebsiella variicola,species,Proteobacteria,7,8,8,5.0,3.0,0.0,broad,0.375
+Massilimicrobiota timonensis,species,Firmicutes,7,8,8,6.0,2.0,0.0,broad,0.25
+Clostridium sp. am29-11ac,species,Firmicutes,7,8,6,5.0,1.0,2.0,broad,0.167
+Enterobacter kobei,species,Proteobacteria,7,8,5,2.0,2.0,4.0,broad,0.5
+Pseudoflavonifractor gallinarum,species,Firmicutes,7,8,6,1.0,3.0,4.0,broad,0.75
+Veillonella tobetsuensis,species,Firmicutes,7,8,5,4.0,0.0,4.0,broad,0.0
+Hominifimenecus microfluidus,species,Firmicutes,7,8,7,0.0,6.0,2.0,broad,1.0
+Emergencia,genus,Firmicutes,7,8,7,5.0,1.0,2.0,broad,0.167
+Emergencia timonensis,species,Firmicutes,7,8,7,5.0,1.0,2.0,broad,0.167
+Massilimicrobiota,genus,Firmicutes,7,8,8,6.0,2.0,0.0,broad,0.25
+Ligilactobacillus ruminis,species,Firmicutes,7,8,7,1.0,7.0,0.0,broad,0.875
+Megasphaera sp. nm10,species,Firmicutes,7,8,7,1.0,5.0,2.0,broad,0.833
+Candidatus epulonipiscium,genus,Firmicutes,7,7,6,4.0,3.0,0.0,broad,0.429
+Lactobacillus crispatus,species,Firmicutes,7,7,5,3.0,2.0,2.0,broad,0.4
+Slackia isoflavoniconvertens,species,Actinobacteria,7,7,6,1.0,6.0,0.0,broad,0.857
+Longibaculum muris,species,Firmicutes,7,7,6,5.0,0.0,2.0,broad,0.0
+Longibaculum,genus,Firmicutes,7,7,6,5.0,0.0,2.0,broad,0.0
+Paludihabitans,genus,Firmicutes,7,7,7,5.0,2.0,0.0,broad,0.286
+Raoultibacter,genus,Actinobacteria,7,7,6,3.0,2.0,2.0,broad,0.4
+Stenotrophomonas,genus,Proteobacteria,7,7,7,5.0,2.0,0.0,broad,0.286
+Merdimmobilis hominis,species,,7,7,6,5.0,0.0,2.0,broad,0.0
+Neglectibacter,genus,Firmicutes,7,7,6,5.0,2.0,0.0,broad,0.286
+Neglectibacter timonensis,species,Firmicutes,7,7,6,5.0,2.0,0.0,broad,0.286
+Cetobacterium,genus,Fusobacteria,7,7,7,4.0,3.0,0.0,broad,0.429
+Lactiplantibacillus,genus,Firmicutes,7,7,6,6.0,1.0,0.0,broad,0.143
+Dysgonomonas,genus,Bacteroidetes,7,7,6,4.0,3.0,0.0,broad,0.429
+Bivalvulida,genus,Cnidaria,7,7,6,4.0,3.0,0.0,broad,0.429
+Tm7 phylum sp. oral taxon 352,species,Candidatus Saccharimonadota,7,7,7,1.0,6.0,0.0,broad,0.857
+Eubacteriales bacterium,species,Firmicutes,7,7,6,5.0,0.0,2.0,broad,0.0
+Mediterraneibacter butyricigenes,species,Firmicutes,6,13,10,1.0,10.0,2.0,broad,0.909
+Collinsella intestinalis,species,Actinobacteria,6,11,7,6.0,3.0,2.0,broad,0.333
+Bacillota bacterium,species,Firmicutes,6,10,6,2.0,2.0,6.0,broad,0.5
+Clostridioides difficile,species,Firmicutes,6,9,6,5.0,0.0,4.0,broad,0.0
+Anaerostipes caccae,species,Firmicutes,6,8,5,5.0,1.0,2.0,broad,0.167
+Butyricimonas synergistica,species,Bacteroidetes,6,8,7,5.0,1.0,2.0,broad,0.167
+Paraprevotella xylaniphila,species,Bacteroidetes,6,8,6,3.0,3.0,2.0,broad,0.5
+Butyricicoccus intestinisimiae,species,Firmicutes,6,8,7,2.0,4.0,2.0,broad,0.667
+Massilistercora,genus,Firmicutes,6,8,6,1.0,3.0,4.0,broad,0.75
+Massilistercora timonensis,species,Firmicutes,6,8,6,1.0,3.0,4.0,broad,0.75
+Caballeronia,genus,Proteobacteria,6,8,7,4.0,4.0,0.0,broad,0.5
+Gordonibacter pamelaeae,species,Actinobacteria,6,7,7,4.0,3.0,0.0,broad,0.429
+Roseburia sp. am23-20,species,Firmicutes,6,7,7,2.0,5.0,0.0,broad,0.714
+Bacteroides propionicigenes,species,Bacteroidetes,6,7,5,2.0,3.0,2.0,broad,0.6
+Eubacteriaceae bacterium marseille-q4139,species,Firmicutes,6,7,6,5.0,2.0,0.0,broad,0.286
+Clostridia bacterium,species,Firmicutes,6,7,7,6.0,1.0,0.0,broad,0.143
+Dielma fastidiosa,species,Firmicutes,6,7,7,5.0,2.0,0.0,broad,0.286
+Parolsenella catena,species,Actinobacteria,6,7,4,1.0,2.0,4.0,broad,0.667
+Parabacteroides sp. tm07-1ac,species,Bacteroidetes,6,7,4,2.0,1.0,4.0,broad,0.333
+Fusobacterium varium,species,Fusobacteria,6,6,5,3.0,1.0,2.0,broad,0.25
+Turicibacter sanguinis,species,Firmicutes,6,6,5,2.0,2.0,2.0,broad,0.5
+Muribaculum,genus,Bacteroidetes,6,6,6,2.0,4.0,0.0,broad,0.667
+Anaerovibrio lipolyticus,species,Firmicutes,6,6,6,1.0,5.0,0.0,broad,0.833
+Merdibacter,genus,Firmicutes,6,6,6,4.0,2.0,0.0,broad,0.333
+Citrobacter braakii,species,Proteobacteria,6,6,6,3.0,3.0,0.0,broad,0.5
+Candidatus Stoquefichus,genus,Firmicutes,6,6,6,4.0,2.0,0.0,broad,0.333
+Wansuia,genus,Firmicutes,6,6,6,3.0,3.0,0.0,broad,0.5
+Wansuia hejianensis,species,Firmicutes,6,6,6,3.0,3.0,0.0,broad,0.5
+Anaerovorax,genus,Firmicutes,5,11,8,4.0,7.0,0.0,narrow,0.636
+Eikenella,genus,Proteobacteria,5,11,9,7.0,2.0,2.0,narrow,0.222
+Klebsiella oxytoca,species,Proteobacteria,5,9,5,3.0,2.0,4.0,narrow,0.4
+Drancourtella massiliensis,species,Firmicutes,5,9,7,5.0,2.0,2.0,narrow,0.286
+Bacteroides fluxus,species,Bacteroidetes,5,8,5,3.0,1.0,4.0,narrow,0.25
+Latilactobacillus,genus,Firmicutes,5,8,4,1.0,3.0,4.0,narrow,0.75
+Victivallis lenta,species,Lentisphaerae,5,8,6,1.0,7.0,0.0,narrow,0.875
+Streptococcus gallolyticus,species,Firmicutes,5,7,5,5.0,0.0,2.0,narrow,0.0
+Clostridia bacterium uc5.1-1e11,species,Firmicutes,5,7,5,4.0,1.0,2.0,narrow,0.2
+Rikenellaceae bacterium,species,Bacteroidetes,5,7,5,2.0,5.0,0.0,narrow,0.714
+Candidatus Gastranaerophilales bacterium,species,Candidatus Melainabacteria,5,7,4,0.0,5.0,2.0,narrow,1.0
+Prevotella merdae,species,Bacteroidetes,5,7,7,1.0,6.0,0.0,narrow,0.857
+Enterococcus avium,species,Firmicutes,5,6,5,6.0,0.0,0.0,narrow,0.0
+Veillonella ratti,species,Firmicutes,5,6,4,3.0,1.0,2.0,narrow,0.25
+Anaerotignum sp. msj-24,species,Firmicutes,5,6,6,0.0,6.0,0.0,narrow,1.0
+Holdemania massiliensis,species,Firmicutes,5,6,5,1.0,3.0,2.0,narrow,0.75
+Companilactobacillus,genus,Firmicutes,5,6,4,2.0,2.0,2.0,narrow,0.5
+Merdimonas,genus,Firmicutes,5,6,5,3.0,1.0,2.0,narrow,0.25
+Merdimonas faecis,species,Firmicutes,5,6,5,3.0,1.0,2.0,narrow,0.25
+Zhenpiania hominis,species,Firmicutes,5,6,5,4.0,2.0,0.0,narrow,0.333
+Streptococcus rubneri,species,Firmicutes,5,6,4,2.0,2.0,2.0,narrow,0.5
+Sporobacter,genus,Firmicutes,5,6,6,0.0,6.0,0.0,narrow,1.0
+Oxalobacter formigenes,species,Proteobacteria,5,5,4,1.0,4.0,0.0,narrow,0.8
+Oribacterium,genus,Firmicutes,5,5,5,4.0,1.0,0.0,narrow,0.2
+Nitrospira,genus,Nitrospirae,5,5,4,1.0,4.0,0.0,narrow,0.8
+Mycobacterium,genus,Actinobacteria,5,5,4,2.0,3.0,0.0,narrow,0.6
+Citrobacter freundii,species,Proteobacteria,5,5,5,4.0,1.0,0.0,narrow,0.2
+Brevibacterium,genus,Actinobacteria,5,5,4,1.0,2.0,2.0,narrow,0.667
+Catenibacterium mitsuokai,species,Firmicutes,5,5,5,3.0,2.0,0.0,narrow,0.4
+Megasphaera elsdenii,species,Firmicutes,5,5,5,1.0,4.0,0.0,narrow,0.8
+Klebsiella michiganensis,species,Proteobacteria,5,5,4,1.0,2.0,2.0,narrow,0.667
+Citrobacter portucalensis,species,Proteobacteria,5,5,5,3.0,2.0,0.0,narrow,0.4
+Prevotella pectinovora,species,Bacteroidetes,5,5,4,1.0,2.0,2.0,narrow,0.667
+Anaeroplasma,genus,Tenericutes,5,5,5,0.0,5.0,0.0,narrow,1.0
+Leyella lascolaii,species,Bacteroidetes,5,5,4,1.0,2.0,2.0,narrow,0.667
+Lactonifactor,genus,Firmicutes,5,5,5,3.0,2.0,0.0,narrow,0.4
+Bianquea,genus,Firmicutes,5,5,5,3.0,2.0,0.0,narrow,0.4
+Eubacterium callanderi,species,Firmicutes,5,5,5,5.0,0.0,0.0,narrow,0.0
+Lentihominibacter hominis,species,Firmicutes,5,5,4,4.0,1.0,0.0,narrow,0.2
+Massilicoli timonensis,species,Firmicutes,5,5,4,2.0,3.0,0.0,narrow,0.6
+Bryobacter,genus,Acidobacteria,5,5,4,1.0,4.0,0.0,narrow,0.8
+Peptoclostridium,genus,Firmicutes,5,5,4,4.0,1.0,0.0,narrow,0.2
+Megasphaera massiliensis,species,Firmicutes,5,5,4,2.0,3.0,0.0,narrow,0.6
+Jilunia,genus,Bacteroidetes,5,5,3,0.0,3.0,2.0,narrow,1.0
+Jilunia laotingensis,species,Bacteroidetes,5,5,3,0.0,3.0,2.0,narrow,1.0
+Catenisphaera,genus,Firmicutes,5,5,5,3.0,2.0,0.0,narrow,0.4
+Parabacteroides massiliensis,species,Bacteroidetes,5,5,5,1.0,4.0,0.0,narrow,0.8
+Vescimonas fastidiosa,species,Firmicutes,5,5,5,1.0,4.0,0.0,narrow,0.8
+Fructilactobacillus,genus,Firmicutes,5,5,5,3.0,2.0,0.0,narrow,0.4
+Coprococcus sp. om04-5bh,species,Firmicutes,5,5,5,0.0,5.0,0.0,narrow,1.0
+Ezakiella,genus,Firmicutes,5,5,5,4.0,1.0,0.0,narrow,0.2
+Faecalicatena contorta,species,Firmicutes,5,5,5,4.0,1.0,0.0,narrow,0.2
+Murdochiella,genus,Firmicutes,5,5,4,2.0,3.0,0.0,narrow,0.6
+Eubacterium sp. om08-24,species,Firmicutes,5,5,4,1.0,2.0,2.0,narrow,0.667
