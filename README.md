@@ -234,6 +234,54 @@ dysbiosis marker into an apparently specific one. Its breadth columns stay
 association-level on purpose: specificity asks how widely a taxon has been
 reported, not how cohorts voted on one disease.
 
+### Replication, not error: reading q7's disagreements
+
+```bash
+python scripts/replication_audit.py     # writes data/replication_audit.csv
+```
+
+`q7` flags 191 of 4,392 species-level pairs where the curated associations and
+this database's abundance matrix point opposite ways. The obvious reading -- that
+those rows are mistakes -- is wrong, and this script exists to say why. For every
+per-study comparison it asks whether that study is one that **reported** the
+association:
+
+| pair group | cohorts that reported it | other cohorts |
+| --- | --- | --- |
+| abundance **agrees** (4,201 pairs) | 98.1% match | 75.1% match |
+| abundance **disagrees** (191 pairs) | **91.9% match** | **18.3% match** |
+
+The associations describe their own cohorts correctly in *both* groups. What
+makes a pair a "disagreement" is that no other cohort reproduces it. So
+`disagreement_kind` in q7 separates the two cases, and as of 2026-10-12 the
+split is **190 `non_replicating`, 1 `no_own_cohort_abundance`, and zero
+`contradicted_in_own_cohort`** -- not one association is contradicted by the
+measurements of the study it is attributed to, which is a statement about the
+loaders as much as about the biology.
+
+*Clostridium perfringens* in Crohn disease is the pattern in miniature. It is
+flagged depleted while the abundance says enriched 6-1 at a 15-fold difference,
+which looks like a sign error until you check the source: the association comes
+from PRJNA993675, and that study's own abundance reads 0.00165 in Crohn against
+0.00461 in health. It is depleted *there*. Seven other cohorts measure the
+opposite.
+
+Most of the 191 are not even substantive. When the abundance disagrees its own
+vote is typically a bare majority (median agreement 0.667) whereas agreeing
+pairs are usually unanimous (3,459 of 4,201 at 0.9 or above), and the median
+absolute log2 fold change is 0.297 against 1.593 across all pairs, on taxa
+sitting near 0.04% relative abundance where a handful of reads flips the sign.
+Two filters pull in opposite directions and both are reported, because quoting
+either alone misleads: demanding more comparable studies **raises** the
+disagreement rate (4.3% to 15.5%, since single-study pairs confirm themselves),
+while demanding a real contradiction **lowers** it (8.8% to 1.0%). Ten pairs
+survive an abundance majority of 0.8 with a two-fold difference over at least
+two studies, and nine of those ten rest on a single association study.
+
+**For modelling, this is a generalisation warning list rather than a cleanup
+list.** A feature whose direction holds in one cohort and reverses in six others
+is exactly what fails on held-out data.
+
 ### Adjudicating directional conflicts
 
 2,285 (taxon, disease) pairs are reported by more than one study and the studies

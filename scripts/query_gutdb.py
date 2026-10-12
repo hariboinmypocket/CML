@@ -176,15 +176,29 @@ pairs AS (
     FROM v_taxon_disease_evidence
     WHERE taxonomic_rank = 'species'
       AND consensus_direction IN ('enriched', 'depleted')
+),
+reported AS (
+    -- Which studies actually reported each association, case/control only. A
+    -- study's abundance can then be checked against a claim that study made,
+    -- separately from claims other cohorts made.
+    SELECT DISTINCT a.taxon_id, a.disease_id, cp.study_id
+    FROM taxon_disease_associations a
+    JOIN phenotype_comparisons cp ON cp.id = a.comparison_id
+    LEFT JOIN diseases rpa ON rpa.id = cp.phenotype_a_id
+    LEFT JOIN diseases rpb ON rpb.id = cp.phenotype_b_id
+    WHERE COALESCE(rpa.name = 'Health' OR rpb.name = 'Health', 0) = 1
 )
 SELECT p.scientific_name, p.disease_name, p.n_studies, p.consensus_direction,
        p.mean_abs_effect_size, st.project_accession,
+       CASE WHEN r.study_id IS NULL THEN 0 ELSE 1 END AS reported_here,
        ar.n_case AS n_case_samples, ar.n_health AS n_health_samples,
        COALESCE(sc.total, 0) / ar.n_case   AS mean_abundance_case,
        COALESCE(sh.total, 0) / ar.n_health AS mean_abundance_health
 FROM pairs p
 JOIN arms ar ON ar.disease_id = p.disease_id
 JOIN studies st ON st.id = ar.study_id
+LEFT JOIN reported r ON r.taxon_id = p.taxon_id AND r.disease_id = p.disease_id
+                    AND r.study_id = ar.study_id
 LEFT JOIN sums sc ON sc.taxon_id = p.taxon_id AND sc.study_id = ar.study_id
                  AND sc.disease_id = p.disease_id
 LEFT JOIN sums sh ON sh.taxon_id = p.taxon_id AND sh.study_id = ar.study_id
@@ -213,6 +227,11 @@ def summarize_concordance(rows: pd.DataFrame) -> pd.DataFrame:
     # sample together would give, rather than averaging the study means.
     rows["case_mass"] = rows["mean_abundance_case"] * rows["n_case_samples"]
     rows["health_mass"] = rows["mean_abundance_health"] * rows["n_health_samples"]
+    # Does this study's own abundance back the direction it is claimed to support?
+    decided_here = rows["study_direction"] != "tied"
+    rows["own_checked"] = (rows["reported_here"] == 1) & decided_here
+    rows["own_matching"] = rows["own_checked"] & (
+        rows["study_direction"] == rows["consensus_direction"])
 
     key = ["scientific_name", "disease_name", "n_studies", "consensus_direction",
            "mean_abs_effect_size"]
@@ -226,6 +245,8 @@ def summarize_concordance(rows: pd.DataFrame) -> pd.DataFrame:
         n_case_samples=("n_case_samples", "sum"),
         health_mass=("health_mass", "sum"),
         n_health_samples=("n_health_samples", "sum"),
+        n_own_studies=("own_checked", "sum"),
+        n_own_matching=("own_matching", "sum"),
     ).reset_index()
 
     decided = out["n_studies_enriched"] + out["n_studies_depleted"]
@@ -247,6 +268,31 @@ def summarize_concordance(rows: pd.DataFrame) -> pd.DataFrame:
         out[f"agrees_{'within_study' if method == 'abundance' else 'pooled'}"] = np.where(
             out[f"{method}_direction"].isna(), np.nan,
             (out[f"{method}_direction"] == out["consensus_direction"]).astype(float))
+
+    # Why a pair disagrees, which is not the same question as whether it does.
+    #
+    # An association that matches the abundance in the cohorts that REPORTED it,
+    # and is reversed only in cohorts that did not, is a finding that failed to
+    # replicate -- not a wrong row. Measured across the disagreeing pairs, the
+    # reporting cohorts back their own association 91.9% of the time while other
+    # cohorts back it 18.3% of the time, so almost every disagreement here is of
+    # that kind. The rare other kind, where a study's own measurements contradict
+    # the claim attributed to it, is worth actual investigation: a sign
+    # convention, a taxonomy mismatch or a loading error.
+    own_rate = np.where(out["n_own_studies"] > 0,
+                        out["n_own_matching"] / out["n_own_studies"].where(out["n_own_studies"] > 0),
+                        np.nan)
+    out["own_cohort_match_rate"] = np.round(own_rate, 3)
+    out["disagreement_kind"] = np.select(
+        [
+            out["abundance_direction"].isna(),
+            out["agrees_within_study"] == 1,
+            out["n_own_studies"] == 0,
+            own_rate >= 0.5,
+        ],
+        ["abundance_tied", "agrees", "no_own_cohort_abundance", "non_replicating"],
+        default="contradicted_in_own_cohort",
+    )
 
     out["median_log2_fold_change"] = out["median_log2_fold_change"].round(3)
     out = out.drop(columns=["case_mass", "health_mass"])
@@ -301,6 +347,13 @@ def main() -> dict[str, pd.DataFrame]:
     print("   reconciles with taxon_disease_adjudication's 91.7%.")
     print("   (The 62% this table used to report was neither: it averaged only")
     print("   the samples where a taxon was detected.)")
+    print("\nwhy the disagreements disagree:")
+    for kind, n in conc["disagreement_kind"].value_counts().items():
+        if kind == "agrees":
+            continue
+        print(f"   {kind:28} {n:>5}")
+    print("   non_replicating = the reporting cohort's own abundance backs the")
+    print("   association; other cohorts reverse it. Not a wrong row.")
     return results
 
 
