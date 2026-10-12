@@ -113,56 +113,151 @@ QUERIES: dict[str, str] = {
     """,
 }
 
-# 7. Do the curated associations agree with the abundance matrix? For every
-#    species-level (taxon, disease) pair that has both an association and
-#    abundance data, compare its mean relative abundance in case samples of that
-#    disease against Health samples. Abundances are species-rank only here, so
-#    the comparison is rank-clean.
+# 7. Do the curated associations agree with the abundance matrix?
 #
-#    READ THE RESULT WITH CARE. This pools case and control samples ACROSS
-#    studies, and that is what drives its concordance rate: 62.1% here against
-#    91.7% for the same two data sources compared WITHIN each study, which is
-#    what taxon_disease_adjudication does. The 29-point gap is cohort,
-#    protocol and sequencing-run heterogeneity, not disagreement between the
-#    curated associations and the measurements. Quote 62% as a statement about
-#    pooling; quote the adjudication table for how well the two actually agree.
+#    This table was rebuilt on 2026-10-12. The previous version answered a
+#    different question than its name claimed and reported 62% concordance,
+#    which was quoted as "the curated associations only match the measurements
+#    62% of the time". The true figure is about 95%. Three things were wrong:
+#
+#      It pooled case and control samples ACROSS studies, comparing cases from
+#      one cohort against controls from every other cohort, on different
+#      protocols and sequencing runs.
+#
+#      It averaged over v_abundance_species, which holds only the rows that
+#      exist. 97.3% of (sample, taxon) cells are absences with no row, so it
+#      compared "abundance where the taxon was detected in cases" against
+#      "abundance where it was detected in controls" -- not a case/control
+#      contrast at all.
+#
+#      Its n_case_samples >= 20 gate counted DETECTIONS rather than samples
+#      profiled, so the threshold meant something other than it appeared to.
+#
+#    It now does what taxon_disease_adjudication does: one direction per study
+#    that holds both arms, absence counted as zero, denominator every sample in
+#    the arm profiled at species rank.
+#
+#    WHICH OF THE THREE MATTERED, measured on the 4,046 pairs every method can
+#    score: pooled with absence missing gives 65.8%, pooled with absence as zero
+#    gives 95.5%, within-study with absence as zero gives 95.3%. So counting
+#    absence as zero is worth +29.7 points and comparing within study is worth
+#    -0.2. The old number was an artefact of skipping absences, NOT of pooling,
+#    and an earlier version of this comment said otherwise.
+#
+#    Within-study is still the right comparison and is what this table reports:
+#    it compares like with like, and it is what taxon_disease_adjudication uses
+#    to settle directions. It simply is not what rescues the headline. Both
+#    columns are kept so neither claim has to be taken on trust.
 CONCORDANCE_SQL = """
-WITH case_ab AS (
-    SELECT sp.taxon_id, s.disease_id,
-           COUNT(*) AS n_case_samples,
-           AVG(sp.relative_abundance) AS mean_case
-    FROM v_abundance_species sp
-    JOIN samples s ON s.id = sp.sample_id
-    JOIN diseases d ON d.id = s.disease_id
-    WHERE d.name <> 'Health'
-    GROUP BY sp.taxon_id, s.disease_id
+WITH prof AS (
+    SELECT s.study_id, s.disease_id, COUNT(DISTINCT a.sample_id) AS n
+    FROM sample_taxon_abundances a
+    JOIN taxa t ON t.id = a.taxon_id AND t.taxonomic_rank = 'species'
+    JOIN samples s ON s.id = a.sample_id
+    GROUP BY s.study_id, s.disease_id
 ),
-health_ab AS (
-    SELECT sp.taxon_id,
-           COUNT(*) AS n_health_samples,
-           AVG(sp.relative_abundance) AS mean_health
-    FROM v_abundance_species sp
-    JOIN samples s ON s.id = sp.sample_id
-    JOIN diseases d ON d.id = s.disease_id
-    WHERE d.name = 'Health'
-    GROUP BY sp.taxon_id
+arms AS (
+    SELECT pc.study_id, pc.disease_id, pc.n AS n_case, ph.n AS n_health
+    FROM prof pc
+    JOIN prof ph ON ph.study_id = pc.study_id
+                AND ph.disease_id = (SELECT id FROM diseases WHERE name = 'Health')
+    WHERE pc.disease_id <> (SELECT id FROM diseases WHERE name = 'Health')
+),
+sums AS (
+    SELECT a.taxon_id, s.study_id, s.disease_id, SUM(a.relative_abundance) AS total
+    FROM sample_taxon_abundances a
+    JOIN taxa t ON t.id = a.taxon_id AND t.taxonomic_rank = 'species'
+    JOIN samples s ON s.id = a.sample_id
+    GROUP BY a.taxon_id, s.study_id, s.disease_id
+),
+pairs AS (
+    SELECT taxon_id, scientific_name, disease_id, disease_name,
+           n_studies, consensus_direction, mean_abs_effect_size
+    FROM v_taxon_disease_evidence
+    WHERE taxonomic_rank = 'species'
+      AND consensus_direction IN ('enriched', 'depleted')
 )
-SELECT e.scientific_name, e.disease_name, e.n_studies, e.consensus_direction,
-       e.mean_abs_effect_size,
-       c.n_case_samples, h.n_health_samples,
-       ROUND(c.mean_case, 6)   AS mean_abundance_case,
-       ROUND(h.mean_health, 6) AS mean_abundance_health,
-       CASE WHEN e.consensus_direction = 'enriched' AND c.mean_case > h.mean_health THEN 1
-            WHEN e.consensus_direction = 'depleted' AND c.mean_case < h.mean_health THEN 1
-            WHEN e.consensus_direction IN ('enriched', 'depleted') THEN 0
-       END AS abundance_agrees
-FROM v_taxon_disease_evidence e
-JOIN case_ab  c ON c.taxon_id = e.taxon_id AND c.disease_id = e.disease_id
-JOIN health_ab h ON h.taxon_id = e.taxon_id
-WHERE e.taxonomic_rank = 'species'
-  AND e.consensus_direction IN ('enriched', 'depleted')
-  AND c.n_case_samples >= 20 AND h.n_health_samples >= 20
+SELECT p.scientific_name, p.disease_name, p.n_studies, p.consensus_direction,
+       p.mean_abs_effect_size, st.project_accession,
+       ar.n_case AS n_case_samples, ar.n_health AS n_health_samples,
+       COALESCE(sc.total, 0) / ar.n_case   AS mean_abundance_case,
+       COALESCE(sh.total, 0) / ar.n_health AS mean_abundance_health
+FROM pairs p
+JOIN arms ar ON ar.disease_id = p.disease_id
+JOIN studies st ON st.id = ar.study_id
+LEFT JOIN sums sc ON sc.taxon_id = p.taxon_id AND sc.study_id = ar.study_id
+                 AND sc.disease_id = p.disease_id
+LEFT JOIN sums sh ON sh.taxon_id = p.taxon_id AND sh.study_id = ar.study_id
+                 AND sh.disease_id = (SELECT id FROM diseases WHERE name = 'Health')
 """
+
+
+def summarize_concordance(rows: pd.DataFrame) -> pd.DataFrame:
+    """Collapse per-(pair, study) rows to one row per (taxon, disease).
+
+    Two directions are derived from the same numbers. The within-study one
+    counts each study's own case-vs-control comparison; the pooled one averages
+    every case sample against every control sample regardless of which cohort
+    produced it. Reporting both is the point: they disagree often enough that
+    which one a figure used changes its headline.
+    """
+    rows = rows.copy()
+    eps = 1e-6
+    rows["log2_fold_change"] = np.log2(
+        (rows["mean_abundance_case"] + eps) / (rows["mean_abundance_health"] + eps))
+    rows["study_direction"] = np.where(
+        rows["mean_abundance_case"] > rows["mean_abundance_health"], "enriched",
+        np.where(rows["mean_abundance_case"] < rows["mean_abundance_health"],
+                 "depleted", "tied"))
+    # Pooled means are sample-weighted so they match what averaging every
+    # sample together would give, rather than averaging the study means.
+    rows["case_mass"] = rows["mean_abundance_case"] * rows["n_case_samples"]
+    rows["health_mass"] = rows["mean_abundance_health"] * rows["n_health_samples"]
+
+    key = ["scientific_name", "disease_name", "n_studies", "consensus_direction",
+           "mean_abs_effect_size"]
+    g = rows.groupby(key, dropna=False)
+    out = g.agg(
+        n_studies_compared=("project_accession", "nunique"),
+        n_studies_enriched=("study_direction", lambda v: int((v == "enriched").sum())),
+        n_studies_depleted=("study_direction", lambda v: int((v == "depleted").sum())),
+        median_log2_fold_change=("log2_fold_change", "median"),
+        case_mass=("case_mass", "sum"),
+        n_case_samples=("n_case_samples", "sum"),
+        health_mass=("health_mass", "sum"),
+        n_health_samples=("n_health_samples", "sum"),
+    ).reset_index()
+
+    decided = out["n_studies_enriched"] + out["n_studies_depleted"]
+    out["abundance_direction"] = np.where(
+        out["n_studies_enriched"] > out["n_studies_depleted"], "enriched",
+        np.where(out["n_studies_depleted"] > out["n_studies_enriched"], "depleted", None))
+    out["abundance_agreement"] = np.where(
+        decided > 0,
+        np.maximum(out["n_studies_enriched"], out["n_studies_depleted"]) / decided.where(decided > 0),
+        np.nan).round(3)
+
+    out["pooled_mean_case"] = (out["case_mass"] / out["n_case_samples"]).round(8)
+    out["pooled_mean_health"] = (out["health_mass"] / out["n_health_samples"]).round(8)
+    out["pooled_direction"] = np.where(
+        out["pooled_mean_case"] > out["pooled_mean_health"], "enriched",
+        np.where(out["pooled_mean_case"] < out["pooled_mean_health"], "depleted", None))
+
+    for method in ("abundance", "pooled"):
+        out[f"agrees_{'within_study' if method == 'abundance' else 'pooled'}"] = np.where(
+            out[f"{method}_direction"].isna(), np.nan,
+            (out[f"{method}_direction"] == out["consensus_direction"]).astype(float))
+
+    out["median_log2_fold_change"] = out["median_log2_fold_change"].round(3)
+    out = out.drop(columns=["case_mass", "health_mass"])
+    # Disagreements first, best-evidenced first. Sorting by |log2_fold_change|
+    # would lead with the 175 pairs where one arm's mean is ~0 and the 1e-6
+    # pseudocount dominates the ratio, which says more about the pseudocount
+    # than about the taxon.
+    return out.sort_values(
+        ["agrees_within_study", "n_studies_compared", "abundance_agreement"],
+        ascending=[True, False, False], na_position="last"
+    ).reset_index(drop=True)
 
 
 def open_source():
@@ -178,21 +273,34 @@ def main() -> dict[str, pd.DataFrame]:
     con, label = open_source()
     print(f"source: {label}")
     results = {name: pd.read_sql_query(sql, con) for name, sql in QUERIES.items()}
-    conc = pd.read_sql_query(CONCORDANCE_SQL, con)
-    # log2 fold change computed here rather than in SQL: SQLite's LOG() is only
-    # present in builds compiled with the math extension, so doing it in pandas
-    # keeps both sources producing the same column.
-    pseudo = 1e-6
-    conc["log2_fold_change"] = np.log2(
-        (conc["mean_abundance_case"] + pseudo) / (conc["mean_abundance_health"] + pseudo)
-    ).round(3)
-    results["q7_association_vs_abundance"] = conc.reindex(
-        conc["log2_fold_change"].abs().sort_values(ascending=False).index
-    ).reset_index(drop=True)
+    # Per-(pair, study) rows, collapsed in pandas: the log2 ratio and the median
+    # across studies both need functions SQLite lacks without its math
+    # extension, so doing it here keeps both sources producing one shape.
+    conc = summarize_concordance(pd.read_sql_query(CONCORDANCE_SQL, con))
+    results["q7_association_vs_abundance"] = conc
     con.close()
     for name, frame in results.items():
         frame.to_csv(f"{name}.csv", index=False)
         print(f"{name}: {len(frame)} rows -> {name}.csv")
+
+    # The headline this table exists to produce, stated rather than left to be
+    # recomputed by hand -- which is how the old 62% came to be quoted as a
+    # statement about the curated associations.
+    scored = conc.dropna(subset=["agrees_within_study"])
+    independent = scored[scored["n_studies_compared"] >= 2]
+    print("\nconcordance with the curated associations:")
+    print(f"   all pairs:                  "
+          f"{int(scored['agrees_within_study'].sum()):>5,}/{len(scored):<6,} = "
+          f"{100*scored['agrees_within_study'].mean():.1f}%")
+    print(f"   pairs with >= 2 studies:    "
+          f"{int(independent['agrees_within_study'].sum()):>5,}/{len(independent):<6,} = "
+          f"{100*independent['agrees_within_study'].mean():.1f}%   <-- quote this one")
+    print("   A pair with only ONE comparable study has its abundance direction")
+    print("   computed from the same cohort that produced the association, so it")
+    print("   confirms itself. The >=2 figure is the independent one, and it")
+    print("   reconciles with taxon_disease_adjudication's 91.7%.")
+    print("   (The 62% this table used to report was neither: it averaged only")
+    print("   the samples where a taxon was detected.)")
     return results
 
 

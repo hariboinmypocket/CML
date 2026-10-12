@@ -131,14 +131,26 @@ within the species rank, so `v_abundance_coverage` flags none of them.
    *Bacteroides* is +4.66 in `PRJNA637763`, an example of the conflicts in q4.
 6. **`q6_cohort_readiness`** — per-study covariate and feature completeness from
    `v_ml_cohort_summary`, 273 studies.
-7. **`q7_association_vs_abundance`** — the cross-check that joins the two halves of
-   the database: for each species-level pair with a consensus direction and ≥20
-   case and ≥20 health samples, the mean relative abundance in cases against
-   health. Only 62% of 2,670 pairs move in the direction the curated association
-   claims (68% of enrichments, 57% of depletions). The comparison pools samples
-   across studies and ignores batch effects, so it is a smell test rather than a
-   validation — but a coin-flip-ish depletion rate is a reason to prefer
-   within-study effect estimates.
+7. **`q7_association_vs_abundance`** — the cross-check that joins the two halves
+   of the database: for each species-level pair with a consensus direction, the
+   taxon's mean relative abundance in each study's cases against that same
+   study's controls, with absence counted as zero and the denominator every
+   sample profiled at species rank. **91.2% of the pairs with two or more
+   comparable studies move in the direction the curated association claims**
+   (95.7% across all pairs, but a pair with a single comparable study has its
+   abundance direction computed from the same cohort that produced the
+   association, so it confirms itself; quote the 91.2%, which reconciles with
+   `taxon_disease_adjudication`'s 91.7%).
+
+   This table was rebuilt on 2026-10-12 and this entry used to report 62% of
+   2,670 pairs, blaming the pooling of samples across studies. That diagnosis
+   was wrong. The old query averaged over the abundance rows that exist, and
+   97.3% of (sample, taxon) cells at species rank are absences with no row, so
+   it compared "abundance where detected in cases" against "abundance where
+   detected in controls". Measured on the 4,046 pairs every method can score:
+   pooled with absence missing 65.8%, pooled with absence as zero 95.5%,
+   within-study with absence as zero 95.3%. Counting absence as zero is worth
+   +29.7 points; the pooling it blamed is worth -0.2.
 
 ## Not done
 

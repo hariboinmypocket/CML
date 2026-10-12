@@ -252,13 +252,21 @@ study's cases is compared with its mean in that study's controls, giving one
 direction per study. Directions are then counted the same way association votes
 are. Two details decide whether the number means anything:
 
-- **Within-study, never pooled.** Pooling cases and controls across cohorts
-  agrees with the curated associations only 62% of the time, which is what
-  comparing across different protocols and sequencing runs produces.
 - **Absence is zero, not missing.** An undetected taxon has no row in
-  `sample_taxon_abundances`. Averaging only the rows that exist compares the
-  samples where a taxon was abundant against the samples where it was abundant.
-  The denominator is every sample in the arm profiled at that taxon's rank.
+  `sample_taxon_abundances`, and 97.3% of (sample, taxon) cells at species rank
+  are such absences. Averaging only the rows that exist compares the samples
+  where a taxon was abundant against the samples where it was abundant. The
+  denominator is every sample in the arm profiled at that taxon's rank. **This
+  is the rule that matters**: on the 4,046 pairs every method can score,
+  counting absence as zero moves concordance with the curated associations from
+  65.8% to 95.5%, while the choice of pooling moves it by -0.2.
+- **Within-study, never pooled.** A direction computed inside one study compares
+  like with like -- same protocol, same sequencing run, same recruitment -- and
+  only directions are aggregated, so one large cohort cannot outweigh several
+  smaller ones. It is the correct comparison, but it is worth only -0.2 points
+  on the concordance figure (95.5% pooled against 95.3% within study), and an
+  earlier version of this README claimed the 62% was what pooling costs. It was
+  not; it was what skipping absences costs.
 
 **Only case/control contrasts vote.** 2,340 of the 16,889 associations compare
 one disease against another rather than against Health. "Enriched in UC relative

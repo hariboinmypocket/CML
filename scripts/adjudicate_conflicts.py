@@ -26,11 +26,19 @@ pair -- a cross-check that is cheap to keep and would catch either one drifting.
 Pairs whose associations are all disease-vs-disease keep their evidence recorded
 but get no association vote.
 
-Within-study, never pooled. q7 pools case and control samples across studies
-and finds only 62% concordance with the curated associations, which is what
-pooling across different cohorts, protocols and sequencing runs produces. A
-direction computed inside one study compares like with like, and only the
-directions are aggregated.
+Within-study, never pooled. A direction computed inside one study compares like
+with like -- same protocol, same sequencing run, same recruitment -- and only
+the directions are aggregated, so a large cohort cannot outweigh several smaller
+ones that disagree with it.
+
+An earlier version of this note justified the rule by pointing at q7, which
+reported 62% concordance with the curated associations and was said to show what
+pooling costs. That was wrong, and measuring it says so: on the 4,046 pairs
+every method can score, pooling with absence treated as missing gives 65.8%,
+pooling with absence as zero gives 95.5%, and comparing within study gives
+95.3%. The 62% came from averaging only the samples where a taxon was detected.
+Pooling is worth about -0.2 points on that metric. The rule is kept because it
+is the correct comparison, not because it moves this number.
 
 Absence is zero, not missing. A taxon that was not detected in a sample has no
 row in sample_taxon_abundances. Averaging only the rows that exist would
