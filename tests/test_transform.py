@@ -158,6 +158,35 @@ class NormalizePhylumTests(unittest.TestCase):
             normalize_phylum("Thermodesulfobacteria"), "Thermodesulfobacteria"
         )
 
+    def test_euryarchaeota_rename_folds(self):
+        """Same NCBI tax ID (28890) under two names, so it is a rename."""
+        self.assertEqual(normalize_phylum("Methanobacteriota"), "Euryarchaeota")
+
+    def test_euryarchaeota_splits_are_not_folded(self):
+        """GTDB split the old Euryarchaeota, and NCBI gave the pieces their own
+        nodes: Thermoplasmatota is 2283796 and Halobacteriota is 3100166, not
+        28890. Folding either onto Euryarchaeota would move real organisms
+        between phyla, which is a taxonomic decision rather than a spelling one
+        and belongs in normalize_reclassified_phyla.py's APPROVED set.
+        """
+        self.assertEqual(normalize_phylum("Thermoplasmatota"), "Thermoplasmatota")
+        self.assertEqual(normalize_phylum("Halobacteriota"), "Halobacteriota")
+        self.assertEqual(normalize_phylum("Myxococcota"), "Myxococcota")
+
+    def test_every_synonym_target_is_itself_stable(self):
+        """Folding must reach a fixed point in one step.
+
+        If a target were itself a key, the stored value would depend on how many
+        times the normalizer happened to run -- and these names are written by
+        several loaders.
+        """
+        from gutdb.transform import PHYLUM_SYNONYMS
+
+        for source, target in PHYLUM_SYNONYMS.items():
+            self.assertEqual(
+                normalize_phylum(target), target,
+                f"{source} -> {target}, but {target} folds again")
+
     def test_unknown_and_empty(self):
         self.assertEqual(normalize_phylum("Firmicutes"), "Firmicutes")
         self.assertEqual(normalize_phylum(""), "")

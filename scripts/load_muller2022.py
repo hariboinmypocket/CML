@@ -70,6 +70,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from gutdb.config import Settings
 from gutdb.db import connect
+from gutdb.transform import normalize_phylum
 
 csv.field_size_limit(10 ** 9)
 
@@ -355,11 +356,18 @@ def ensure_diseases(cur) -> dict[str, int]:
 def ensure_genera(cur, needed: set[str], taxdump) -> dict[str, int]:
     """Resolve each NCBI genus name to a taxa row, creating the ones missing.
 
-    New rows get their lineage from the local NCBI dump, not from GTDB: GTDB
-    writes Firmicutes_A where NCBI writes Firmicutes, and normalize_phylum and
-    the phylum columns elsewhere in this schema are NCBI-shaped. The domain the
-    GTDB label declares is used only to pick between homonyms, which is the
-    guard Bacillus-the-stick-insect needs.
+    New rows get their lineage from the local NCBI dump, not from GTDB, since
+    GTDB writes Firmicutes_A where this schema wants one value per phylum. The
+    domain the GTDB label declares is used only to pick between homonyms, which
+    is the guard Bacillus-the-stick-insect needs.
+
+    The phylum goes through normalize_phylum on the way in. NCBI's SCIENTIFIC
+    name for these is now the 2021 ICNP one -- taxid 1239 is Bacillota, with
+    Firmicutes as a synonym -- while this schema deliberately stores the classic
+    name so a phylum groups as one value. Writing the dump's answer straight
+    through is what put 119 genus rows under Bacillota, Bacteroidota and
+    Pseudomonadota beside the 1,365 under Firmicutes, splitting seven phyla in
+    two and quietly breaking any Firmicutes/Bacteroidetes ratio.
     """
     cur.execute("SELECT LOWER(scientific_name), id FROM taxa WHERE taxonomic_rank = 'genus'")
     have = {name: tid for name, tid in cur.fetchall()}
@@ -391,7 +399,8 @@ def ensure_genera(cur, needed: set[str], taxdump) -> dict[str, int]:
                                      source_database)
                    VALUES (%s,%s,%s,%s,%s,%s,'',%s,'',%s,'genus',%s,%s)""",
                 (lineage.get("superkingdom") or lineage.get("domain"),
-                 lineage.get("phylum"), lineage.get("class"), lineage.get("order"),
+                 normalize_phylum(lineage.get("phylum")) or None,
+                 lineage.get("class"), lineage.get("order"),
                  lineage.get("family"), genus, genus.casefold(), genus, taxid, SOURCE_DB))
             resolved[genus] = cur.lastrowid
         else:

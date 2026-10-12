@@ -195,6 +195,13 @@ PHYLUM_SYNONYMS = {
     "gemmatimonadota": "Gemmatimonadetes",
     "ignavibacteriota": "Ignavibacteriae",
     "lentisphaerota": "Lentisphaerae",
+    # Euryarchaeota and Methanobacteriota are NCBI taxid 28890 under two names,
+    # so this is a rename and folds safely. Its neighbours are not: GTDB split
+    # the old Euryarchaeota, and Thermoplasmatota (2283796) and Halobacteriota
+    # (3100166) are separate taxids, i.e. real reclassifications. Those belong in
+    # scripts/normalize_reclassified_phyla.py's APPROVED set, where a human signs
+    # off on moving taxa between phyla, not in a synonym table.
+    "methanobacteriota": "Euryarchaeota",
     "mycoplasmatota": "Tenericutes",
     "nitrospinota": "Nitrospinae",
     "nitrospirota": "Nitrospirae",

@@ -59,31 +59,133 @@ mysql,2023,Thermoplasma acidophilum,species,2303,Euryarchaeota,Thermoplasmatota,
 mysql,2036,Monoblepharis insignis,species,109953,Chytridiomycota,Monoblepharomycota,reported_only
 mysql,2170,Methanomassiliicoccus candidatus methanomassiliicoccus intestinalis,species,1295009,Candidatus thermoplasmatota,Thermoplasmatota,reported_only
 mysql,3230,Sphingomonas sphingobacterium paucimobilis,species,1346330,Proteobacteria,Bacteroidetes,reported_only
+mysql,2673903,Acutalibacter,genus,1918385,Bacillota,Firmicutes,reported_only
+mysql,2673904,Alangreenwoodia,genus,2720809,Bacillota,Firmicutes,reported_only
+mysql,2673905,Alectryocaccomicrobium,genus,2840559,Bacillota,Firmicutes,reported_only
+mysql,2673906,Amulumruptor,genus,2510710,Bacteroidota,Bacteroidetes,reported_only
+mysql,2673907,Aphodocola,genus,2840545,Bacillota,Firmicutes,reported_only
+mysql,2673908,Aphodomorpha,genus,2840577,Bacillota,Firmicutes,reported_only
+mysql,2673909,Aphodosoma,genus,2840521,Bacteroidota,Bacteroidetes,reported_only
+mysql,2673910,Aphodousia,genus,2840646,Pseudomonadota,Proteobacteria,reported_only
+mysql,2673911,Aphodovivens,genus,2840516,Actinomycetota,Actinobacteria,reported_only
+mysql,2673912,Avichristensenella,genus,2840560,Bacillota,Firmicutes,reported_only
+mysql,2673913,Avimicrobium,genus,2720800,Bacillota,Firmicutes,reported_only
+mysql,2673914,Avimonas,genus,2720801,Bacillota,Firmicutes,reported_only
+mysql,2673915,Avispirillum,genus,2720802,Bacillota,Firmicutes,reported_only
+mysql,2673916,Avoscillospira,genus,2840624,Bacillota,Firmicutes,reported_only
+mysql,2673917,Borkfalkia,genus,2508948,Bacillota,Firmicutes,reported_only
+mysql,2673918,Butyribacter,genus,2822463,Bacillota,Firmicutes,reported_only
+mysql,2673919,Caccenecus,genus,2840546,Bacillota,Firmicutes,reported_only
+mysql,2673920,Caccocola,genus,2840654,Synergistota,Synergistetes,reported_only
+mysql,2673921,Caccosoma,genus,2840540,Bacillota,Firmicutes,reported_only
+mysql,2673922,Caccousia,genus,2840638,Bacillota,Firmicutes,reported_only
+mysql,2673923,Caccovicinus,genus,2840570,Bacillota,Firmicutes,reported_only
+mysql,2673924,Caccovivens,genus,2840581,Bacillota,Firmicutes,reported_only
+mysql,2673925,Caecibacter,genus,1980685,Bacillota,Firmicutes,reported_only
+mysql,2673926,Caproicibacter,genus,2576755,Bacillota,Firmicutes,reported_only
+mysql,2673927,Choladocola,genus,2840621,Bacillota,Firmicutes,reported_only
+mysql,2673928,Choladousia,genus,2840613,Bacillota,Firmicutes,reported_only
+mysql,2673929,Coprenecus,genus,2840536,Bacteroidota,Bacteroidetes,reported_only
+mysql,2673930,Coprocola,genus,2840607,Bacillota,Firmicutes,reported_only
+mysql,2673931,Copromonas,genus,3230375,Bacillota,Firmicutes,reported_only
+mysql,2673932,Coproplasma,genus,2840583,Bacillota,Firmicutes,reported_only
+mysql,2673933,Coprovivens,genus,2840547,Bacillota,Firmicutes,reported_only
+mysql,2673935,Cryptobacteroides,genus,2840523,Bacteroidota,Bacteroidetes,reported_only
+mysql,2673936,Egerieenecus,genus,2840584,Bacillota,Firmicutes,reported_only
+mysql,2673937,Egerieimonas,genus,2840614,Bacillota,Firmicutes,reported_only
+mysql,2673938,Egerieisoma,genus,2840962,Bacillota,Firmicutes,reported_only
+mysql,2673939,Egerieousia,genus,2840524,Bacteroidota,Bacteroidetes,reported_only
+mysql,2673940,Enterenecus,genus,2840571,Bacillota,Firmicutes,reported_only
+mysql,2673941,Enterosoma,genus,2840553,Bacillota,Firmicutes,reported_only
+mysql,2673942,Enterousia,genus,2840644,Pseudomonadota,Proteobacteria,reported_only
+mysql,2673943,Excrementavichristensenella,genus,2840563,Bacillota,Firmicutes,reported_only
+mysql,2673944,Faecaligallichristensenella,genus,2840557,Bacillota,Firmicutes,reported_only
+mysql,2673945,Faecenecus,genus,2840543,Bacillota,Firmicutes,reported_only
+mysql,2673946,Faecicola,genus,2840585,Bacillota,Firmicutes,reported_only
+mysql,2673947,Faecimonas,genus,2840548,Bacillota,Firmicutes,reported_only
+mysql,2673948,Faecimorpha,genus,2840586,Bacillota,Firmicutes,reported_only
+mysql,2673949,Faeciplasma,genus,2840640,Bacillota,Firmicutes,reported_only
+mysql,2673950,Faecivicinus,genus,2840587,Bacillota,Firmicutes,reported_only
+mysql,2673951,Faecousia,genus,2840588,Bacillota,Firmicutes,reported_only
+mysql,2673952,Falcatimonas,genus,1890291,Bacillota,Firmicutes,reported_only
+mysql,2673953,Fimadaptatus,genus,2840589,Bacillota,Firmicutes,reported_only
+mysql,2673954,Fimenecus,genus,2840564,Bacillota,Firmicutes,reported_only
+mysql,2673955,Fimimorpha,genus,2840590,Bacillota,Firmicutes,reported_only
+mysql,2673956,Fimiplasma,genus,2840591,Bacillota,Firmicutes,reported_only
+mysql,2673957,Fimisoma,genus,2840592,Bacillota,Firmicutes,reported_only
+mysql,2673958,Fimivicinus,genus,2840631,Bacillota,Firmicutes,reported_only
+mysql,2673959,Fimivivens,genus,2840632,Bacillota,Firmicutes,reported_only
+mysql,2673960,Fimousia,genus,2840620,Bacillota,Firmicutes,reported_only
+mysql,2673961,Fournierella,genus,1940255,Bacillota,Firmicutes,reported_only
+mysql,2673962,Gabonibacter,genus,1911312,Bacteroidota,Bacteroidetes,reported_only
+mysql,2673963,Gallimonas,genus,2720806,Bacillota,Firmicutes,reported_only
+mysql,2673964,Gallispira,genus,2720807,Bacillota,Firmicutes,reported_only
+mysql,2673965,Galloscillospira,genus,2840625,Bacillota,Firmicutes,reported_only
+mysql,2673966,Heritagella,genus,2721100,Bacillota,Firmicutes,reported_only
+mysql,2673967,Limadaptatus,genus,2840574,Bacillota,Firmicutes,reported_only
+mysql,2673969,Limihabitans,genus,2840593,Bacillota,Firmicutes,reported_only
+mysql,2673970,Limimorpha,genus,3083039,Bacteroidota,Bacteroidetes,reported_only
+mysql,2673971,Limiplasma,genus,2840594,Bacillota,Firmicutes,reported_only
+mysql,2673972,Limisoma,genus,2840527,Bacteroidota,Bacteroidetes,reported_only
+mysql,2673973,Limivicinus,genus,2840595,Bacillota,Firmicutes,reported_only
+mysql,2673974,Limivivens,genus,2840661,Bacillota,Firmicutes,reported_only
+mysql,2673975,Limousia,genus,2840639,Bacillota,Firmicutes,reported_only
+mysql,2673976,Massilimaliae,genus,2895461,Bacillota,Firmicutes,reported_only
+mysql,2673977,Massiliomicrobiota,genus,1924110,Bacillota,Firmicutes,reported_only
+mysql,2673978,Merdicola,genus,2840565,Bacillota,Firmicutes,reported_only
+mysql,2673979,Merdimorpha,genus,2840537,Bacteroidota,Bacteroidetes,reported_only
+mysql,2673980,Merdiplasma,genus,2840615,Bacillota,Firmicutes,reported_only
+mysql,2673981,Merdisoma,genus,2840622,Bacillota,Firmicutes,reported_only
+mysql,2673982,Merdivicinus,genus,2840633,Bacillota,Firmicutes,reported_only
+mysql,2673983,Merdousia,genus,2840660,Verrucomicrobiota,Verrucomicrobia,reported_only
+mysql,2673984,Metalachnospira,genus,2721107,Bacillota,Firmicutes,reported_only
+mysql,2673985,Neobittarella,genus,2126544,Bacillota,Firmicutes,reported_only
+mysql,2673986,Onthenecus,genus,2840596,Bacillota,Firmicutes,reported_only
+mysql,2673987,Onthocola,genus,2840549,Bacillota,Firmicutes,reported_only
+mysql,2673988,Onthomonas,genus,2840626,Bacillota,Firmicutes,reported_only
+mysql,2673989,Onthomorpha,genus,2840528,Bacteroidota,Bacteroidetes,reported_only
+mysql,2673990,Onthousia,genus,2840550,Bacillota,Firmicutes,reported_only
+mysql,2673991,Parachristensenella,genus,2721113,Bacillota,Firmicutes,reported_only
+mysql,2673992,Paralachnospira,genus,2721114,Bacillota,Firmicutes,reported_only
+mysql,2673993,Pararuminococcus,genus,2721115,Bacillota,Firmicutes,reported_only
+mysql,2673994,Pelagibacter,genus,198251,Pseudomonadota,Proteobacteria,reported_only
+mysql,2673995,Pelethenecus,genus,2840658,Mycoplasmatota,Tenericutes,reported_only
+mysql,2673996,Pelethocola,genus,2840616,Bacillota,Firmicutes,reported_only
+mysql,2673997,Pelethomonas,genus,2840627,Bacillota,Firmicutes,reported_only
+mysql,2673998,Pelethousia,genus,2840597,Bacillota,Firmicutes,reported_only
+mysql,2673999,Phytoplasma,genus,33926,Mycoplasmatota,Tenericutes,reported_only
+mysql,2674000,Protoclostridium,genus,2721116,Bacillota,Firmicutes,reported_only
+mysql,2674001,Pseudobutyricicoccus,genus,2721117,Bacillota,Firmicutes,reported_only
+mysql,2674002,Pullichristensenella,genus,2840567,Bacillota,Firmicutes,reported_only
+mysql,2674003,Pullilachnospira,genus,2840612,Bacillota,Firmicutes,reported_only
+mysql,2674004,Scandinavium,genus,2726810,Pseudomonadota,Proteobacteria,reported_only
+mysql,2674005,Scatavimonas,genus,2840635,Bacillota,Firmicutes,reported_only
+mysql,2674007,Scatocola,genus,2840645,Pseudomonadota,Proteobacteria,reported_only
+mysql,2674008,Scatomonas,genus,2840617,Bacillota,Firmicutes,reported_only
+mysql,2674009,Scatomorpha,genus,2840598,Bacillota,Firmicutes,reported_only
+mysql,2674010,Scatosoma,genus,2840568,Bacillota,Firmicutes,reported_only
+mysql,2674012,Scatovivens,genus,2840609,Bacillota,Firmicutes,reported_only
+mysql,2674013,Schaedlerella,genus,2676048,Bacillota,Firmicutes,reported_only
+mysql,2674014,Scybalenecus,genus,2840637,Bacillota,Firmicutes,reported_only
+mysql,2674015,Scybalomonas,genus,2840619,Bacillota,Firmicutes,reported_only
+mysql,2674016,Scybalosoma,genus,2840599,Bacillota,Firmicutes,reported_only
+mysql,2674017,Scybalousia,genus,3082844,Bacteroidota,Bacteroidetes,reported_only
+mysql,2674018,Solibaculum,genus,2842531,Bacillota,Firmicutes,reported_only
+mysql,2674019,Specibacter,genus,2778528,Actinomycetota,Actinobacteria,reported_only
+mysql,2674020,Sporofaciens,genus,2811390,Bacillota,Firmicutes,reported_only
+mysql,2674021,Spyradocola,genus,2840605,Bacillota,Firmicutes,reported_only
+mysql,2674023,Stoquefichus,genus,1470349,Bacillota,Firmicutes,reported_only
+mysql,2674024,Tidjanibacter,genus,1929083,Bacteroidota,Bacteroidetes,reported_only
+mysql,2674025,Ventricola,genus,2840601,Bacillota,Firmicutes,reported_only
+mysql,2674026,Ventrimonas,genus,2840573,Bacillota,Firmicutes,reported_only
+mysql,2674027,Ventrisoma,genus,2840569,Bacillota,Firmicutes,reported_only
 sqlite,42,Methanocorpusculum,genus,2192,Euryarchaeota,Methanobacteriota,reported_only
 sqlite,81,Methanobrevibacter,genus,2172,Euryarchaeota,Methanobacteriota,reported_only
 sqlite,108,Methanobacterium bryantii,species,2161,Euryarchaeota,Methanobacteriota,reported_only
 sqlite,512,Methanothermobacter thermautotrophicus,species,145262,Euryarchaeota,Methanobacteriota,reported_only
 sqlite,644,Methanosaeta,genus,2222,Euryarchaeota,Methanobacteriota,reported_only
 sqlite,703,Archaeoglobus fulgidus,species,2234,Euryarchaeota,Methanobacteriota,reported_only
-sqlite,836,Bilophila wadsworthia,species,35833,Proteobacteria,Thermodesulfobacteriota,normalized
 sqlite,989,Aeropyrum pernix,species,56636,Crenarchaeota,Thermoproteota,reported_only
-sqlite,1021,Desulfarculus baarsii,species,453230,Proteobacteria,Thermodesulfobacteriota,normalized
-sqlite,1024,Desulfatibacillum alkenivorans,species,259354,Proteobacteria,Thermodesulfobacteriota,normalized
-sqlite,1031,Desulfobacterium autotrophicum,species,2296,Proteobacteria,Thermodesulfobacteriota,normalized
-sqlite,1034,Desulfobulbus propionicus,species,894,Proteobacteria,Thermodesulfobacteriota,normalized
-sqlite,1036,Desulfohalobium retbaense,species,45663,Proteobacteria,Thermodesulfobacteriota,normalized
-sqlite,1038,Desulfomicrobium baculatum,species,899,Proteobacteria,Thermodesulfobacteriota,normalized
-sqlite,1040,Desulfonatronospira thiodismutans,species,488939,Proteobacteria,Thermodesulfobacteriota,normalized
-sqlite,1042,Desulfotalea psychrophila,species,84980,Proteobacteria,Thermodesulfobacteriota,normalized
-sqlite,1048,Desulfovibrio desulfuricans,species,876,Proteobacteria,Thermodesulfobacteriota,normalized
-sqlite,1050,Desulfovibrio magneticus,species,184917,Proteobacteria,Thermodesulfobacteriota,normalized
-sqlite,1052,Desulfovibrio piger,species,901,Proteobacteria,Thermodesulfobacteriota,normalized
-sqlite,1054,Desulfovibrio salexigens,species,880,Proteobacteria,Thermodesulfobacteriota,normalized
-sqlite,1056,Desulfovibrio sp. 3_1_syn3,species,457398,Proteobacteria,Thermodesulfobacteriota,normalized
-sqlite,1058,Desulfuromonas acetoxidans,species,891,Proteobacteria,Thermodesulfobacteriota,normalized
-sqlite,1137,Geobacter bemidjiensis,species,225194,Proteobacteria,Thermodesulfobacteriota,normalized
-sqlite,1139,Geobacter metallireducens,species,28232,Proteobacteria,Thermodesulfobacteriota,normalized
-sqlite,1141,Geobacter sulfurreducens,species,35554,Proteobacteria,Thermodesulfobacteriota,normalized
 sqlite,1155,Gonapodya prolifera,species,1123529,Chytridiomycota,Monoblepharomycota,reported_only
 sqlite,1181,Haloarcula marismortui,species,2238,Euryarchaeota,Methanobacteriota,reported_only
 sqlite,1183,Halobacterium salinarum,species,2242,Euryarchaeota,Methanobacteriota,reported_only
@@ -124,13 +226,9 @@ sqlite,1680,Rhodothermus marinus,species,29549,Bacteroidetes,Rhodothermota,repor
 sqlite,1736,Saccharolobus solfataricus,species,2287,Crenarchaeota,Thermoproteota,reported_only
 sqlite,1901,Sulfolobus acidocaldarius,species,2285,Crenarchaeota,Thermoproteota,reported_only
 sqlite,1903,Sulfolobus solfataricus,species,2287,Crenarchaeota,Thermoproteota,reported_only
-sqlite,1914,Syntrophobacter fumaroxidans,species,119484,Proteobacteria,Thermodesulfobacteriota,normalized
 sqlite,1921,Methanospirillum hungatei,species,2203,Euryarchaeota,Methanobacteriota,reported_only
 sqlite,1925,Methanothermobacter marburgensis,species,145263,Euryarchaeota,Methanobacteriota,reported_only
-sqlite,1927,Syntrophus aciditrophicus,species,316277,Proteobacteria,Thermodesulfobacteriota,normalized
-sqlite,1929,Pelobacter carbinolicus,species,19,Proteobacteria,Thermodesulfobacteriota,normalized
 sqlite,1930,Methanothermococcus okinawensis,species,155863,Euryarchaeota,Methanobacteriota,reported_only
-sqlite,1933,Pelobacter propionicus,species,29543,Proteobacteria,Thermodesulfobacteriota,normalized
 sqlite,1934,Methanothermus fervidus,species,2180,Euryarchaeota,Methanobacteriota,reported_only
 sqlite,2008,Thermococcus barophilus,species,55802,Euryarchaeota,Methanobacteriota,reported_only
 sqlite,2010,Thermococcus gammatolerans,species,187878,Euryarchaeota,Methanobacteriota,reported_only
@@ -144,25 +242,16 @@ sqlite,2528,Bosea,genus,85413,Streptophyta,Proteobacteria,reported_only
 sqlite,2644,Bacteroides pectinophilus,species,384638,Bacteroidetes,Firmicutes,reported_only
 sqlite,3012,Methanosphaera cuniculi,species,1077256,Euryarchaeota,Methanobacteriota,reported_only
 sqlite,3470,Methanobrevibacter arboriphilus,species,39441,Euryarchaeota,Methanobacteriota,reported_only
-sqlite,3507,Thermus scotoductus,species,37636,Deinococcus-thermus,Deinococcus-Thermus,case_folded
 sqlite,3640,Methanobrevibacter oralis,species,66851,Euryarchaeota,Methanobacteriota,reported_only
-sqlite,3683,Desulfobulbus oralis,species,1986146,Proteobacteria,Thermodesulfobacteriota,normalized
 sqlite,3816,Methanobrevibacter woesei,species,190976,Euryarchaeota,Methanobacteriota,reported_only
 sqlite,4021,Methanobacterium formicicum,species,2162,Euryarchaeota,Methanobacteriota,reported_only
 sqlite,4035,Methanobacterium sp. mb1,species,1379702,Euryarchaeota,Methanobacteriota,reported_only
 sqlite,4068,Methanosarcina thermophila,species,2210,Euryarchaeota,Methanobacteriota,reported_only
 sqlite,4070,Methanoculleus thermophilus,species,2200,Euryarchaeota,Methanobacteriota,reported_only
 sqlite,4295,Methanobrevibacter boviskoreani,species,1348249,Euryarchaeota,Methanobacteriota,reported_only
-sqlite,4299,Deinococcus wulumuqiensis,species,980427,Deinococcus-thermus,Deinococcus-Thermus,case_folded
 sqlite,4306,Halococcus dombrowskii,species,179637,Euryarchaeota,Methanobacteriota,reported_only
-sqlite,4367,Deinococcus geothermalis,species,68909,Deinococcus-thermus,Deinococcus-Thermus,case_folded
 sqlite,4461,Methanobacterium,genus,2160,Euryarchaeota,Methanobacteriota,reported_only
-sqlite,4493,Deinococcus,genus,1298,Deinococcus-thermus,Deinococcus-Thermus,case_folded
-sqlite,4582,Thermus,genus,270,Deinococcus-thermus,Deinococcus-Thermus,case_folded
 sqlite,4735,Sphaerobacter,genus,2056,Chloroflexi,Thermomicrobiota,reported_only
 sqlite,4758,Methanosarcina,genus,2207,Euryarchaeota,Methanobacteriota,reported_only
 sqlite,4761,Methanoculleus,genus,45989,Euryarchaeota,Methanobacteriota,reported_only
-sqlite,4860,Syntrophobacter,genus,29526,Proteobacteria,Thermodesulfobacteriota,normalized
 sqlite,5011,Bogoriella,genus,56054,Ascomycota,Actinobacteria,reported_only
-sqlite,5019,Sulfurimonas,genus,202746,Proteobacteria,Campylobacterota,normalized
-sqlite,4185,Deinococcus soli (ex cha et al. 2016),,,Deinococcus-thermus,Deinococcus-Thermus,genus_consensus (4 of 5 agree)

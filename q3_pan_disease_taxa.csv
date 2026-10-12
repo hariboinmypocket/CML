@@ -385,7 +385,7 @@ Citrobacter,genus,Proteobacteria,10,13,11,7.0,4.0,2.0,broad,0.364
 Collinsella bouchesdurhonensis,species,Actinobacteria,10,13,8,2.0,5.0,6.0,broad,0.714
 Anaerofilum,genus,Firmicutes,10,12,10,3.0,7.0,2.0,broad,0.7
 Leuconostoc,genus,Firmicutes,10,12,9,7.0,3.0,2.0,broad,0.3
-Methanosphaera,genus,Methanobacteriota,10,12,8,1.0,7.0,4.0,broad,0.875
+Methanosphaera,genus,Euryarchaeota,10,12,8,1.0,7.0,4.0,broad,0.875
 Clostridium sp. 1001270j_160509_d11,species,Firmicutes,10,12,12,3.0,9.0,0.0,broad,0.75
 Sarcina,genus,Firmicutes,10,11,10,7.0,4.0,0.0,broad,0.364
 Fusobacterium mortiferum,species,Fusobacteria,10,11,10,8.0,3.0,0.0,broad,0.273
