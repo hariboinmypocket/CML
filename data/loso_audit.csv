@@ -1,0 +1,13 @@
+disease,studies_used,platforms,samples,cases,controls,features,auc_random_split,auc_loso_mean,auc_loso_min,auc_loso_max,optimism,loso_folds
+COVID-19,3,16S+mNGS,155,67,88,91,0.899,0.506,0.363,0.707,0.392,3
+Irritable Bowel Syndrome,3,16S+mNGS,643,405,238,338,0.926,0.577,0.519,0.612,0.349,3
+"Colitis, Ulcerative",8,16S+mNGS,1339,793,546,104,0.809,0.585,0.396,0.791,0.224,8
+"Diabetes Mellitus, Type 1",4,16S+mixed,278,157,121,115,0.735,0.517,0.43,0.581,0.218,4
+Multiple Sclerosis,4,16S+mNGS,362,272,90,90,0.729,0.555,0.486,0.601,0.174,4
+Crohn Disease,9,16S+mNGS,1983,1326,657,103,0.825,0.687,0.282,0.9,0.138,9
+"Diabetes Mellitus, Type 2",5,16S,226,74,152,78,0.636,0.52,0.434,0.731,0.115,5
+Colorectal Neoplasms,7,16S+mNGS,712,364,348,400,0.731,0.647,0.425,0.847,0.083,7
+Autism Spectrum Disorder,5,16S+mNGS,393,207,186,101,0.595,0.515,0.453,0.607,0.081,5
+Parkinson Disease,4,16S+mNGS,358,211,147,108,0.533,0.463,0.314,0.52,0.07,4
+"Depressive Disorder, Major",3,16S+mNGS,246,134,112,132,0.554,0.534,0.517,0.561,0.021,3
+"Fatigue Syndrome, Chronic",4,mNGS,1014,621,393,98,0.748,0.743,0.692,0.796,0.005,4

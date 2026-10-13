@@ -549,6 +549,60 @@ split will partly learn which study a sample came from and report a flattering
 score. `project_accession` is written into every matrix so cross-validation can
 be grouped on it.
 
+### What the cohort can actually support: leave-one-study-out
+
+```bash
+python scripts/loso_audit.py      # writes data/loso_audit.csv
+```
+
+A gut-microbiome classifier is usually scored with a random train/test split,
+and in this database that is close to meaningless. Study membership is
+confounded with the label -- of the 105 studies behind the Crohn cohort, 96
+contribute a single arm -- so a random split puts samples from one study on both
+sides of it and the model is rewarded for recognising the cohort. Leave-one-
+study-out holds out a whole study, which is what using the model on a new patient
+would actually ask of it.
+
+**Only 12 of 65 diseases can be scored at all**, needing three studies with at
+least five cases and five controls each. 20 diseases have two such studies, and
+none has ten. Plain L2 logistic regression on CLR genus features:
+
+| disease | n | folds | random split | LOSO | LOSO range | optimism |
+| --- | --- | --- | --- | --- | --- | --- |
+| COVID-19 | 155 | 3 | 0.899 | **0.506** | 0.36–0.71 | +0.392 |
+| Irritable Bowel Syndrome | 643 | 3 | 0.926 | **0.577** | 0.52–0.61 | +0.349 |
+| Colitis, Ulcerative | 1,339 | 8 | 0.809 | 0.585 | 0.40–0.79 | +0.224 |
+| Diabetes Mellitus, Type 1 | 278 | 4 | 0.735 | 0.517 | 0.43–0.58 | +0.218 |
+| Multiple Sclerosis | 362 | 4 | 0.729 | 0.555 | 0.49–0.60 | +0.174 |
+| Crohn Disease | 1,983 | 9 | 0.825 | **0.687** | 0.28–0.90 | +0.138 |
+| Diabetes Mellitus, Type 2 | 226 | 5 | 0.636 | 0.520 | 0.43–0.73 | +0.115 |
+| Colorectal Neoplasms | 712 | 7 | 0.731 | 0.647 | 0.42–0.85 | +0.083 |
+| Autism Spectrum Disorder | 393 | 5 | 0.595 | 0.515 | 0.45–0.61 | +0.081 |
+| Parkinson Disease | 358 | 4 | 0.533 | 0.463 | 0.31–0.52 | +0.070 |
+| Depressive Disorder, Major | 246 | 3 | 0.554 | 0.534 | 0.52–0.56 | +0.021 |
+| Fatigue Syndrome, Chronic | 1,014 | 4 | 0.748 | **0.743** | 0.69–0.80 | +0.005 |
+
+Mean random-split AUC **0.727**, mean LOSO **0.571**, mean optimism **+0.156**.
+IBS would be reported at 0.93 and COVID-19 at 0.90 on a random split; both are
+chance-level across cohorts. Only two diseases clear a LOSO AUC of 0.65 --
+Crohn disease and chronic fatigue -- and one of those needs a caveat: all four
+chronic-fatigue studies are shotgun, so its folds never cross a sequencing
+platform, while Crohn's nine mix 16S and shotgun and every fold is a platform
+transfer as well. That is most of why Crohn's range is 0.28 to 0.90.
+
+Read the ranges before the means. With three to nine folds these estimates are
+noisy, and nine of the twelve diseases have at least one fold at or below chance.
+Diseases scoring across platforms lose more on average (+0.175 against +0.060),
+but there are only two single-platform diseases to compare against, and the
+all-16S one still loses 0.115 -- the study is a confounder within a platform, not
+only between them.
+
+**The practical consequence:** the modelling-ready cohort is 13,328 samples, but
+the number of *independent cohorts* is what bounds an honest estimate, and for
+most diseases that is three to five. Reporting a random-split AUC from this
+database overstates what the model would do on a new cohort by about 0.16 on
+average, and by more than 0.3 for the two diseases that look most impressive.
+
 ### Why the species layer stops where it does
 
 Species coverage reads as 34% of all samples, which sounds like a gap worth
