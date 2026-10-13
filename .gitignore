@@ -66,3 +66,11 @@ data/microbiomehd/
 # (doi:10.1038/s41522-022-00345-5) - fetched by scripts/fetch_muller2022.py,
 # upstream data rather than ours to redistribute.
 data/muller2022/
+
+# Per-disease CLR feature matrices (scripts/export_ml_matrix.py). One per disease
+# and rank, regenerated on demand, and each is a function of the prevalence floor
+# it was built with -- the .json beside it records that. The q1-q7 tables above
+# are tracked because they pin a snapshot; these are a modelling input chosen per
+# experiment, so pinning one would imply a choice that belongs to the experiment.
+data/ml_matrix_*.csv
+data/ml_matrix_*.json

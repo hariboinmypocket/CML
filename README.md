@@ -499,6 +499,56 @@ YACHIDA holds 74 Health, 150 Colorectal Neoplasms, 40 Adenoma and 30 Colectomy;
 ERAWIJANTARI holds 54 Health and 42 Gastrectomy. No sample in the database now
 lacks a phenotype.
 
+### Making the abundances modellable: the CLR transform
+
+```bash
+python scripts/export_ml_matrix.py "Crohn Disease"
+python scripts/export_ml_matrix.py "Colorectal Neoplasms" --rank=species --prevalence=0.2
+```
+
+Relative abundances are compositional. They carry only ratios, they sum to 1
+within a rank, and two taxa cannot both rise -- so an increase in one forces an
+apparent fall in the others, and a model trained on raw proportions learns that
+artefact. `gutdb/compositional.py` provides the centred log-ratio transform that
+removes it, and `scripts/export_ml_matrix.py` writes a matrix for one disease
+against Health.
+
+**Nothing is stored in the database, deliberately.** Two measurements decide
+that:
+
+- **CLR is not invariant to the part set.** A three-part composition transforms
+  to `[0.476, -0.035, -0.441]`; add a fourth part at 0.1% and the same three
+  become `[1.910, 1.400, 0.994]`. A stored column would be wrong the moment
+  anyone filtered the feature set, which is the first thing a modeller does.
+- **The matrix is sparse enough that the transform would be mostly pseudocount.**
+  A genus profile holds roughly 50 of 2,076 taxa, so 99% of the log-sum would
+  come from replaced zeros and the geometric mean would be a function of the
+  replacement constant rather than of the sample. Filtering to prevalent taxa
+  first is not tidying; it is what makes the number mean anything.
+
+So the order is load-bearing: **select samples, filter by prevalence,
+renormalize, replace zeros, transform.** Renormalizing after filtering is what
+keeps each row a composition. Zeros are replaced multiplicatively
+([Martín-Fernández et al. 2003](https://doi.org/10.1023/A:1023866030544)) rather
+than by adding a constant, because adding one changes the ratios between the
+parts that were actually measured -- the only information a composition carries.
+`delta` defaults to half the smallest observed value **in that sample**, since a
+zero means "below this sample's detection limit" and the limit is not the same
+for every sample. Eleven tests assert the properties rather than remembered
+numbers: rows sum to zero, the transform is invariant to rescaling a row,
+observed ratios survive zero replacement, and a naive pseudocount demonstrably
+breaks them.
+
+A Crohn export gives 6,968 samples by 121 genus features, with the prevalence
+floor retaining 98.7% of the median sample's mass.
+
+**The export prints a warning it is important not to skip.** The rows pool many
+studies, and study is confounded with the label: of the 105 studies behind that
+Crohn matrix, **96 contribute only one arm**. A model given a random train/test
+split will partly learn which study a sample came from and report a flattering
+score. `project_accession` is written into every matrix so cross-validation can
+be grouped on it.
+
 ### Why the species layer stops where it does
 
 Species coverage reads as 34% of all samples, which sounds like a gap worth
