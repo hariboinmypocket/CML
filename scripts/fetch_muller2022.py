@@ -19,10 +19,16 @@ Four tables per study are fetched and the rest are skipped:
   mtb.map.tsv   original metabolite names -> KEGG / HMDB, with a
                 High.Confidence.Annotation flag that must not be dropped
 
-species.tsv is left behind deliberately: it exists for only 6 of the 14 cohorts,
-and genus is the common denominator across 16S and shotgun anyway. The
-*.counts.tsv tables are only needed to re-derive abundances that are already
-provided. Together those would be another 535MB.
+species.tsv is fetched only with --species, because it is 221MB against 140MB
+for everything else. It exists for 5 of the 14 cohorts and matters for exactly
+one thing: 1,341 Muller shotgun samples sit in the database with genus profiles
+and no species, which is the whole of the closeable species-coverage gap --
+GMrepo's shotgun samples are already at 100% species coverage, and 16S cannot
+resolve species at all. YACHIDA_CRC_2019 is shotgun but ships no species table,
+so 294 of those 1,341 cannot be closed from this source.
+
+The *.counts.tsv tables are still skipped: they only re-derive abundances that
+are already provided, for another 243MB.
 
 Two things make this collection harder to load than its format suggests, and
 neither is handled here -- this script only fetches.
@@ -53,6 +59,10 @@ REPO = "borenstein-lab/microbiome-metabolome-curated-data"
 CONTENTS = f"https://api.github.com/repos/{REPO}/contents/data/processed_data"
 DEST = Path("data/muller2022")
 WANTED = ("genera.tsv", "metadata.tsv", "mtb.tsv", "mtb.map.tsv")
+# Species tables are fetched separately because they are most of the bytes: 221MB
+# across the four shotgun cohorts that ship one, against 140MB for everything
+# else combined. Pass --species to include them.
+SPECIES = "species.tsv"
 
 
 def session() -> requests.Session:
@@ -78,7 +88,8 @@ def main() -> int:
         out = DEST / study
         out.mkdir(parents=True, exist_ok=True)
         got = []
-        for name in WANTED:
+        wanted = (*WANTED, SPECIES) if "--species" in sys.argv else WANTED
+        for name in wanted:
             item = by_name.get(name)
             if item is None:
                 got.append(f"{name}=absent")

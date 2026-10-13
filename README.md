@@ -499,6 +499,49 @@ YACHIDA holds 74 Health, 150 Colorectal Neoplasms, 40 Adenoma and 30 Colectomy;
 ERAWIJANTARI holds 54 Health and 42 Gastrectomy. No sample in the database now
 lacks a phenotype.
 
+### Why the species layer stops where it does
+
+Species coverage reads as 34% of all samples, which sounds like a gap worth
+closing. Measured against a denominator that can physically carry a species
+call it is **90.4%** (12,566 of 13,907 profiled shotgun samples). The other
+19,899 samples are 16S, where one marker gene cannot separate species in a
+genus, so no amount of loading will move them. GMrepo's shotgun samples are at
+**100%**.
+
+The entire shortfall is 1,341 Muller shotgun samples, and the collection's
+`species.tsv` tables cannot close it honestly. `scripts/fetch_muller2022.py
+--species` will fetch them (221MB for the four cohorts that ship one;
+YACHIDA_CRC_2019 is shotgun but ships none, so 294 of the 1,341 have no source
+at all), and the measurements that follow are the reason they are not loaded:
+
+| species label | distinct | abundance mass |
+| --- | --- | --- |
+| maps to a species already in `taxa` | 1,969 | **50.2%** |
+| a real binomial this database lacks | 12,220 | 8.2% |
+| GTDB accession-derived, no published name (`4484-113 sp002050035`) | 41,966 | **41.6%** |
+
+Loading would therefore drop and renormalize away **49.8% of every sample's
+mass**, against 8.2% for the genus layer. Per sample the median retained share
+is 50.0% and the 95th percentile is 71.3% -- below the *mean* of the species
+profiles already here, which retain about 79.7% by GMrepo's own
+`unclassified_fraction`. Renormalization hides all of this, because a profile
+built on half the mass still sums to 1 and looks like every other row in
+`sample_taxon_abundances`.
+
+The usual escape hatch does not hold either. A mapping loss that falls equally
+on both arms cancels in a within-study ratio, but it does not fall equally:
+cases retain 4.5 to 7.8 points more mass than controls in three of the four
+cohorts and less in the fourth. Renormalizing then multiplies the two arms by
+different factors, a systematic directional bias of roughly 15% on every ratio
+in a cohort -- the same order as the marginal signals that
+`scripts/replication_audit.py` shows the disagreements live in.
+
+So the species gap is, for this source, already closed. Moving the headline from
+34% to 37% would mean adding 1,047 samples whose species profiles are built on
+half the evidence of the 12,566 beside them, with nothing in the schema to say
+so. Closing it properly means re-profiling raw reads against an NCBI-based
+classifier, which is a different project from loading a curated table.
+
 ### Sparse per-sample metadata
 
 Cohorts report traits that matter for confound control but that almost nothing
