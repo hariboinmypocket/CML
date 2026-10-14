@@ -45,85 +45,24 @@ DB = os.environ.get("GUTDB_SQLITE", "gut_microbiome.sqlite")
 TAXDUMP = os.environ.get("GUTDB_TAXDUMP", "taxdump")
 
 # --- controlled vocabularies -------------------------------------------------
-# Case and synonym variants collapse onto one lowercase canonical form. The
-# right-hand sides are the vocabulary; anything not listed is left verbatim so
-# no information is silently dropped.
-OXYGEN = {
-    "aerobe": "aerobe", "aerobic": "aerobe", "obligate aerobe": "aerobe",
-    "anaerobe": "anaerobe", "anaerobic": "anaerobe", "obligate anaerobe": "anaerobe",
-    "facultative": "facultative anaerobe", "facultative anaerobe": "facultative anaerobe",
-    "facultative aerobe": "facultative anaerobe",
-    "aerobe/facultative anaerobe": "facultative anaerobe",
-    "aerobe; facultative anaerobe": "facultative anaerobe",
-    "microaerophile": "microaerophile", "microaerophilic": "microaerophile",
-    "aerobe; anaerobe": "variable",
-    "obligate aerobic": "aerobe", "facultatively anaerobe": "facultative anaerobe",
-    "facultative anaerobe, air+co2": "facultative anaerobe",
-}
-GRAM = {
-    "positive": "positive", "negative": "negative", "variable": "variable",
-    "uncharacterized": "uncharacterized",
-    # A cell wall that is structurally positive but does not hold the stain is
-    # reported either way in the literature; "variable" is the honest label.
-    "structurally positive but stains negative": "variable",
-    "structurally positive but may stain negative": "variable",
-    "negative due to the absence of a cell wall": "negative",
-}
-TEMPERATURE = {
-    "mesophilic": "mesophilic", "mesophil": "mesophilic", "thermophilic": "thermophilic",
-    "hyperthermophilic": "hyperthermophilic", "psychrophilic": "psychrophilic",
-    "psychrotolerant": "psychrotolerant",
-}
-YES_NO = {"yes": "yes", "no": "no", "yes?": "yes", "no?": "no", "1": "yes", "0": "no",
-          "true": "yes", "false": "no", "not known": ""}
-PH = {"alkaliphile": "alkaliphile", "acidophile": "acidophile", "neutrophile": "neutrophile"}
-# `superkingdom` collects three different vocabularies: MiMeDB's domains, the
-# curated table's `kingdom` (Eubacteria, Fungi), and NCBI's post-2024 kingdom
-# names (Bacillati, Pseudomonadati). All fold onto the three domains + Viruses.
-SUPERKINGDOM = {
-    "bacteria": "Bacteria", "eubacteria": "Bacteria", "bacillati": "Bacteria",
-    "pseudomonadati": "Bacteria", "fusobacteriati": "Bacteria", "thermotogati": "Bacteria",
-    "archaea": "Archaea", "methanobacteriati": "Archaea", "thermoproteati": "Archaea",
-    "eukaryota": "Eukaryota", "fungi": "Eukaryota", "metazoa": "Eukaryota",
-    "viridiplantae": "Eukaryota", "viruses": "Viruses",
-}
-
-ARRANGEMENT_TERMS = {"singles", "pairs", "chains", "clusters", "tetrads", "filaments",
-                     "v-shaped forms"}
+# Imported from gutdb.transform rather than defined here. They used to live in
+# this script, which runs only against the SQLite mirror, so MySQL never got the
+# same normalization: it held 30 distinct oxygen_requirement values where this
+# store held 10. See the note beside them in gutdb/transform.py.
+from gutdb.transform import (  # noqa: E402
+    ARRANGEMENT_TERMS, FREE_TEXT_TRAITS, GRAM, OXYGEN, PH, SUPERKINGDOM,
+    TEMPERATURE, TRAIT_VOCABULARIES, YES_NO, canon_trait, split_sporulation,
+)
 
 
 def canon(value, mapping: dict[str, str] | None = None) -> str:
-    """Clean a source value; map it through a vocabulary when one is given.
-
-    Under a vocabulary, a value the vocabulary does not list is kept but
-    lowercased, so 'Aerotolerant' and 'aerotolerant' stop being two values while
-    a category nobody anticipated is still never discarded.
-    """
-    text = T.clean_str(value).replace("\xa0", " ")
-    text = re.sub(r"\s+", " ", text).strip()
-    if not text:
-        return ""
-    if mapping is None:
-        return text
-    return mapping.get(text.casefold(), text if mapping is SUPERKINGDOM else text.casefold())
+    """Alias for gutdb.transform.canon_trait, kept for this script's callers."""
+    return canon_trait(value, mapping)
 
 
 def split_spore(value) -> tuple[str, str]:
-    """Return (sporulation, cell_arrangement) from one mixed `Spore`-style value."""
-    text = canon(value)
-    if not text:
-        return "", ""
-    folded = text.casefold()
-    if folded in YES_NO:
-        return YES_NO[folded], ""
-    if "sporulat" in folded or "spotulating" in folded:
-        return ("no" if folded.startswith("non") else "yes"), ""
-    if "budding" in folded:
-        return ("no" if folded.startswith(("no;", "no ")) else "yes"), ""
-    tokens = {p.strip() for p in folded.replace("/", "-").split("-")}
-    if tokens and tokens <= ARRANGEMENT_TERMS:
-        return "", text
-    return "", ""
+    """Alias for gutdb.transform.split_sporulation."""
+    return split_sporulation(value)
 
 
 # --- coverage reporting ------------------------------------------------------

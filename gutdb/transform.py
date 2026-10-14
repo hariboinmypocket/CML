@@ -424,3 +424,140 @@ def association_direction(
         if clean_str(enriched_group).casefold() == clean_str(disease_name).casefold()
         else "depleted"
     )
+
+
+# --- controlled vocabularies for the taxa trait columns ----------------------
+#
+# These lived in scripts/cleanup_gutdb.py, which runs only against the SQLite
+# mirror, so for three columns the two stores held different vocabularies for the
+# same rows. MySQL carried 30 distinct oxygen_requirement values where the mirror
+# carried 10 -- 'anaerobe' (576), 'Anaerobic' (50) and 'Obligate anaerobe' (35)
+# as three groups rather than one -- and `GROUP BY oxygen_requirement` therefore
+# answered differently depending on which store was asked. Oxygen tolerance is
+# one of the few genuinely mechanistic traits for a gut community, so a
+# fragmented categorical is a real loss, not untidiness.
+#
+# They are here rather than in a script because this is the third repair that
+# existed for one store only: the (SeqCode) annotations and body_site were the
+# first two. One implementation, imported by both sides.
+#
+# Case and synonym variants collapse onto one lowercase canonical form. The
+# right-hand sides are the vocabulary; a value the vocabulary does not list is
+# kept, lowercased, so an unanticipated category is never silently dropped.
+OXYGEN = {
+    "aerobe": "aerobe", "aerobic": "aerobe", "obligate aerobe": "aerobe",
+    "obligate aerobic": "aerobe",
+    "anaerobe": "anaerobe", "anaerobic": "anaerobe",
+    "obligate anaerobe": "anaerobe",
+    "facultative": "facultative anaerobe",
+    "facultative anaerobe": "facultative anaerobe",
+    "facultative aerobe": "facultative anaerobe",
+    "facultatively anaerobe": "facultative anaerobe",
+    "aerobe/facultative anaerobe": "facultative anaerobe",
+    "aerobe; facultative anaerobe": "facultative anaerobe",
+    "facultative anaerobe, air+co2": "facultative anaerobe",
+    "microaerophile": "microaerophile", "microaerophilic": "microaerophile",
+    # Organisms reported as tolerating both: 'variable' rather than a pick, since
+    # collapsing them onto either end would assert something the source does not.
+    "aerobe; anaerobe": "variable",
+}
+GRAM = {
+    "positive": "positive", "negative": "negative", "variable": "variable",
+    "uncharacterized": "uncharacterized",
+    # A cell wall that is structurally positive but does not hold the stain is
+    # reported either way in the literature; "variable" is the honest label.
+    "structurally positive but stains negative": "variable",
+    "structurally positive but may stain negative": "variable",
+    "negative due to the absence of a cell wall": "negative",
+}
+TEMPERATURE = {
+    "mesophilic": "mesophilic", "mesophil": "mesophilic",
+    "thermophilic": "thermophilic", "hyperthermophilic": "hyperthermophilic",
+    "psychrophilic": "psychrophilic", "psychrotolerant": "psychrotolerant",
+}
+YES_NO = {"yes": "yes", "no": "no", "yes?": "yes", "no?": "no",
+          "1": "yes", "0": "no", "true": "yes", "false": "no", "not known": ""}
+PH = {"alkaliphile": "alkaliphile", "acidophile": "acidophile",
+      "neutrophile": "neutrophile"}
+# `superkingdom` collects three different vocabularies: MiMeDB's domains, the
+# curated table's `kingdom` (Eubacteria, Fungi), and NCBI's post-2024 kingdom
+# names (Bacillati, Pseudomonadati). All fold onto the three domains + Viruses.
+SUPERKINGDOM = {
+    "bacteria": "Bacteria", "eubacteria": "Bacteria", "bacillati": "Bacteria",
+    "pseudomonadati": "Bacteria", "fusobacteriati": "Bacteria",
+    "thermotogati": "Bacteria",
+    "archaea": "Archaea", "methanobacteriati": "Archaea",
+    "thermoproteati": "Archaea",
+    "eukaryota": "Eukaryota", "fungi": "Eukaryota", "metazoa": "Eukaryota",
+    "viridiplantae": "Eukaryota", "viruses": "Viruses",
+}
+# Terms that describe how cells sit next to each other, which is a different axis
+# from whether they form spores. A `sporulation` value made only of these is
+# cell-arrangement text in the wrong column.
+ARRANGEMENT_TERMS = frozenset({"singles", "pairs", "chains", "clusters",
+                               "tetrads", "filaments", "v-shaped forms"})
+
+TRAIT_VOCABULARIES = {
+    "oxygen_requirement": OXYGEN,
+    "gram_stain": GRAM,
+    "ph_preference": PH,
+    "superkingdom": SUPERKINGDOM,
+    "temperature_range": TEMPERATURE,
+    "mobility": YES_NO,
+    "flagella_presence": YES_NO,
+}
+# Columns that get whitespace and case tidied but have no closed vocabulary --
+# free text whose categories nobody has enumerated.
+FREE_TEXT_TRAITS = ("human_pathogen", "shape", "metabolism", "habitat",
+                    "energy_source", "biotic_relationship",
+                    "optimal_temperature", "cell_arrangement")
+
+
+def canon_trait(value, mapping: dict[str, str] | None = None) -> str:
+    """Clean a trait value; map it through a vocabulary when one is given.
+
+    Under a vocabulary, an unlisted value is kept but lowercased, so
+    'Aerotolerant' and 'aerotolerant' stop being two values while a category
+    nobody anticipated survives. SUPERKINGDOM is the exception: its canonical
+    forms are capitalised because they are taxon names.
+    """
+    text = clean_str(value).replace("\xa0", " ")
+    text = re.sub(r"\s+", " ", text).strip()
+    if not text:
+        return ""
+    if mapping is None:
+        return text
+    return mapping.get(text.casefold(),
+                       text if mapping is SUPERKINGDOM else text.casefold())
+
+
+def split_sporulation(value) -> tuple[str, str]:
+    """Split one mixed `Spore`-style value into (sporulation, cell_arrangement).
+
+    The column holds three kinds of value at once: a yes/no flag, prose about
+    spore type ('Sporulating (ascospores); reproduction also by budding'), and
+    cell-arrangement text that belongs to another column entirely ('Chains -
+    Pairs - Singles'). Anything the three rules below do not recognise returns
+    ('', ''), which leaves the cell alone rather than guessing at it.
+    """
+    text = canon_trait(value)
+    if not text:
+        return "", ""
+    folded = text.casefold()
+    if folded in YES_NO:
+        return YES_NO[folded], ""
+    if "sporulat" in folded or "spotulating" in folded:
+        return ("no" if folded.startswith("non") else "yes"), ""
+    if "budding" in folded:
+        return ("no" if folded.startswith(("no;", "no ")) else "yes"), ""
+    # Two delimiter styles are in use and a single split handles only one of
+    # them. 'Chains - Pairs - Singles' and 'Singles - V-shaped forms' separate on
+    # ' - ', while 'Pairs-Singles' separates on a bare hyphen -- and splitting
+    # 'Singles - V-shaped forms' on the bare hyphen yields 'v' and 'shaped
+    # forms', which matches nothing. Try the spaced form first, then the bare one.
+    for parts in (folded.replace("/", " - ").split(" - "),
+                  folded.replace("/", "-").split("-")):
+        tokens = {p.strip() for p in parts if p.strip()}
+        if tokens and tokens <= ARRANGEMENT_TERMS:
+            return "", text
+    return "", ""

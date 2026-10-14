@@ -3,6 +3,11 @@ import csv
 from pathlib import Path
 
 from gutdb.transform import (
+    GRAM,
+    OXYGEN,
+    SUPERKINGDOM,
+    canon_trait,
+    split_sporulation,
     quantize_effect_size,
     association_direction,
     collapse_energy_modes,
@@ -260,3 +265,93 @@ class ResolveEffectTypeTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TraitVocabularyTests(unittest.TestCase):
+    """The vocabularies moved here from scripts/cleanup_gutdb.py.
+
+    They lived in a script that runs only against the SQLite mirror, so MySQL
+    held 21 distinct oxygen_requirement values where the mirror held 10. These
+    tests pin the folding itself, which is now the single implementation both
+    stores use.
+    """
+
+    def test_oxygen_case_and_synonym_variants_are_one_value(self):
+        for variant in ("anaerobe", "Anaerobic", "ANAEROBE", "Obligate anaerobe"):
+            self.assertEqual(canon_trait(variant, OXYGEN), "anaerobe", variant)
+        for variant in ("aerobe", "Aerobic", "obligate aerobe", "Obligate aerobic"):
+            self.assertEqual(canon_trait(variant, OXYGEN), "aerobe", variant)
+
+    def test_facultative_forms_collapse_onto_the_anaerobe_spelling(self):
+        for variant in ("Facultative", "Facultative aerobe", "Facultatively anaerobe",
+                        "Aerobe/facultative anaerobe", "Facultative anaerobe, air+co2"):
+            self.assertEqual(canon_trait(variant, OXYGEN),
+                             "facultative anaerobe", variant)
+
+    def test_both_tolerances_reported_becomes_variable_not_a_pick(self):
+        """Collapsing onto either end would assert what the source does not say."""
+        self.assertEqual(canon_trait("Aerobe; anaerobe", OXYGEN), "variable")
+
+    def test_an_unlisted_category_survives_lowercased(self):
+        """Never silently dropped: 'Aerotolerant' is a real category nobody mapped."""
+        self.assertEqual(canon_trait("Aerotolerant", OXYGEN), "aerotolerant")
+        self.assertEqual(canon_trait("Nanaerobe", OXYGEN), "nanaerobe")
+
+    def test_a_structurally_positive_wall_that_does_not_stain_is_variable(self):
+        for variant in ("Structurally positive but stains negative",
+                        "Structurally positive but may stain negative"):
+            self.assertEqual(canon_trait(variant, GRAM), "variable", variant)
+
+    def test_superkingdom_keeps_its_capitals_because_they_are_taxon_names(self):
+        self.assertEqual(canon_trait("bacillati", SUPERKINGDOM), "Bacteria")
+        self.assertEqual(canon_trait("Eubacteria", SUPERKINGDOM), "Bacteria")
+        self.assertEqual(canon_trait("methanobacteriati", SUPERKINGDOM), "Archaea")
+
+    def test_whitespace_and_nbsp_are_normalized(self):
+        self.assertEqual(canon_trait("  Aerobic  "), "Aerobic")
+
+    def test_empty_stays_empty_rather_than_becoming_a_value(self):
+        for value in (None, "", "   ", " "):
+            self.assertEqual(canon_trait(value, OXYGEN), "")
+
+
+class SporulationSplitTests(unittest.TestCase):
+    """sporulation held a flag, prose about spore type, and cell arrangement."""
+
+    def test_integer_and_word_encodings_of_the_flag_agree(self):
+        self.assertEqual(split_sporulation("0"), ("no", ""))
+        self.assertEqual(split_sporulation("1"), ("yes", ""))
+        self.assertEqual(split_sporulation("Nonsporulating"), ("no", ""))
+        self.assertEqual(split_sporulation("Sporulating"), ("yes", ""))
+
+    def test_prose_about_spore_type_reduces_to_the_flag(self):
+        self.assertEqual(
+            split_sporulation("Sporulating (ascospores); reproduction also by budding"),
+            ("yes", ""))
+        self.assertEqual(split_sporulation("No; Reproduction by unipolar budding"),
+                         ("no", ""))
+
+    def test_a_known_typo_is_still_recognised(self):
+        self.assertEqual(split_sporulation("Spotulating"), ("yes", ""))
+
+    def test_cell_arrangement_text_is_routed_to_the_other_column(self):
+        for value in ("Singles", "Pairs - Singles", "Chains - Pairs - Singles",
+                      "Clusters - Singles"):
+            spore, arrangement = split_sporulation(value)
+            self.assertEqual(spore, "", value)
+            self.assertEqual(arrangement, value, value)
+
+    def test_both_delimiter_styles_are_handled(self):
+        """'Pairs-Singles' splits on a bare hyphen; 'Singles - V-shaped forms' does not.
+
+        Splitting the second on a bare hyphen yields 'v' and 'shaped forms',
+        which matches nothing, so it was being left in the wrong column.
+        """
+        self.assertEqual(split_sporulation("Pairs-Singles")[1], "Pairs-Singles")
+        self.assertEqual(split_sporulation("Singles - V-shaped forms")[1],
+                         "Singles - V-shaped forms")
+
+    def test_an_unrecognised_value_is_left_alone_rather_than_guessed_at(self):
+        """('', '') means 'do not touch this cell', not 'clear it'."""
+        self.assertEqual(split_sporulation("Septated hyphae"), ("", ""))
+        self.assertEqual(split_sporulation("something nobody anticipated"), ("", ""))

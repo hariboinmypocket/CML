@@ -711,6 +711,57 @@ What changed, since again nothing is deleted:
 - **`scripts/richness_audit.py`** writes `data/richness_audit.csv` and
   `data/richness_arm_imbalance.csv`.
 
+### The taxa trait vocabularies, fixed in the mirror only since they were written
+
+Third instance of the same shape. `cleanup_gutdb.py` has normalized these
+columns for as long as it has existed, but it runs **only against the SQLite
+mirror**, so the two stores held different vocabularies for the same rows:
+
+| column | MySQL distinct | mirror distinct |
+|---|---|---|
+| `oxygen_requirement` | 21 | 10 |
+| `gram_stain` | 7 | 4 |
+| `temperature_range` | 6 | 5 |
+| `sporulation` | 32 | 2 |
+
+`oxygen_requirement` is the one that costs something. `anaerobe` (576),
+`Anaerobic` (50) and `Obligate anaerobe` (35) were three groups rather than one;
+`aerobe` (486), `Aerobic` (161), `obligate aerobe` (8) and `Obligate aerobic`
+(1) were four. Oxygen tolerance is among the few genuinely mechanistic traits
+for a gut community -- the lumen is anaerobic, and a shift toward aerotolerant
+taxa is a recognised dysbiosis signature -- so splitting it across case variants
+quietly weakens anything that groups on it.
+
+**`sporulation` held three different kinds of value at once:**
+
+| what it held | taxa | what it actually is |
+|---|---|---|
+| `0` / `1` | 429 | a yes/no flag as integers |
+| `Sporulating` / `Nonsporulating` | 183 | the same flag as words |
+| `Sporulating (ascospores); reproduction also by budding` | 216 | prose about spore type |
+| `Singles`, `Pairs - Singles`, `Chains - Pairs` | 128 | **cell arrangement** -- another axis |
+
+The last group is the real defect: that text answers how cells sit next to each
+other, which `cell_arrangement` already exists for. Those move rather than being
+deleted, and only where `cell_arrangement` is empty -- which turns out to be **2
+of the 128**. For the other 126 `cell_arrangement` already holds the same
+reading, so nothing was ever stored *only* in the wrong column.
+
+Fixing the instance without fixing the cause would invite a fourth, so the
+vocabularies now live in `gutdb/transform.py` and `cleanup_gutdb.py` imports
+them. `scripts/normalize_trait_vocabularies.py` applies them to MySQL. Seven of
+the eight columns now hold **identical value sets** in both stores; the two
+remaining differences are membership, not vocabulary (MySQL holds one virus the
+mirror lacks, the mirror has `Coenocytic Hyphae` filled for three *Mucor* rows
+where MySQL has it NULL).
+
+Two things deliberately left alone. `shape` keeps `Yeast-like cell/globose to
+elongate` beside `Yeast-like cell, globose to elongate`: they differ by
+punctuation inside free prose, and there is no closed vocabulary for shape to
+fold them onto -- inventing one would be a taxonomic judgement rather than a
+repair. And any value no rule recognises keeps its cell, because the alternative
+is discarding a category nobody anticipated.
+
 ### `body_site` was three vocabularies across two stores
 
 | store | source | value | samples |
@@ -826,16 +877,23 @@ here: Streptophyta and Nematoda are *correct* for those rows. The remaining 275
 are ordinary bacteria that simply have not turned up in any study yet, which is a
 statement about study coverage rather than about the rows.
 
-**The real defect was the count, not the data.** `validate` reported `taxa: 5,897`
-with no indication that a quarter of it is reference material, so anyone reading
-that as the number of organisms this database has observed overstates it by
-1,416. It now reports all three:
+**The real defect was the count, not the data.** `validate` reported a single
+`taxa:` figure with no indication that a quarter of it is reference material, so
+anyone reading that as the number of organisms this database has *observed*
+overstated it by the whole reference set. It now reports all three, so the
+distinction is visible without having to know it exists:
 
 ```
-taxa: 5,897
+taxa: 5,835              <- snapshot, 2026-10-14
 taxa_observed: 4,481
-taxa_reference_only: 1,416
+taxa_reference_only: 1,354
 ```
+
+Treat those as a snapshot, not a fact about the schema. The database is written
+to by more than one session: the figure was 5,897 / 4,481 / 1,416 earlier the
+same day, and dropped by 62 when a concurrent branch merged 62 mangled
+double-genus names into the correctly named rows that already held their
+evidence. Run `validate` rather than quoting a number from here.
 
 ### Backfilling the lineage that was never loaded
 
