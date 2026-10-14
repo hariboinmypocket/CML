@@ -696,8 +696,8 @@ def main() -> int:
             if not DRY_RUN:
                 cur.execute(
                     """INSERT INTO samples (study_id, disease_id, run_accession,
-                                            subject_id, sex, age_years, bmi, qc_status)
-                       VALUES (%s,%s,%s,%s,%s,%s,%s,'curated')
+                                            subject_id, sex, age_years, bmi)
+                       VALUES (%s,%s,%s,%s,%s,%s,%s)
                        ON DUPLICATE KEY UPDATE disease_id = VALUES(disease_id),
                            subject_id = VALUES(subject_id), sex = VALUES(sex),
                            age_years = VALUES(age_years), bmi = VALUES(bmi)""",

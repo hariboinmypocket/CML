@@ -603,6 +603,36 @@ most diseases that is three to five. Reporting a random-split AUC from this
 database overstates what the model would do on a new cohort by about 0.16 on
 average, and by more than 0.3 for the two diseases that look most impressive.
 
+### Two columns holding the wrong vocabulary
+
+Both were caught by listing distinct values per column, and both are the same
+mistake: a word from one axis written into a column that answers a different
+question.
+
+**`samples.qc_status`** held `'1'` (29,509), `'0'` (1,378) and `'curated'`
+(2,464). The first two are GMrepo's own QC verdict, copied from its `QCStatus`
+field; the third I wrote for the Muller samples, which GMrepo never assessed.
+Anything filtering `qc_status = '1'` silently dropped all 2,464 of them, and
+anything filtering `<> '0'` silently kept them. The provenance was never missing
+either -- `studies.data_quality` already reads `curated` for all 13 Muller
+studies -- so the value was redundant as well as wrong. Those samples now carry
+NULL, which is what "GMrepo did not assess this" means, and the column's meaning
+is written into the schema.
+
+**`taxon_disease_associations.effect_type`** held `'LEfSe'` on 125 rows, beside
+`LDA` and `log2_fold_change`. LEfSe is the method; LDA is the statistic it
+produces. 124 of the 125 had no effect size at all, which is the same shape as
+the 235 rows already labelled `reported`. The literature marker CSVs do declare
+`effect_type=LEfSe`, and `cleanup_gutdb.py` already read that column as naming a
+method -- the pipeline just copied it verbatim into a column that answers "what
+is this number". `resolve_effect_type` now maps a declared method to `LDA` when a
+score came with it and `reported` when none did; the method itself is not lost,
+since `phenotype_comparisons.method` carries it.
+
+The vocabulary is now five values with a clean invariant: `LDA` and
+`log2_fold_change` always have an effect size, `reported`, `consensus` and
+`q_value` never do.
+
 ### The 1,416 taxa with no evidence are not junk
 
 A sweep for dead rows finds 1,416 taxa carrying no association and no abundance,

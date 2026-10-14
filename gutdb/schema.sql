@@ -167,6 +167,12 @@ CREATE TABLE IF NOT EXISTS samples (
     age_years DOUBLE NULL,
     bmi DOUBLE NULL,
     country VARCHAR(100) NULL,
+    -- GMrepo's own QC verdict for the run, '1' passed and '0' failed, copied
+    -- from its QCStatus field. The vocabulary belongs to that source: a sample
+    -- GMrepo never assessed has NULL here, which is why 3,342 rows are empty.
+    -- Do not use it to record provenance or curation tier -- studies.data_quality
+    -- is for that, and a loader that wrote 'curated' here put a word from a
+    -- different axis into a column others filter as a boolean.
     qc_status VARCHAR(100) NULL,
     body_site VARCHAR(100) NULL,
     -- share of reads GMrepo could not assign to a taxon. Recorded rather than

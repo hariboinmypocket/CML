@@ -2,7 +2,7 @@ source_database,effect_type,method,n_associations,n_taxa,n_diseases,n_studies,n_
 GMrepo,LDA,LEfSe,16072,1297,142,273,7079.0,8993.0,3.22
 MicrobiomeHD,log2_fold_change,Kruskal-Wallis + BH FDR,327,116,9,17,137.0,190.0,2.73
 PubMed,reported,reported,197,132,13,24,86.0,111.0,
-PubMed,LEfSe,LEfSe,125,81,12,20,66.0,59.0,4.31
+PubMed,reported,LEfSe,124,81,12,20,65.0,59.0,
 MicrobiomeHD,consensus,cross-study consensus (q<0.05 in >=2 datasets),71,63,4,1,32.0,39.0,
 MicrobiomeHD,q_value,Kruskal-Wallis + BH FDR,59,49,7,10,35.0,24.0,
 MicrobiomeHD,reported,as reported (wilcoxon),13,13,1,1,9.0,4.0,
@@ -10,3 +10,4 @@ MicrobiomeHD,reported,as reported (anova),10,10,1,1,7.0,3.0,
 MicrobiomeHD,reported,as reported (t_test),9,9,1,1,3.0,6.0,
 MicrobiomeHD,reported,as reported (anova_tukey),4,4,1,1,1.0,3.0,
 MicrobiomeHD,reported,as reported (lefse),2,2,1,1,1.0,1.0,
+PubMed,LDA,LEfSe,1,1,1,1,1.0,0.0,4.31
