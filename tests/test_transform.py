@@ -12,6 +12,7 @@ from gutdb.transform import (
     extract_species_epithet,
     normalize_genus,
     normalize_phylum,
+    strip_nomenclatural_code,
     normalize_platform,
     parse_scientific_name,
     same_epithet,
@@ -161,6 +162,28 @@ class NormalizePhylumTests(unittest.TestCase):
     def test_euryarchaeota_rename_folds(self):
         """Same NCBI tax ID (28890) under two names, so it is a rename."""
         self.assertEqual(normalize_phylum("Methanobacteriota"), "Euryarchaeota")
+
+    def test_nomenclatural_code_annotation_is_stripped(self):
+        """NCBI appends the code to names published outside the ICNP.
+
+        It describes how a name was published, not the name, and leaving it on
+        makes a rank value of one that splits from the bare name later.
+        """
+        self.assertEqual(
+            strip_nomenclatural_code("Methylomirabilota (SeqCode)"), "Methylomirabilota")
+        self.assertEqual(strip_nomenclatural_code("Bathyarchaeia (ICNP)"), "Bathyarchaeia")
+        self.assertEqual(normalize_phylum("Methylomirabilota (SeqCode)"), "Methylomirabilota")
+
+    def test_other_parentheticals_survive(self):
+        """A parenthetical is not always an annotation.
+
+        "Neobittarella (ex bilen et al. 2018)" is a scientific name this database
+        legitimately held, so the strip is deliberately limited to the two codes
+        and to trailing position.
+        """
+        self.assertEqual(
+            strip_nomenclatural_code("Neobittarella (ex bilen et al. 2018)"),
+            "Neobittarella (ex bilen et al. 2018)")
 
     def test_crenarchaeota_rename_folds(self):
         """Thermoproteota and Crenarchaeota are both NCBI taxid 28889."""

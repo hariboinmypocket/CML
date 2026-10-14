@@ -603,6 +603,79 @@ most diseases that is three to five. Reporting a random-split AUC from this
 database overstates what the model would do on a new cohort by about 0.16 on
 average, and by more than 0.3 for the two diseases that look most impressive.
 
+### The 1,416 taxa with no evidence are not junk
+
+A sweep for dead rows finds 1,416 taxa carrying no association and no abundance,
+which looks like an obvious deletion. It is not one. **Every one comes from
+MiMeDB, and 1,058 of them carry measured traits** -- gram stain, oxygen
+requirement, sporulation, habitat, pathogenicity. They are a reference set,
+loaded so those traits are already present if a study ever reports the organism.
+Deleting them would remove **58% of the trait reference** (1,058 of the 1,833
+taxa carrying any trait) and **35 of the 63 human_pathogen flags**.
+
+The 358 carrying neither evidence nor traits look more deletable until you read
+what they are: 62 are eukaryotes, including the plants and helminths that
+`fix_curated_csv_lineage.py` documents as deliberate -- *Carica papaya*,
+*Citrullus lanatus*, *Nelumbo nucifera*, and nematodes and flatworms. That script
+exists because the obvious test, "this phylum looks non-microbial", is wrong
+here: Streptophyta and Nematoda are *correct* for those rows. The remaining 275
+are ordinary bacteria that simply have not turned up in any study yet, which is a
+statement about study coverage rather than about the rows.
+
+**The real defect was the count, not the data.** `validate` reported `taxa: 5,897`
+with no indication that a quarter of it is reference material, so anyone reading
+that as the number of organisms this database has observed overstates it by
+1,416. It now reports all three:
+
+```
+taxa: 5,897
+taxa_observed: 4,481
+taxa_reference_only: 1,416
+```
+
+### Backfilling the lineage that was never loaded
+
+```bash
+python scripts/backfill_lineage.py --apply
+```
+
+1,417 taxa carried no phylum and 1,563 no superkingdom, and **1,415 of those were
+not dead rows** -- they had associations or abundance behind them. *Waltera* alone
+accounts for 7,944 abundance rows. Most are recently described gut organisms that
+arrived from GMrepo with a name and a tax ID but no lineage, so anything grouped
+by phylum silently dropped them.
+
+1,326 had a tax ID, which makes them resolvable offline from the local dump.
+
+| | before | after |
+| --- | --- | --- |
+| taxa with no phylum | 1,417 | **143** |
+| of those, carrying evidence | 1,415 | 141 |
+| taxa with no superkingdom | 1,563 | 283 |
+| genus-rank abundance mass carrying a phylum | — | **99.54%** |
+
+**Only empty fields are filled, and that is the safety property rather than a
+nicety.** Several lineages here were repaired by hand after cross-kingdom
+homonyms put *Bosea* under Streptophyta and *Bogoriella* under Ascomycota; a
+backfill that preferred the dump over the stored value would quietly undo that
+work every time it ran. `genus` and `species` are excluded entirely -- they are
+keys, so rewriting them would change identity rather than fill a gap.
+
+The backfill surfaced one thing worth keeping: NCBI appends the nomenclatural
+code to names published outside the ICNP, so the dump carries
+`Methylomirabilota (SeqCode)` and nine siblings across class, order and family.
+That is metadata about how a name was published, not part of the name, and it
+creates a rank value of one that would split from the bare name later.
+`strip_nomenclatural_code` removes it, limited to `(SeqCode)` and `(ICNP)` in
+trailing position -- a parenthetical is not always an annotation, and
+`Neobittarella (ex bilen et al. 2018)` is a scientific name this database
+legitimately held.
+
+Two survivors of the backfill look wrong and are not. *Bivalvulida* sits under
+phylum **Cnidaria** because myxozoans are parasitic cnidarians and GMrepo
+genuinely reports it in faecal samples; its `superkingdom` correctly reads
+Eukaryota. 143 taxa still have no phylum because NCBI has none for them either.
+
 ### Phylum names: renames against reclassifications
 
 ```bash

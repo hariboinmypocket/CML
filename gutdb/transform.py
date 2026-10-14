@@ -231,9 +231,25 @@ PHYLUM_SYNONYMS = {
 }
 
 
+# NCBI appends the nomenclatural code to names published outside the ICNP, so
+# the dump carries "Methylomirabilota (SeqCode)" and nine siblings across the
+# class, order and family ranks. The code is metadata about how a name was
+# published, not part of the name, and leaving it attached creates a rank value
+# of one that would split from the bare name the moment anything else arrives
+# under it. Only these two are stripped, and only in trailing position: a
+# parenthetical is not always an annotation, and "Neobittarella (ex bilen et al.
+# 2018)" is a scientific name this database legitimately held.
+NOMENCLATURAL_CODE = re.compile(r"\s*\((?:SeqCode|ICNP)\)\s*$", re.IGNORECASE)
+
+
+def strip_nomenclatural_code(value: Any) -> str:
+    """Drop a trailing (SeqCode) or (ICNP) annotation from a lineage rank."""
+    return NOMENCLATURAL_CODE.sub("", clean_str(value)).strip()
+
+
 def normalize_phylum(value: Any) -> str:
     """Fold post-2021 phylum names onto the classic name already used here."""
-    text = clean_str(value)
+    text = strip_nomenclatural_code(value)
     if not text:
         return ""
     return PHYLUM_SYNONYMS.get(text.casefold(), text)
