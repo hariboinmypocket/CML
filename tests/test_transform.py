@@ -12,6 +12,7 @@ from gutdb.transform import (
     OXYGEN,
     SUPERKINGDOM,
     canon_trait,
+    coarser_than_genus,
     split_sporulation,
     quantize_effect_size,
     association_direction,
@@ -473,3 +474,26 @@ class MetaboliteScaleTests(unittest.TestCase):
     def test_a_zero_minimum_is_non_negative_not_centred(self):
         """Boundary: 0.0 is not negative, so it must not be called centred."""
         self.assertEqual(derive_metabolite_scale(0.0, 1.0), "non_negative")
+
+
+class NcbiRankTests(unittest.TestCase):
+    """taxonomic_rank is the abundance layer; ncbi_rank is what the organism is."""
+
+    def test_a_family_or_coarser_in_the_genus_layer_is_flagged(self):
+        for rank in ("family", "order", "class", "phylum", "infraclass",
+                     "infraorder", "superkingdom"):
+            self.assertTrue(coarser_than_genus(rank), rank)
+
+    def test_genus_and_anything_below_it_is_not_flagged(self):
+        for rank in ("genus", "subgenus", "species", "subspecies", "strain",
+                     "species group", "isolate"):
+            self.assertFalse(coarser_than_genus(rank), rank)
+
+    def test_an_uninformative_rank_asserts_nothing(self):
+        """'no rank' and 'clade' must not be read as a disagreement."""
+        for rank in ("no rank", "clade", "", None):
+            self.assertFalse(coarser_than_genus(rank), rank)
+
+    def test_case_and_whitespace_do_not_change_the_answer(self):
+        self.assertTrue(coarser_than_genus("  Family "))
+        self.assertFalse(coarser_than_genus(" GENUS "))

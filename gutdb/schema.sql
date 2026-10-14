@@ -30,6 +30,29 @@ CREATE TABLE IF NOT EXISTS taxa (
     scientific_name VARCHAR(420) NOT NULL,
     taxonomic_rank ENUM('species', 'genus', 'other') NOT NULL DEFAULT 'species',
     ncbi_tax_id BIGINT NULL,
+    -- The rank NCBI assigns this tax ID, copied verbatim from nodes.dmp. It sits
+    -- BESIDE taxonomic_rank rather than replacing it, because the two answer
+    -- different questions: taxonomic_rank is the abundance LAYER the row was
+    -- loaded into, and ncbi_rank is what the organism actually is.
+    --
+    -- 408 rows disagree. 125 sit in the genus layer while NCBI calls them
+    -- coarser -- 90 families (Muribaculaceae 2005473, Tannerellaceae 2005525),
+    -- 19 orders, 7 classes, 5 phyla -- and 283 sit in the species layer while
+    -- NCBI calls them finer, almost all strains.
+    --
+    -- THE GENUS-LAYER ONES MUST NOT BE "FIXED" BY MOVING THEM. GMrepo's own
+    -- export labels them taxonomic_rank = genus, and they are the unclassified
+    -- RESIDUAL within that family: their mean share is 0.2-0.6% while the real
+    -- genera beside them carry far more, so they are the reads a 16S classifier
+    -- placed to family but no further. 3,443 samples hold such a row alongside
+    -- genuine genera of the same family; the parts are disjoint, so the
+    -- per-(sample, rank) sum to 1 is correct. Taking them out of the genus layer
+    -- would break that invariant and discard real mass.
+    --
+    -- What was missing is only that nothing SAID they were coarser, so a model
+    -- treated Muribaculaceae as a peer of Bacteroides. v_abundance_genus exposes
+    -- coarser_than_genus for exactly that.
+    ncbi_rank VARCHAR(32) NULL,
     gram_stain VARCHAR(50) NULL,
     oxygen_requirement VARCHAR(100) NULL,
     ph_preference VARCHAR(100) NULL,
@@ -912,6 +935,15 @@ SELECT
     t.scientific_name AS genus,
     t.phylum,
     t.superkingdom,
+    -- 125 of these features are not genera. See taxa.ncbi_rank: they are the
+    -- family- or order-level residual a 16S classifier could not place further,
+    -- faithfully reported by GMrepo at genus rank, and disjoint from the real
+    -- genera beside them. Filter on this when a model needs features at one
+    -- resolution; do not drop the rows, which would break the sum to 1.
+    t.ncbi_rank,
+    (t.ncbi_rank IS NOT NULL
+     AND t.ncbi_rank NOT IN ('genus', 'subgenus', 'species', 'subspecies',
+                             'strain', 'no rank', 'clade')) AS coarser_than_genus,
     a.relative_abundance
 FROM sample_taxon_abundances a
 JOIN taxa t ON t.id = a.taxon_id

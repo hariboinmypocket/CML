@@ -673,3 +673,37 @@ def derive_metabolite_scale(min_level, max_level) -> str:
 def zero_means_absence(scale: str) -> bool:
     """Whether a stored level of 0 may be read as "not detected" on this scale."""
     return scale == METABOLITE_SCALE_NON_NEGATIVE
+
+
+# --- NCBI rank vs the abundance layer ---------------------------------------
+#
+# taxonomic_rank is the LAYER a row was loaded into -- GMrepo publishes a genus
+# array and a species array, and the per-(sample, rank) sum to 1 is defined over
+# that split. ncbi_rank is what the organism actually is. 408 rows differ.
+#
+# Ranks at or below genus: a genus-layer row carrying one of these is not coarser
+# than its layer. 'no rank' and 'clade' assert nothing either way, so they are
+# included here rather than counted as a disagreement.
+RANKS_AT_OR_BELOW_GENUS = frozenset({
+    "genus", "subgenus", "species", "subspecies", "strain", "species group",
+    "species subgroup", "isolate", "serotype", "no rank", "clade",
+})
+
+
+def coarser_than_genus(ncbi_rank) -> bool:
+    """Whether a genus-layer feature is really a family, order, class or phylum.
+
+    123 observed taxa are: 90 families (Muribaculaceae, Tannerellaceae), 19
+    orders (Candidatus Gastranaerophilales, Bivalvulida), 7 classes, 5 phyla.
+    They carry 16,098 abundance rows and about 1% of the genus layer's mass.
+
+    They are NOT errors to move out of the layer. GMrepo labels them genus, they
+    are the unclassified residual within their family rather than a duplicate of
+    it -- mean shares of 0.2-1.6% beside real genera carrying far more -- and the
+    parts are disjoint, so the sum to 1 holds. The only thing missing was a way
+    to tell them apart from a real genus, which is what this is for.
+    """
+    rank = clean_str(ncbi_rank).casefold()
+    if not rank:
+        return False
+    return rank not in RANKS_AT_OR_BELOW_GENUS

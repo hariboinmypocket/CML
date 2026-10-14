@@ -711,6 +711,49 @@ What changed, since again nothing is deleted:
 - **`scripts/richness_audit.py`** writes `data/richness_audit.csv` and
   `data/richness_arm_imbalance.csv`.
 
+### 408 rows disagree with NCBI about their own rank
+
+`taxonomic_rank` in this database is the abundance **layer** a row was loaded
+into -- GMrepo publishes a genus array and a species array, and the
+per-`(sample, rank)` sum to 1 is defined over that split. It is not a claim about
+what the organism is, and for 408 rows the two differ:
+
+| stored | NCBI says | rows | examples |
+|---|---|---|---|
+| genus | **family** | 90 | *Muribaculaceae* (2005473), *Tannerellaceae* |
+| genus | **order** | 19 | *Candidatus Gastranaerophilales*, *Bivalvulida* |
+| genus | **class** | 7 | *Candidatus Sericytochromatia*, **Mammalia** |
+| genus | **phylum** | 5 | *Candidatus Latescibacterota* |
+| species | **strain** | 277 | *Bifidobacterium longum* (1322347) |
+| species | subspecies | 4 | *Streptomyces lavendulae* (58340) |
+
+**The 123 coarse genus-layer rows are not an error to move**, and checking that
+was the point. GMrepo's own export labels them `taxonomic_rank = genus`, so the
+database is faithful. More importantly they are the unclassified **residual**
+within a family rather than a duplicate of it: mean shares run 0.2% to 1.6% while
+the real genera beside them carry far more, which is exactly what a 16S
+classifier produces when it places a read to family but no further. 3,443 samples
+hold such a row alongside genuine genera of the same family, the parts are
+**disjoint**, and the sum to 1 is correct. Taking them out of the genus layer
+would break that invariant and discard real mass -- 16,098 abundance rows and
+about 1% of the layer's total.
+
+So nothing moved. What was missing was never the rows; it was that nothing *said*
+they were coarser, so a model treated *Muribaculaceae* as a peer of
+*Bacteroides*. `taxa.ncbi_rank` records the fact and `v_abundance_genus` exposes
+`coarser_than_genus`.
+
+One of them ties back to an earlier finding: **`Bivalvulida` is an order**, and it
+was the lone survivor in 82 of the 269 one-genus profiles. A degenerate profile
+whose single feature is a myxozoan *order* is now visibly that.
+
+**The 283 species-layer rows are left alone deliberately.** A species-named row
+carrying a strain tax ID is the `retaxid` case in `merge_duplicate_taxa.py`'s
+`OVERRIDES`, and two concurrent branches are working through taxon identity right
+now -- the concatenated-genus repair and the gram-stain corrections both came out
+of it. Repointing tax IDs from here would collide with that, so they are recorded
+in `data/ncbi_rank_audit.csv` and reported, not touched.
+
 ### The same metabolite zero meant absence in 11 cohorts and "average" in 2
 
 `sample_metabolite_levels` mixes scales that differ **in kind**, and nothing
