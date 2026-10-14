@@ -190,6 +190,21 @@ CREATE TABLE IF NOT EXISTS samples (
     -- store. 'gut' was also the wrong word: the stomach is part of the gut, so
     -- it could not separate the biopsies from the stool, which is the only
     -- distinction this column is for. scripts/normalize_body_site.py folds both.
+    -- The platform that produced THIS sample's profile, which studies.data_type
+    -- cannot express. GMrepo records it per run -- 'AMPLICON' or 'Metagenomics'
+    -- in data/gmrepo_project_samples.csv -- and 10 projects contain both, so the
+    -- loader collapsed them to data_type = 'mixed' and 3,786 samples lost a
+    -- platform the source had for every one of them (2,683 amplicon, 1,103
+    -- shotgun).
+    --
+    -- That loss is not cosmetic. Platform sets the taxonomic floor: amplicon
+    -- reads one marker gene and cannot separate species within a genus, so
+    -- inside a 'mixed' study some samples resolve species and some stop at genus
+    -- with nothing saying which. It is also the strongest batch covariate here
+    -- -- scripts/loso_audit.py measures platform mixing at +0.175 optimism --
+    -- and both that audit and export_ml_matrix.py read the STUDY's value, so for
+    -- these samples the covariate they carried was the word 'mixed'.
+    sequencing_platform VARCHAR(40) NULL,
     body_site VARCHAR(100) NULL,
     -- share of reads GMrepo could not assign to a taxon. Recorded rather than
     -- discarded: it is a per-sample quality signal, and the classified taxa are
@@ -369,7 +384,11 @@ SELECT
     s.run_accession,
     st.project_accession,
     st.source_database                     AS study_source,
+    -- The STUDY's summary. For the 10 projects holding both platforms it reads
+    -- 'mixed', which is not a batch and not a resolution; use
+    -- sequencing_platform for anything per-sample.
     st.data_type,
+    s.sequencing_platform,
     d.name                                 AS phenotype,
     d.mesh_id,
     (d.name = 'Health')                    AS is_control,

@@ -57,7 +57,7 @@ def fit_predict(train_X, train_y, test_X):
 
 def evaluate(disease: str, conn) -> dict | None:
     meta = pd.read_sql_query(
-        """SELECT sample_id, phenotype, project_accession, data_type
+        """SELECT sample_id, phenotype, project_accession, sequencing_platform
            FROM v_ml_ready_samples
            WHERE ml_ready_deduplicated = 1 AND phenotype IN (%s, 'Health')""",
         conn, params=(disease,)).set_index("sample_id")
@@ -99,7 +99,10 @@ def evaluate(disease: str, conn) -> dict | None:
     if folds < MIN_FOLDS or not random_scores:
         return None
 
-    platforms = sorted(meta["data_type"].dropna().unique())
+    # The per-sample platform, not the study's data_type: 10 projects hold both
+    # and read 'mixed', which is not a platform, so a cohort drawing on them used
+    # to look single-platform or three-platform depending on nothing real.
+    platforms = sorted(meta["sequencing_platform"].dropna().unique())
     return {
         "disease": disease,
         "studies_used": int(len(usable)),

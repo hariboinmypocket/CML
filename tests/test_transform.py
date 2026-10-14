@@ -4,6 +4,8 @@ from pathlib import Path
 
 from gutdb.transform import (
     GRAM,
+    NOT_A_PLATFORM,
+    derive_study_platform,
     OXYGEN,
     SUPERKINGDOM,
     canon_trait,
@@ -355,3 +357,42 @@ class SporulationSplitTests(unittest.TestCase):
         """('', '') means 'do not touch this cell', not 'clear it'."""
         self.assertEqual(split_sporulation("Septated hyphae"), ("", ""))
         self.assertEqual(split_sporulation("something nobody anticipated"), ("", ""))
+
+
+class StudyPlatformDerivationTests(unittest.TestCase):
+    """studies.data_type is derived from the samples so the stores cannot differ.
+
+    The mirror held four vocabularies for two platforms -- 'AMPLICON' beside
+    '16S rRNA', 'Metagenomics' beside 'shotgun metagenomics' -- where MySQL held
+    '16S'/'mNGS', so `WHERE data_type = '16S'` matched 236 studies in one store
+    and none in the other.
+    """
+
+    def test_one_platform_however_it_is_spelled(self):
+        for spellings in (("AMPLICON",), ("16S",), ("16S rRNA",),
+                          ("AMPLICON", "16S rRNA", "16S")):
+            self.assertEqual(derive_study_platform(spellings), "16S", spellings)
+        for spellings in (("Metagenomics",), ("mNGS",),
+                          ("shotgun metagenomics", "Metagenomics")):
+            self.assertEqual(derive_study_platform(spellings), "mNGS", spellings)
+
+    def test_two_real_platforms_become_mixed(self):
+        self.assertEqual(derive_study_platform(["AMPLICON", "Metagenomics"]), "mixed")
+        self.assertEqual(derive_study_platform(["16S", "mNGS"]), "mixed")
+
+    def test_nothing_to_derive_from_returns_empty_meaning_leave_it_alone(self):
+        """An association-only study has no samples; 'meta-analysis' is true there."""
+        for empty in ([], [None], [""], [None, ""]):
+            self.assertEqual(derive_study_platform(empty), "", empty)
+
+    def test_mixed_does_not_survive_as_an_input_value(self):
+        """'mixed' is a summary, so feeding it back must not make it a platform."""
+        self.assertEqual(derive_study_platform(["mixed"]), "mixed")
+        self.assertEqual(derive_study_platform(["mixed", "AMPLICON"]), "mixed")
+
+    def test_a_sample_may_not_inherit_a_summary_or_a_study_design(self):
+        self.assertIn("mixed", NOT_A_PLATFORM)
+        self.assertIn("meta-analysis", NOT_A_PLATFORM)
+        self.assertIn("", NOT_A_PLATFORM)
+        self.assertNotIn("16S", NOT_A_PLATFORM)
+        self.assertNotIn("mNGS", NOT_A_PLATFORM)

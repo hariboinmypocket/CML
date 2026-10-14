@@ -74,8 +74,8 @@ def main() -> int:
     cur = conn.cursor()
     cur.execute(
         """SELECT sample_id, phenotype, sex, age_years, bmi, country,
-                  project_accession, data_type, n_genera_profiled,
-                  n_species_profiled, body_site
+                  project_accession, data_type, sequencing_platform,
+                  n_genera_profiled, n_species_profiled, body_site
            FROM v_ml_ready_samples
            WHERE ml_ready_deduplicated = 1 AND phenotype IN (%s, 'Health')""",
         (disease,))
@@ -89,8 +89,8 @@ def main() -> int:
     import pandas as pd
     meta = pd.DataFrame(rows, columns=["sample_id", "phenotype", "sex", "age_years",
                                        "bmi", "country", "project_accession",
-                                       "data_type", "n_genera_profiled",
-                                       "n_species_profiled",
+                                       "data_type", "sequencing_platform",
+                                       "n_genera_profiled", "n_species_profiled",
                                        "body_site"]).set_index("sample_id")
     for column in ("n_genera_profiled", "n_species_profiled"):
         meta[column] = meta[column].astype(int)

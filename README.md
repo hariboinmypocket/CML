@@ -711,6 +711,69 @@ What changed, since again nothing is deleted:
 - **`scripts/richness_audit.py`** writes `data/richness_audit.csv` and
   `data/richness_arm_imbalance.csv`.
 
+### `data_type` answered at the wrong granularity, and the stores disagreed on it
+
+Fourth instance, on the column that governs taxonomic resolution. GMrepo records
+the platform **per run** -- `AMPLICON` or `Metagenomics` in
+`data/gmrepo_project_samples.csv` -- and 10 of its projects contain both, so the
+loader collapsed them to `data_type = 'mixed'`:
+
+| project | shotgun | amplicon |
+|---|---|---|
+| PRJNA763023 | 200 | 1,038 |
+| PRJNA888860 | 230 | 264 |
+| PRJNA604850 | 134 | 354 |
+| PRJNA648321 | 48 | 428 |
+| PRJEB42155 | 208 | 211 |
+| PRJNA905444 | 88 | 236 |
+| PRJNA813705 | 60 | 60 |
+| PRJEB21933 | 75 | 40 |
+| PRJNA730640 | 40 | 32 |
+| PRJEB53891 | 20 | 20 |
+
+**3,786 samples** -- 2,683 amplicon and 1,103 shotgun -- whose platform the
+source knew for every single one.
+
+That is not cosmetic. Platform sets the taxonomic floor: amplicon reads one
+marker gene, near-identical between species of a genus, so it resolves to genus
+and no further. Inside a `'mixed'` study some samples therefore carry
+species-rank profiles and some cannot, with nothing recording which. Platform is
+also the strongest batch covariate here, and both `loso_audit.py` and
+`export_ml_matrix.py` read the **study's** `data_type` -- so for these samples
+the covariate they carried was the literal word `'mixed'`.
+
+It showed up in the committed audit: `Diabetes Mellitus, Type 1` was reported as
+`platforms = 16S+mixed`, treating a summary as a third platform. It now reads
+`16S+mNGS`. The aggregate platform-mixing figures are unchanged (+0.175 across
+platforms against +0.060 within), because `16S+mixed` already contained a `+`
+and was counted as cross-platform either way -- but the label was wrong and any
+finer attribution built on it would have been too.
+
+**And the two stores disagreed about `data_type` itself.** The mirror held four
+vocabularies for two platforms:
+
+| store | values |
+|---|---|
+| MySQL | `16S` (236), `mNGS` (96), `mixed` (12), `meta-analysis` (3) |
+| SQLite | `AMPLICON` (191), `Metagenomics` (82), `16S rRNA` (28), `shotgun metagenomics` (9), `meta-analysis` (2) |
+
+So `WHERE data_type = '16S'` matched **236 studies against MySQL and zero
+against the mirror**. The mirror was also actively wrong rather than merely
+differently spelled: it had no `'mixed'` at all, so 10 projects were labelled
+`AMPLICON` when the runs the mirror actually holds from them are shotgun --
+PRJNA763023 keeps exactly its 200 `Metagenomics` runs and none of its 1,038
+amplicon ones.
+
+The fix removes the class rather than the instance. `samples.sequencing_platform`
+records the platform per sample, filled from the run where the source has it and
+from the study only where the study names a single platform -- never inheriting
+`'mixed'` or `'meta-analysis'`, which are not platforms. `studies.data_type` is
+then **derived** from those samples by `derive_study_platform()` in
+`gutdb/transform.py`, so `'mixed'` is now a summary of a recorded fact instead of
+a value that replaced one, and neither store can drift from the other. Studies
+with no samples keep their value, since an association-only study has nothing to
+derive from and `meta-analysis` is true of those.
+
 ### The taxa trait vocabularies, fixed in the mirror only since they were written
 
 Third instance of the same shape. `cleanup_gutdb.py` has normalized these

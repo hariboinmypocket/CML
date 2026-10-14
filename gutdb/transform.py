@@ -561,3 +561,33 @@ def split_sporulation(value) -> tuple[str, str]:
         if tokens and tokens <= ARRANGEMENT_TERMS:
             return "", text
     return "", ""
+
+
+# Values that name a study design or summarise several platforms rather than
+# naming one. A SAMPLE must never inherit any of these: 'mixed' is not a
+# resolution and not a batch.
+NOT_A_PLATFORM = frozenset({"mixed", "meta-analysis", ""})
+
+
+def derive_study_platform(platforms) -> str:
+    """Summarise a study's per-sample platforms into its data_type.
+
+    One platform across the samples means that platform; more than one means
+    'mixed'. Keeping this as a function rather than inline SQL is the point --
+    the SQLite mirror held FOUR vocabularies for two platforms ('AMPLICON'
+    beside '16S rRNA', 'Metagenomics' beside 'shotgun metagenomics') where MySQL
+    held the normalized pair, so `WHERE data_type = '16S'` matched 236 studies
+    in one store and none in the other. Deriving both stores' value from the same
+    rule is what stops that recurring.
+
+    Returns '' for a study with nothing to derive from, which the callers read as
+    "leave this study's data_type alone" -- an association-only study has no
+    samples, and 'meta-analysis' is a true statement about those.
+    """
+    distinct = {normalize_platform(p) for p in platforms if p}
+    distinct -= {""}
+    if not distinct:
+        return ""
+    if len(distinct) == 1:
+        return distinct.pop()
+    return "mixed"
