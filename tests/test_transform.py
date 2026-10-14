@@ -5,8 +5,10 @@ from pathlib import Path
 from gutdb.transform import (
     GRAM,
     NOT_A_PLATFORM,
+    derive_metabolite_scale,
     derive_study_platform,
     numeric_value_is_trustworthy,
+    zero_means_absence,
     OXYGEN,
     SUPERKINGDOM,
     canon_trait,
@@ -439,3 +441,35 @@ class AttributeNumericTrustTests(unittest.TestCase):
         """Stage = 0 is correct; what is missing is the denominator, not the value."""
         self.assertTrue(numeric_value_is_trustworthy("Stage", "0"))
         self.assertTrue(numeric_value_is_trustworthy("Antibiotics", "1"))
+
+
+class MetaboliteScaleTests(unittest.TestCase):
+    """sample_metabolite_levels mixes scales that differ in kind.
+
+    Two of 13 cohorts arrive log- or z-transformed and hold 70,067 negative
+    levels; the rest are non-negative with maxima spanning nine orders of
+    magnitude. The hazard is the zero: absence on one scale, mid-distribution on
+    the other.
+    """
+
+    def test_a_negative_level_proves_an_upstream_transform(self):
+        """A concentration cannot be negative, so this is positive evidence."""
+        self.assertEqual(derive_metabolite_scale(-6.725, 7.6), "centred")
+        self.assertEqual(derive_metabolite_scale(-2.481, 3.3), "centred")
+
+    def test_no_negatives_claims_only_non_negativity(self):
+        """Not a unit claim: the source records units nowhere."""
+        for lo, hi in ((0.0, 665180.6), (0.0, 266.7), (1.0, 3297391681.0)):
+            self.assertEqual(derive_metabolite_scale(lo, hi), "non_negative")
+
+    def test_a_zero_means_absence_only_on_the_non_negative_scale(self):
+        self.assertTrue(zero_means_absence(derive_metabolite_scale(0.0, 665180.6)))
+        self.assertFalse(zero_means_absence(derive_metabolite_scale(-6.725, 7.6)))
+
+    def test_nothing_to_derive_from_claims_nothing(self):
+        self.assertEqual(derive_metabolite_scale(None, None), "")
+        self.assertFalse(zero_means_absence(""))
+
+    def test_a_zero_minimum_is_non_negative_not_centred(self):
+        """Boundary: 0.0 is not negative, so it must not be called centred."""
+        self.assertEqual(derive_metabolite_scale(0.0, 1.0), "non_negative")

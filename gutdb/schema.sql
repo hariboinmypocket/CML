@@ -98,6 +98,25 @@ CREATE TABLE IF NOT EXISTS studies (
     -- uncheckable. A DOI makes it mechanical instead: levels are poolable only
     -- where it matches, and no two cohorts here share one.
     metabolomics_method VARCHAR(120) NULL,
+    -- 'centred' or 'non_negative', derived from the study's own level range by
+    -- derive_metabolite_scale(). Two of the 13 cohorts arrive already log- or
+    -- z-transformed and hold 70,067 negative levels; the other 11 are
+    -- non-negative, with maxima spanning nine orders of magnitude (461 to
+    -- 3.07e10).
+    --
+    -- THE ZERO IS WHY THIS COLUMN EXISTS. On a non-negative scale a zero means
+    -- the compound was not detected -- 78,400 of YACHIDA_CRC_2019's 130,242
+    -- levels, 60% of them. On a centred scale a zero is mid-distribution:
+    -- SINHA_CRC_2016 holds 23,553 negatives against 22,540 positives with a mean
+    -- of -0.04, so its 281 zeros mean "at this cohort's average" -- the opposite
+    -- of absence. The same stored number meant opposite things with nothing
+    -- recording which, and "normalize within study" does not cover it: a uniform
+    -- log1p over this table returns NaN on 70,067 rows and takes the log of a
+    -- log on 136,134 more.
+    --
+    -- 'non_negative' claims no unit, only non-negativity. The source records
+    -- units nowhere; metabolomics_method above carries the protocol DOI.
+    metabolite_scale VARCHAR(20) NULL,
     data_quality ENUM('curated', 'qualified', 'unknown') NOT NULL DEFAULT 'unknown',
     PRIMARY KEY (id),
     UNIQUE KEY uq_study_accession (project_accession)
@@ -486,11 +505,38 @@ SELECT
      AND s.age_years IS NOT NULL
      AND COALESCE(ab.n_taxa, 0) > 0)       AS ml_ready,
     -- ml_ready says the row has covariates and features; this additionally
-    -- keeps one run per biological sample, which is what a split should use.
+    -- keeps one run per biological sample.
+    --
+    -- IT DOES NOT KEEP ONE SAMPLE PER PERSON, and an earlier version of this
+    -- comment claimed it was "what a split should use", which overstated it. A
+    -- longitudinal study sampling one subject at seven timepoints produces seven
+    -- distinct biological samples, all of which survive this flag: 389 subjects
+    -- contribute 1,340 of its rows, so 971 are repeat visits by someone already
+    -- in the cohort. Irritable Bowel Syndrome is 305 rows from 51 people and
+    -- Diabetes Mellitus, Type 1 is 66 rows from 11 -- a sixfold overstatement of
+    -- the effective sample size, and a random split puts the same person on both
+    -- sides of it. Use ml_ready_one_per_subject for a split.
     (s.sex IS NOT NULL
      AND s.age_years IS NOT NULL
      AND COALESCE(ab.n_taxa, 0) > 0
-     AND (COALESCE(rep.n_runs, 1) = 1 OR s.id = rep.first_id)) AS ml_ready_deduplicated
+     AND (COALESCE(rep.n_runs, 1) = 1 OR s.id = rep.first_id)) AS ml_ready_deduplicated,
+    s.subject_id,
+    COALESCE(subj.n_visits, 1)             AS samples_for_this_subject,
+    -- One row per person where the source names the person, falling back to the
+    -- sample-level dedup where it does not.
+    --
+    -- THE FALLBACK IS MOST OF THE COHORT, so read this flag knowing what it can
+    -- and cannot see. subject_id is NULL for all 33,630 GMrepo samples and all
+    -- 120 from MGnify, which is 10,961 of the 13,328 deduplicated rows. A
+    -- longitudinal GMrepo study is therefore invisible to this flag, and it only
+    -- genuinely constrains the 2,367 MullerMM and PubMed rows. It is an
+    -- improvement on ml_ready_deduplicated, not a solution to
+    -- pseudo-replication.
+    (s.sex IS NOT NULL
+     AND s.age_years IS NOT NULL
+     AND COALESCE(ab.n_taxa, 0) > 0
+     AND (COALESCE(rep.n_runs, 1) = 1 OR s.id = rep.first_id)
+     AND (s.subject_id IS NULL OR s.id = subj.first_visit_id)) AS ml_ready_one_per_subject
 FROM samples s
 JOIN studies st ON st.id = s.study_id
 LEFT JOIN diseases d ON d.id = s.disease_id
@@ -509,7 +555,15 @@ LEFT JOIN (
     WHERE gmrepo_sample_id IS NOT NULL
     GROUP BY study_id, gmrepo_sample_id
 ) rep ON rep.study_id = s.study_id
-     AND rep.gmrepo_sample_id = s.gmrepo_sample_id;
+     AND rep.gmrepo_sample_id = s.gmrepo_sample_id
+LEFT JOIN (
+    SELECT study_id, subject_id, COUNT(*) AS n_visits,
+           MIN(id) AS first_visit_id
+    FROM samples
+    WHERE subject_id IS NOT NULL
+    GROUP BY study_id, subject_id
+) subj ON subj.study_id = s.study_id
+      AND subj.subject_id = s.subject_id;
 
 
 -- Study-level rollup: where each cohort stands on covariates vs features.

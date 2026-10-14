@@ -711,6 +711,65 @@ What changed, since again nothing is deleted:
 - **`scripts/richness_audit.py`** writes `data/richness_audit.csv` and
   `data/richness_arm_imbalance.csv`.
 
+### The same metabolite zero meant absence in 11 cohorts and "average" in 2
+
+`sample_metabolite_levels` mixes scales that differ **in kind**, and nothing
+recorded which:
+
+| cohort | levels | negative | zero | max |
+|---|---|---|---|---|
+| YACHIDA_CRC_2019 | 130,242 | 0 | 78,400 | 665,180 |
+| KIM_ADENOMAS_2020 | 89,760 | **46,514** | 513 | 3.3 |
+| SINHA_CRC_2016 | 46,374 | **23,553** | 281 | 7.6 |
+| KOSTIC_INFANTS_DIABETES_2015 | 13,471 | 0 | 13 | 3.07×10¹⁰ |
+| KANG_AUTISM_2017 | 2,596 | 0 | 407 | 461 |
+
+Two cohorts arrive **already log- or z-transformed** -- SINHA holds 23,553
+negative levels against 22,540 positive with a mean of −0.04 -- while eleven are
+non-negative with maxima spanning **nine orders of magnitude**.
+
+**The hazard is the zero.** On a non-negative scale it means the compound was
+not detected: 78,400 of YACHIDA's 130,242 levels, **60% of them**. On a centred
+scale a zero sits mid-distribution and means *at this cohort's average* -- the
+opposite. Across the table that is **127,836 zeros meaning absence and 794
+meaning average**, with nothing to tell them apart.
+
+The standing rule to "normalize within study" does not cover this. A uniform
+`log1p` over the table returns **NaN on 70,067 rows** and takes the log of a log
+on 136,134 more.
+
+`studies.metabolite_scale` now records it, derived from each cohort's own range
+rather than asserted: a negative level cannot be a concentration, so it is
+positive evidence of an upstream transform. The absence of negatives is *not*
+evidence of a unit, only of non-negativity -- which is exactly what the other
+label says, because the source records units nowhere.
+
+### `ml_ready_deduplicated` keeps one run per sample, not one sample per person
+
+The comment on that flag said it "keeps one run per biological sample, which is
+what a split should use". The second clause overstated it. A longitudinal study
+sampling one subject at seven timepoints produces seven *distinct biological
+samples*, and all seven survive the flag:
+
+| phenotype | rows | people | overstatement |
+|---|---|---|---|
+| Irritable Bowel Syndrome | 305 | **51** | ×6.0 |
+| Diabetes Mellitus, Type 1 | 66 | **11** | ×6.0 |
+| Fatigue Syndrome, Chronic | 319 | 147 | ×2.2 |
+| Health | 1,103 | 613 | ×1.8 |
+
+389 subjects contribute 1,340 of the cohort's rows, so **971 are repeat visits by
+someone already in it** -- and a random split puts the same person on both sides.
+`ml_ready_one_per_subject` keeps one row per person where the source names the
+person, taking the cohort from 13,328 to 12,357.
+
+**Read that flag knowing what it cannot see.** `subject_id` is NULL for all
+33,630 GMrepo samples and all 120 from MGnify -- 10,961 of the 13,328
+deduplicated rows. A longitudinal *GMrepo* study is invisible to it, and it only
+genuinely constrains the 2,367 MullerMM and PubMed rows. It is an improvement on
+`ml_ready_deduplicated`, not a solution to pseudo-replication. (The SQLite mirror
+has no `subject_id` column at all, so the flag is MySQL-only.)
+
 ### `value_numeric` held numbers that were not quantities
 
 `sample_attributes.value_numeric` was documented as *"populated only when `value`

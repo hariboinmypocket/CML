@@ -632,3 +632,44 @@ def numeric_value_is_trustworthy(attribute: str, value: str) -> bool:
     if CODED_IN_NAME.search(clean_str(attribute)):
         return False
     return True
+
+
+# --- metabolite level scales -------------------------------------------------
+#
+# sample_metabolite_levels mixes scales that differ in KIND, not magnitude, and
+# nothing recorded which. Two of the 13 cohorts arrive already log- or
+# z-transformed and hold 70,067 negative values; the other 11 are non-negative
+# intensities whose maxima span nine orders of magnitude, from 461 in
+# KANG_AUTISM_2017 to 3.07e10 in KOSTIC_INFANTS_DIABETES_2015.
+#
+# THE DANGEROUS PART IS THE ZERO. On a non-negative scale a zero means the
+# compound was not detected -- 78,400 of YACHIDA_CRC_2019's 130,242 levels, 60%
+# of them. On a centred scale a zero is mid-distribution: SINHA_CRC_2016 has
+# 23,553 negatives against 22,540 positives with a mean of -0.04, so its 281
+# zeros mean "at this cohort's average", the opposite of absence. The same stored
+# number means opposite things depending on the study, and the standing advice to
+# "normalize within study" does not cover it -- a uniform log1p over this table
+# yields NaN on 70,067 rows and takes the log of a log on 136,134 more.
+METABOLITE_SCALE_CENTRED = "centred"
+METABOLITE_SCALE_NON_NEGATIVE = "non_negative"
+
+
+def derive_metabolite_scale(min_level, max_level) -> str:
+    """Classify a study's level scale from its own range.
+
+    A negative level cannot be a concentration, so it is positive evidence that
+    the cohort was transformed upstream. The absence of negatives is NOT evidence
+    of a particular unit, only that the values are non-negative -- which is why
+    the other label says exactly that and claims no unit. The source does not
+    record units anywhere; studies.metabolomics_method carries the protocol DOI.
+    """
+    if min_level is None:
+        return ""
+    if float(min_level) < 0:
+        return METABOLITE_SCALE_CENTRED
+    return METABOLITE_SCALE_NON_NEGATIVE
+
+
+def zero_means_absence(scale: str) -> bool:
+    """Whether a stored level of 0 may be read as "not detected" on this scale."""
+    return scale == METABOLITE_SCALE_NON_NEGATIVE
