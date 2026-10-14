@@ -85,6 +85,11 @@ NON_EPITHETS = {
     "bacterium", "archaeon", "symbiont", "endosymbiont", "oral", "group",
     "complex", "sp", "spp", "subsp", "str", "var", "cf", "aff",
 }
+# "Parabacteroides sp. 20_3" names its genus as surely as a binomial does; the
+# unnamed species is still that genus's. Only these stand in for an epithet --
+# "subsp."/"var." qualify an epithet rather than replace one, so a field that
+# opens with them is not naming a species at all.
+EPITHET_PLACEHOLDERS = {"sp.", "sp", "spp.", "spp"}
 
 
 def names_a_genus(token: Any) -> bool:
@@ -134,18 +139,21 @@ def resolve_source_binomial(genus_field: Any, species_field: Any) -> tuple[str, 
         return genus, extract_species_epithet(genus, field)
 
     parts = field.replace("[", "").replace("]", "").split()
+    def follows_a_genus(token: str) -> bool:
+        return is_species_epithet(token) or token.casefold() in EPITHET_PLACEHOLDERS
+
     if len(parts) >= 3 and parts[0].casefold() == "candidatus":
         # "Candidatus" is a status prefix, so the genus is the next word too.
         takes_field = (
             " ".join(parts[:2]).casefold() != genus.casefold()
             and names_a_genus(parts[1])
-            and is_species_epithet(parts[2])
+            and follows_a_genus(parts[2])
         )
     elif len(parts) >= 2:
         takes_field = (
             parts[0].casefold() != genus.casefold()
             and names_a_genus(parts[0])
-            and is_species_epithet(parts[1])
+            and follows_a_genus(parts[1])
         )
     else:
         takes_field = False
