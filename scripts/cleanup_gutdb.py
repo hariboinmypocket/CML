@@ -484,6 +484,15 @@ def fill_from_ncbi_taxonomy(con: sqlite3.Connection) -> Counter:
         for node in chains.get(taxid, []):
             column = RANK_COLUMN[rank[node]]
             value = ancestor_name.get(node, "")
+            # The dump annotates names published outside the ICNP with their
+            # nomenclatural code, and those siblings sit at the class, order and
+            # family ranks as well as at phylum -- Methylomirabilia (SeqCode),
+            # Saccharimonadales (SeqCode), Obscuribacteraceae (SeqCode). Only
+            # phylum went through normalize_phylum, which strips the code, so
+            # every other rank stored the annotation verbatim and split from the
+            # bare name. Strip it at every rank; normalize_phylum still does the
+            # synonym folding on top for phylum.
+            value = T.strip_nomenclatural_code(value)
             if column == "phylum":
                 value = T.normalize_phylum(value)
             if column == "superkingdom":
