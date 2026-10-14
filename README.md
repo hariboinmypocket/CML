@@ -711,6 +711,62 @@ What changed, since again nothing is deleted:
 - **`scripts/richness_audit.py`** writes `data/richness_audit.csv` and
   `data/richness_arm_imbalance.csv`.
 
+### `value_numeric` held numbers that were not quantities
+
+`sample_attributes.value_numeric` was documented as *"populated only when `value`
+parses as a number ... lets a numeric trait be filtered and aggregated"*. Both
+halves were false.
+
+**A number fabricated from a string that is not one** (434 rows). `unique_id`
+held `'10007539_0'` with `value_numeric = 100075390` -- the underscore dropped
+and the digits run together. Not a parse, and it **collides**: `'1000753_90'`
+reduces to the same number.
+
+**A code, not a quantity** (687 rows, 2 keys). `Antibiotic_in_the_past_month._1_no_2_yes`
+stores 1 and 2 as labels. Averaging labels is meaningless, and the encoding
+**inverts against its neighbour** -- `1` means *no* there, while under
+`Antibiotics` `1` means *yes*. Pooling the two silently flips 343 rows: the same
+family of error as the LDA sign ambiguity this schema already guards against.
+
+Both cleared. 8,048 genuine quantities kept.
+
+**The third class is the interesting one, and it is not a deletion problem.**
+13 keys mix numbers with words, and there the number is *correct* for whichever
+rows have one -- what is missing is the denominator:
+
+| key | numeric | rows | `AVG(value_numeric)` |
+|---|---|---|---|
+| `Stage` | 27 | 150 | **0.0** (real values run I to IVB) |
+| `Antibiotics` | 74 | 518 | 0.85 |
+| `Race` | 131 | 371 | 0.18 |
+| `PhysicalExercise_LastWeek.h.` | 4 | 49 | **0.0** |
+
+The activity keys are the sharpest case. Under
+`PhysicalExercise_LastWeek.h.` the **only point answer is `0`**, given by 4 of 49
+respondents; the other 45 answered `'1-'`, `'1-3'` or `'3+'`. So the mean is
+exactly 0.0 -- not merely incomplete but **anti-correlated with the truth**,
+because the rows carrying a number are precisely the people who did nothing.
+`Cycling_LastWeek.h.` and `Housework_Childcare_LastWeek.h.` are identical in
+shape.
+
+Deleting those zeros would not help -- they are right. This is the same defect as
+absence in the abundance matrix, where the number was never wrong and the
+denominator was missing, so the fix is the same: **expose it**.
+`v_sample_attribute_keys` carries `n_rows`, `n_numeric`, `numeric_fraction`,
+`mixes_numbers_and_words` and `looks_like_an_interval` for all 362 keys, so a
+mean can be read against what it was taken over.
+
+**Still outstanding, and worth knowing before you use it:** antibiotic exposure
+is spread across **8 keys** with three incompatible encodings --
+`Antibiotics` (no/yes/0/1), `Antibiotic_in_the_past_month._1_no_2_yes` (1/2,
+where 1 is *no*), `antibiotic` (No/Yes), `Antibiotics_Last3months`
+(No / "Yes, 2 months ago"), `maternal_antibiotics` (0/1), plus
+`antibiotic_type`, `Antibiotic_start_date` and `Antibiotic_used`. A query for
+antibiotic exposure finds a fraction of the data, and pooling the coded keys
+naively inverts 343 rows. Harmonising 362 source-named keys into a controlled
+vocabulary is a design decision rather than a repair, so it is reported here
+rather than done.
+
 ### `data_type` answered at the wrong granularity, and the stores disagreed on it
 
 Fourth instance, on the column that governs taxonomic resolution. GMrepo records

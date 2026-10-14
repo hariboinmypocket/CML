@@ -268,9 +268,27 @@ CREATE TABLE IF NOT EXISTS sample_attributes (
     -- 289-character clinical course note. Loaders report truncation instead of
     -- silently cutting.
     value VARCHAR(512) NOT NULL,
-    -- Populated only when `value` parses as a number, which is true of 21% of
-    -- them. Lets a numeric trait be filtered and aggregated without casting
-    -- strings, while categorical answers stay in `value` untouched.
+    -- A number you may do arithmetic on -- which is NARROWER than "value parsed
+    -- as a number", and the earlier wording here claimed the looser thing while
+    -- the data broke even that. Two classes were cleared by
+    -- scripts/fix_attribute_numerics.py:
+    --
+    --   434 rows under `unique_id` held '10007539_0' as 100075390, the
+    --   underscore dropped and the digits run together. Not a parse of the
+    --   value, and it collides: '1000753_90' gives the same number.
+    --
+    --   687 rows under two keys whose names spell out their own code mapping
+    --   ('..._1_no_2_yes') stored 1 and 2 as labels. Averaging labels is
+    --   meaningless, and the encoding INVERTS against its neighbour -- 1 is no
+    --   there, 1 is yes under `Antibiotics` -- so pooling them flips 343 rows.
+    --
+    -- 13 keys still MIX numbers with words and are left that way, because the
+    -- number is correct wherever there is one; what is missing is the
+    -- denominator. AVG(value_numeric) over `Stage` is the mean of 27 zeros out
+    -- of 150 rows whose real values run I to IVB, and under
+    -- `Alcohol.drink.week.` the non-numeric values are RANGES, so the numeric
+    -- subset is precisely the respondents who gave a point answer rather than a
+    -- random sample. Read any mean against v_sample_attribute_keys.
     value_numeric DOUBLE NULL,
     PRIMARY KEY (sample_id, attribute),
     KEY ix_sample_attribute (attribute),
@@ -278,6 +296,44 @@ CREATE TABLE IF NOT EXISTS sample_attributes (
     CONSTRAINT fk_sample_attribute_sample FOREIGN KEY (sample_id) REFERENCES samples(id)
         ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Per-key coverage for sample_attributes, so a mean always has its denominator.
+--
+-- 362 keys, and 13 of them mix numbers with words. Without this view
+-- `SELECT AVG(value_numeric) ... WHERE attribute = 'Stage'` returns 0 and looks
+-- like an answer: it is the mean of the 27 rows that happen to hold a numeric
+-- stage out of 150 whose values run I to IVB. numeric_fraction is what tells you
+-- not to trust it. Same shape as absence in the abundance matrix -- the number
+-- was never wrong, the denominator was missing.
+--
+-- `mixes_numbers_and_words` is the flag to filter on. `looks_like_an_interval`
+-- narrows it further to the keys whose non-numeric values are RANGES ('0-1',
+-- '2-4', '3+'), where the numeric subset is biased by construction.
+--
+-- The activity keys show how bad that gets. Under
+-- `PhysicalExercise_LastWeek.h.` the ONLY point answer is 0, given by 4 of 49
+-- respondents; the other 45 answered '1-', '1-3' or '3+'. So
+-- AVG(value_numeric) is exactly 0.0 -- not merely incomplete but anti-correlated
+-- with the truth, because the rows that carry a number are precisely the people
+-- who did nothing. Cycling_LastWeek.h. and Housework_Childcare_LastWeek.h.
+-- are the same shape.
+CREATE OR REPLACE VIEW v_sample_attribute_keys AS
+SELECT
+    a.attribute,
+    COUNT(*)                                   AS n_rows,
+    COUNT(DISTINCT a.sample_id)                AS n_samples,
+    COUNT(DISTINCT a.value)                    AS n_distinct_values,
+    SUM(a.value_numeric IS NOT NULL)           AS n_numeric,
+    ROUND(SUM(a.value_numeric IS NOT NULL) / COUNT(*), 3) AS numeric_fraction,
+    (SUM(a.value_numeric IS NOT NULL) > 0
+     AND SUM(a.value_numeric IS NOT NULL) < COUNT(*)) AS mixes_numbers_and_words,
+    SUM(a.value REGEXP '^[0-9]+(\\.[0-9]+)?[-+]') > 0 AS looks_like_an_interval,
+    MIN(a.value_numeric)                       AS numeric_min,
+    MAX(a.value_numeric)                       AS numeric_max,
+    AVG(a.value_numeric)                       AS numeric_mean
+FROM sample_attributes a
+GROUP BY a.attribute;
+
 
 -- The metabolome axis.
 --

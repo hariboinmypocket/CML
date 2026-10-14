@@ -6,6 +6,7 @@ from gutdb.transform import (
     GRAM,
     NOT_A_PLATFORM,
     derive_study_platform,
+    numeric_value_is_trustworthy,
     OXYGEN,
     SUPERKINGDOM,
     canon_trait,
@@ -396,3 +397,45 @@ class StudyPlatformDerivationTests(unittest.TestCase):
         self.assertIn("", NOT_A_PLATFORM)
         self.assertNotIn("16S", NOT_A_PLATFORM)
         self.assertNotIn("mNGS", NOT_A_PLATFORM)
+
+
+class AttributeNumericTrustTests(unittest.TestCase):
+    """value_numeric must hold a number you can do arithmetic on.
+
+    Two classes broke that while looking fine: a number fabricated from a string
+    that is not one, and a category code whose meaning lives in the key name.
+    """
+
+    def test_a_number_is_kept(self):
+        for attribute, value in (("Creatinine", "1.42"), ("eGFR", "-1.5"),
+                                 ("Brinkman Index", "2400"), ("Timepoint", " 3 ")):
+            self.assertTrue(numeric_value_is_trustworthy(attribute, value),
+                            (attribute, value))
+
+    def test_a_fabricated_number_is_refused(self):
+        """'10007539_0' was stored as 100075390 -- and '1000753_90' collides with it."""
+        self.assertFalse(numeric_value_is_trustworthy("unique_id", "10007539_0"))
+        self.assertFalse(numeric_value_is_trustworthy("unique_id", "1000753_90"))
+
+    def test_an_interval_is_not_a_number(self):
+        for value in ("0-1", "2-4", "3+", "1-", "AADF", "IIIB", ""):
+            self.assertFalse(numeric_value_is_trustworthy("anything", value), value)
+
+    def test_a_code_declared_in_the_key_name_is_refused(self):
+        """1 means NO here and YES under `Antibiotics`; pooling them inverts rows."""
+        for attribute in ("Antibiotic_in_the_past_month._1_no_2_yes",
+                          "X_probiotic_in_the_past_2_weeks_1_no_2_yes",
+                          "smoker_yes_1_no_0"):
+            self.assertFalse(numeric_value_is_trustworthy(attribute, "1"), attribute)
+
+    def test_a_key_merely_mentioning_a_range_is_not_treated_as_coded(self):
+        """'IBS_symptom_severity_1_500' is a scale, not a yes/no code."""
+        self.assertTrue(numeric_value_is_trustworthy("IBS_symptom_severity_1_500",
+                                                     "320"))
+        self.assertTrue(numeric_value_is_trustworthy("Effect_on_life_in_general_0_100",
+                                                     "45"))
+
+    def test_a_plain_number_under_a_mixed_key_is_still_kept(self):
+        """Stage = 0 is correct; what is missing is the denominator, not the value."""
+        self.assertTrue(numeric_value_is_trustworthy("Stage", "0"))
+        self.assertTrue(numeric_value_is_trustworthy("Antibiotics", "1"))

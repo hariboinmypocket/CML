@@ -591,3 +591,44 @@ def derive_study_platform(platforms) -> str:
     if len(distinct) == 1:
         return distinct.pop()
     return "mixed"
+
+
+# --- sample_attributes.value_numeric ----------------------------------------
+#
+# The column's contract is "a number you may do arithmetic on". Two classes of
+# value break it while looking fine:
+#
+#   The number was FABRICATED from a string that is not one. 434 rows under
+#   `unique_id` hold '10007539_0' with value_numeric = 100075390 -- the
+#   underscore was dropped and the digits run together, which can collide two
+#   distinct ids ('10007539_0' and '1000753_90' both give 100075390).
+#
+#   The number is a CODE, not a quantity, and the key name says so:
+#   'Antibiotic_in_the_past_month._1_no_2_yes' stores 1 and 2. Averaging those
+#   is averaging labels, and worse, 1 means NO there while 1 means YES under the
+#   neighbouring `Antibiotics` key -- so pooling the two inverts 343 rows. Same
+#   family of error as the LDA sign ambiguity this schema already guards.
+#
+# A key whose values MIX numbers and words is a third case and is deliberately
+# NOT cleared: the number is correct for the rows that have one. What is missing
+# there is the denominator -- `Stage` holds 0 beside I, IIA and IIIB, so
+# AVG(value_numeric) is the mean of 27 zeros out of 150 rows, which is 0 -- and
+# the fix for a missing denominator is to expose it, exactly as with absence in
+# the abundance matrix. v_sample_attribute_keys reports it per key.
+PLAIN_NUMBER = re.compile(r"^\s*-?\d+(\.\d+)?\s*$")
+# A key name that spells out its own code mapping: '..._1_no_2_yes', 'yes_1_no_0'.
+CODED_IN_NAME = re.compile(r"\d\s*_\s*(?:no|yes)|(?:no|yes)\s*_\s*\d", re.IGNORECASE)
+
+
+def numeric_value_is_trustworthy(attribute: str, value: str) -> bool:
+    """Whether value_numeric may hold a number for this (attribute, value).
+
+    False means the cell should be NULL: either the string is not the number
+    stored against it, or the number is a category code whose meaning lives in
+    the key name rather than on the number line.
+    """
+    if not PLAIN_NUMBER.match(clean_str(value)):
+        return False
+    if CODED_IN_NAME.search(clean_str(attribute)):
+        return False
+    return True
