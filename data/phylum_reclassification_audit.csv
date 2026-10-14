@@ -1,2 +1,1 @@
 store,taxon_id,scientific_name,rank,ncbi_tax_id,stored_phylum,ncbi_phylum,action
-mysql,392297,Candidatus Methylomirabilis,genus,1170227,Methylomirabilota,Methylomirabilota (SeqCode),reported_only

@@ -167,6 +167,12 @@ CREATE TABLE IF NOT EXISTS samples (
     age_years DOUBLE NULL,
     bmi DOUBLE NULL,
     country VARCHAR(100) NULL,
+    -- GMrepo's own QC verdict for the run, '1' passed and '0' failed, copied
+    -- from its QCStatus field. The vocabulary belongs to that source: a sample
+    -- GMrepo never assessed has NULL here, which is why 3,342 rows are empty.
+    -- Do not use it to record provenance or curation tier -- studies.data_quality
+    -- is for that, and a loader that wrote 'curated' here put a word from a
+    -- different axis into a column others filter as a boolean.
     qc_status VARCHAR(100) NULL,
     body_site VARCHAR(100) NULL,
     -- share of reads GMrepo could not assign to a taxon. Recorded rather than
@@ -311,6 +317,31 @@ JOIN studies s ON s.id = c.study_id;
 --
 -- A sample is only usable for supervised per-sample modelling if it has BOTH
 -- covariates (sex/age) AND a taxonomic feature vector in sample_taxon_abundances.
+--
+-- has_features asks only whether n_taxa_profiled is above zero, which is a lower
+-- bar than it sounds. 613 (sample, rank) profiles hold two taxa or fewer: 269
+-- with a single genus, 316 with two genera, 28 with two species. All of them are
+-- faithful to GMrepo, whose own numbers for them sum to exactly 1.0, so these
+-- are reported upstream as complete profiles and there is nothing here that was
+-- lost at load. A one-part composition has a CLR of identically zero, so such a
+-- row is not a feature vector in any usable sense, and gutdb/compositional.py
+-- drops anything under two parts because the transform is undefined there. The
+-- median sample holds 62 genera and the 5th percentile 9.
+--
+-- FILTER ON n_genera_profiled OR n_species_profiled, NEVER ON n_taxa_profiled.
+-- n_taxa_profiled counts rows across every rank at once, so for the 12,566
+-- samples profiled at both genus and species it is a sum of two richnesses and
+-- not the richness of anything. 44 samples are thin at one rank while the sum
+-- looks healthy, and a filter written against the sum keeps them.
+--
+-- Depth is also mostly a STUDY-level property rather than a sample-level one:
+-- six studies holding 516 samples have no sample at all above 15 genera, so
+-- inside them a thin profile is the cohort and not an outlier. That matters
+-- because depth can predict the label on its own -- Neuromyelitis Optica's
+-- entire case arm is one such study at a median of 3 genera against controls at
+-- 45, and richness used alone as the only predictor scores AUC 0.982 there.
+-- v_ml_cohort_summary carries the per-study depth columns and
+-- scripts/richness_audit.py measures the confound per cohort.
 -- Those two are tracked separately here on purpose: demographic completeness and
 -- feature availability are independent gaps in this database, and collapsing them
 -- into a single "ready" flag hides which one is actually blocking a given cohort.
@@ -333,7 +364,19 @@ SELECT
     (s.age_years IS NOT NULL)              AS has_age,
     (s.sex IS NOT NULL AND s.age_years IS NOT NULL) AS has_demographics,
     COALESCE(ab.n_taxa, 0)                 AS n_taxa_profiled,
+    COALESCE(ab.n_genera, 0)               AS n_genera_profiled,
+    COALESCE(ab.n_species, 0)              AS n_species_profiled,
+    -- Richness at the sample's deepest profiled rank, which is the number a
+    -- compositional transform is actually applied over. GREATEST rather than a
+    -- sum: the ranks are separate compositions, each summing to 1 on its own.
+    GREATEST(COALESCE(ab.n_genera, 0),
+             COALESCE(ab.n_species, 0))    AS profile_richness,
     (COALESCE(ab.n_taxa, 0) > 0)           AS has_features,
+    -- Two parts is the mathematical floor, not a quality bar: below it the CLR
+    -- is identically zero. Anything stricter is a modelling choice and is left
+    -- to whoever is modelling.
+    (GREATEST(COALESCE(ab.n_genera, 0),
+              COALESCE(ab.n_species, 0)) >= 2) AS has_transformable_features,
     -- The biological sample, not the sequencing run. A study may sequence one
     -- sample several times, so `samples` can hold two to four rows that are one
     -- piece of biological material: PRJEB28543 profiles each of its samples four
@@ -359,9 +402,13 @@ FROM samples s
 JOIN studies st ON st.id = s.study_id
 LEFT JOIN diseases d ON d.id = s.disease_id
 LEFT JOIN (
-    SELECT sample_id, COUNT(*) AS n_taxa
-    FROM sample_taxon_abundances
-    GROUP BY sample_id
+    SELECT a.sample_id,
+           COUNT(*)                                        AS n_taxa,
+           SUM(t.taxonomic_rank = 'genus')                 AS n_genera,
+           SUM(t.taxonomic_rank = 'species')               AS n_species
+    FROM sample_taxon_abundances a
+    JOIN taxa t ON t.id = a.taxon_id
+    GROUP BY a.sample_id
 ) ab ON ab.sample_id = s.id
 LEFT JOIN (
     SELECT study_id, gmrepo_sample_id, COUNT(*) AS n_runs, MIN(id) AS first_id
@@ -377,6 +424,15 @@ LEFT JOIN (
 -- (a study reports sex/age for everyone or for nobody), so the study is the
 -- correct unit for reasoning about what is recoverable and what must be modelled
 -- as a batch effect.
+--
+-- Taxonomic DEPTH is study-level for the same reason, and the columns for it are
+-- here rather than only per sample because the per-sample view cannot express
+-- the problem. Six studies -- PRJNA1031953, PRJNA832282, PRJDB6133, PRJNA422961,
+-- PRJNA923180, PRJNA889687, 516 samples between them -- contain no sample above
+-- 15 genera, so a per-sample richness filter either keeps all of them or drops
+-- every one, and there is no outlier inside them to catch. feature_depth_status
+-- names that situation: `genus_depth_degenerate` means nothing in the study can
+-- support a genus-level model, whatever the per-sample numbers say.
 CREATE OR REPLACE VIEW v_ml_cohort_summary AS
 SELECT
     st.project_accession,
@@ -390,6 +446,15 @@ SELECT
     SUM(d.name = 'Health')                  AS n_control,
     SUM(d.name <> 'Health')                 AS n_case,
     COUNT(DISTINCT s.disease_id)            AS n_phenotypes,
+    MAX(COALESCE(ab.n_genera, 0))           AS max_genera,
+    ROUND(AVG(COALESCE(ab.n_genera, 0)), 1) AS mean_genera,
+    SUM(COALESCE(ab.n_genera, 0) BETWEEN 1 AND 2) AS n_thin_genus_profiles,
+    CASE
+        WHEN SUM(ab.sample_id IS NOT NULL) = 0 THEN 'no_features'
+        WHEN MAX(COALESCE(ab.n_genera, 0)) = 0 THEN 'no_genus_layer'
+        WHEN MAX(COALESCE(ab.n_genera, 0)) < 15 THEN 'genus_depth_degenerate'
+        ELSE 'ok'
+    END                                     AS feature_depth_status,
     CASE
         WHEN SUM(s.sex IS NOT NULL) = 0 THEN 'no_demographics'
         WHEN SUM(s.sex IS NOT NULL) = COUNT(*) THEN 'full_demographics'
@@ -399,7 +464,11 @@ FROM samples s
 JOIN studies st ON st.id = s.study_id
 LEFT JOIN diseases d ON d.id = s.disease_id
 LEFT JOIN (
-    SELECT DISTINCT sample_id FROM sample_taxon_abundances
+    SELECT a.sample_id,
+           SUM(t.taxonomic_rank = 'genus') AS n_genera
+    FROM sample_taxon_abundances a
+    JOIN taxa t ON t.id = a.taxon_id
+    GROUP BY a.sample_id
 ) ab ON ab.sample_id = s.id
 GROUP BY st.project_accession, st.source_database, st.data_quality;
 

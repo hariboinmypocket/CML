@@ -19,6 +19,14 @@ multiplicatively, then transform. The matrix is written out rather than stored
 because a CLR value only means something relative to the feature set it was
 computed over -- see that module's docstring.
 
+PROFILE DEPTH IS CHECKED BEFORE ANYTHING IS WRITTEN. If the case arm was
+sequenced or classified to a different depth than the controls, richness alone
+separates the arms and the model has nothing to learn. The export prints the AUC
+of richness used as the only predictor, pooled and again within the studies that
+carry both arms, and records both in the .json -- for Neuromyelitis Optica those
+are 0.982 and 0.497, which says the whole apparent signal is pooling a thin case
+study against rich controls. See gutdb/diagnostics.py.
+
 THE ROWS COME FROM MANY STUDIES AND THAT IS A CONFOUNDER, not a detail. A Crohn
 matrix draws on 105 of them, each with its own protocol, sequencing run and
 recruitment, and cohort membership is correlated with the label because a study
@@ -41,6 +49,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from gutdb.compositional import clr_matrix
 from gutdb.config import Settings
 from gutdb.db import connect
+from gutdb.diagnostics import richness_confound
 
 OUT_DIR = Path("data")
 
@@ -65,7 +74,8 @@ def main() -> int:
     cur = conn.cursor()
     cur.execute(
         """SELECT sample_id, phenotype, sex, age_years, bmi, country,
-                  project_accession, data_type
+                  project_accession, data_type, n_genera_profiled,
+                  n_species_profiled
            FROM v_ml_ready_samples
            WHERE ml_ready_deduplicated = 1 AND phenotype IN (%s, 'Health')""",
         (disease,))
@@ -79,7 +89,10 @@ def main() -> int:
     import pandas as pd
     meta = pd.DataFrame(rows, columns=["sample_id", "phenotype", "sex", "age_years",
                                        "bmi", "country", "project_accession",
-                                       "data_type"]).set_index("sample_id")
+                                       "data_type", "n_genera_profiled",
+                                       "n_species_profiled"]).set_index("sample_id")
+    for column in ("n_genera_profiled", "n_species_profiled"):
+        meta[column] = meta[column].astype(int)
     n_case = int((meta["phenotype"] != "Health").sum())
     n_ctrl = int((meta["phenotype"] == "Health").sum())
     print(f"{disease}: {n_case:,} cases, {n_ctrl:,} controls, "
@@ -88,6 +101,11 @@ def main() -> int:
         print("need both arms; nothing to export")
         conn.close()
         return 1
+
+    # Depth check before the transform, because a cohort whose arms differ in
+    # richness produces a high score whatever the features turn out to be.
+    richness_column = f"n_{'genera' if rank == 'genus' else 'species'}_profiled"
+    depth = richness_confound(meta.reset_index(), richness=richness_column)
 
     matrix, provenance = clr_matrix(conn, rank, list(meta.index),
                                     min_prevalence=prevalence)
@@ -116,10 +134,17 @@ def main() -> int:
     per_study = meta.groupby("project_accession")["phenotype"].apply(
         lambda v: float((v != "Health").mean()))
     single_arm = int(((per_study == 0) | (per_study == 1)).sum())
+    lopsided = [d for d in depth["per_study_depth"]
+                if d["depth_ratio"] is not None and d["depth_ratio"] <= 0.5]
     provenance.update({
         "disease": disease, "n_cases": n_case, "n_controls": n_ctrl,
         "studies": int(meta["project_accession"].nunique()),
         "studies_contributing_one_arm_only": single_arm,
+        "richness_auc_pooled": depth["richness_auc_pooled"],
+        "richness_auc_within_study": depth["richness_auc_within_study"],
+        "median_richness_case": depth["median_richness_case"],
+        "median_richness_control": depth["median_richness_control"],
+        "studies_with_lopsided_depth": [d["project_accession"] for d in lopsided],
         "selection": "v_ml_ready_samples.ml_ready_deduplicated = 1",
         "column_order": "metadata, then one CLR column per taxon",
         "warning": ("rows pool multiple studies and study is confounded with the "
@@ -128,6 +153,26 @@ def main() -> int:
     })
     path.with_suffix(".json").write_text(json.dumps(provenance, indent=2) + "\n")
 
+    pooled = depth["richness_auc_pooled"]
+    within = depth["richness_auc_within_study"]
+    print(f"   profile depth: cases median {depth['median_richness_case']:.0f} "
+          f"{rank}, controls {depth['median_richness_control']:.0f}")
+    print(f"   richness alone as the only predictor: pooled AUC "
+          f"{pooled:.3f}" + (f", within study {within:.3f}" if within is not None
+                             else ", within study n/a (no study carries both arms)"))
+    if pooled is not None and pooled >= 0.75:
+        print("   !! depth alone nearly separates these arms. Any score from this "
+              "matrix needs")
+        print("      to be read against that number, not against 0.5.")
+        if within is not None and within < 0.6:
+            print("      Within study it is chance, so the gap is pooling: the case "
+                  "arm comes from")
+            print("      thinner cohorts than the controls, not from a thinner gut.")
+    for d in lopsided:
+        print(f"   !! {d['project_accession']} profiled its own arms to different "
+              f"depths ({d['median_richness_case']:.0f} vs "
+              f"{d['median_richness_control']:.0f}); holding the study out does "
+              f"not remove this.")
     print(f"   taxa kept at prevalence >= {prevalence:.0%}: {provenance['taxa_kept']}")
     print(f"   median mass retained by that filter: "
           f"{provenance['median_mass_retained_by_filter']:.1%}")

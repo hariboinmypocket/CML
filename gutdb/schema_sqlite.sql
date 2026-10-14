@@ -172,6 +172,13 @@ JOIN studies s ON s.id = c.study_id;
 
 -- Per-sample ML readiness: covariates and feature vectors tracked separately,
 -- because demographic completeness and feature availability are independent gaps.
+--
+-- Filter on n_genera_profiled or n_species_profiled, never on n_taxa_profiled:
+-- the latter counts rows across every rank at once, so for a sample profiled at
+-- both genus and species it is a sum of two richnesses rather than the richness
+-- of either. 613 (sample, rank) profiles hold two taxa or fewer, faithfully to
+-- GMrepo, and a CLR over one part is identically zero -- hence
+-- has_transformable_features. See gutdb/schema.sql for the full note.
 DROP VIEW IF EXISTS v_ml_ready_samples;
 CREATE VIEW v_ml_ready_samples AS
 SELECT
@@ -192,19 +199,30 @@ SELECT
     CASE WHEN s.age_years IS NOT NULL THEN 1 ELSE 0 END AS has_age,
     CASE WHEN s.sex IS NOT NULL AND s.age_years IS NOT NULL THEN 1 ELSE 0 END AS has_demographics,
     COALESCE(ab.n_taxa, 0) AS n_taxa_profiled,
+    COALESCE(ab.n_genera, 0) AS n_genera_profiled,
+    COALESCE(ab.n_species, 0) AS n_species_profiled,
+    MAX(COALESCE(ab.n_genera, 0), COALESCE(ab.n_species, 0)) AS profile_richness,
     CASE WHEN COALESCE(ab.n_taxa, 0) > 0 THEN 1 ELSE 0 END AS has_features,
+    CASE WHEN MAX(COALESCE(ab.n_genera, 0), COALESCE(ab.n_species, 0)) >= 2
+              THEN 1 ELSE 0 END AS has_transformable_features,
     CASE WHEN s.sex IS NOT NULL AND s.age_years IS NOT NULL
               AND COALESCE(ab.n_taxa, 0) > 0 THEN 1 ELSE 0 END AS ml_ready
 FROM samples s
 JOIN studies st ON st.id = s.study_id
 LEFT JOIN diseases d ON d.id = s.disease_id
 LEFT JOIN (
-    SELECT sample_id, COUNT(*) AS n_taxa
-    FROM sample_taxon_abundances
-    GROUP BY sample_id
+    SELECT a.sample_id,
+           COUNT(*) AS n_taxa,
+           SUM(CASE WHEN t.taxonomic_rank = 'genus' THEN 1 ELSE 0 END) AS n_genera,
+           SUM(CASE WHEN t.taxonomic_rank = 'species' THEN 1 ELSE 0 END) AS n_species
+    FROM sample_taxon_abundances a
+    JOIN taxa t ON t.id = a.taxon_id
+    GROUP BY a.sample_id
 ) ab ON ab.sample_id = s.id;
 
 -- Study-level rollup: demographic missingness here is study-level, not random.
+-- Taxonomic depth is study-level too: six studies holding 516 profiled samples
+-- have no sample above 15 genera, which no per-sample filter can express.
 DROP VIEW IF EXISTS v_ml_cohort_summary;
 CREATE VIEW v_ml_cohort_summary AS
 SELECT
@@ -219,6 +237,16 @@ SELECT
     SUM(CASE WHEN d.name = 'Health' THEN 1 ELSE 0 END) AS n_control,
     SUM(CASE WHEN d.name <> 'Health' THEN 1 ELSE 0 END) AS n_case,
     COUNT(DISTINCT s.disease_id) AS n_phenotypes,
+    MAX(COALESCE(ab.n_genera, 0)) AS max_genera,
+    ROUND(AVG(COALESCE(ab.n_genera, 0)), 1) AS mean_genera,
+    SUM(CASE WHEN COALESCE(ab.n_genera, 0) BETWEEN 1 AND 2 THEN 1 ELSE 0 END)
+        AS n_thin_genus_profiles,
+    CASE
+        WHEN SUM(CASE WHEN ab.sample_id IS NOT NULL THEN 1 ELSE 0 END) = 0 THEN 'no_features'
+        WHEN MAX(COALESCE(ab.n_genera, 0)) = 0 THEN 'no_genus_layer'
+        WHEN MAX(COALESCE(ab.n_genera, 0)) < 15 THEN 'genus_depth_degenerate'
+        ELSE 'ok'
+    END AS feature_depth_status,
     CASE
         WHEN SUM(CASE WHEN s.sex IS NOT NULL THEN 1 ELSE 0 END) = 0 THEN 'no_demographics'
         WHEN SUM(CASE WHEN s.sex IS NOT NULL THEN 1 ELSE 0 END) = COUNT(*) THEN 'full_demographics'
@@ -228,7 +256,11 @@ FROM samples s
 JOIN studies st ON st.id = s.study_id
 LEFT JOIN diseases d ON d.id = s.disease_id
 LEFT JOIN (
-    SELECT DISTINCT sample_id FROM sample_taxon_abundances
+    SELECT a.sample_id,
+           SUM(CASE WHEN t.taxonomic_rank = 'genus' THEN 1 ELSE 0 END) AS n_genera
+    FROM sample_taxon_abundances a
+    JOIN taxa t ON t.id = a.taxon_id
+    GROUP BY a.sample_id
 ) ab ON ab.sample_id = s.id
 GROUP BY st.project_accession, st.source_database, st.data_quality;
 

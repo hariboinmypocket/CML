@@ -12,6 +12,7 @@ from gutdb.transform import (
     extract_species_epithet,
     normalize_genus,
     normalize_phylum,
+    resolve_effect_type,
     strip_nomenclatural_code,
     normalize_platform,
     parse_scientific_name,
@@ -230,6 +231,31 @@ class NormalizePhylumTests(unittest.TestCase):
         self.assertEqual(normalize_phylum("Firmicutes"), "Firmicutes")
         self.assertEqual(normalize_phylum(""), "")
         self.assertEqual(normalize_phylum(None), "")
+
+
+class ResolveEffectTypeTests(unittest.TestCase):
+    """effect_type says WHAT the number is, not how it was produced."""
+
+    def test_a_declared_method_becomes_the_statistic_it_produces(self):
+        self.assertEqual(resolve_effect_type("LEfSe", 4.31), "LDA")
+
+    def test_a_declared_method_with_no_score_is_reported(self):
+        """124 of the 125 rows that carried effect_type 'LEfSe' had no score.
+
+        A direction with no magnitude is exactly what 'reported' already means
+        for the other rows loaded from these same literature files.
+        """
+        self.assertEqual(resolve_effect_type("LEfSe", None), "reported")
+
+    def test_real_effect_types_pass_through(self):
+        self.assertEqual(resolve_effect_type("log2_fold_change", 1.2), "log2_fold_change")
+        self.assertEqual(resolve_effect_type("q_value", None), "q_value")
+        self.assertEqual(resolve_effect_type("reported", None), "reported")
+
+    def test_nothing_declared_defaults_to_lda(self):
+        """GMrepo supplies LDA scores and declares no effect_type."""
+        self.assertEqual(resolve_effect_type("", None), "LDA")
+        self.assertEqual(resolve_effect_type(None, 2.0), "LDA")
 
 
 if __name__ == "__main__":

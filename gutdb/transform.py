@@ -354,6 +354,32 @@ def nullable_float(value: Any) -> float | None:
         return None
 
 
+# Methods the literature marker files name in their own `effect_type` column.
+# That column answers "how was this obtained", which is not what
+# taxon_disease_associations.effect_type records -- that says WHAT the number in
+# effect_size is. Copying it verbatim put 125 rows under effect_type 'LEfSe', a
+# method standing beside LDA and log2_fold_change, and 124 of them had no effect
+# size at all. The method is not lost by fixing this: phenotype_comparisons.method
+# already carries it, and scripts/cleanup_gutdb.py reads it from the same column
+# for exactly that purpose.
+EFFECT_TYPE_METHODS = frozenset({"lefse", "lefse analysis", "linear discriminant analysis"})
+
+
+def resolve_effect_type(declared: Any, effect_size: Any = None) -> str:
+    """What the stored number is, rather than how it was produced.
+
+    A declared method becomes 'LDA' when a score came with it and 'reported'
+    when none did -- which is what the rows loaded from these same files already
+    use for a direction with no magnitude.
+    """
+    text = clean_str(declared).casefold()
+    if not text:
+        return "LDA"
+    if text in EFFECT_TYPE_METHODS:
+        return "LDA" if effect_size is not None else "reported"
+    return clean_str(declared)
+
+
 def quantize_effect_size(value: Any) -> float | None:
     """Quantize an effect size to two decimals: round positives, floor negatives.
 

@@ -46,10 +46,35 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from gutdb.config import Settings
 from gutdb.db import connect
-from gutdb.transform import normalize_phylum
+from gutdb.transform import normalize_phylum, strip_nomenclatural_code
 
 DRY_RUN = "--apply" not in sys.argv
 SQLITE = os.environ.get("GUTDB_SQLITE", "gut_microbiome.sqlite")
+
+# NCBI appends the nomenclatural code to names published outside the ICNP, and it
+# lands on every rank rather than just the phylum, so the strip is applied across
+# the lineage. Doing it here rather than only in the backfill means a store that
+# was populated before strip_nomenclatural_code existed gets cleaned too -- the
+# SQLite mirror held 22 such values after MySQL had been fixed.
+LINEAGE_COLUMNS = ("superkingdom", "phylum", "class_name", "order_name", "family")
+
+
+def strip_annotations(label: str, cur, placeholder: str) -> int:
+    """Remove (SeqCode)/(ICNP) annotations from every lineage rank."""
+    cleaned = 0
+    for column in LINEAGE_COLUMNS:
+        cur.execute(f"SELECT DISTINCT {column} FROM taxa "
+                    f"WHERE {column} LIKE '%(SeqCode)%' OR {column} LIKE '%(ICNP)%'")
+        for (value,) in cur.fetchall():
+            tidy = strip_nomenclatural_code(value)
+            if not tidy or tidy == value:
+                continue
+            print(f"   {label}: {column} {value!r} -> {tidy!r}")
+            if not DRY_RUN:
+                cur.execute(f"UPDATE taxa SET {column} = {placeholder} "
+                            f"WHERE {column} = {placeholder}", (tidy, value))
+                cleaned += cur.rowcount
+    return cleaned
 
 
 def fold_store(label: str, cur, placeholder: str) -> int:
@@ -88,13 +113,13 @@ def main() -> int:
         if folded and folded != phylum:
             changes.append((phylum, folded, n))
 
-    if not changes:
-        print("every stored phylum is already the classic name; nothing to fold")
-        conn.close()
-        return 0
-
+    # An early return here would skip the annotation strip and the mirror, which
+    # is how the SQLite store kept 22 (SeqCode) values after MySQL was clean.
     counts = dict(stored)
-    print(f"{'stored name':26} {'folds to':24} {'rows':>6}  joins an existing group of")
+    if not changes:
+        print("mysql: every stored phylum is already the classic name")
+    else:
+        print(f"{'stored name':26} {'folds to':24} {'rows':>6}  joins an existing group of")
     total = 0
     for old, new, n in sorted(changes, key=lambda c: -c[2]):
         total += n
@@ -106,28 +131,36 @@ def main() -> int:
     print(f"{merged} of them merge into a group that already exists, which is the "
           f"split being repaired")
 
-    if DRY_RUN:
-        print("\n*** DRY RUN - nothing written. Re-run with --apply ***")
-        conn.close()
-        return 0
-
     applied: Counter = Counter()
-    for old, new, _ in changes:
-        cur.execute("UPDATE taxa SET phylum = %s WHERE phylum = %s", (new, old))
-        applied[old] = cur.rowcount
-    conn.commit()
-    print(f"\nmysql: updated {sum(applied.values())} rows")
+    if not DRY_RUN:
+        for old, new, _ in changes:
+            cur.execute("UPDATE taxa SET phylum = %s WHERE phylum = %s", (new, old))
+            applied[old] = cur.rowcount
+        conn.commit()
+        print(f"\nmysql: updated {sum(applied.values())} rows")
+
+    print("\nnomenclatural annotations:")
+    n = strip_annotations("mysql", cur, "%s")
+    if not DRY_RUN:
+        conn.commit()
+        print(f"   mysql: cleaned {n} rows")
 
     if Path(SQLITE).exists():
         print("\nsqlite mirror:")
         sq = sqlite3.connect(SQLITE)
-        n = fold_store("sqlite", sq.cursor(), "?")
+        sc = sq.cursor()
+        n = fold_store("sqlite", sc, "?") + strip_annotations("sqlite", sc, "?")
         if not DRY_RUN:
             sq.commit()
             print(f"   sqlite: updated {n} rows")
         sq.close()
     else:
         print(f"\nsqlite mirror {SQLITE} not present; skipped")
+
+    if DRY_RUN:
+        print("\n*** DRY RUN - nothing written. Re-run with --apply ***")
+        conn.close()
+        return 0
 
     cur.execute("""SELECT phylum, COUNT(*) FROM taxa
                    WHERE phylum IS NOT NULL AND phylum <> '' GROUP BY phylum""")
