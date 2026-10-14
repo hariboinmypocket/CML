@@ -2209,7 +2209,6 @@ Faecalibacillus faecis,"Colitis, Ulcerative",D003093,2,2,vs_health,2.0,0.0,2.0,0
 Faecalibacillus faecis,Crohn Disease,D003424,2,2,vs_health,2.0,0.0,2.0,0.0,0.0,depleted,1.0,0,2.905,1
 Lachnospiraceae bacterium om04-12bh,Crohn Disease,D003424,2,2,vs_health,2.0,0.0,2.0,0.0,0.0,depleted,1.0,0,2.355,1
 Lachnospiraceae bacterium om04-12bh,Colorectal Neoplasms,D015179,2,2,vs_health,2.0,0.0,2.0,0.0,0.0,depleted,1.0,0,2.23,1
-Massilimicrobiota,"Kidney Failure, Chronic",D007676,2,2,vs_health,2.0,2.0,0.0,0.0,0.0,enriched,1.0,0,2.415,1
 Merdimonas,"Kidney Failure, Chronic",D007676,2,2,vs_health,2.0,2.0,0.0,0.0,0.0,enriched,1.0,0,2.515,1
 Merdimonas faecis,"Kidney Failure, Chronic",D007676,2,2,vs_health,2.0,2.0,0.0,0.0,0.0,enriched,1.0,0,2.475,1
 Oscillospiraceae bacterium,Parkinson Disease,D010300,2,2,vs_health,2.0,2.0,0.0,0.0,0.0,enriched,1.0,0,3.345,1
@@ -2284,3 +2283,4 @@ Holdemania sp. 1001095h_141210_f2,Crohn Disease,D003424,2,2,mixed,1.0,1.0,0.0,0.
 Clostridium sp. 1001270j_160509_d11,Colorectal Neoplasms,D015179,2,2,vs_health,2.0,0.0,2.0,0.0,0.0,depleted,1.0,0,2.945,1
 Clostridium sp. 1001270j_160509_d11,COVID-19,D000086382,2,2,vs_health,2.0,0.0,2.0,0.0,0.0,depleted,1.0,0,2.45,1
 Xylanibacter,Clostridium Infections,D003015,2,2,vs_health,2.0,0.0,2.0,0.0,0.0,depleted,1.0,0,,1
+Massiliimicrobium,"Kidney Failure, Chronic",D007676,2,2,vs_health,2.0,2.0,0.0,0.0,0.0,enriched,1.0,0,2.415,1

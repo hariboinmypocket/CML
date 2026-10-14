@@ -100,6 +100,25 @@ OVERRIDES: dict[int, dict] = {
     29361: {"action": "merge", "note": "C. nexile -> Tyzzerella -> Faecalimonas nexilis"},
     2093823: {"action": "merge", "note": "'Candidatus' is a status prefix, not a name"},
     33039: {"action": "merge", "note": "genuine 2020 Ruminococcus -> Mediterraneibacter move"},
+    # Seven groups created on 2026-10-07 by scripts/load_muller2022.py, which
+    # resolved existing genera by name and so missed rows holding the same tax ID
+    # under a different spelling. Four merge on the automatic rule; these three
+    # were flagged because the names differ by more than formatting, and NCBI
+    # settles each of them.
+    #
+    # Both stored names are synonyms here: the dump's scientific name for 1924110
+    # is Massiliimicrobium, which this database does not have under any spelling,
+    # so the survivor is renamed rather than picked.
+    1924110: {"action": "merge",
+              "note": "Massilimicrobiota and Massiliomicrobiota are both synonyms "
+                      "of Massiliimicrobium (corrig. Tall et al. 2026); the survivor "
+                      "is renamed to it by the usual rule"},
+    # Allofournierella is the dump's scientific name, Fournierella its synonym --
+    # one of the Allo- prefixes being issued to break genus homonyms.
+    1940255: {"action": "merge", "note": "Fournierella is a synonym of Allofournierella "
+                                         "(Oren and Molinari Novoa 2024)"},
+    2895461: {"action": "merge", "note": "Massilimaliae is a synonym of Massiliimalia "
+                                         "(Afouda et al. 2019)"},
 }
 
 def norm(name: str) -> str:

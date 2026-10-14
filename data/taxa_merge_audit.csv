@@ -1,12 +1,9 @@
 taxid,action,taxon_id,scientific_name,rank,source,assoc,abund,into_taxon_id,into_name,rename_to,note
-29348,merged_away,80747,Clostridium spiroforme,species,PubMed,1,0,8524,Thomasclavelia spiroformis,,
-33038,merged_away,2673644,Ruminococcus gnavus,species,PubMed,1,0,3826,Mediterraneibacter gnavus,,
-39485,merged_away,2673225,Eubacterium eligens,species,MicrobiomeHD,1,0,1203,Lachnospira eligens,,
-39488,merged_away,1086,Eubacterium hallii,species,MiMeDB,3,0,683,Anaerobutyricum hallii,,
-40520,merged_away,80764,Ruminococcus obeum,species,PubMed,1,0,66,Blautia obeum,,
-45851,merged_away,2673649,Butyrivibrio crossotus,species,PubMed,1,0,10542,Eshraghiella crossota,,
-208479,merged_away,80743,Clostridium bolteae,species,PubMed,1,0,1016,Enterocloster bolteae,,
-310298,merged_away,2731,Bacteroides phocaeicola coprocola,species,MiMeDB,0,0,781,Bacteroides coprocola,Phocaeicola coprocola,
-310298,rename_canonical:skipped:name_taken_by_1563,781,Bacteroides coprocola,species,MiMeDB,1,0,781,Phocaeicola coprocola,Phocaeicola coprocola,
-333367,merged_away,80741,Clostridium asparagiforme,species,PubMed,1,0,1014,Enterocloster asparagiformis,,
-358743,merged_away,316,Clostridium citroniae,species,MiMeDB,1,0,1018,Enterocloster citroniae,,
+33926,merged_away,2673999,Phytoplasma,genus,MullerMM,0,697,298860,Candidatus Phytoplasma,,
+1470349,merged_away,2674023,Stoquefichus,genus,MullerMM,0,1031,8935,Candidatus Stoquefichus,,
+1924110,merged_away,10056,Massilimicrobiota,genus,GMrepo,8,1269,2673977,Massiliomicrobiota,Massiliimicrobium,Massilimicrobiota and Massiliomicrobiota are both synonyms of Massiliimicrobium (corrig. Tall et al. 2026); the survivor is renamed to it by the usual rule
+1924110,rename_canonical:renamed,2673977,Massiliomicrobiota,genus,MullerMM,0,1347,2673977,Massiliimicrobium,Massiliimicrobium,Massilimicrobiota and Massiliomicrobiota are both synonyms of Massiliimicrobium (corrig. Tall et al. 2026); the survivor is renamed to it by the usual rule
+1940255,merged_away,2673961,Fournierella,genus,MullerMM,0,1390,7734,Allofournierella,,Fournierella is a synonym of Allofournierella (Oren and Molinari Novoa 2024)
+2126544,merged_away,2673985,Neobittarella,genus,MullerMM,0,1292,104393,Neobittarella (ex bilen et al. 2018),,
+2508948,merged_away,2673917,Borkfalkia,genus,MullerMM,0,1325,10450,Candidatus Borkfalkia,,
+2895461,merged_away,2673976,Massilimaliae,genus,MullerMM,0,1363,10054,Massiliimalia,,Massilimaliae is a synonym of Massiliimalia (Afouda et al. 2019)

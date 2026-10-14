@@ -369,15 +369,22 @@ def ensure_genera(cur, needed: set[str], taxdump) -> dict[str, int]:
     Pseudomonadota beside the 1,365 under Firmicutes, splitting seven phyla in
     two and quietly breaking any Firmicutes/Bacteroidetes ratio.
     """
-    cur.execute("SELECT LOWER(scientific_name), id FROM taxa WHERE taxonomic_rank = 'genus'")
-    have = {name: tid for name, tid in cur.fetchall()}
-    resolved = {g: have[g.lower()] for g in needed if g.lower() in have}
-    missing = sorted(g for g in needed if g.lower() not in have)
+    cur.execute("""SELECT LOWER(scientific_name), id, ncbi_tax_id FROM taxa
+                   WHERE taxonomic_rank = 'genus'""")
+    by_name: dict[str, int] = {}
+    by_taxid: dict[int, int] = {}
+    for name, tid, taxid in cur.fetchall():
+        by_name[name] = tid
+        if taxid is not None:
+            by_taxid.setdefault(int(taxid), tid)
+
+    resolved = {g: by_name[g.lower()] for g in needed if g.lower() in by_name}
+    missing = sorted(g for g in needed if g.lower() not in by_name)
     if not missing:
         return resolved
 
     name_to_taxid, lineages = taxdump
-    created = skipped = 0
+    created = skipped = reused = 0
     for genus in missing:
         candidates = name_to_taxid.get(genus.casefold(), [])
         pick = None
@@ -391,6 +398,19 @@ def ensure_genera(cur, needed: set[str], taxdump) -> dict[str, int]:
             skipped += 1
             continue
         taxid, lineage = pick
+        # A name miss is not proof the organism is absent. GMrepo files this
+        # genus as "Candidatus Stoquefichus" where GTDB writes "Stoquefichus",
+        # as "Allofournierella" where GTDB still writes "Fournierella", and as
+        # "Massilimicrobiota" against "Massiliomicrobiota" -- same NCBI node,
+        # different spelling. Matching on the name alone created a second row
+        # for seven genera on 2026-10-07 and split their abundance across the
+        # pair, 8,367 rows of it, which no invariant catches because both rows
+        # are individually consistent. The tax ID is the identity.
+        existing = by_taxid.get(int(taxid))
+        if existing is not None:
+            resolved[genus] = existing
+            reused += 1
+            continue
         if not DRY_RUN:
             cur.execute(
                 """INSERT INTO taxa (superkingdom, phylum, class_name, order_name,
@@ -406,7 +426,8 @@ def ensure_genera(cur, needed: set[str], taxdump) -> dict[str, int]:
         else:
             resolved[genus] = -1
         created += 1
-    print(f"   genus rows: {len(resolved) - created} existing, {created} created"
+    print(f"   genus rows: {len(resolved) - created - reused} matched by name, "
+          f"{reused} matched by tax ID under another spelling, {created} created"
           + (f", {skipped} unresolvable in the dump and skipped" if skipped else ""))
     return resolved
 
