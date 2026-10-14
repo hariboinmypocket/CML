@@ -1,0 +1,139 @@
+#!/bin/sh
+# Run the project's integrity checks, then mirror the pushed commits to main.
+#
+# Installed into the shared hooks directory by scripts/hooks/install.sh, so it
+# applies to every worktree of this repository.
+#
+# Behaviour, in order:
+#   1. Run `populate_database.py validate` and `normalize_reclassified_phyla.py`.
+#      If either reports a non-zero integrity counter the whole push is aborted
+#      -- nothing reaches the branch or main.
+#   2. If origin/main can fast-forward to the commits being pushed, push them to
+#      main as well.
+#   3. If it cannot, leave main untouched, say so, and let the branch push
+#      proceed. Nothing is ever force-pushed and no merge is started.
+#
+# Set GUTDB_NO_MIRROR=1 to skip the mirroring but still run the checks, or
+# GUTDB_SKIP_HOOK=1 to skip the hook entirely (e.g. pushing a throwaway branch).
+set -u
+
+# The mirroring push below re-enters this hook; bail out immediately when it does.
+[ -n "${GUTDB_MIRROR_PUSH:-}" ] && exit 0
+[ -n "${GUTDB_SKIP_HOOK:-}" ] && { echo "pre-push: skipped (GUTDB_SKIP_HOOK)"; exit 0; }
+
+REMOTE="$1"
+ROOT="$(git rev-parse --show-toplevel)"
+# First entry of `git worktree list` is the main working tree, which is where the
+# gitignored prerequisites (.env, taxdump/) live.
+MAIN_WT="$(git worktree list --porcelain | awk '/^worktree /{print $2; exit}')"
+
+# The checks need .env (MySQL credentials) and the NCBI dump. Prefer this
+# worktree so a branch's own changes to the scripts are what gets tested, and
+# fall back to the main working tree for whatever is only there.
+if [ -f "$ROOT/.env" ]; then RUNDIR="$ROOT"; else RUNDIR="$MAIN_WT"; fi
+if [ -d "$ROOT/taxdump" ]; then TAXDUMP="$ROOT/taxdump"; else TAXDUMP="$MAIN_WT/taxdump"; fi
+
+PY="${GUTDB_PYTHON:-python3}"
+
+echo "pre-push: running project checks before mirroring to main..."
+[ "$RUNDIR" = "$ROOT" ] || echo "  (checks run from $RUNDIR -- no .env in this worktree)"
+
+# --- check 1: validate ------------------------------------------------------
+VALIDATE_OUT="$(cd "$RUNDIR" && "$PY" populate_database.py validate 2>&1)" || {
+    echo "  validate: FAILED to run"
+    echo "$VALIDATE_OUT" | sed 's/^/    /'
+    exit 1
+}
+# Counters that must read zero. Values are printed with thousands separators.
+BAD=""
+for key in taxa_missing_genus orphan_associations orphan_abundances \
+           abundance_rank_groups_not_summing_to_1; do
+    value="$(printf '%s\n' "$VALIDATE_OUT" | awk -v k="$key:" '$1==k {gsub(/,/,"",$2); print $2}')"
+    if [ -z "$value" ]; then
+        echo "  validate: counter '$key' missing from output"
+        exit 1
+    fi
+    [ "$value" = "0" ] || BAD="$BAD $key=$value"
+done
+if [ -n "$BAD" ]; then
+    echo "  validate: NOT clean -$BAD"
+    echo "pre-push: aborted. Nothing was pushed."
+    exit 1
+fi
+echo "  validate: clean"
+
+# --- check 2: phylum reconciliation (dry run, writes nothing) ---------------
+PHYLUM_OUT="$(cd "$RUNDIR" && GUTDB_TAXDUMP="$TAXDUMP" \
+    "$PY" scripts/normalize_reclassified_phyla.py 2>&1)" || {
+    echo "  phylum check: FAILED to run"
+    echo "$PHYLUM_OUT" | sed 's/^/    /'
+    exit 1
+}
+# One line per store; every one of them must be zero.
+UNAPPROVED="$(printf '%s\n' "$PHYLUM_OUT" \
+    | awk '$1=="disagrees_unapproved" {gsub(/,/,"",$2); s+=$2} END {print s+0}')"
+if ! printf '%s\n' "$PHYLUM_OUT" | grep -q 'disagrees_unapproved'; then
+    echo "  phylum check: no 'disagrees_unapproved' line in output"
+    exit 1
+fi
+if [ "$UNAPPROVED" != "0" ]; then
+    echo "  phylum disagreements: $UNAPPROVED unapproved"
+    printf '%s\n' "$PHYLUM_OUT" | sed -n '/unapproved disagreements/,$p' | sed 's/^/    /'
+    echo "pre-push: aborted. Nothing was pushed."
+    exit 1
+fi
+echo "  phylum disagreements: 0"
+
+# --- mirror to main ---------------------------------------------------------
+# stdin: <local ref> <local sha> <remote ref> <remote sha>, one line per ref.
+ZERO="0000000000000000000000000000000000000000"
+MIRROR_SHA=""
+MIRROR_REF=""
+while read -r local_ref local_sha remote_ref remote_sha; do
+    [ -z "${local_ref:-}" ] && continue
+    # A deletion has no local commit to mirror.
+    [ "$local_sha" = "$ZERO" ] && continue
+    # Pushing main itself needs no mirroring.
+    [ "$remote_ref" = "refs/heads/main" ] && continue
+    MIRROR_SHA="$local_sha"
+    MIRROR_REF="$local_ref"
+done
+
+echo "  -> pushing $(git rev-parse --abbrev-ref HEAD)"
+
+if [ -z "$MIRROR_SHA" ]; then
+    echo "  -> nothing to mirror to main"
+    exit 0
+fi
+if [ -n "${GUTDB_NO_MIRROR:-}" ]; then
+    echo "  -> mirroring skipped (GUTDB_NO_MIRROR)"
+    exit 0
+fi
+
+git fetch --quiet "$REMOTE" main 2>/dev/null || true
+MAIN_REMOTE="$(git rev-parse --verify --quiet FETCH_HEAD || true)"
+if [ -z "$MAIN_REMOTE" ]; then
+    # No main on the remote yet: the first push creates it.
+    echo "  -> pushing to main (creating it on $REMOTE)"
+elif git merge-base --is-ancestor "$MAIN_REMOTE" "$MIRROR_SHA"; then
+    if [ "$MAIN_REMOTE" = "$MIRROR_SHA" ]; then
+        echo "  -> main already up to date"
+        exit 0
+    fi
+    echo "  -> pushing to main (fast-forward)"
+else
+    AHEAD="$(git rev-list --count "$MIRROR_SHA".."$MAIN_REMOTE" 2>/dev/null || echo '?')"
+    echo "  -> pushing to main ... REFUSED"
+    echo "     main has $AHEAD commit(s) this branch lacks."
+    echo "     Merge the base branch in, then push again."
+    echo "     (your branch push proceeds; main is untouched)"
+    exit 0
+fi
+
+if GUTDB_MIRROR_PUSH=1 git push --quiet "$REMOTE" "$MIRROR_SHA":refs/heads/main; then
+    echo "     main -> $(git rev-parse --short "$MIRROR_SHA")"
+else
+    echo "  -> pushing to main FAILED; main is untouched."
+    echo "     (your branch push proceeds)"
+fi
+exit 0

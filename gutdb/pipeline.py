@@ -57,6 +57,7 @@ from .transform import (
     nullable_int,
     parse_scientific_name,
     quantize_effect_size,
+    resolve_effect_type,
     resolve_source_binomial,
 )
 
@@ -731,7 +732,8 @@ def load_associations(
                 WHERE taxon_id = %s AND disease_id = %s AND comparison_id = %s
                     AND effect_type = %s
                 """,
-                (taxon_id, disease_id, comparison_id, first_value(row, "effect_type") or "LDA"),
+                (taxon_id, disease_id, comparison_id,
+                 resolve_effect_type(first_value(row, "effect_type"), lda)),
             )
             existed = cursor.fetchone() is not None
             cursor.execute(
@@ -749,7 +751,7 @@ def load_associations(
                 """,
                 (
                     taxon_id, disease_id, comparison_id, direction,
-                    first_value(row, "effect_type") or "LDA", lda,
+                    resolve_effect_type(first_value(row, "effect_type"), lda), lda,
                     # The hand-curated marker files carry these and they were
                     # being dropped: 59 p values and 42 q values across the 15
                     # files. The columns existed only after p_value/q_value were

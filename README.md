@@ -603,6 +603,144 @@ most diseases that is three to five. Reporting a random-split AUC from this
 database overstates what the model would do on a new cohort by about 0.16 on
 average, and by more than 0.3 for the two diseases that look most impressive.
 
+### The 269 one-genus profiles are faithful, and still unusable
+
+A sweep for degenerate data finds 269 (sample, rank) groups holding exactly one
+taxon at relative abundance 1.0, all genus-rank and all from GMrepo. The obvious
+reading is a loading bug that dropped the rest of the profile. **It is not.**
+Checked against `data/gmrepo_all_abundances.csv`, the source export gives
+**exactly one row for all 210 of them it contains** -- the database is faithful,
+and the degeneracy is upstream.
+
+What they are: samples where classification largely failed. Their mean
+`unclassified_fraction` is **0.64** against **0.20** database-wide, 190 of the
+269 are above 0.5 and 63 above 0.9. GMrepo assigned the one genus it could and
+the renormalization to sum-to-1 made it 100%. All 269 carry `qc_status = '1'`,
+so GMrepo's own QC does not flag them. The lone survivor is often *Bivalvulida*
+(82 of 269), the myxozoan parasite, then *Bifidobacterium* (41) and
+*Methanobrevibacter* (24).
+
+So nothing is deleted -- the rows record what the source says. The problem is
+that they reach a model. `ml_ready` asks only whether `n_taxa_profiled` exceeds
+zero, so **57 one-genus samples sit inside the deduplicated ML cohort**, and a
+one-part composition has a **CLR of identically zero**: the part *is* the
+geometric mean, so the value carries no information at all regardless of the
+abundance.
+
+`clr_matrix` now takes `min_taxa_present`, defaulting to **2** -- a mathematical
+floor rather than a quality judgement, since the transform is undefined below it.
+The Crohn export drops 50 rows to it and records the count in its provenance
+JSON. Raising it further is a modelling choice and is left to the caller; for
+scale, the median sample holds 62 genera and the 5th percentile 9.
+
+### The 344 two-taxon profiles are a different problem wearing the same clothes
+
+Widening the sweep to profiles holding **two taxa or fewer** gives 613: the 269
+single-genus ones, 316 with two genera, 28 with two species. Every one of the
+612 that appears in the GMrepo CSVs matches the source **row for row**, and
+GMrepo's own abundances for them sum to exactly **1.0** -- so these are reported
+upstream as complete profiles, not truncated ones. (Three apparent mismatches in
+PRJNA769052 are the documented genus-layer repair: `[Clostridium] methylpentosum`
+and `[Bacteroides] pectinophilus` are binomials GMrepo files under genus, and
+`scripts/fix_genus_layer_purity.py` repointed them to the parent genus the sample
+already held.)
+
+But the explanation that fits the 269 does **not** fit these. The two-taxon
+cohort's mean `unclassified_fraction` is **0.27** against 0.20 database-wide --
+close to normal. Classification did not fail. What is actually going on is that
+**depth is a property of the study, not of the sample**:
+
+| study | samples | median genera | max genera |
+|---|---|---|---|
+| PRJNA1031953 | 101 | 1 | 4 |
+| PRJNA832282 | 82 | 2 | 6 |
+| PRJDB6133 | 58 | 3 | 7 |
+| PRJNA422961 | 118 | 3 | 9 |
+| PRJNA923180 | 27 | 3 | 7 |
+| PRJNA889687 | 130 | 3 | 12 |
+
+Six studies, **516 profiled samples, in which no sample reaches 15 genera**. A
+per-sample filter cannot express this: inside these studies a thin profile is not
+an outlier, it is the cohort.
+
+**The harm is a confound that reads as a result.** When a disease is carried by
+one thin study while its controls are pooled from a hundred rich ones, profile
+depth predicts the label by itself. Neuromyelitis Optica is the clean case --
+its whole case arm is PRJNA422961 at a median of 3 genera against controls at 45:
+
+| predictor | AUC |
+|---|---|
+| 130 CLR genus features, 5-fold random split | **0.995** |
+| profile richness alone, one integer, pooled | **0.982** |
+| profile richness alone, **within study** | **0.497** |
+
+The classifier is a richness detector. And the within-study figure is the one
+that names the cause: PRJNA422961's own controls are just as thin as its cases,
+so the gap is **pooling**, not a thinner gut. Eight cohorts score 0.75 or better
+on richness alone, and **six of those have a single-study case arm** -- which is
+exactly the shape `loso_audit.py` declines to score, because leave-one-study-out
+needs a held-out study carrying both arms. Their random-split numbers were never
+challenged by anything.
+
+Two cases read differently, and the audit does not collapse them:
+
+- **PRJNA788674** (Caliciviridae) holds 31 cases at 15 genera against its own 25
+  controls at 30, and the within-study AUC stays at **0.873**. A collapse of gut
+  diversity in acute norovirus is documented, so a within-study gap is evidence.
+- **PRJNA769052** (COVID-19) holds 37 cases at a median of **2** genera against
+  its own **50 controls at 43**, same platform, same project. No virus does that.
+  This is the one confound shape nothing removes -- a per-sample filter cannot
+  see it, and holding the study out takes both arms with it.
+
+What changed, since again nothing is deleted:
+
+- **`v_ml_ready_samples`** gains `n_genera_profiled`, `n_species_profiled`,
+  `profile_richness` and `has_transformable_features`. The old advice to "filter
+  on `n_taxa_profiled`" was **broken**: that column counts rows across every rank
+  at once, so for the 12,566 dual-rank samples it is a sum of two richnesses and
+  not the richness of either, and **44 samples are thin at one rank while the sum
+  looks healthy**.
+- **`v_ml_cohort_summary`** gains `max_genera`, `mean_genera`,
+  `n_thin_genus_profiles` and `feature_depth_status`, whose
+  `genus_depth_degenerate` value names the six studies above.
+- **`gutdb/diagnostics.py`** computes the pooled and within-study richness AUC
+  and the per-study depth ratio.
+- **`scripts/export_ml_matrix.py`** reports all of it before writing, and records
+  it in the provenance JSON. The Crohn export is unaffected in substance (0.570
+  pooled, 0.628 within study) and prints no warning.
+- **`scripts/richness_audit.py`** writes `data/richness_audit.csv` and
+  `data/richness_arm_imbalance.csv`.
+
+### Two columns holding the wrong vocabulary
+
+Both were caught by listing distinct values per column, and both are the same
+mistake: a word from one axis written into a column that answers a different
+question.
+
+**`samples.qc_status`** held `'1'` (29,509), `'0'` (1,378) and `'curated'`
+(2,464). The first two are GMrepo's own QC verdict, copied from its `QCStatus`
+field; the third I wrote for the Muller samples, which GMrepo never assessed.
+Anything filtering `qc_status = '1'` silently dropped all 2,464 of them, and
+anything filtering `<> '0'` silently kept them. The provenance was never missing
+either -- `studies.data_quality` already reads `curated` for all 13 Muller
+studies -- so the value was redundant as well as wrong. Those samples now carry
+NULL, which is what "GMrepo did not assess this" means, and the column's meaning
+is written into the schema.
+
+**`taxon_disease_associations.effect_type`** held `'LEfSe'` on 125 rows, beside
+`LDA` and `log2_fold_change`. LEfSe is the method; LDA is the statistic it
+produces. 124 of the 125 had no effect size at all, which is the same shape as
+the 235 rows already labelled `reported`. The literature marker CSVs do declare
+`effect_type=LEfSe`, and `cleanup_gutdb.py` already read that column as naming a
+method -- the pipeline just copied it verbatim into a column that answers "what
+is this number". `resolve_effect_type` now maps a declared method to `LDA` when a
+score came with it and `reported` when none did; the method itself is not lost,
+since `phenotype_comparisons.method` carries it.
+
+The vocabulary is now five values with a clean invariant: `LDA` and
+`log2_fold_change` always have an effect size, `reported`, `consensus` and
+`q_value` never do.
+
 ### The 1,416 taxa with no evidence are not junk
 
 A sweep for dead rows finds 1,416 taxa carrying no association and no abundance,

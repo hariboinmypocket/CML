@@ -92,5 +92,22 @@ class ClrTests(unittest.TestCase):
         self.assertGreater(out.iloc[0, 2], out.iloc[0, 3])
 
 
+class DegenerateRowTests(unittest.TestCase):
+    def test_clr_of_a_single_part_is_zero(self):
+        """Why a one-taxon profile has to be excluded rather than transformed.
+
+        With one part, that part IS the geometric mean, so its CLR is zero no
+        matter what the abundance was. 269 samples in this database hold exactly
+        one genus.
+        """
+        out = clr(frame([[1.0]]))
+        self.assertAlmostEqual(float(out.iloc[0, 0]), 0.0, places=12)
+
+    def test_two_parts_carry_information(self):
+        out = clr(frame([[0.9, 0.1]]))
+        self.assertGreater(out.iloc[0, 0], out.iloc[0, 1])
+        self.assertAlmostEqual(float(out.iloc[0].sum()), 0.0, places=12)
+
+
 if __name__ == "__main__":
     unittest.main()
