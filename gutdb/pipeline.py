@@ -2188,6 +2188,26 @@ def enrich_cmd_demographics(
 def validate_database(connection: MySQLConnection) -> list[tuple[str, int]]:
     checks = {
         "taxa": "SELECT COUNT(*) FROM taxa",
+        # A quarter of the taxa table is MiMeDB's trait reference: organisms
+        # loaded for their gram stain, oxygen requirement and pathogenicity so
+        # those are already there if a study ever reports them. They are not
+        # observations, and reading "taxa" as the number of organisms this
+        # database has seen overstates it by 1,416. Both numbers are reported so
+        # neither has to be inferred.
+        "taxa_observed": """
+            SELECT COUNT(*) FROM taxa t
+            WHERE EXISTS (SELECT 1 FROM sample_taxon_abundances ab
+                          WHERE ab.taxon_id = t.id)
+               OR EXISTS (SELECT 1 FROM taxon_disease_associations a
+                          WHERE a.taxon_id = t.id)
+        """,
+        "taxa_reference_only": """
+            SELECT COUNT(*) FROM taxa t
+            WHERE NOT EXISTS (SELECT 1 FROM sample_taxon_abundances ab
+                              WHERE ab.taxon_id = t.id)
+              AND NOT EXISTS (SELECT 1 FROM taxon_disease_associations a
+                              WHERE a.taxon_id = t.id)
+        """,
         "diseases": "SELECT COUNT(*) FROM diseases",
         "studies": "SELECT COUNT(*) FROM studies",
         "associations": "SELECT COUNT(*) FROM taxon_disease_associations",
