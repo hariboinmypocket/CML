@@ -603,6 +603,49 @@ most diseases that is three to five. Reporting a random-split AUC from this
 database overstates what the model would do on a new cohort by about 0.16 on
 average, and by more than 0.3 for the two diseases that look most impressive.
 
+### Backfilling the lineage that was never loaded
+
+```bash
+python scripts/backfill_lineage.py --apply
+```
+
+1,417 taxa carried no phylum and 1,563 no superkingdom, and **1,415 of those were
+not dead rows** -- they had associations or abundance behind them. *Waltera* alone
+accounts for 7,944 abundance rows. Most are recently described gut organisms that
+arrived from GMrepo with a name and a tax ID but no lineage, so anything grouped
+by phylum silently dropped them.
+
+1,326 had a tax ID, which makes them resolvable offline from the local dump.
+
+| | before | after |
+| --- | --- | --- |
+| taxa with no phylum | 1,417 | **143** |
+| of those, carrying evidence | 1,415 | 141 |
+| taxa with no superkingdom | 1,563 | 283 |
+| genus-rank abundance mass carrying a phylum | — | **99.54%** |
+
+**Only empty fields are filled, and that is the safety property rather than a
+nicety.** Several lineages here were repaired by hand after cross-kingdom
+homonyms put *Bosea* under Streptophyta and *Bogoriella* under Ascomycota; a
+backfill that preferred the dump over the stored value would quietly undo that
+work every time it ran. `genus` and `species` are excluded entirely -- they are
+keys, so rewriting them would change identity rather than fill a gap.
+
+The backfill surfaced one thing worth keeping: NCBI appends the nomenclatural
+code to names published outside the ICNP, so the dump carries
+`Methylomirabilota (SeqCode)` and nine siblings across class, order and family.
+That is metadata about how a name was published, not part of the name, and it
+creates a rank value of one that would split from the bare name later.
+`strip_nomenclatural_code` removes it, limited to `(SeqCode)` and `(ICNP)` in
+trailing position -- a parenthetical is not always an annotation, and
+`Neobittarella (ex bilen et al. 2018)` is a scientific name this database
+legitimately held.
+
+Two survivors of the backfill look wrong and are not. *Bivalvulida* sits under
+phylum **Cnidaria** because myxozoans are parasitic cnidarians and GMrepo
+genuinely reports it in faecal samples; its `superkingdom` correctly reads
+Eukaryota. 143 taxa still have no phylum because NCBI has none for them either.
+
 ### Phylum names: renames against reclassifications
 
 ```bash
