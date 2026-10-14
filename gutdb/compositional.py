@@ -148,14 +148,21 @@ def clr_matrix(connection, rank: str, sample_ids: list[int],
     `min_taxa_present` is a mathematical floor, not a quality judgement. CLR of a
     single part is identically zero -- the part IS the geometric mean -- so a row
     with one surviving taxon carries no information and its pseudocounts would
-    sit at whatever delta the replacement chose. 269 samples in this database
-    hold exactly one genus, faithfully: GMrepo reports one row for them and their
-    mean unclassified_fraction is 0.64 against 0.20 database-wide, so
-    classification largely failed rather than the loader dropping anything. 57 of
-    them reach the deduplicated ML cohort, where ml_ready asks only for
-    n_taxa_profiled > 0.
+    sit at whatever delta the replacement chose. 613 (sample, rank) profiles in
+    this database hold two taxa or fewer, faithfully: GMrepo reports exactly
+    those rows and its own numbers for them sum to 1.0, so these are complete
+    profiles upstream rather than anything the loader dropped. 57 clear the
+    deduplicated ML cohort, where ml_ready asks only for n_taxa_profiled > 0.
     Raising this above 2 is a modelling choice and is left to the caller; for
     scale, the median sample holds 62 genera and the 5th percentile holds 9.
+
+    A floor applied here does NOT make a cohort safe, and that is the limit of
+    what this function can do. Depth in this database is mostly a property of the
+    study -- six of them, 516 samples, contain no sample above 15 genera -- so
+    when a disease is carried by one such study and its controls are pooled from
+    rich ones, richness predicts the label directly and every row still clears
+    this floor. gutdb/diagnostics.py measures that; scripts/export_ml_matrix.py
+    refuses to write a matrix without reporting it.
     """
     if rank not in RANKS:
         raise ValueError(f"rank must be one of {RANKS}, got {rank!r}")

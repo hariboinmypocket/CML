@@ -41,6 +41,8 @@ DRY_RUN = "--apply" not in sys.argv
 TAXDUMP = os.environ.get("GUTDB_TAXDUMP", "taxdump")
 SQLITE_PATH = os.environ.get("GUTDB_SQLITE", "gut_microbiome.sqlite")
 AUDIT = Path("data/phylum_reclassification_audit.csv")
+AUDIT_FIELDS = ("store", "taxon_id", "scientific_name", "rank",
+                "ncbi_tax_id", "stored_phylum", "ncbi_phylum", "action")
 
 # (stored phylum, NCBI's current phylum) pairs this script may rewrite.
 # Keep it explicit: each entry is a documented reclassification, not a guess.
@@ -313,7 +315,9 @@ def main() -> int:
     if audit:
         AUDIT.parent.mkdir(parents=True, exist_ok=True)
         with AUDIT.open("w", newline="", encoding="utf-8") as fh:
-            writer = csv.DictWriter(fh, fieldnames=list(audit[0].keys()))
+            # AUDIT_FIELDS rather than the first row's keys, so this branch and
+            # the empty one below cannot write two different headers.
+            writer = csv.DictWriter(fh, fieldnames=AUDIT_FIELDS)
             writer.writeheader()
             writer.writerows(audit)
         print(f"\naudit written to {AUDIT} ({len(audit)} rows)")
@@ -326,7 +330,16 @@ def main() -> int:
             for (stored, current), n in unapproved.most_common(15):
                 print(f"    {n:>5}  {stored} -> {current}")
     else:
+        # Truncate to the header rather than leaving the previous run's rows in
+        # place. A clean run that keeps a stale file makes the audit claim a
+        # disagreement that has already been fixed, and the next person reads it
+        # as outstanding -- which is exactly what happened to the Methylomirabilis
+        # row after both stores were repaired.
+        AUDIT.parent.mkdir(parents=True, exist_ok=True)
+        with AUDIT.open("w", newline="", encoding="utf-8") as fh:
+            csv.DictWriter(fh, fieldnames=AUDIT_FIELDS).writeheader()
         print("\nno disagreements found")
+        print(f"audit at {AUDIT} truncated to its header")
 
     return 0
 
