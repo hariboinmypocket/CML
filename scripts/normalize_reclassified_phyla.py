@@ -54,6 +54,29 @@ APPROVED = {
     # new phylum, so only the phylum moves -- renaming the class to
     # Campylobacteria would diverge from the dump.
     ("Proteobacteria", "Campylobacterota"),
+    # The following are genuine moves between phyla, each confirmed by the tax
+    # IDs differing -- a shared ID would make it a rename, which belongs in
+    # PHYLUM_SYNONYMS instead. Checked one at a time rather than approved as a
+    # batch, because approving a pair moves every taxon that matches it.
+    #
+    # Thermoplasmatota (2283796) was split out of Euryarchaeota (28890), taking
+    # the Methanomassiliicoccus methanogens and Thermoplasma with it. These are
+    # the archaea this database actually sees in gut samples, so leaving them
+    # under the old phylum splits the archaeal signal across two names.
+    ("Euryarchaeota", "Thermoplasmatota"),
+    # Monoblepharomycota (3705299) left Chytridiomycota (4761): Gonapodya and
+    # Monoblepharis, from the MiMeDB fungal reference set.
+    ("Chytridiomycota", "Monoblepharomycota"),
+    # Rhizophagus irregularis is the arbuscular mycorrhizal fungus, and
+    # Glomeromycota (214504) is where it belongs rather than Mucoromycota
+    # (1913637).
+    ("Mucoromycota", "Glomeromycota"),
+    # Thermomicrobiota (3027942) split from Chloroflexi (32061), taking
+    # Sphaerobacter.
+    ("Chloroflexi", "Thermomicrobiota"),
+    # Rhodothermota (1853220) split from Bacteroidetes (976), taking
+    # Rhodothermus marinus.
+    ("Bacteroidetes", "Rhodothermota"),
 }
 
 

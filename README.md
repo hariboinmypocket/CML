@@ -603,6 +603,69 @@ most diseases that is three to five. Reporting a random-split AUC from this
 database overstates what the model would do on a new cohort by about 0.16 on
 average, and by more than 0.3 for the two diseases that look most impressive.
 
+### Phylum names: renames against reclassifications
+
+```bash
+python scripts/fold_phylum_synonyms.py --apply        # run this FIRST
+python scripts/normalize_reclassified_phyla.py --apply
+```
+
+The two look alike in an audit and are not the same thing, and **the NCBI tax ID
+tells them apart**. One node under two names is a *rename*, which folds without
+anyone's approval. Two nodes is a *move between phyla*, which is a taxonomic
+judgement and needs a line in `normalize_reclassified_phyla.py`'s `APPROVED` set,
+because approving a pair moves every taxon that matches it.
+
+Seven phyla were stored under both their classic and their 2021 ICNP name at
+once -- 1,365 rows saying Firmicutes beside 97 saying Bacillota, 424
+Bacteroidetes beside 12 Bacteroidota, 3,636 taxa in all. Nothing errored;
+`GROUP BY phylum` simply reported one phylum as two, which quietly breaks the
+Firmicutes/Bacteroidetes ratio. 119 of the affected rows came from
+`load_muller2022.py` reading NCBI's lineage verbatim: NCBI's *scientific* name is
+now the ICNP one (taxid 1239 is Bacillota, Firmicutes is the synonym), while this
+schema deliberately keeps the classic name so a phylum groups as one value.
+
+Run the fold **before** the reclassification script. That script normalizes only
+NCBI's side of the comparison, so a stored post-2021 name or typo appears as a
+disagreement it cannot act on; folding first leaves it looking at genuine moves,
+the only thing it should judge.
+
+**Renames** (same tax ID), folded without approval:
+
+| | evidence | taxa |
+| --- | --- | --- |
+| Bacillota → Firmicutes, and 5 more of that family | one node, two names | 132 |
+| Methanobacteriota → Euryarchaeota | taxid 28890 | 98 |
+| Thermoproteota → Crenarchaeota | taxid 28889 | 15 |
+| Pseudomonadata → Proteobacteria | a one-character slip | 1 |
+| Candidatus thermoplasmatota → Thermoplasmatota | a prefix, not a phylum | 1 |
+
+**Reclassifications** (different tax IDs), approved one at a time:
+
+| organisms | from → to | taxa |
+| --- | --- | --- |
+| Methanomassiliicoccus, Thermoplasma | Euryarchaeota 28890 → Thermoplasmatota 2283796 | 7 |
+| Gonapodya, Monoblepharis | Chytridiomycota 4761 → Monoblepharomycota 3705299 | 4 |
+| *Rhizophagus irregularis* | Mucoromycota 1913637 → Glomeromycota 214504 | 2 |
+| *Sphaerobacter thermophilus* | Chloroflexi 32061 → Thermomicrobiota 3027942 | 2 |
+| *Rhodothermus marinus* | Bacteroidetes 976 → Rhodothermota 1853220 | 2 |
+
+Three further disagreements were neither: **cross-kingdom homonyms** surviving in
+the SQLite mirror, which is built from CSVs and predates the repair
+`fix_curated_csv_lineage.py` made in MySQL. *Bosea* sat under Streptophyta
+because a plant genus shares the name, *Bogoriella* under Ascomycota because a
+lichen does, and *Bacteroides pectinophilus* under Bacteroidetes -- NCBI brackets
+that name because the organism is actually a Lachnospiraceae. MySQL had all three
+right, so the mirror was synced from it rather than given `APPROVED` entries:
+approving "Streptophyta → Proteobacteria" as a rule would move any plant that
+came after.
+
+Distinct phylum values **86 → 76**, phyla split under two names **7 → 0**,
+unapproved disagreements **26 → 1**. The one remaining is not a phylum problem: a
+MiMeDB row named `Sphingomonas sphingobacterium paucimobilis`, two organisms
+concatenated, whose tax ID resolves to *Sphingobacterium paucimobilis* while its
+stored lineage says Proteobacteria. It carries no associations and no abundances.
+
 ### Why the species layer stops where it does
 
 Species coverage reads as 34% of all samples, which sounds like a gap worth

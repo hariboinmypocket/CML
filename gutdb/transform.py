@@ -181,6 +181,11 @@ PHYLUM_SYNONYMS = {
     "bacillota": "Firmicutes",
     "bacteroidota": "Bacteroidetes",
     "caldisericota": "Caldiserica",
+    # Same NCBI node (28889) under two names, so a rename like the others. The
+    # thermophilic archaea filed here -- Aeropyrum, Metallosphaera, Ignicoccus,
+    # Pyrobaculum -- are not gut organisms, but they come in through MiMeDB's
+    # reference set and a split phylum is a split phylum.
+    "thermoproteota": "Crenarchaeota",
     "chlamydiota": "Chlamydiae",
     "chlorobiota": "Chlorobi",
     "chloroflexota": "Chloroflexi",
@@ -207,7 +212,12 @@ PHYLUM_SYNONYMS = {
     "nitrospirota": "Nitrospirae",
     "planctomycetota": "Planctomycetes",
     "pseudomonadota": "Proteobacteria",
+    # Not a name anyone publishes: a one-character slip for Pseudomonadota that
+    # reached the taxa table and would otherwise sit as an 87th phylum of one.
+    "pseudomonadata": "Proteobacteria",
     "spirochaetota": "Spirochaetes",
+    # A Candidatus prefix marks an uncultured lineage, not a different phylum.
+    "candidatus thermoplasmatota": "Thermoplasmatota",
     "synergistota": "Synergistetes",
     # NOT "Thermodesulfobacteria". The ICNP did rename that classic phylum to
     # Thermodesulfobacteriota, but NCBI subsequently folded Desulfobacterota --

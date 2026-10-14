@@ -162,6 +162,22 @@ class NormalizePhylumTests(unittest.TestCase):
         """Same NCBI tax ID (28890) under two names, so it is a rename."""
         self.assertEqual(normalize_phylum("Methanobacteriota"), "Euryarchaeota")
 
+    def test_crenarchaeota_rename_folds(self):
+        """Thermoproteota and Crenarchaeota are both NCBI taxid 28889."""
+        self.assertEqual(normalize_phylum("Thermoproteota"), "Crenarchaeota")
+
+    def test_spelling_and_candidatus_variants_fold(self):
+        """Neither is a phylum anyone publishes.
+
+        'Pseudomonadata' is a one-character slip for Pseudomonadota that reached
+        the taxa table, and a Candidatus prefix marks an uncultured lineage
+        rather than a different phylum. Left alone, each sits as a phylum of one
+        and splits a group.
+        """
+        self.assertEqual(normalize_phylum("Pseudomonadata"), "Proteobacteria")
+        self.assertEqual(
+            normalize_phylum("Candidatus thermoplasmatota"), "Thermoplasmatota")
+
     def test_euryarchaeota_splits_are_not_folded(self):
         """GTDB split the old Euryarchaeota, and NCBI gave the pieces their own
         nodes: Thermoplasmatota is 2283796 and Halobacteriota is 3100166, not

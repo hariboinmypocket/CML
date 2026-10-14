@@ -23,10 +23,21 @@ separate nodes that GTDB split out of the old Euryarchaeota. Moving taxa between
 phyla is a taxonomic decision and belongs in normalize_reclassified_phyla.py's
 APPROVED set, where a human signs off on it.
 
+Run this BEFORE scripts/normalize_reclassified_phyla.py. That script compares the
+stored phylum against NCBI's, but it normalizes only NCBI's side, so a stored
+value carrying a post-2021 name or a typo is reported as a disagreement it cannot
+act on. Folding first leaves that script looking at genuine moves between phyla,
+which is the only thing it should be asked to judge.
+
+Both stores are folded: MySQL and the SQLite mirror, which is built from the CSVs
+in data/ and otherwise keeps whatever names those carried.
+
 Idempotent. Dry run by default; pass --apply to write.
 """
 from __future__ import annotations
 
+import os
+import sqlite3
 import sys
 from collections import Counter
 from pathlib import Path
@@ -38,6 +49,29 @@ from gutdb.db import connect
 from gutdb.transform import normalize_phylum
 
 DRY_RUN = "--apply" not in sys.argv
+SQLITE = os.environ.get("GUTDB_SQLITE", "gut_microbiome.sqlite")
+
+
+def fold_store(label: str, cur, placeholder: str) -> int:
+    """Fold one store's phylum column. Returns the number of rows rewritten."""
+    cur.execute("SELECT phylum, COUNT(*) FROM taxa "
+                "WHERE phylum IS NOT NULL AND phylum <> '' GROUP BY phylum")
+    stored = cur.fetchall()
+    counts = dict(stored)
+    changes = [(p, normalize_phylum(p), n) for p, n in stored
+               if normalize_phylum(p) and normalize_phylum(p) != p]
+    if not changes:
+        print(f"   {label}: already folded")
+        return 0
+    total = 0
+    for old, new, n in sorted(changes, key=lambda c: -c[2]):
+        total += n
+        print(f"   {label}: {old:26} -> {new:24} {n:>5} rows "
+              f"(joins {counts.get(new, 0)})")
+        if not DRY_RUN:
+            cur.execute(f"UPDATE taxa SET phylum = {placeholder} "
+                        f"WHERE phylum = {placeholder}", (new, old))
+    return total
 
 
 def main() -> int:
@@ -82,7 +116,18 @@ def main() -> int:
         cur.execute("UPDATE taxa SET phylum = %s WHERE phylum = %s", (new, old))
         applied[old] = cur.rowcount
     conn.commit()
-    print(f"\nupdated {sum(applied.values())} rows")
+    print(f"\nmysql: updated {sum(applied.values())} rows")
+
+    if Path(SQLITE).exists():
+        print("\nsqlite mirror:")
+        sq = sqlite3.connect(SQLITE)
+        n = fold_store("sqlite", sq.cursor(), "?")
+        if not DRY_RUN:
+            sq.commit()
+            print(f"   sqlite: updated {n} rows")
+        sq.close()
+    else:
+        print(f"\nsqlite mirror {SQLITE} not present; skipped")
 
     cur.execute("""SELECT phylum, COUNT(*) FROM taxa
                    WHERE phylum IS NOT NULL AND phylum <> '' GROUP BY phylum""")
