@@ -603,6 +603,36 @@ most diseases that is three to five. Reporting a random-split AUC from this
 database overstates what the model would do on a new cohort by about 0.16 on
 average, and by more than 0.3 for the two diseases that look most impressive.
 
+### The 269 one-genus profiles are faithful, and still unusable
+
+A sweep for degenerate data finds 269 (sample, rank) groups holding exactly one
+taxon at relative abundance 1.0, all genus-rank and all from GMrepo. The obvious
+reading is a loading bug that dropped the rest of the profile. **It is not.**
+Checked against `data/gmrepo_all_abundances.csv`, the source export gives
+**exactly one row for all 210 of them it contains** -- the database is faithful,
+and the degeneracy is upstream.
+
+What they are: samples where classification largely failed. Their mean
+`unclassified_fraction` is **0.64** against **0.20** database-wide, 190 of the
+269 are above 0.5 and 63 above 0.9. GMrepo assigned the one genus it could and
+the renormalization to sum-to-1 made it 100%. All 269 carry `qc_status = '1'`,
+so GMrepo's own QC does not flag them. The lone survivor is often *Bivalvulida*
+(82 of 269), the myxozoan parasite, then *Bifidobacterium* (41) and
+*Methanobrevibacter* (24).
+
+So nothing is deleted -- the rows record what the source says. The problem is
+that they reach a model. `ml_ready` asks only whether `n_taxa_profiled` exceeds
+zero, so **57 one-genus samples sit inside the deduplicated ML cohort**, and a
+one-part composition has a **CLR of identically zero**: the part *is* the
+geometric mean, so the value carries no information at all regardless of the
+abundance.
+
+`clr_matrix` now takes `min_taxa_present`, defaulting to **2** -- a mathematical
+floor rather than a quality judgement, since the transform is undefined below it.
+The Crohn export drops 50 rows to it and records the count in its provenance
+JSON. Raising it further is a modelling choice and is left to the caller; for
+scale, the median sample holds 62 genera and the 5th percentile 9.
+
 ### Two columns holding the wrong vocabulary
 
 Both were caught by listing distinct values per column, and both are the same

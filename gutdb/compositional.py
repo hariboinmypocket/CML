@@ -138,12 +138,24 @@ def clr(frame: pd.DataFrame) -> pd.DataFrame:
 
 
 def clr_matrix(connection, rank: str, sample_ids: list[int],
-               min_prevalence: float = 0.10, delta: float | None = None
-               ) -> tuple[pd.DataFrame, dict]:
+               min_prevalence: float = 0.10, delta: float | None = None,
+               min_taxa_present: int = 2) -> tuple[pd.DataFrame, dict]:
     """Samples by taxa, CLR transformed, in the order that keeps it meaningful.
 
     Returns the matrix and a dict of what was done to produce it, because a CLR
     value is uninterpretable without knowing which parts it was computed over.
+
+    `min_taxa_present` is a mathematical floor, not a quality judgement. CLR of a
+    single part is identically zero -- the part IS the geometric mean -- so a row
+    with one surviving taxon carries no information and its pseudocounts would
+    sit at whatever delta the replacement chose. 269 samples in this database
+    hold exactly one genus, faithfully: GMrepo reports one row for them and their
+    mean unclassified_fraction is 0.64 against 0.20 database-wide, so
+    classification largely failed rather than the loader dropping anything. 57 of
+    them reach the deduplicated ML cohort, where ml_ready asks only for
+    n_taxa_profiled > 0.
+    Raising this above 2 is a modelling choice and is left to the caller; for
+    scale, the median sample holds 62 genera and the 5th percentile holds 9.
     """
     if rank not in RANKS:
         raise ValueError(f"rank must be one of {RANKS}, got {rank!r}")
@@ -157,6 +169,10 @@ def clr_matrix(connection, rank: str, sample_ids: list[int],
     renormalized = raw.div(kept_mass.replace(0, np.nan), axis=0)
     usable = renormalized.dropna(how="all")
 
+    present = (usable > 0).sum(axis=1)
+    too_thin = present[present < min_taxa_present]
+    usable = usable.drop(index=too_thin.index)
+
     replaced = multiplicative_replacement(usable, delta=delta)
     transformed = clr(replaced.dropna(how="any"))
 
@@ -168,5 +184,7 @@ def clr_matrix(connection, rank: str, sample_ids: list[int],
         "min_prevalence": min_prevalence,
         "delta": "per-sample: half the smallest observed value" if delta is None else delta,
         "median_mass_retained_by_filter": round(float(kept_mass.median()), 4),
+        "min_taxa_present": min_taxa_present,
+        "samples_dropped_too_few_taxa": int(len(too_thin)),
     }
     return transformed, provenance

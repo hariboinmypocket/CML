@@ -317,6 +317,17 @@ JOIN studies s ON s.id = c.study_id;
 --
 -- A sample is only usable for supervised per-sample modelling if it has BOTH
 -- covariates (sex/age) AND a taxonomic feature vector in sample_taxon_abundances.
+--
+-- has_features asks only whether n_taxa_profiled is above zero, which is a lower
+-- bar than it sounds. 269 samples hold exactly ONE genus -- faithfully, since
+-- GMrepo reports a single row for them and their mean unclassified_fraction is
+-- 0.64 against 0.20 database-wide, so classification largely failed rather than
+-- anything being lost at load -- and 57 of those sit inside
+-- ml_ready_deduplicated. A one-part composition has a CLR of identically zero,
+-- so such a row is not a feature vector in any usable sense. n_taxa_profiled is
+-- exposed for that reason: filter on it. The median sample holds 62 genera, the
+-- 5th percentile 9, and gutdb/compositional.py drops anything under two parts
+-- because the transform is undefined there.
 -- Those two are tracked separately here on purpose: demographic completeness and
 -- feature availability are independent gaps in this database, and collapsing them
 -- into a single "ready" flag hides which one is actually blocking a given cohort.
