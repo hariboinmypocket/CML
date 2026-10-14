@@ -644,7 +644,14 @@ def main() -> int:
                    ON DUPLICATE KEY UPDATE data_type = VALUES(data_type),
                        source_database = VALUES(source_database)""",
                 (f"{SOURCE_DB}_{study}", meta[0].get("Publication.Name", study)[:500],
-                 platform, SOURCE_DB, "see mtb.map.tsv" if compounds else None))
+                 platform, SOURCE_DB,
+                 # The DOI of the paper describing the protocol, not a method
+                 # name: this collection redistributes matrices, not protocols,
+                 # and mtb.map.tsv is a compound-to-KEGG/HMDB map with no method
+                 # in it. The DOI is what makes the comparability rule mechanical
+                 # -- levels are poolable only where it matches.
+                 (f"doi:{clean(meta[0].get('DOI'))}"
+                  if compounds and clean(meta[0].get("DOI")) else None)))
             cur.execute("SELECT id FROM studies WHERE project_accession = %s",
                         (f"{SOURCE_DB}_{study}",))
             study_id = cur.fetchone()[0]

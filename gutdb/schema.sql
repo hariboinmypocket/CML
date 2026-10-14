@@ -87,10 +87,16 @@ CREATE TABLE IF NOT EXISTS studies (
     description TEXT NULL,
     data_type VARCHAR(100) NULL,
     source_database VARCHAR(100) NOT NULL DEFAULT 'GMrepo',
-    -- Which metabolomics platform produced this study's metabolite levels, if
-    -- any. Levels are only interpretable within a platform, so this is what
-    -- keeps sample_metabolite_levels from being pooled across incompatible
-    -- instruments.
+    -- 'doi:<doi>' for each of the 13 studies that carry metabolite levels: the
+    -- DOI of the paper describing the protocol, NOT an instrument name.
+    --
+    -- The distinction is the whole point. The Muller collection redistributes
+    -- the matrices, not the protocols, so no platform string exists to store --
+    -- and the column spent its life holding the literal 'see mtb.map.tsv', a
+    -- file that maps compound names to KEGG and HMDB ids and contains no method
+    -- at all. Every study gave the same answer, so the standing rule below was
+    -- uncheckable. A DOI makes it mechanical instead: levels are poolable only
+    -- where it matches, and no two cohorts here share one.
     metabolomics_method VARCHAR(120) NULL,
     data_quality ENUM('curated', 'qualified', 'unknown') NOT NULL DEFAULT 'unknown',
     PRIMARY KEY (id),
@@ -174,6 +180,16 @@ CREATE TABLE IF NOT EXISTS samples (
     -- is for that, and a loader that wrote 'curated' here put a word from a
     -- different axis into a column others filter as a boolean.
     qc_status VARCHAR(100) NULL,
+    -- Controlled vocabulary, two values: 'feces' (voided stool, 36,573) and
+    -- 'gastric mucosa' (endoscopic biopsy, 120). It is a PER-STUDY CONSTANT
+    -- everywhere -- no source in this database reports it per sample -- and for
+    -- every source but MGnify it is the source's documented scope rather than a
+    -- reading, which data/body_site_audit.csv records in its `basis` column.
+    -- It used to be NULL for 36,094 rows in MySQL while the SQLite mirror said
+    -- 'gut' for the same samples, so the same query answered differently per
+    -- store. 'gut' was also the wrong word: the stomach is part of the gut, so
+    -- it could not separate the biopsies from the stool, which is the only
+    -- distinction this column is for. scripts/normalize_body_site.py folds both.
     body_site VARCHAR(100) NULL,
     -- share of reads GMrepo could not assign to a taxon. Recorded rather than
     -- discarded: it is a per-sample quality signal, and the classified taxa are
@@ -261,8 +277,10 @@ CREATE TABLE IF NOT EXISTS sample_attributes (
 -- cohorts, and nothing sums to 1. A model may rank or correlate levels WITHIN a
 -- study, or compare a study's case arm against its own control arm, but pooling
 -- raw levels across studies is meaningless in a way that pooling relative
--- abundances is not. studies.metabolomics_method records which platform
--- produced a given study's numbers so that constraint stays visible.
+-- abundances is not. studies.metabolomics_method holds the protocol's DOI so
+-- that constraint is checkable rather than merely stated: two studies' levels
+-- may be pooled only where that value matches, and in this database no two
+-- cohorts share one.
 CREATE TABLE IF NOT EXISTS metabolites (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     -- Normalized to the 7-digit form: upstream carries both HMDB00002 and

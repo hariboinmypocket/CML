@@ -711,6 +711,72 @@ What changed, since again nothing is deleted:
 - **`scripts/richness_audit.py`** writes `data/richness_audit.csv` and
   `data/richness_arm_imbalance.csv`.
 
+### `body_site` was three vocabularies across two stores
+
+| store | source | value | samples |
+|---|---|---|---|
+| MySQL | GMrepo | `NULL` | 33,630 |
+| MySQL | MullerMM | `NULL` | 2,464 |
+| MySQL | PubMed | `feces` | 479 |
+| MySQL | MGnify | `human gastric mucosa` | 120 |
+| SQLite | GMrepo | `gut` | 23,494 |
+
+`cleanup_gutdb.py` has filled the mirror's NULLs with `'gut'` since it was
+written; nothing ever did the same to MySQL. So `WHERE body_site = 'feces'`
+returned 479 rows against one store and none against the other -- the same defect
+shape as the `(SeqCode)` annotations, a repair applied to one store only.
+
+`'gut'` was also the wrong word for the job: **the stomach is part of the gut**,
+so it could not separate the gastric biopsies from the stool, which is the only
+distinction this column is here for. The vocabulary is now the sampled material
+-- `feces` (36,573) and `gastric mucosa` (120) -- in both stores.
+
+**Why it was worth fixing.** MGYS00001188 contributes 120 gastric mucosa samples
+and **no control arm of its own**, so Gastritis, Metaplasia and Stomach Neoplasms
+are each modelled by comparing stomach biopsies against pooled stool controls:
+
+| disease | CLR genus 5-fold AUC | body site alone |
+|---|---|---|
+| Stomach Neoplasms | **1.000** | **1.000** |
+| Gastritis | **1.000** | **1.000** |
+| Metaplasia | **1.000** | **1.000** |
+
+Exactly 1.000, and a single indicator variable matches it. The two communities
+share no abundant genus -- *Haematomicrobium*, *Helicobacter*, *Tsukamurella*,
+*Gordonia*, *Thermus* in the mucosa against *Bacteroides*, *Phocaeicola*,
+*Faecalibacterium*, *Prevotella*, *Bifidobacterium* in stool. These were never
+disease models. (`Metaplasia` also mixes 30 mucosa with 10 GMrepo stool samples
+inside one label, though the stool ten lack demographics and so never reach the
+ML cohort.)
+
+`body_site` is a **per-study constant everywhere** -- no source in this database
+reports it per sample -- and for every source but MGnify the value is the
+source's *documented scope* rather than a reading. `data/body_site_audit.csv`
+records which is which in its `basis` column, and
+`scripts/normalize_body_site.py` refuses to proceed if any study ever starts
+holding two values. `body_site_confound()` and the exporter now warn when an arm
+sits at a site with no control to compare against.
+
+### `metabolomics_method` named a file that holds no method
+
+All 13 metabolomics studies held the literal string `'see mtb.map.tsv'`. That
+file exists -- its columns are `Compound, KEGG, HMDB,
+High.Confidence.Annotation`. It is a compound-to-identifier map. **No method, no
+instrument, no units.**
+
+This column carries a standing rule: metabolite levels are the one measurement
+here that cannot be pooled across studies, so check `metabolomics_method` before
+combining anything. That rule was **uncheckable** -- every study gave the same
+answer and the answer pointed at the wrong file.
+
+The method is not in the Muller collection, which redistributes matrices rather
+than protocols. What every cohort's `metadata.tsv` does carry is the protocol's
+**DOI**, so that is what the column holds now, as `doi:<doi>`. It identifies the
+protocol uniquely and makes the rule mechanical: levels are poolable only where
+the value matches. **No two of the 13 cohorts share one**, which is the honest
+answer to "can I combine these". `load_muller2022.py` writes the DOI going
+forward instead of the placeholder.
+
 ### Two columns holding the wrong vocabulary
 
 Both were caught by listing distinct values per column, and both are the same

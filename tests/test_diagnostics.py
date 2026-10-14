@@ -14,7 +14,8 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from gutdb.diagnostics import rank_auc, richness_confound
+from gutdb.diagnostics import (body_site_confound, rank_auc,
+                               richness_confound)
 
 
 def cohort(rows):
@@ -100,6 +101,47 @@ class RichnessConfoundTests(unittest.TestCase):
         self.assertEqual(out["richness_auc_pooled"], 1.0)
         self.assertEqual(out["richness_auc_within_study"], 1.0)
         self.assertLess(out["median_richness_case"], out["median_richness_control"])
+
+
+def sites(rows):
+    return pd.DataFrame(rows, columns=["phenotype", "body_site"])
+
+
+class BodySiteConfoundTests(unittest.TestCase):
+    def test_unmatched_site_is_flagged_and_scores_one(self):
+        """The MGYS00001188 shape: biopsies as cases, stool as controls."""
+        out = body_site_confound(sites(
+            [("D", "gastric mucosa")] * 3 + [("Health", "feces")] * 4))
+        self.assertEqual(out["sites_in_one_arm_only"], ["feces", "gastric mucosa"])
+        self.assertEqual(out["shared_sites"], [])
+        self.assertEqual(out["site_auc"], 1.0)
+        self.assertEqual(out["n_case_at_unmatched_site"], 3)
+
+    def test_a_matched_cohort_raises_nothing(self):
+        out = body_site_confound(sites(
+            [("D", "feces")] * 3 + [("Health", "feces")] * 3))
+        self.assertEqual(out["sites_in_one_arm_only"], [])
+        self.assertEqual(out["shared_sites"], ["feces"])
+        self.assertIsNone(out["site_auc"])
+
+    def test_a_site_present_in_both_arms_is_not_counted_as_exclusive(self):
+        """Sites in both arms can be adjusted for; only one-sided ones cannot."""
+        out = body_site_confound(sites(
+            [("D", "feces")] * 3 + [("D", "gastric mucosa")] * 2
+            + [("Health", "feces")] * 3 + [("Health", "gastric mucosa")] * 2))
+        self.assertEqual(out["sites_in_one_arm_only"], [])
+        self.assertEqual(out["shared_sites"], ["feces", "gastric mucosa"])
+        self.assertEqual(out["n_case_at_unmatched_site"], 0)
+
+    def test_a_partially_unmatched_cohort_scores_below_one(self):
+        """Half the cases at a matched site: body site cannot separate alone."""
+        out = body_site_confound(sites(
+            [("D", "gastric mucosa")] * 3 + [("D", "feces")] * 3
+            + [("Health", "feces")] * 6))
+        self.assertEqual(out["sites_in_one_arm_only"], ["gastric mucosa"])
+        self.assertLess(out["site_auc"], 1.0)
+        self.assertGreater(out["site_auc"], 0.5)
+        self.assertEqual(out["n_case_at_unmatched_site"], 3)
 
 
 if __name__ == "__main__":

@@ -139,6 +139,9 @@ CREATE TABLE IF NOT EXISTS samples (
     bmi REAL,
     country TEXT,
     qc_status TEXT,
+    -- 'feces' or 'gastric mucosa'; a per-study constant, never per-sample
+    -- metadata. This store said 'gut' for every GMrepo sample while MySQL said
+    -- NULL -- see gutdb/schema.sql and scripts/normalize_body_site.py.
     body_site TEXT
 );
 CREATE INDEX IF NOT EXISTS ix_sample_study ON samples (study_id);
