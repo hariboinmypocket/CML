@@ -424,3 +424,252 @@ def association_direction(
         if clean_str(enriched_group).casefold() == clean_str(disease_name).casefold()
         else "depleted"
     )
+
+
+# --- controlled vocabularies for the taxa trait columns ----------------------
+#
+# These lived in scripts/cleanup_gutdb.py, which runs only against the SQLite
+# mirror, so for three columns the two stores held different vocabularies for the
+# same rows. MySQL carried 30 distinct oxygen_requirement values where the mirror
+# carried 10 -- 'anaerobe' (576), 'Anaerobic' (50) and 'Obligate anaerobe' (35)
+# as three groups rather than one -- and `GROUP BY oxygen_requirement` therefore
+# answered differently depending on which store was asked. Oxygen tolerance is
+# one of the few genuinely mechanistic traits for a gut community, so a
+# fragmented categorical is a real loss, not untidiness.
+#
+# They are here rather than in a script because this is the third repair that
+# existed for one store only: the (SeqCode) annotations and body_site were the
+# first two. One implementation, imported by both sides.
+#
+# Case and synonym variants collapse onto one lowercase canonical form. The
+# right-hand sides are the vocabulary; a value the vocabulary does not list is
+# kept, lowercased, so an unanticipated category is never silently dropped.
+OXYGEN = {
+    "aerobe": "aerobe", "aerobic": "aerobe", "obligate aerobe": "aerobe",
+    "obligate aerobic": "aerobe",
+    "anaerobe": "anaerobe", "anaerobic": "anaerobe",
+    "obligate anaerobe": "anaerobe",
+    "facultative": "facultative anaerobe",
+    "facultative anaerobe": "facultative anaerobe",
+    "facultative aerobe": "facultative anaerobe",
+    "facultatively anaerobe": "facultative anaerobe",
+    "aerobe/facultative anaerobe": "facultative anaerobe",
+    "aerobe; facultative anaerobe": "facultative anaerobe",
+    "facultative anaerobe, air+co2": "facultative anaerobe",
+    "microaerophile": "microaerophile", "microaerophilic": "microaerophile",
+    # Organisms reported as tolerating both: 'variable' rather than a pick, since
+    # collapsing them onto either end would assert something the source does not.
+    "aerobe; anaerobe": "variable",
+}
+GRAM = {
+    "positive": "positive", "negative": "negative", "variable": "variable",
+    "uncharacterized": "uncharacterized",
+    # A cell wall that is structurally positive but does not hold the stain is
+    # reported either way in the literature; "variable" is the honest label.
+    "structurally positive but stains negative": "variable",
+    "structurally positive but may stain negative": "variable",
+    "negative due to the absence of a cell wall": "negative",
+}
+TEMPERATURE = {
+    "mesophilic": "mesophilic", "mesophil": "mesophilic",
+    "thermophilic": "thermophilic", "hyperthermophilic": "hyperthermophilic",
+    "psychrophilic": "psychrophilic", "psychrotolerant": "psychrotolerant",
+}
+YES_NO = {"yes": "yes", "no": "no", "yes?": "yes", "no?": "no",
+          "1": "yes", "0": "no", "true": "yes", "false": "no", "not known": ""}
+PH = {"alkaliphile": "alkaliphile", "acidophile": "acidophile",
+      "neutrophile": "neutrophile"}
+# `superkingdom` collects three different vocabularies: MiMeDB's domains, the
+# curated table's `kingdom` (Eubacteria, Fungi), and NCBI's post-2024 kingdom
+# names (Bacillati, Pseudomonadati). All fold onto the three domains + Viruses.
+SUPERKINGDOM = {
+    "bacteria": "Bacteria", "eubacteria": "Bacteria", "bacillati": "Bacteria",
+    "pseudomonadati": "Bacteria", "fusobacteriati": "Bacteria",
+    "thermotogati": "Bacteria",
+    "archaea": "Archaea", "methanobacteriati": "Archaea",
+    "thermoproteati": "Archaea",
+    "eukaryota": "Eukaryota", "fungi": "Eukaryota", "metazoa": "Eukaryota",
+    "viridiplantae": "Eukaryota", "viruses": "Viruses",
+}
+# Terms that describe how cells sit next to each other, which is a different axis
+# from whether they form spores. A `sporulation` value made only of these is
+# cell-arrangement text in the wrong column.
+ARRANGEMENT_TERMS = frozenset({"singles", "pairs", "chains", "clusters",
+                               "tetrads", "filaments", "v-shaped forms"})
+
+TRAIT_VOCABULARIES = {
+    "oxygen_requirement": OXYGEN,
+    "gram_stain": GRAM,
+    "ph_preference": PH,
+    "superkingdom": SUPERKINGDOM,
+    "temperature_range": TEMPERATURE,
+    "mobility": YES_NO,
+    "flagella_presence": YES_NO,
+}
+# Columns that get whitespace and case tidied but have no closed vocabulary --
+# free text whose categories nobody has enumerated.
+FREE_TEXT_TRAITS = ("human_pathogen", "shape", "metabolism", "habitat",
+                    "energy_source", "biotic_relationship",
+                    "optimal_temperature", "cell_arrangement")
+
+
+def canon_trait(value, mapping: dict[str, str] | None = None) -> str:
+    """Clean a trait value; map it through a vocabulary when one is given.
+
+    Under a vocabulary, an unlisted value is kept but lowercased, so
+    'Aerotolerant' and 'aerotolerant' stop being two values while a category
+    nobody anticipated survives. SUPERKINGDOM is the exception: its canonical
+    forms are capitalised because they are taxon names.
+    """
+    text = clean_str(value).replace("\xa0", " ")
+    text = re.sub(r"\s+", " ", text).strip()
+    if not text:
+        return ""
+    if mapping is None:
+        return text
+    return mapping.get(text.casefold(),
+                       text if mapping is SUPERKINGDOM else text.casefold())
+
+
+def split_sporulation(value) -> tuple[str, str]:
+    """Split one mixed `Spore`-style value into (sporulation, cell_arrangement).
+
+    The column holds three kinds of value at once: a yes/no flag, prose about
+    spore type ('Sporulating (ascospores); reproduction also by budding'), and
+    cell-arrangement text that belongs to another column entirely ('Chains -
+    Pairs - Singles'). Anything the three rules below do not recognise returns
+    ('', ''), which leaves the cell alone rather than guessing at it.
+    """
+    text = canon_trait(value)
+    if not text:
+        return "", ""
+    folded = text.casefold()
+    if folded in YES_NO:
+        return YES_NO[folded], ""
+    if "sporulat" in folded or "spotulating" in folded:
+        return ("no" if folded.startswith("non") else "yes"), ""
+    if "budding" in folded:
+        return ("no" if folded.startswith(("no;", "no ")) else "yes"), ""
+    # Two delimiter styles are in use and a single split handles only one of
+    # them. 'Chains - Pairs - Singles' and 'Singles - V-shaped forms' separate on
+    # ' - ', while 'Pairs-Singles' separates on a bare hyphen -- and splitting
+    # 'Singles - V-shaped forms' on the bare hyphen yields 'v' and 'shaped
+    # forms', which matches nothing. Try the spaced form first, then the bare one.
+    for parts in (folded.replace("/", " - ").split(" - "),
+                  folded.replace("/", "-").split("-")):
+        tokens = {p.strip() for p in parts if p.strip()}
+        if tokens and tokens <= ARRANGEMENT_TERMS:
+            return "", text
+    return "", ""
+
+
+# Values that name a study design or summarise several platforms rather than
+# naming one. A SAMPLE must never inherit any of these: 'mixed' is not a
+# resolution and not a batch.
+NOT_A_PLATFORM = frozenset({"mixed", "meta-analysis", ""})
+
+
+def derive_study_platform(platforms) -> str:
+    """Summarise a study's per-sample platforms into its data_type.
+
+    One platform across the samples means that platform; more than one means
+    'mixed'. Keeping this as a function rather than inline SQL is the point --
+    the SQLite mirror held FOUR vocabularies for two platforms ('AMPLICON'
+    beside '16S rRNA', 'Metagenomics' beside 'shotgun metagenomics') where MySQL
+    held the normalized pair, so `WHERE data_type = '16S'` matched 236 studies
+    in one store and none in the other. Deriving both stores' value from the same
+    rule is what stops that recurring.
+
+    Returns '' for a study with nothing to derive from, which the callers read as
+    "leave this study's data_type alone" -- an association-only study has no
+    samples, and 'meta-analysis' is a true statement about those.
+    """
+    distinct = {normalize_platform(p) for p in platforms if p}
+    distinct -= {""}
+    if not distinct:
+        return ""
+    if len(distinct) == 1:
+        return distinct.pop()
+    return "mixed"
+
+
+# --- sample_attributes.value_numeric ----------------------------------------
+#
+# The column's contract is "a number you may do arithmetic on". Two classes of
+# value break it while looking fine:
+#
+#   The number was FABRICATED from a string that is not one. 434 rows under
+#   `unique_id` hold '10007539_0' with value_numeric = 100075390 -- the
+#   underscore was dropped and the digits run together, which can collide two
+#   distinct ids ('10007539_0' and '1000753_90' both give 100075390).
+#
+#   The number is a CODE, not a quantity, and the key name says so:
+#   'Antibiotic_in_the_past_month._1_no_2_yes' stores 1 and 2. Averaging those
+#   is averaging labels, and worse, 1 means NO there while 1 means YES under the
+#   neighbouring `Antibiotics` key -- so pooling the two inverts 343 rows. Same
+#   family of error as the LDA sign ambiguity this schema already guards.
+#
+# A key whose values MIX numbers and words is a third case and is deliberately
+# NOT cleared: the number is correct for the rows that have one. What is missing
+# there is the denominator -- `Stage` holds 0 beside I, IIA and IIIB, so
+# AVG(value_numeric) is the mean of 27 zeros out of 150 rows, which is 0 -- and
+# the fix for a missing denominator is to expose it, exactly as with absence in
+# the abundance matrix. v_sample_attribute_keys reports it per key.
+PLAIN_NUMBER = re.compile(r"^\s*-?\d+(\.\d+)?\s*$")
+# A key name that spells out its own code mapping: '..._1_no_2_yes', 'yes_1_no_0'.
+CODED_IN_NAME = re.compile(r"\d\s*_\s*(?:no|yes)|(?:no|yes)\s*_\s*\d", re.IGNORECASE)
+
+
+def numeric_value_is_trustworthy(attribute: str, value: str) -> bool:
+    """Whether value_numeric may hold a number for this (attribute, value).
+
+    False means the cell should be NULL: either the string is not the number
+    stored against it, or the number is a category code whose meaning lives in
+    the key name rather than on the number line.
+    """
+    if not PLAIN_NUMBER.match(clean_str(value)):
+        return False
+    if CODED_IN_NAME.search(clean_str(attribute)):
+        return False
+    return True
+
+
+# --- metabolite level scales -------------------------------------------------
+#
+# sample_metabolite_levels mixes scales that differ in KIND, not magnitude, and
+# nothing recorded which. Two of the 13 cohorts arrive already log- or
+# z-transformed and hold 70,067 negative values; the other 11 are non-negative
+# intensities whose maxima span nine orders of magnitude, from 461 in
+# KANG_AUTISM_2017 to 3.07e10 in KOSTIC_INFANTS_DIABETES_2015.
+#
+# THE DANGEROUS PART IS THE ZERO. On a non-negative scale a zero means the
+# compound was not detected -- 78,400 of YACHIDA_CRC_2019's 130,242 levels, 60%
+# of them. On a centred scale a zero is mid-distribution: SINHA_CRC_2016 has
+# 23,553 negatives against 22,540 positives with a mean of -0.04, so its 281
+# zeros mean "at this cohort's average", the opposite of absence. The same stored
+# number means opposite things depending on the study, and the standing advice to
+# "normalize within study" does not cover it -- a uniform log1p over this table
+# yields NaN on 70,067 rows and takes the log of a log on 136,134 more.
+METABOLITE_SCALE_CENTRED = "centred"
+METABOLITE_SCALE_NON_NEGATIVE = "non_negative"
+
+
+def derive_metabolite_scale(min_level, max_level) -> str:
+    """Classify a study's level scale from its own range.
+
+    A negative level cannot be a concentration, so it is positive evidence that
+    the cohort was transformed upstream. The absence of negatives is NOT evidence
+    of a particular unit, only that the values are non-negative -- which is why
+    the other label says exactly that and claims no unit. The source does not
+    record units anywhere; studies.metabolomics_method carries the protocol DOI.
+    """
+    if min_level is None:
+        return ""
+    if float(min_level) < 0:
+        return METABOLITE_SCALE_CENTRED
+    return METABOLITE_SCALE_NON_NEGATIVE
+
+
+def zero_means_absence(scale: str) -> bool:
+    """Whether a stored level of 0 may be read as "not detected" on this scale."""
+    return scale == METABOLITE_SCALE_NON_NEGATIVE

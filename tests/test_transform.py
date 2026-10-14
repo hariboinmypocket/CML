@@ -3,6 +3,16 @@ import csv
 from pathlib import Path
 
 from gutdb.transform import (
+    GRAM,
+    NOT_A_PLATFORM,
+    derive_metabolite_scale,
+    derive_study_platform,
+    numeric_value_is_trustworthy,
+    zero_means_absence,
+    OXYGEN,
+    SUPERKINGDOM,
+    canon_trait,
+    split_sporulation,
     quantize_effect_size,
     association_direction,
     collapse_energy_modes,
@@ -260,3 +270,206 @@ class ResolveEffectTypeTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TraitVocabularyTests(unittest.TestCase):
+    """The vocabularies moved here from scripts/cleanup_gutdb.py.
+
+    They lived in a script that runs only against the SQLite mirror, so MySQL
+    held 21 distinct oxygen_requirement values where the mirror held 10. These
+    tests pin the folding itself, which is now the single implementation both
+    stores use.
+    """
+
+    def test_oxygen_case_and_synonym_variants_are_one_value(self):
+        for variant in ("anaerobe", "Anaerobic", "ANAEROBE", "Obligate anaerobe"):
+            self.assertEqual(canon_trait(variant, OXYGEN), "anaerobe", variant)
+        for variant in ("aerobe", "Aerobic", "obligate aerobe", "Obligate aerobic"):
+            self.assertEqual(canon_trait(variant, OXYGEN), "aerobe", variant)
+
+    def test_facultative_forms_collapse_onto_the_anaerobe_spelling(self):
+        for variant in ("Facultative", "Facultative aerobe", "Facultatively anaerobe",
+                        "Aerobe/facultative anaerobe", "Facultative anaerobe, air+co2"):
+            self.assertEqual(canon_trait(variant, OXYGEN),
+                             "facultative anaerobe", variant)
+
+    def test_both_tolerances_reported_becomes_variable_not_a_pick(self):
+        """Collapsing onto either end would assert what the source does not say."""
+        self.assertEqual(canon_trait("Aerobe; anaerobe", OXYGEN), "variable")
+
+    def test_an_unlisted_category_survives_lowercased(self):
+        """Never silently dropped: 'Aerotolerant' is a real category nobody mapped."""
+        self.assertEqual(canon_trait("Aerotolerant", OXYGEN), "aerotolerant")
+        self.assertEqual(canon_trait("Nanaerobe", OXYGEN), "nanaerobe")
+
+    def test_a_structurally_positive_wall_that_does_not_stain_is_variable(self):
+        for variant in ("Structurally positive but stains negative",
+                        "Structurally positive but may stain negative"):
+            self.assertEqual(canon_trait(variant, GRAM), "variable", variant)
+
+    def test_superkingdom_keeps_its_capitals_because_they_are_taxon_names(self):
+        self.assertEqual(canon_trait("bacillati", SUPERKINGDOM), "Bacteria")
+        self.assertEqual(canon_trait("Eubacteria", SUPERKINGDOM), "Bacteria")
+        self.assertEqual(canon_trait("methanobacteriati", SUPERKINGDOM), "Archaea")
+
+    def test_whitespace_and_nbsp_are_normalized(self):
+        self.assertEqual(canon_trait("  Aerobic  "), "Aerobic")
+
+    def test_empty_stays_empty_rather_than_becoming_a_value(self):
+        for value in (None, "", "   ", " "):
+            self.assertEqual(canon_trait(value, OXYGEN), "")
+
+
+class SporulationSplitTests(unittest.TestCase):
+    """sporulation held a flag, prose about spore type, and cell arrangement."""
+
+    def test_integer_and_word_encodings_of_the_flag_agree(self):
+        self.assertEqual(split_sporulation("0"), ("no", ""))
+        self.assertEqual(split_sporulation("1"), ("yes", ""))
+        self.assertEqual(split_sporulation("Nonsporulating"), ("no", ""))
+        self.assertEqual(split_sporulation("Sporulating"), ("yes", ""))
+
+    def test_prose_about_spore_type_reduces_to_the_flag(self):
+        self.assertEqual(
+            split_sporulation("Sporulating (ascospores); reproduction also by budding"),
+            ("yes", ""))
+        self.assertEqual(split_sporulation("No; Reproduction by unipolar budding"),
+                         ("no", ""))
+
+    def test_a_known_typo_is_still_recognised(self):
+        self.assertEqual(split_sporulation("Spotulating"), ("yes", ""))
+
+    def test_cell_arrangement_text_is_routed_to_the_other_column(self):
+        for value in ("Singles", "Pairs - Singles", "Chains - Pairs - Singles",
+                      "Clusters - Singles"):
+            spore, arrangement = split_sporulation(value)
+            self.assertEqual(spore, "", value)
+            self.assertEqual(arrangement, value, value)
+
+    def test_both_delimiter_styles_are_handled(self):
+        """'Pairs-Singles' splits on a bare hyphen; 'Singles - V-shaped forms' does not.
+
+        Splitting the second on a bare hyphen yields 'v' and 'shaped forms',
+        which matches nothing, so it was being left in the wrong column.
+        """
+        self.assertEqual(split_sporulation("Pairs-Singles")[1], "Pairs-Singles")
+        self.assertEqual(split_sporulation("Singles - V-shaped forms")[1],
+                         "Singles - V-shaped forms")
+
+    def test_an_unrecognised_value_is_left_alone_rather_than_guessed_at(self):
+        """('', '') means 'do not touch this cell', not 'clear it'."""
+        self.assertEqual(split_sporulation("Septated hyphae"), ("", ""))
+        self.assertEqual(split_sporulation("something nobody anticipated"), ("", ""))
+
+
+class StudyPlatformDerivationTests(unittest.TestCase):
+    """studies.data_type is derived from the samples so the stores cannot differ.
+
+    The mirror held four vocabularies for two platforms -- 'AMPLICON' beside
+    '16S rRNA', 'Metagenomics' beside 'shotgun metagenomics' -- where MySQL held
+    '16S'/'mNGS', so `WHERE data_type = '16S'` matched 236 studies in one store
+    and none in the other.
+    """
+
+    def test_one_platform_however_it_is_spelled(self):
+        for spellings in (("AMPLICON",), ("16S",), ("16S rRNA",),
+                          ("AMPLICON", "16S rRNA", "16S")):
+            self.assertEqual(derive_study_platform(spellings), "16S", spellings)
+        for spellings in (("Metagenomics",), ("mNGS",),
+                          ("shotgun metagenomics", "Metagenomics")):
+            self.assertEqual(derive_study_platform(spellings), "mNGS", spellings)
+
+    def test_two_real_platforms_become_mixed(self):
+        self.assertEqual(derive_study_platform(["AMPLICON", "Metagenomics"]), "mixed")
+        self.assertEqual(derive_study_platform(["16S", "mNGS"]), "mixed")
+
+    def test_nothing_to_derive_from_returns_empty_meaning_leave_it_alone(self):
+        """An association-only study has no samples; 'meta-analysis' is true there."""
+        for empty in ([], [None], [""], [None, ""]):
+            self.assertEqual(derive_study_platform(empty), "", empty)
+
+    def test_mixed_does_not_survive_as_an_input_value(self):
+        """'mixed' is a summary, so feeding it back must not make it a platform."""
+        self.assertEqual(derive_study_platform(["mixed"]), "mixed")
+        self.assertEqual(derive_study_platform(["mixed", "AMPLICON"]), "mixed")
+
+    def test_a_sample_may_not_inherit_a_summary_or_a_study_design(self):
+        self.assertIn("mixed", NOT_A_PLATFORM)
+        self.assertIn("meta-analysis", NOT_A_PLATFORM)
+        self.assertIn("", NOT_A_PLATFORM)
+        self.assertNotIn("16S", NOT_A_PLATFORM)
+        self.assertNotIn("mNGS", NOT_A_PLATFORM)
+
+
+class AttributeNumericTrustTests(unittest.TestCase):
+    """value_numeric must hold a number you can do arithmetic on.
+
+    Two classes broke that while looking fine: a number fabricated from a string
+    that is not one, and a category code whose meaning lives in the key name.
+    """
+
+    def test_a_number_is_kept(self):
+        for attribute, value in (("Creatinine", "1.42"), ("eGFR", "-1.5"),
+                                 ("Brinkman Index", "2400"), ("Timepoint", " 3 ")):
+            self.assertTrue(numeric_value_is_trustworthy(attribute, value),
+                            (attribute, value))
+
+    def test_a_fabricated_number_is_refused(self):
+        """'10007539_0' was stored as 100075390 -- and '1000753_90' collides with it."""
+        self.assertFalse(numeric_value_is_trustworthy("unique_id", "10007539_0"))
+        self.assertFalse(numeric_value_is_trustworthy("unique_id", "1000753_90"))
+
+    def test_an_interval_is_not_a_number(self):
+        for value in ("0-1", "2-4", "3+", "1-", "AADF", "IIIB", ""):
+            self.assertFalse(numeric_value_is_trustworthy("anything", value), value)
+
+    def test_a_code_declared_in_the_key_name_is_refused(self):
+        """1 means NO here and YES under `Antibiotics`; pooling them inverts rows."""
+        for attribute in ("Antibiotic_in_the_past_month._1_no_2_yes",
+                          "X_probiotic_in_the_past_2_weeks_1_no_2_yes",
+                          "smoker_yes_1_no_0"):
+            self.assertFalse(numeric_value_is_trustworthy(attribute, "1"), attribute)
+
+    def test_a_key_merely_mentioning_a_range_is_not_treated_as_coded(self):
+        """'IBS_symptom_severity_1_500' is a scale, not a yes/no code."""
+        self.assertTrue(numeric_value_is_trustworthy("IBS_symptom_severity_1_500",
+                                                     "320"))
+        self.assertTrue(numeric_value_is_trustworthy("Effect_on_life_in_general_0_100",
+                                                     "45"))
+
+    def test_a_plain_number_under_a_mixed_key_is_still_kept(self):
+        """Stage = 0 is correct; what is missing is the denominator, not the value."""
+        self.assertTrue(numeric_value_is_trustworthy("Stage", "0"))
+        self.assertTrue(numeric_value_is_trustworthy("Antibiotics", "1"))
+
+
+class MetaboliteScaleTests(unittest.TestCase):
+    """sample_metabolite_levels mixes scales that differ in kind.
+
+    Two of 13 cohorts arrive log- or z-transformed and hold 70,067 negative
+    levels; the rest are non-negative with maxima spanning nine orders of
+    magnitude. The hazard is the zero: absence on one scale, mid-distribution on
+    the other.
+    """
+
+    def test_a_negative_level_proves_an_upstream_transform(self):
+        """A concentration cannot be negative, so this is positive evidence."""
+        self.assertEqual(derive_metabolite_scale(-6.725, 7.6), "centred")
+        self.assertEqual(derive_metabolite_scale(-2.481, 3.3), "centred")
+
+    def test_no_negatives_claims_only_non_negativity(self):
+        """Not a unit claim: the source records units nowhere."""
+        for lo, hi in ((0.0, 665180.6), (0.0, 266.7), (1.0, 3297391681.0)):
+            self.assertEqual(derive_metabolite_scale(lo, hi), "non_negative")
+
+    def test_a_zero_means_absence_only_on_the_non_negative_scale(self):
+        self.assertTrue(zero_means_absence(derive_metabolite_scale(0.0, 665180.6)))
+        self.assertFalse(zero_means_absence(derive_metabolite_scale(-6.725, 7.6)))
+
+    def test_nothing_to_derive_from_claims_nothing(self):
+        self.assertEqual(derive_metabolite_scale(None, None), "")
+        self.assertFalse(zero_means_absence(""))
+
+    def test_a_zero_minimum_is_non_negative_not_centred(self):
+        """Boundary: 0.0 is not negative, so it must not be called centred."""
+        self.assertEqual(derive_metabolite_scale(0.0, 1.0), "non_negative")

@@ -87,11 +87,36 @@ CREATE TABLE IF NOT EXISTS studies (
     description TEXT NULL,
     data_type VARCHAR(100) NULL,
     source_database VARCHAR(100) NOT NULL DEFAULT 'GMrepo',
-    -- Which metabolomics platform produced this study's metabolite levels, if
-    -- any. Levels are only interpretable within a platform, so this is what
-    -- keeps sample_metabolite_levels from being pooled across incompatible
-    -- instruments.
+    -- 'doi:<doi>' for each of the 13 studies that carry metabolite levels: the
+    -- DOI of the paper describing the protocol, NOT an instrument name.
+    --
+    -- The distinction is the whole point. The Muller collection redistributes
+    -- the matrices, not the protocols, so no platform string exists to store --
+    -- and the column spent its life holding the literal 'see mtb.map.tsv', a
+    -- file that maps compound names to KEGG and HMDB ids and contains no method
+    -- at all. Every study gave the same answer, so the standing rule below was
+    -- uncheckable. A DOI makes it mechanical instead: levels are poolable only
+    -- where it matches, and no two cohorts here share one.
     metabolomics_method VARCHAR(120) NULL,
+    -- 'centred' or 'non_negative', derived from the study's own level range by
+    -- derive_metabolite_scale(). Two of the 13 cohorts arrive already log- or
+    -- z-transformed and hold 70,067 negative levels; the other 11 are
+    -- non-negative, with maxima spanning nine orders of magnitude (461 to
+    -- 3.07e10).
+    --
+    -- THE ZERO IS WHY THIS COLUMN EXISTS. On a non-negative scale a zero means
+    -- the compound was not detected -- 78,400 of YACHIDA_CRC_2019's 130,242
+    -- levels, 60% of them. On a centred scale a zero is mid-distribution:
+    -- SINHA_CRC_2016 holds 23,553 negatives against 22,540 positives with a mean
+    -- of -0.04, so its 281 zeros mean "at this cohort's average" -- the opposite
+    -- of absence. The same stored number meant opposite things with nothing
+    -- recording which, and "normalize within study" does not cover it: a uniform
+    -- log1p over this table returns NaN on 70,067 rows and takes the log of a
+    -- log on 136,134 more.
+    --
+    -- 'non_negative' claims no unit, only non-negativity. The source records
+    -- units nowhere; metabolomics_method above carries the protocol DOI.
+    metabolite_scale VARCHAR(20) NULL,
     data_quality ENUM('curated', 'qualified', 'unknown') NOT NULL DEFAULT 'unknown',
     PRIMARY KEY (id),
     UNIQUE KEY uq_study_accession (project_accession)
@@ -174,6 +199,31 @@ CREATE TABLE IF NOT EXISTS samples (
     -- is for that, and a loader that wrote 'curated' here put a word from a
     -- different axis into a column others filter as a boolean.
     qc_status VARCHAR(100) NULL,
+    -- Controlled vocabulary, two values: 'feces' (voided stool, 36,573) and
+    -- 'gastric mucosa' (endoscopic biopsy, 120). It is a PER-STUDY CONSTANT
+    -- everywhere -- no source in this database reports it per sample -- and for
+    -- every source but MGnify it is the source's documented scope rather than a
+    -- reading, which data/body_site_audit.csv records in its `basis` column.
+    -- It used to be NULL for 36,094 rows in MySQL while the SQLite mirror said
+    -- 'gut' for the same samples, so the same query answered differently per
+    -- store. 'gut' was also the wrong word: the stomach is part of the gut, so
+    -- it could not separate the biopsies from the stool, which is the only
+    -- distinction this column is for. scripts/normalize_body_site.py folds both.
+    -- The platform that produced THIS sample's profile, which studies.data_type
+    -- cannot express. GMrepo records it per run -- 'AMPLICON' or 'Metagenomics'
+    -- in data/gmrepo_project_samples.csv -- and 10 projects contain both, so the
+    -- loader collapsed them to data_type = 'mixed' and 3,786 samples lost a
+    -- platform the source had for every one of them (2,683 amplicon, 1,103
+    -- shotgun).
+    --
+    -- That loss is not cosmetic. Platform sets the taxonomic floor: amplicon
+    -- reads one marker gene and cannot separate species within a genus, so
+    -- inside a 'mixed' study some samples resolve species and some stop at genus
+    -- with nothing saying which. It is also the strongest batch covariate here
+    -- -- scripts/loso_audit.py measures platform mixing at +0.175 optimism --
+    -- and both that audit and export_ml_matrix.py read the STUDY's value, so for
+    -- these samples the covariate they carried was the word 'mixed'.
+    sequencing_platform VARCHAR(40) NULL,
     body_site VARCHAR(100) NULL,
     -- share of reads GMrepo could not assign to a taxon. Recorded rather than
     -- discarded: it is a per-sample quality signal, and the classified taxa are
@@ -237,9 +287,27 @@ CREATE TABLE IF NOT EXISTS sample_attributes (
     -- 289-character clinical course note. Loaders report truncation instead of
     -- silently cutting.
     value VARCHAR(512) NOT NULL,
-    -- Populated only when `value` parses as a number, which is true of 21% of
-    -- them. Lets a numeric trait be filtered and aggregated without casting
-    -- strings, while categorical answers stay in `value` untouched.
+    -- A number you may do arithmetic on -- which is NARROWER than "value parsed
+    -- as a number", and the earlier wording here claimed the looser thing while
+    -- the data broke even that. Two classes were cleared by
+    -- scripts/fix_attribute_numerics.py:
+    --
+    --   434 rows under `unique_id` held '10007539_0' as 100075390, the
+    --   underscore dropped and the digits run together. Not a parse of the
+    --   value, and it collides: '1000753_90' gives the same number.
+    --
+    --   687 rows under two keys whose names spell out their own code mapping
+    --   ('..._1_no_2_yes') stored 1 and 2 as labels. Averaging labels is
+    --   meaningless, and the encoding INVERTS against its neighbour -- 1 is no
+    --   there, 1 is yes under `Antibiotics` -- so pooling them flips 343 rows.
+    --
+    -- 13 keys still MIX numbers with words and are left that way, because the
+    -- number is correct wherever there is one; what is missing is the
+    -- denominator. AVG(value_numeric) over `Stage` is the mean of 27 zeros out
+    -- of 150 rows whose real values run I to IVB, and under
+    -- `Alcohol.drink.week.` the non-numeric values are RANGES, so the numeric
+    -- subset is precisely the respondents who gave a point answer rather than a
+    -- random sample. Read any mean against v_sample_attribute_keys.
     value_numeric DOUBLE NULL,
     PRIMARY KEY (sample_id, attribute),
     KEY ix_sample_attribute (attribute),
@@ -247,6 +315,44 @@ CREATE TABLE IF NOT EXISTS sample_attributes (
     CONSTRAINT fk_sample_attribute_sample FOREIGN KEY (sample_id) REFERENCES samples(id)
         ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Per-key coverage for sample_attributes, so a mean always has its denominator.
+--
+-- 362 keys, and 13 of them mix numbers with words. Without this view
+-- `SELECT AVG(value_numeric) ... WHERE attribute = 'Stage'` returns 0 and looks
+-- like an answer: it is the mean of the 27 rows that happen to hold a numeric
+-- stage out of 150 whose values run I to IVB. numeric_fraction is what tells you
+-- not to trust it. Same shape as absence in the abundance matrix -- the number
+-- was never wrong, the denominator was missing.
+--
+-- `mixes_numbers_and_words` is the flag to filter on. `looks_like_an_interval`
+-- narrows it further to the keys whose non-numeric values are RANGES ('0-1',
+-- '2-4', '3+'), where the numeric subset is biased by construction.
+--
+-- The activity keys show how bad that gets. Under
+-- `PhysicalExercise_LastWeek.h.` the ONLY point answer is 0, given by 4 of 49
+-- respondents; the other 45 answered '1-', '1-3' or '3+'. So
+-- AVG(value_numeric) is exactly 0.0 -- not merely incomplete but anti-correlated
+-- with the truth, because the rows that carry a number are precisely the people
+-- who did nothing. Cycling_LastWeek.h. and Housework_Childcare_LastWeek.h.
+-- are the same shape.
+CREATE OR REPLACE VIEW v_sample_attribute_keys AS
+SELECT
+    a.attribute,
+    COUNT(*)                                   AS n_rows,
+    COUNT(DISTINCT a.sample_id)                AS n_samples,
+    COUNT(DISTINCT a.value)                    AS n_distinct_values,
+    SUM(a.value_numeric IS NOT NULL)           AS n_numeric,
+    ROUND(SUM(a.value_numeric IS NOT NULL) / COUNT(*), 3) AS numeric_fraction,
+    (SUM(a.value_numeric IS NOT NULL) > 0
+     AND SUM(a.value_numeric IS NOT NULL) < COUNT(*)) AS mixes_numbers_and_words,
+    SUM(a.value REGEXP '^[0-9]+(\\.[0-9]+)?[-+]') > 0 AS looks_like_an_interval,
+    MIN(a.value_numeric)                       AS numeric_min,
+    MAX(a.value_numeric)                       AS numeric_max,
+    AVG(a.value_numeric)                       AS numeric_mean
+FROM sample_attributes a
+GROUP BY a.attribute;
+
 
 -- The metabolome axis.
 --
@@ -261,8 +367,10 @@ CREATE TABLE IF NOT EXISTS sample_attributes (
 -- cohorts, and nothing sums to 1. A model may rank or correlate levels WITHIN a
 -- study, or compare a study's case arm against its own control arm, but pooling
 -- raw levels across studies is meaningless in a way that pooling relative
--- abundances is not. studies.metabolomics_method records which platform
--- produced a given study's numbers so that constraint stays visible.
+-- abundances is not. studies.metabolomics_method holds the protocol's DOI so
+-- that constraint is checkable rather than merely stated: two studies' levels
+-- may be pooled only where that value matches, and in this database no two
+-- cohorts share one.
 CREATE TABLE IF NOT EXISTS metabolites (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     -- Normalized to the 7-digit form: upstream carries both HMDB00002 and
@@ -351,7 +459,11 @@ SELECT
     s.run_accession,
     st.project_accession,
     st.source_database                     AS study_source,
+    -- The STUDY's summary. For the 10 projects holding both platforms it reads
+    -- 'mixed', which is not a batch and not a resolution; use
+    -- sequencing_platform for anything per-sample.
     st.data_type,
+    s.sequencing_platform,
     d.name                                 AS phenotype,
     d.mesh_id,
     (d.name = 'Health')                    AS is_control,
@@ -393,11 +505,38 @@ SELECT
      AND s.age_years IS NOT NULL
      AND COALESCE(ab.n_taxa, 0) > 0)       AS ml_ready,
     -- ml_ready says the row has covariates and features; this additionally
-    -- keeps one run per biological sample, which is what a split should use.
+    -- keeps one run per biological sample.
+    --
+    -- IT DOES NOT KEEP ONE SAMPLE PER PERSON, and an earlier version of this
+    -- comment claimed it was "what a split should use", which overstated it. A
+    -- longitudinal study sampling one subject at seven timepoints produces seven
+    -- distinct biological samples, all of which survive this flag: 389 subjects
+    -- contribute 1,340 of its rows, so 971 are repeat visits by someone already
+    -- in the cohort. Irritable Bowel Syndrome is 305 rows from 51 people and
+    -- Diabetes Mellitus, Type 1 is 66 rows from 11 -- a sixfold overstatement of
+    -- the effective sample size, and a random split puts the same person on both
+    -- sides of it. Use ml_ready_one_per_subject for a split.
     (s.sex IS NOT NULL
      AND s.age_years IS NOT NULL
      AND COALESCE(ab.n_taxa, 0) > 0
-     AND (COALESCE(rep.n_runs, 1) = 1 OR s.id = rep.first_id)) AS ml_ready_deduplicated
+     AND (COALESCE(rep.n_runs, 1) = 1 OR s.id = rep.first_id)) AS ml_ready_deduplicated,
+    s.subject_id,
+    COALESCE(subj.n_visits, 1)             AS samples_for_this_subject,
+    -- One row per person where the source names the person, falling back to the
+    -- sample-level dedup where it does not.
+    --
+    -- THE FALLBACK IS MOST OF THE COHORT, so read this flag knowing what it can
+    -- and cannot see. subject_id is NULL for all 33,630 GMrepo samples and all
+    -- 120 from MGnify, which is 10,961 of the 13,328 deduplicated rows. A
+    -- longitudinal GMrepo study is therefore invisible to this flag, and it only
+    -- genuinely constrains the 2,367 MullerMM and PubMed rows. It is an
+    -- improvement on ml_ready_deduplicated, not a solution to
+    -- pseudo-replication.
+    (s.sex IS NOT NULL
+     AND s.age_years IS NOT NULL
+     AND COALESCE(ab.n_taxa, 0) > 0
+     AND (COALESCE(rep.n_runs, 1) = 1 OR s.id = rep.first_id)
+     AND (s.subject_id IS NULL OR s.id = subj.first_visit_id)) AS ml_ready_one_per_subject
 FROM samples s
 JOIN studies st ON st.id = s.study_id
 LEFT JOIN diseases d ON d.id = s.disease_id
@@ -416,7 +555,15 @@ LEFT JOIN (
     WHERE gmrepo_sample_id IS NOT NULL
     GROUP BY study_id, gmrepo_sample_id
 ) rep ON rep.study_id = s.study_id
-     AND rep.gmrepo_sample_id = s.gmrepo_sample_id;
+     AND rep.gmrepo_sample_id = s.gmrepo_sample_id
+LEFT JOIN (
+    SELECT study_id, subject_id, COUNT(*) AS n_visits,
+           MIN(id) AS first_visit_id
+    FROM samples
+    WHERE subject_id IS NOT NULL
+    GROUP BY study_id, subject_id
+) subj ON subj.study_id = s.study_id
+      AND subj.subject_id = s.subject_id;
 
 
 -- Study-level rollup: where each cohort stands on covariates vs features.

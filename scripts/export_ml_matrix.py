@@ -49,7 +49,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from gutdb.compositional import clr_matrix
 from gutdb.config import Settings
 from gutdb.db import connect
-from gutdb.diagnostics import richness_confound
+from gutdb.diagnostics import body_site_confound, richness_confound
 
 OUT_DIR = Path("data")
 
@@ -74,8 +74,8 @@ def main() -> int:
     cur = conn.cursor()
     cur.execute(
         """SELECT sample_id, phenotype, sex, age_years, bmi, country,
-                  project_accession, data_type, n_genera_profiled,
-                  n_species_profiled
+                  project_accession, data_type, sequencing_platform,
+                  n_genera_profiled, n_species_profiled, body_site
            FROM v_ml_ready_samples
            WHERE ml_ready_deduplicated = 1 AND phenotype IN (%s, 'Health')""",
         (disease,))
@@ -89,8 +89,9 @@ def main() -> int:
     import pandas as pd
     meta = pd.DataFrame(rows, columns=["sample_id", "phenotype", "sex", "age_years",
                                        "bmi", "country", "project_accession",
-                                       "data_type", "n_genera_profiled",
-                                       "n_species_profiled"]).set_index("sample_id")
+                                       "data_type", "sequencing_platform",
+                                       "n_genera_profiled", "n_species_profiled",
+                                       "body_site"]).set_index("sample_id")
     for column in ("n_genera_profiled", "n_species_profiled"):
         meta[column] = meta[column].astype(int)
     n_case = int((meta["phenotype"] != "Health").sum())
@@ -105,7 +106,9 @@ def main() -> int:
     # Depth check before the transform, because a cohort whose arms differ in
     # richness produces a high score whatever the features turn out to be.
     richness_column = f"n_{'genera' if rank == 'genus' else 'species'}_profiled"
-    depth = richness_confound(meta.reset_index(), richness=richness_column)
+    flat = meta.reset_index()
+    depth = richness_confound(flat, richness=richness_column)
+    sites = body_site_confound(flat)
 
     matrix, provenance = clr_matrix(conn, rank, list(meta.index),
                                     min_prevalence=prevalence)
@@ -145,6 +148,10 @@ def main() -> int:
         "median_richness_case": depth["median_richness_case"],
         "median_richness_control": depth["median_richness_control"],
         "studies_with_lopsided_depth": [d["project_accession"] for d in lopsided],
+        "case_body_sites": sites["case_sites"],
+        "control_body_sites": sites["control_sites"],
+        "body_sites_in_one_arm_only": sites["sites_in_one_arm_only"],
+        "body_site_auc": sites["site_auc"],
         "selection": "v_ml_ready_samples.ml_ready_deduplicated = 1",
         "column_order": "metadata, then one CLR column per taxon",
         "warning": ("rows pool multiple studies and study is confounded with the "
@@ -153,6 +160,16 @@ def main() -> int:
     })
     path.with_suffix(".json").write_text(json.dumps(provenance, indent=2) + "\n")
 
+    if sites["sites_in_one_arm_only"]:
+        print(f"   !! BODY SITE IS NOT MATCHED. cases: "
+              f"{', '.join(sites['case_sites'])}; controls: "
+              f"{', '.join(sites['control_sites'])}")
+        print(f"      Body site alone scores AUC {sites['site_auc']:.3f} on this "
+              f"cohort, and {sites['n_case_at_unmatched_site']} cases sit at a "
+              f"site with no control")
+        print("      to compare against. This contrast answers which material was "
+              "sampled, not")
+        print("      which disease the donor had.")
     pooled = depth["richness_auc_pooled"]
     within = depth["richness_auc_within_study"]
     print(f"   profile depth: cases median {depth['median_richness_case']:.0f} "
