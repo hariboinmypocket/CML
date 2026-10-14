@@ -2216,6 +2216,34 @@ def validate_database(connection: MySQLConnection) -> list[tuple[str, int]]:
         "samples": "SELECT COUNT(*) FROM samples",
         "abundance_rows": "SELECT COUNT(*) FROM sample_taxon_abundances",
         "taxa_missing_genus": "SELECT COUNT(*) FROM taxa WHERE genus = '' OR genus IS NULL",
+        # Gram stain is a property of the cell envelope, so it is near-constant
+        # within a phylum, and a lone dissenter is almost always a bad source
+        # value rather than a discovery. MiMeDB called Bacteroides vulgatus
+        # gram-positive, and the trait backfill moved that onto Phocaeicola
+        # vulgatus -- 10,263 abundance rows -- where it was the only positive
+        # among 109 Bacteroidetes. On an orphan row nobody would have seen it.
+        #
+        # Deliberately conservative, because some phyla genuinely hold both:
+        # Firmicutes contains the gram-negative Negativicutes, so it is well
+        # under the 90% threshold and never flagged. Only 'positive'/'negative'
+        # vote and are judged -- 'variable' and 'uncharacterized' are real
+        # answers about an organism, not disagreements with its phylum.
+        "gram_stain_against_phylum": """
+            SELECT COUNT(*) FROM taxa t
+            JOIN (
+                SELECT phylum,
+                       SUBSTRING_INDEX(GROUP_CONCAT(g ORDER BY n DESC), ',', 1) AS majority
+                FROM (SELECT phylum, LOWER(TRIM(gram_stain)) g, COUNT(*) n
+                        FROM taxa
+                       WHERE phylum IS NOT NULL AND phylum <> ''
+                         AND LOWER(TRIM(gram_stain)) IN ('positive', 'negative')
+                       GROUP BY phylum, LOWER(TRIM(gram_stain))) d
+                GROUP BY phylum
+               HAVING SUM(n) >= 10 AND MAX(n) / SUM(n) >= 0.90
+            ) c ON c.phylum = t.phylum
+            WHERE LOWER(TRIM(t.gram_stain)) IN ('positive', 'negative')
+              AND LOWER(TRIM(t.gram_stain)) <> c.majority
+        """,
         "orphan_associations": """
             SELECT COUNT(*) FROM taxon_disease_associations a
             LEFT JOIN taxa t ON t.id = a.taxon_id
