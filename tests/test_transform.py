@@ -497,3 +497,28 @@ class NcbiRankTests(unittest.TestCase):
     def test_case_and_whitespace_do_not_change_the_answer(self):
         self.assertTrue(coarser_than_genus("  Family "))
         self.assertFalse(coarser_than_genus(" GENUS "))
+
+
+class EffectTypeSentinelTests(unittest.TestCase):
+    """effect_type's sentinels are load-bearing, not a vocabulary to fold.
+
+    It is part of uq_taxon_disease_evidence, and load_microbiomehd.py deletes
+    rows for the same (taxon, disease, comparison) whose effect_type differs so a
+    finding that arrives as 'q_value' and later gains an effect flips to
+    'log2_fold_change' rather than duplicating. These tests exist so a future
+    tidy-up of the three no-magnitude labels fails here first.
+    """
+
+    def test_a_method_with_a_score_is_an_LDA_and_without_one_is_reported(self):
+        self.assertEqual(resolve_effect_type("LEfSe", 4.31), "LDA")
+        self.assertEqual(resolve_effect_type("LEfSe", None), "reported")
+
+    def test_a_declared_sentinel_survives_verbatim(self):
+        """'q_value' and 'consensus' must not collapse onto 'reported'."""
+        for declared in ("q_value", "consensus", "log2_fold_change"):
+            self.assertEqual(resolve_effect_type(declared, None), declared)
+            self.assertEqual(resolve_effect_type(declared, 1.5), declared)
+
+    def test_nothing_declared_defaults_to_the_column_default(self):
+        self.assertEqual(resolve_effect_type("", None), "LDA")
+        self.assertEqual(resolve_effect_type(None, None), "LDA")

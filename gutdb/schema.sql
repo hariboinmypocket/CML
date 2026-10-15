@@ -151,6 +151,24 @@ CREATE TABLE IF NOT EXISTS phenotype_comparisons (
     phenotype_a_id BIGINT UNSIGNED NOT NULL,
     phenotype_b_id BIGINT UNSIGNED NOT NULL,
     comparison_key VARCHAR(600) NOT NULL,
+    -- The statistical method, and it is PART OF comparison_key on purpose --
+    -- see resolve_comparison_method() in gutdb/pipeline.py, which explains why.
+    --
+    -- The 'as reported (...)' family looks like the same method under a wrapper
+    -- phrase and is not. One study can legitimately hold two analyses of the
+    -- same arms, and three of these five sit beside MicrobiomeHD's standardized
+    -- re-analysis of the very same study, arms and rank:
+    --
+    --   pmid25432777  as reported (wilcoxon)  13 assoc | Kruskal-Wallis  11
+    --   pmid24034618  as reported (anova)     10       | Kruskal-Wallis  16
+    --   pmid25417156  as reported (t_test)     9       | Kruskal-Wallis  11
+    --
+    -- The prefix is what keeps the publication's own result distinct from the
+    -- re-analysis, which is the comparison those rows were loaded to enable.
+    -- Stripping it, or folding 'as reported (lefse)' onto the 468 'LEfSe'
+    -- comparisons that came through GMrepo, would destroy that and mix
+    -- publication-reported findings with repository-sourced ones. Normalizing
+    -- this column is therefore NOT a cleanup; it is a loss.
     method VARCHAR(100) NULL,
     taxonomic_level ENUM('species', 'genus', 'mixed') NOT NULL DEFAULT 'species',
     positive_score_enriched_in_id BIGINT UNSIGNED NULL,
@@ -177,6 +195,22 @@ CREATE TABLE IF NOT EXISTS taxon_disease_associations (
     disease_id BIGINT UNSIGNED NOT NULL,
     comparison_id BIGINT UNSIGNED NOT NULL,
     direction ENUM('enriched', 'depleted', 'marker', 'no_difference') NOT NULL,
+    -- What the stored number IS, not how it was produced. 'LDA' (16,073) and
+    -- 'log2_fold_change' (327) name a magnitude in effect_size; 'reported'
+    -- (359), 'q_value' (59) and 'consensus' (71) are sentinels for rows with no
+    -- effect_size, distinguishing "we hold a q-value" from "we hold nothing but
+    -- a direction".
+    --
+    -- THE THREE SENTINELS LOOK LIKE A FRAGMENTED VOCABULARY AND ARE NOT ONE.
+    -- This column is part of uq_taxon_disease_evidence below, and
+    -- scripts/load_microbiomehd.py uses it as a SUPERSESSION marker: it deletes
+    -- rows for the same (taxon, disease, comparison) whose effect_type differs,
+    -- so a finding that arrives as 'q_value' and later gains an effect from the
+    -- S5 table flips to 'log2_fold_change' instead of inserting a second row.
+    -- Folding the sentinels together would break that, lose the distinction
+    -- above, and be undone on the next load -- which is why it has not been
+    -- done. Measured: all 16,889 (taxon, disease, comparison) groups hold
+    -- exactly one effect_type, so nothing is currently duplicated beneath it.
     effect_type VARCHAR(50) NOT NULL DEFAULT 'LDA',
     effect_size DOUBLE NULL,
     -- Significance, where the source reports it. These are independent of

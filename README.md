@@ -711,6 +711,45 @@ What changed, since again nothing is deleted:
 - **`scripts/richness_audit.py`** writes `data/richness_audit.csv` and
   `data/richness_arm_imbalance.csv`.
 
+### Two association-layer "defects" that turned out to be deliberate
+
+Both looked like the vocabulary fragmentation this sweep had already fixed four
+times. Neither was, and measuring is the only reason nothing broke.
+
+**`phenotype_comparisons.method`** holds `LEfSe` (468) beside
+`as reported (lefse)` (1), plus `as reported (wilcoxon)`, `(t_test)`, `(anova)`
+and `(anova_tukey)`. That reads as one method under a wrapper phrase. It is not:
+**three of those five sit beside MicrobiomeHD's standardized re-analysis of the
+very same study, arms and rank.**
+
+| study | the paper's own result | MicrobiomeHD's re-analysis |
+|---|---|---|
+| pmid25432777 | `as reported (wilcoxon)` — 13 assoc | `Kruskal-Wallis + BH FDR` — 11 |
+| pmid24034618 | `as reported (anova)` — 10 | `Kruskal-Wallis + BH FDR` — 16 |
+| pmid25417156 | `as reported (t_test)` — 9 | `Kruskal-Wallis + BH FDR` — 11 |
+
+The prefix is what keeps publication apart from re-analysis, and `method` is part
+of `comparison_key` precisely so both can coexist —
+`resolve_comparison_method()` in `pipeline.py` already says so. Folding
+`as reported (lefse)` onto the 468 GMrepo-sourced `LEfSe` comparisons would also
+mix publication-reported findings with repository-sourced ones. **Normalizing
+this column is not a cleanup; it is a loss.**
+
+**`taxon_disease_associations.effect_type`** holds three labels for rows with no
+`effect_size` — `reported` (359), `q_value` (59), `consensus` (71) — which looks
+like three ways of saying the same nothing. But the column is part of
+`uq_taxon_disease_evidence`, and `load_microbiomehd.py` uses it as a
+**supersession marker**: it deletes rows for the same `(taxon, disease,
+comparison)` whose `effect_type` differs, so a finding that arrives as `q_value`
+and later gains an effect from the S5 table *flips* to `log2_fold_change` rather
+than inserting a second row. A fold would break that, lose the distinction
+between "we hold a q-value" and "we hold only a direction", and **be undone on
+the next load**.
+
+Neither column had a schema comment, which is why both read as defects an hour
+ago. Both now carry one, and `EffectTypeSentinelTests` pins the sentinels so a
+future tidy-up fails in the test suite rather than in the data.
+
 ### 408 rows disagree with NCBI about their own rank
 
 `taxonomic_rank` in this database is the abundance **layer** a row was loaded
