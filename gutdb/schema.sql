@@ -439,7 +439,16 @@ CREATE TABLE IF NOT EXISTS metabolites (
     name VARCHAR(255) NOT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY uq_metabolite_hmdb (hmdb_id),
-    UNIQUE KEY uq_metabolite_kegg (kegg_id),
+    -- NOT unique. A KEGG compound id is often a lipid CLASS rather than a
+    -- molecule: C00422 is triacylglycerol and covers 28 distinct HMDB species in
+    -- the Muller collection, C00157 (phosphatidylcholine) 16, C04230
+    -- (lysophosphatidylcholine) 15, C00165 (diacylglycerol) 10. HMDB resolves
+    -- individual acyl species; KEGG does not. A UNIQUE key here let only one of
+    -- each family exist, so 109 real compounds had nowhere to go and the
+    -- 1-palmitoyl-2-linoleoyl-GPC row ended up holding no levels at all --
+    -- recorded but unmeasurable. hmdb_id above is the identity; this is an
+    -- annotation, indexed for lookup only.
+    KEY ix_metabolite_kegg (kegg_id),
     KEY ix_metabolite_name (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 

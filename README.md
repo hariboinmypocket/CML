@@ -711,6 +711,51 @@ What changed, since again nothing is deleted:
 - **`scripts/richness_audit.py`** writes `data/richness_audit.csv` and
   `data/richness_arm_imbalance.csv`.
 
+### A KEGG id is a lipid class, and it was being used as an identity
+
+One metabolite held no levels at all —
+`1-palmitoyl-2-linoleoyl-GPC (16:0/18:2)`, recorded but unmeasurable. Tracing it
+found a correctness bug and a constraint that enforced it.
+
+`ensure_metabolite_rows` resolved a compound by HMDB id and, **if that missed,
+fell back to KEGG**. But a KEGG compound id is often a *lipid class* rather than
+a molecule:
+
+| KEGG id | what it is | distinct HMDB species it covers |
+|---|---|---|
+| `C00422` | triacylglycerol | **28** |
+| `C00157` | phosphatidylcholine | 16 |
+| `C04230` | lysophosphatidylcholine | 15 |
+| `C00165` | diacylglycerol | 10 |
+| `C02530` | cholesterol ester | 8 |
+
+So the second triacylglycerol to arrive missed on its own HMDB id, fell back to
+`C00422`, found the **first one's row**, and silently reused it — two different
+molecules on one row, with the loser's levels colliding on the
+`(sample_id, metabolite_id)` key or dropped. `UNIQUE (kegg_id)` then made the
+alternative impossible: only one member of each family could exist at all.
+
+**202 of the 1,376 HMDB compounds in the source maps are absent from the
+database** (15%), at least **109** traceable to a KEGG class collision — and they
+are mostly lipid species, which are the bulk of an untargeted panel.
+
+Two changes: the KEGG lookup now runs **only** for a compound with no HMDB id of
+its own, and `kegg_id` is a non-unique annotation (`ix_metabolite_kegg`) rather
+than an identity, with `hmdb_id` carrying identity as before.
+
+**Recovering the 109 needs a reload**, which I have not run: `load_muller2022.py
+--apply` writes ~515k level rows against a database two other sessions are also
+writing to, so that is your call on timing. The fix stops the loss recurring; the
+reload is what undoes it.
+
+One thing this is *not*: the loader's "216 columns dropped for sharing an
+identifier within a cohort" is a separate and deliberate behaviour, keyed on
+`identity` (which prefers HMDB), covering two LC modes of one analyte and
+genuine upstream annotation errors — ERAWIJANTARI labels both
+3-phosphoglycerate and glycerol-3-phosphate `HMDB0000807`. Distinct HMDB species
+sharing a KEGG id have distinct identities and never collided there. That
+comment's count was stale at 124 and is now 216.
+
 ### The class, order and family layers had the Firmicutes/Bacillota split too
 
 `PHYLUM_SYNONYMS` solved this for one rank. The other three never got it:
