@@ -1039,6 +1039,62 @@ genuinely constrains the 2,367 MullerMM and PubMed rows. It is an improvement on
 `ml_ready_deduplicated`, not a solution to pseudo-replication. (The SQLite mirror
 has no `subject_id` column at all, so the flag is MySQL-only.)
 
+### A key-alias table, so a question can find all of its data
+
+`sample_attributes` keeps 362 keys exactly as the source wrote them, which is
+right — a value can always be traced back to the file and column it came from —
+and useless for asking a question. **Antibiotic exposure is spread over seven
+yes/no keys**, so `WHERE attribute = 'Antibiotics'` finds 518 of the 1,484 rows
+that answer it.
+
+`sample_attribute_aliases` maps each key to a **concept**, and
+`sample_attribute_value_aliases` carries the **per-key decoding**.
+`v_sample_attributes_canonical` joins both beside the raw columns.
+
+| concept | keys | rows |
+|---|---|---|
+| `antibiotic_exposure` | 7 | 1,484 |
+| `smoking_status` | 3 | 499 |
+| `alcohol_amount` | 2 | 455 |
+| `immunosuppressant_use` | 2 | 360 |
+| `antibiotic_agent` | 5 | 309 |
+| `infant_feeding` | 3 | 226 |
+| `delivery_mode` | 2 | 173 |
+
+**The value map is the point, not the name map.** `1` means *yes* under
+`Antibiotics` and *no* under `Antibiotic_in_the_past_month._1_no_2_yes`. A
+name-only alias would let those pool, and the damage is measurable:
+
+| read | "yes" count |
+|---|---|
+| naive — treat `1`/`yes`/`TRUE` as yes | **602** |
+| decoded per key | **309** |
+| rows the naive read inverts | **293** |
+
+Same family of error as pooling an LDA score without its comparison order, which
+this schema already guards against.
+
+**`concept` is the question, not the topic.** Antibiotics carry three —
+`antibiotic_exposure`, `antibiotic_agent`, `antibiotic_start_date` — and one
+`antibiotic` concept would put drug names and booleans in the same column.
+
+**Three false clusters were produced by name heuristics and rejected by reading
+the values**, and they are in the tests so they stay rejected:
+
+- `steroids` and `mesalamine` are **distinct drugs**, not members of an
+  immunosuppressant concept. Only `immunosuppressant` and
+  `Immunosuppressive_medication` answer one question.
+- **`Breast cancer` is a diagnosis** — a `%breast%` match pulls it in beside the
+  infant-feeding keys.
+- `GADA_Level`, `IA2A_Level`, `IAA_Level`, `AAB_Level`, `ICA_Level` are **five
+  different autoantibodies**, not one "level".
+
+**331 of the 362 keys are unmapped, and that is the normal case** rather than a
+backlog: most are a single cohort's own question and need no alias. The view
+returns them with `concept` NULL rather than hiding them. `boolean_undecoded`
+flags any boolean value the map does not cover — currently **0** — so an
+unanticipated answer surfaces instead of being guessed at.
+
 ### `value_numeric` held numbers that were not quantities
 
 `sample_attributes.value_numeric` was documented as *"populated only when `value`
