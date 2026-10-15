@@ -575,6 +575,23 @@ class LineageSynonymTests(unittest.TestCase):
         self.assertEqual(normalize_lineage_name("Kitasatosporales"),
                          "Streptomycetales")
 
+    def test_the_candidatus_prefix_is_kept_not_dropped(self):
+        """The two stores disagreed about it: MySQL kept it, the mirror did not.
+
+        Candidatus is how NCBI writes the designation of an uncultivated taxon,
+        so a lineage string read from one store did not match the other across
+        5 values. Folding onto the prefixed form matches NCBI.
+        """
+        for bare, prefixed in (
+                ("Cloacimonadia", "Candidatus Cloacimonadia"),
+                ("Cloacimonadales", "Candidatus Cloacimonadales"),
+                ("Cloacimonadaceae", "Candidatus Cloacimonadaceae"),
+                ("Hepatoplasmataceae", "Candidatus Hepatoplasmataceae"),
+                ("Nucleicultricaceae", "Candidatus Nucleicultricaceae")):
+            self.assertEqual(normalize_lineage_name(bare), prefixed, bare)
+            # and idempotent on the prefixed form
+            self.assertEqual(normalize_lineage_name(prefixed), prefixed, prefixed)
+
     def test_an_unmapped_name_is_returned_unchanged(self):
         for name in ("Lachnospiraceae", "Bacteroidales", "Something Novel"):
             self.assertEqual(normalize_lineage_name(name), name, name)

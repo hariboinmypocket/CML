@@ -146,6 +146,25 @@ def reconcile_study_data_type(label, cur, placeholder) -> Counter:
         if not DRY_RUN:
             cur.execute(f"UPDATE studies SET data_type = {placeholder} "
                         f"WHERE id = {placeholder}", (derived, study_id))
+    # A study with no samples has nothing to DERIVE from, but its stored value
+    # can still be the raw source vocabulary, and normalizing that is not a
+    # derivation. The mirror held AMPLICON (59 studies), '16S rRNA' (28) and
+    # 'shotgun metagenomics' (9) this way, all of them sample-less, so
+    # `WHERE data_type = '16S'` matched 122 studies there against 236 in MySQL.
+    # normalize_platform leaves 'mixed' and 'meta-analysis' alone, so nothing
+    # gains a platform it has no evidence for.
+    cur.execute("""SELECT st.id, st.data_type FROM studies st
+                   WHERE NOT EXISTS (SELECT 1 FROM samples s
+                                     WHERE s.study_id = st.id)""")
+    for study_id, stored in cur.fetchall():
+        folded = normalize_platform(stored)
+        if not folded or folded == stored:
+            continue
+        counts[f"{stored} -> {folded} (no samples)"] += 1
+        if not DRY_RUN:
+            cur.execute(f"UPDATE studies SET data_type = {placeholder} "
+                        f"WHERE id = {placeholder}", (folded, study_id))
+
     print(f"   {label}: studies.data_type derived from the samples")
     for key, n in sorted(counts.items(), key=lambda kv: -kv[1]):
         print(f"      {key:34} {n:>5}")

@@ -773,6 +773,35 @@ genuine upstream annotation errors — ERAWIJANTARI labels both
 sharing a KEGG id have distinct identities and never collided there. That
 comment's count was stale at 124 and is now 216.
 
+### Two store divergences left after everything else
+
+Re-auditing every column this sweep touched, as value *sets* in both stores,
+separated the real problems from the noise. Most differences are **membership** —
+the mirror holds a different subset of taxa, so `Caryophyllales` and `Amelidae`
+appear only there and `Viruses` only in MySQL. Two were not.
+
+**`studies.data_type` in the mirror still held the raw source vocabulary for
+every study with no samples**: `AMPLICON` (59 studies), `16S rRNA` (28),
+`shotgun metagenomics` (9). The derivation pass only touched studies that *have*
+samples, since a sample-less study has nothing to derive from — but normalizing
+a stored value is not a derivation, and skipping it meant
+`WHERE data_type = '16S'` matched **122 studies in the mirror against 236 in
+MySQL**. Those 96 now fold through `normalize_platform`, which leaves `mixed` and
+`meta-analysis` alone so nothing gains a platform it has no evidence for. The
+mirror reads `16S` (209), `mNGS` (101), `meta-analysis` (2) — one vocabulary, and
+no `mixed` because none of *its* studies span both platforms.
+
+**The `Candidatus` prefix differed across stores for the same taxon.** Taxid
+456826 carried `Candidatus Cloacimonadia` / `Cloacimonadales` /
+`Cloacimonadaceae` in MySQL and the bare forms in the mirror — 5 values across
+class, order and family. Neither store held both forms *internally*, so this was
+invisible to any single-store check. `Candidatus` is how NCBI writes the
+designation of an uncultivated taxon, so the fold keeps it, matching the
+`Saccharimonadales` and `Obscuribacteraceae` entries already in the map.
+
+Prefix splits remaining: **0** across all three ranks. What is left between the
+stores is membership only.
+
 ### The class, order and family layers had the Firmicutes/Bacillota split too
 
 `PHYLUM_SYNONYMS` solved this for one rank. The other three never got it:
