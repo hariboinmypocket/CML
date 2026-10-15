@@ -2444,6 +2444,65 @@ def _validate_checks() -> dict[str, str]:
                     FROM taxon_disease_associations) pairs))
             FROM v_taxon_disease_evidence
         """,
+        # --- the LDA sign order ----------------------------------------------
+        #
+        # An LDA score's sign is meaningless without its comparison order, which
+        # is why phenotype_comparisons records which phenotype a POSITIVE score
+        # refers to. These two counters are the only things that make that
+        # design self-enforcing.
+        #
+        # One association of 16,400 had a magnitude and no sign order -- 
+        # Bacteroides / Vitiligo at LDA 4.31 -- so the 4.31 could not be read.
+        # Found by hand; this is what finds the next one.
+        #
+        # 56 comparisons carry no sign order and that is FINE: the other 55 hold
+        # only unscored associations, a direction with no magnitude, where sign
+        # order has nothing to disambiguate. So the counter asks about scored
+        # associations, not about comparisons.
+        "scored_associations_without_a_sign_order": """
+            SELECT COUNT(*) FROM taxon_disease_associations a
+            JOIN phenotype_comparisons c ON c.id = a.comparison_id
+            WHERE a.effect_size IS NOT NULL
+              AND c.positive_score_enriched_in_id IS NULL
+              AND c.negative_score_enriched_in_id IS NULL
+        """,
+        # The arm a score's sign points at must be the disease exactly when the
+        # direction says enriched. Written as an XOR rather than two cases
+        # because the obvious form -- "does the signed arm equal the disease" --
+        # is TRUE for enriched and FALSE for depleted, and reading a 0 there as a
+        # failure is a mistake easily made: 9,183 correct rows look like
+        # disagreements under it.
+        "direction_disagrees_with_the_signed_arm": """
+            SELECT COUNT(*) FROM taxon_disease_associations a
+            JOIN phenotype_comparisons c ON c.id = a.comparison_id
+            WHERE a.effect_size IS NOT NULL AND a.effect_size <> 0
+              AND a.direction IN ('enriched', 'depleted')
+              AND CASE WHEN a.effect_size > 0
+                       THEN c.positive_score_enriched_in_id
+                       ELSE c.negative_score_enriched_in_id END IS NOT NULL
+              AND ((CASE WHEN a.effect_size > 0
+                         THEN c.positive_score_enriched_in_id
+                         ELSE c.negative_score_enriched_in_id END = a.disease_id)
+                   <> (a.direction = 'enriched'))
+        """,
+        # effect_type records what the stored number IS, not how it was
+        # produced, and resolve_effect_type() exists to make that conversion.
+        # The mirror held 123 rows reading 'LEfSe' -- a method -- because its
+        # build never called the resolver. MySQL had none, so nothing noticed.
+        # The method names are listed in gutdb/transform.py; this is the
+        # case-folded form of that set.
+        "effect_type_names_a_method": """
+            SELECT COUNT(*) FROM taxon_disease_associations
+            WHERE LOWER(TRIM(effect_type)) IN
+                  ('lefse', 'lefse analysis', 'linear discriminant analysis')
+        """,
+        # A comparison with one arm recorded and not the other is half a fact:
+        # the sign order is only usable as a pair.
+        "comparisons_with_only_one_arm": """
+            SELECT COUNT(*) FROM phenotype_comparisons
+            WHERE (positive_score_enriched_in_id IS NULL)
+               <> (negative_score_enriched_in_id IS NULL)
+        """,
         # v_taxon_specificity.depleted_fraction had the same contrast-mixing
         # defect and was fixed the same way; a fraction outside [0, 1] means the
         # denominator has drifted from the numerator again.

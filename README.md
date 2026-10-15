@@ -1095,6 +1095,59 @@ returns them with `concept` NULL rather than hiding them. `boolean_undecoded`
 flags any boolean value the map does not cover — currently **0** — so an
 unanticipated answer surfaces instead of being guessed at.
 
+### The LDA sign machinery had no invariant either, and two rows needed it
+
+An LDA score's sign is meaningless without its comparison order — this schema's
+central design point. Four counters now enforce it, and finding them took one
+wrong turn worth recording.
+
+**My first check asked the wrong question.** "Does the arm named by the score's
+sign equal the disease?" is `TRUE` for an *enriched* association and `FALSE` for
+a *depleted* one, so reading a 0 as failure made **9,183 perfectly correct rows
+look like disagreements**. The real invariant is an XOR — the signed arm equals
+the disease *iff* the direction is `enriched` — and it holds at **0 violations**
+across all 16,399 scored associations. The counter is written that way with the
+trap noted, since it is easy to make twice.
+
+**One scored association per store had no sign order at all**: *Bacteroides* /
+Vitiligo at LDA 4.31, so the 4.31 could not be read. 56 comparisons in MySQL and
+45 in the mirror carry no sign order and that is fine — the rest hold only
+unscored associations, where sign order has nothing to disambiguate.
+
+Deriving the arms back from `direction` looks circular, and checking that it
+isn't was the real work. `association_direction()` returns `'marker'` when it has
+no enriched group to work from — so a row with a score, no sign order, and a
+direction of `enriched` **cannot** have had that direction derived from the sign
+order. It came from an explicit source field, and for this row
+`literature_vitiligo_markers.csv` confirms it: a `direction` column reading
+`enriched`, both `enriched_in` columns empty, and a note saying *"Highest LDA
+score among vitiligo-group markers"*.
+
+**A second wrong turn:** my guard refused because 3 of the comparison's 8
+associations read `depleted`. But LEfSe always reports markers of *both* groups,
+so a mixed set is normal — only the *scored* rows constrain the sign order, and
+there is one. The guard fired on my own bad premise, which is what a guard is
+for; the repair is now a rule rather than a hardcoded row, so it covered the
+mirror's copy too under a different `comparison_key`.
+
+### The mirror kept a method name where the number's kind belongs
+
+Found in passing while fixing the above: that row's `effect_type` is `LDA` in
+MySQL and **`LEfSe`** in the mirror. `effect_type` records what the stored number
+*is*, not how it was produced — and `resolve_effect_type()` exists to convert.
+MySQL goes through it; the mirror's build never did, so **123 rows** kept the raw
+method.
+
+| | mirror before | after |
+|---|---|---|
+| `LDA` | 16,072 | **16,073** |
+| `reported` | 195 | **317** |
+| `LEfSe` | **123** | — |
+
+122 had no score → `reported`; one carried 4.31 → `LDA`. Those are the resolver's
+own answers, and the mirror's `LDA` count now matches MySQL's exactly. A counter
+rejects any `effect_type` that names a method, so neither store can drift back.
+
 ### The view that was once catastrophically wrong had no invariant
 
 `v_taxon_disease_evidence` reported *Faecalibacterium prausnitzii* as **enriched**
