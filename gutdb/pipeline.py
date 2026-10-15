@@ -2193,7 +2193,18 @@ def validate_database(connection: MySQLConnection) -> list[tuple[str, int]]:
     results = []
     for label, sql in checks.items():
         cursor.execute(sql)
-        results.append((label, int(cursor.fetchone()[0])))
+        row = cursor.fetchone()
+        # A tuple key means one query returning one row of several counts, so an
+        # expensive view is materialised once while each invariant keeps a name.
+        if isinstance(label, tuple):
+            if len(row) != len(label):
+                raise ValueError(
+                    f"check {label[0]!r} returned {len(row)} columns "
+                    f"for {len(label)} labels")
+            results.extend((name, int(value or 0))
+                           for name, value in zip(label, row))
+        else:
+            results.append((label, int(row[0] or 0)))
     cursor.close()
     return results
 
@@ -2351,6 +2362,96 @@ def _validate_checks() -> dict[str, str]:
             SELECT COUNT(*) FROM v_sample_attributes_canonical
             WHERE boolean_undecoded = 1
         """,
+        # --- v_taxon_disease_evidence ----------------------------------------
+        #
+        # The view that reported Faecalibacterium prausnitzii as ENRICHED in
+        # ulcerative colitis, reversing one of the field's most replicated
+        # findings, and 32 others with it. It had no invariant until now, which
+        # is backwards: it is the most consequential view here and the only one
+        # known to have been catastrophically wrong.
+        #
+        # ONLY THE FIRST OF THESE REPRODUCES THAT BUG. The old view pooled
+        # disease-vs-disease comparisons with case/control ones, so all 753 pure
+        # disease-vs-disease pairs carried a direction built from the wrong
+        # question; direction_on_disease_vs_disease fires on every one of them.
+        # The second rule it broke -- two independent COUNT(DISTINCT study_id),
+        # letting one study be counted on both sides -- cannot be caught on
+        # today's data, because no (taxon, disease, study) group has vs-Health
+        # associations that disagree with each other, so n_studies_split is 0
+        # everywhere and the old form would double-count nothing. The partition
+        # counter is therefore a guard against a future regression rather than a
+        # test of the historical defect, and worth keeping on exactly those
+        # terms: two comparison methods inside one study could disagree tomorrow.
+        #
+        # ONE QUERY, EIGHT COUNTERS. A tuple key returns one row of counts, so
+        # this CTE-heavy view is materialised once per store while each invariant
+        # keeps its own name; a single combined total would say a direction was
+        # wrong without saying which rule it broke.
+        #
+        # Measured, because the first version of this comment guessed and was
+        # wrong: eight separate queries cost 0.89s against MySQL and the combined
+        # one 0.16s, so the collapse saves 0.73s -- real, and worth having, but
+        # NOT the reason validate takes a minute. That is the mirror pass, which
+        # is 56% of the total; see validate_sqlite_mirror.
+        (
+            "evidence_direction_on_disease_vs_disease",
+            "evidence_study_votes_not_partitioning",
+            "evidence_votes_exceed_studies",
+            "evidence_direction_without_a_case_control_vote",
+            "evidence_missing_direction_despite_votes",
+            "evidence_direction_contradicts_its_counts",
+            "evidence_agreement_ratio_out_of_range",
+            "evidence_row_drift",
+        ): """
+            SELECT
+              SUM(CASE WHEN contrast_scope = 'disease_vs_disease'
+                        AND consensus_direction IS NOT NULL
+                       THEN 1 ELSE 0 END),
+              -- One study, one vote: the three buckets must partition the
+              -- case/control studies exactly.
+              SUM(CASE WHEN n_studies_enriched + n_studies_depleted
+                            + n_studies_split <> n_studies_case_control
+                       THEN 1 ELSE 0 END),
+              SUM(CASE WHEN n_studies_case_control + n_studies_other_contrast
+                            <> n_studies
+                       THEN 1 ELSE 0 END),
+              -- A direction exists exactly when a case/control study voted,
+              -- checked both ways round so neither a spurious direction nor a
+              -- lost one passes.
+              SUM(CASE WHEN consensus_direction IS NOT NULL
+                        AND n_studies_enriched + n_studies_depleted = 0
+                       THEN 1 ELSE 0 END),
+              SUM(CASE WHEN consensus_direction IS NULL
+                        AND n_studies_enriched + n_studies_depleted > 0
+                       THEN 1 ELSE 0 END),
+              -- The direction must agree with the counts it summarises. This is
+              -- what catches a CASE arm written the wrong way round, the single
+              -- edit that would silently reverse every direction in the table.
+              SUM(CASE WHEN (consensus_direction = 'enriched'
+                             AND n_studies_enriched <= n_studies_depleted)
+                         OR (consensus_direction = 'depleted'
+                             AND n_studies_depleted <= n_studies_enriched)
+                         OR (consensus_direction = 'tied'
+                             AND n_studies_enriched <> n_studies_depleted)
+                       THEN 1 ELSE 0 END),
+              -- agreement_ratio is a majority over a non-empty vote, so it
+              -- cannot fall below half or above one.
+              SUM(CASE WHEN agreement_ratio IS NOT NULL
+                        AND (agreement_ratio < 0.5 OR agreement_ratio > 1.0)
+                       THEN 1 ELSE 0 END),
+              ABS(COUNT(*) - (SELECT COUNT(*) FROM (
+                    SELECT DISTINCT taxon_id, disease_id
+                    FROM taxon_disease_associations) pairs))
+            FROM v_taxon_disease_evidence
+        """,
+        # v_taxon_specificity.depleted_fraction had the same contrast-mixing
+        # defect and was fixed the same way; a fraction outside [0, 1] means the
+        # denominator has drifted from the numerator again.
+        "specificity_depleted_fraction_out_of_range": """
+            SELECT COUNT(*) FROM v_taxon_specificity
+            WHERE depleted_fraction IS NOT NULL
+              AND (depleted_fraction < 0 OR depleted_fraction > 1)
+        """,
     }
 
 
@@ -2381,6 +2482,13 @@ def validate_sqlite_mirror(sqlite_path: str | None = None) -> list[tuple[str, in
 
     Returns an empty list when the mirror is absent -- it is a build artifact, so
     a checkout without one is normal and must not fail the push.
+
+    THIS PASS IS THE BULK OF validate's RUNTIME: 36.8s of 65.2s, against 28.4s
+    for MySQL, mostly the sum-to-1 check over the mirror's 2.05M abundance rows
+    and its own copy of v_taxon_disease_evidence. Validate went from roughly 32s
+    to 65s when this was added -- the cost of checking the second store at all,
+    not of any one counter. Worth knowing before adding more: the pre-push hook
+    pays it on every push.
     """
     import os
     import sqlite3
@@ -2391,21 +2499,28 @@ def validate_sqlite_mirror(sqlite_path: str | None = None) -> list[tuple[str, in
     if not Path(sqlite_path).exists():
         return []
     checks = {label: sql for label, sql in _validate_checks().items()
-              if label not in _MYSQL_ONLY_CHECKS}
+              if isinstance(label, tuple) or label not in _MYSQL_ONLY_CHECKS}
     connection = sqlite3.connect(sqlite_path)
     try:
         cursor = connection.cursor()
         results = []
         for label, sql in checks.items():
+            names = label if isinstance(label, tuple) else (label,)
             try:
                 cursor.execute(sql)
-                results.append((f"sqlite_{label}", int(cursor.fetchone()[0])))
+                row = cursor.fetchone()
+                if len(row) != len(names):
+                    raise sqlite3.DataError(
+                        f"{len(row)} columns for {len(names)} labels")
+                results.extend((f"sqlite_{name}", int(value or 0))
+                               for name, value in zip(names, row))
             except sqlite3.Error as error:
                 # A check that cannot run is reported as a failure rather than
                 # skipped: a silently absent counter is how the mirror went
                 # unchecked in the first place.
-                results.append((f"sqlite_{label}_FAILED_TO_RUN", 1))
-                results.append((f"sqlite_{label}_error_{type(error).__name__}", 1))
+                results.append((f"sqlite_{names[0]}_FAILED_TO_RUN", 1))
+                results.append(
+                    (f"sqlite_{names[0]}_error_{type(error).__name__}", 1))
         return results
     finally:
         connection.close()

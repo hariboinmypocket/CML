@@ -1095,6 +1095,50 @@ returns them with `concept` NULL rather than hiding them. `boolean_undecoded`
 flags any boolean value the map does not cover — currently **0** — so an
 unanticipated answer surfaces instead of being guessed at.
 
+### The view that was once catastrophically wrong had no invariant
+
+`v_taxon_disease_evidence` reported *Faecalibacterium prausnitzii* as **enriched**
+in ulcerative colitis — the reverse of one of the field's most replicated
+findings — and 32 others with it. It is the most consequential view here, the
+only one known to have been badly wrong, and until now **nothing checked it**.
+
+Nine invariants, all reading 0 in both stores:
+
+| counter | what it protects |
+|---|---|
+| `evidence_direction_on_disease_vs_disease` | the actual historical bug |
+| `evidence_study_votes_not_partitioning` | one study, one vote |
+| `evidence_votes_exceed_studies` | every study falls in exactly one bucket |
+| `evidence_direction_without_a_case_control_vote` | no direction from nothing |
+| `evidence_missing_direction_despite_votes` | and none lost |
+| `evidence_direction_contradicts_its_counts` | a reversed `CASE` arm |
+| `evidence_agreement_ratio_out_of_range` | a majority is in [0.5, 1] |
+| `evidence_row_drift` | one row per (taxon, disease) pair |
+| `specificity_depleted_fraction_out_of_range` | the same defect's other victim |
+
+**Only the first reproduces that bug, and saying otherwise would overstate
+them.** The old view pooled disease-vs-disease with case/control, so all **753**
+pure disease-vs-disease pairs carried a direction built from the wrong question —
+that counter fires on every one. The second rule it broke, two independent
+`COUNT(DISTINCT study_id)` letting one study vote on both sides, **cannot be
+caught on today's data**: no `(taxon, disease, study)` group has vs-Health
+associations that disagree with each other, so `n_studies_split` is 0 everywhere
+and the old form would double-count nothing. That counter is a guard against a
+future regression, which is worth keeping on exactly those terms.
+
+**One query, eight counters.** A tuple key returns a single row of counts, so the
+CTE-heavy view is materialised once per store while each invariant keeps its
+name — a combined total would say a direction was wrong without saying which rule
+broke.
+
+**And I had to correct my own justification for that.** I wrote that nine
+separate checks "took validate from 32s to 67s", then measured: eight queries
+cost **0.89s** against MySQL and the combined one **0.16s**. The collapse saves
+0.73s — real, worth having, and *not* why validate takes a minute. That is the
+mirror pass, at **36.8s of 65.2s**, mostly the sum-to-1 check over the mirror's
+2.05M abundance rows. Validate roughly doubled when the second store started
+being checked at all, which is the cost of checking it, not of any one counter.
+
 ### Nothing validated the mirror, and it was holding a repaired defect
 
 `validate_database` is typed to MySQL, so the mirror's 8 views and 8 tables had
