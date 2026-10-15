@@ -2188,7 +2188,19 @@ def enrich_cmd_demographics(
 
 
 def validate_database(connection: MySQLConnection) -> list[tuple[str, int]]:
-    checks = {
+    checks = _validate_checks()
+    cursor = connection.cursor()
+    results = []
+    for label, sql in checks.items():
+        cursor.execute(sql)
+        results.append((label, int(cursor.fetchone()[0])))
+    cursor.close()
+    return results
+
+
+def _validate_checks() -> dict[str, str]:
+    """The integrity checks, shared by both stores so neither drifts."""
+    return {
         "taxa": "SELECT COUNT(*) FROM taxa",
         # A quarter of the taxa table is MiMeDB's trait reference: organisms
         # loaded for their gram stain, oxygen requirement and pathogenicity so
@@ -2228,21 +2240,34 @@ def validate_database(connection: MySQLConnection) -> list[tuple[str, int]]:
         # under the 90% threshold and never flagged. Only 'positive'/'negative'
         # vote and are judged -- 'variable' and 'uncharacterized' are real
         # answers about an organism, not disagreements with its phylum.
+        # Written with CTEs and no SUBSTRING_INDEX/GROUP_CONCAT so it runs on
+        # the SQLite mirror too. The MySQL-only form left this check unable to
+        # run there -- and the mirror turned out to hold six of the seven
+        # dissenters, including Parabacteroides distasonis with 9,291 abundance
+        # rows, because the repair had reached MySQL only.
         "gram_stain_against_phylum": """
+            WITH votes AS (
+                SELECT phylum, LOWER(TRIM(gram_stain)) AS g, COUNT(*) AS n
+                FROM taxa
+                WHERE phylum IS NOT NULL AND TRIM(phylum) <> ''
+                  AND LOWER(TRIM(gram_stain)) IN ('positive', 'negative')
+                GROUP BY phylum, LOWER(TRIM(gram_stain))
+            ),
+            totals AS (
+                SELECT phylum, SUM(n) AS total, MAX(n) AS top
+                FROM votes GROUP BY phylum
+            ),
+            majority AS (
+                SELECT v.phylum, v.g
+                FROM votes v
+                JOIN totals t ON t.phylum = v.phylum AND v.n = t.top
+                WHERE t.total >= 10
+                  AND CAST(t.top AS REAL) / t.total >= 0.90
+            )
             SELECT COUNT(*) FROM taxa t
-            JOIN (
-                SELECT phylum,
-                       SUBSTRING_INDEX(GROUP_CONCAT(g ORDER BY n DESC), ',', 1) AS majority
-                FROM (SELECT phylum, LOWER(TRIM(gram_stain)) g, COUNT(*) n
-                        FROM taxa
-                       WHERE phylum IS NOT NULL AND phylum <> ''
-                         AND LOWER(TRIM(gram_stain)) IN ('positive', 'negative')
-                       GROUP BY phylum, LOWER(TRIM(gram_stain))) d
-                GROUP BY phylum
-               HAVING SUM(n) >= 10 AND MAX(n) / SUM(n) >= 0.90
-            ) c ON c.phylum = t.phylum
+            JOIN majority m ON m.phylum = t.phylum
             WHERE LOWER(TRIM(t.gram_stain)) IN ('positive', 'negative')
-              AND LOWER(TRIM(t.gram_stain)) <> c.majority
+              AND LOWER(TRIM(t.gram_stain)) <> m.g
         """,
         "orphan_associations": """
             SELECT COUNT(*) FROM taxon_disease_associations a
@@ -2327,10 +2352,60 @@ def validate_database(connection: MySQLConnection) -> list[tuple[str, int]]:
             WHERE boolean_undecoded = 1
         """,
     }
-    cursor = connection.cursor()
-    results = []
-    for label, sql in checks.items():
-        cursor.execute(sql)
-        results.append((label, int(cursor.fetchone()[0])))
-    cursor.close()
-    return results
+
+
+# Checks that cannot run against the SQLite mirror, because it has no
+# sample_attributes table and so none of the alias machinery built on it.
+_MYSQL_ONLY_CHECKS = frozenset({
+    "v_sample_attributes_canonical_row_drift",
+    "v_sample_attribute_keys_row_drift",
+    "attribute_booleans_undecoded",
+})
+
+
+def validate_sqlite_mirror(sqlite_path: str | None = None) -> list[tuple[str, int]]:
+    """Run the portable checks against the SQLite mirror.
+
+    Nothing validated the mirror at all until now. validate_database is typed to
+    MySQL, so the mirror's 8 views had no invariants while MySQL's had twelve --
+    which is the defect shape this whole schema keeps producing: a guard that
+    reached one store only. The (SeqCode) annotations, body_site, the trait
+    vocabularies and studies.data_type were all the same mistake in data; this
+    was it in the checking.
+
+    The queries are reused rather than rewritten, so the two stores cannot be
+    checked against different definitions. Labels are prefixed `sqlite_`, which
+    means the pre-push hook picks them up with no change: its gate now treats
+    every counter as a defect unless it is named a census figure, so a mirror
+    counter is enforced the moment it appears.
+
+    Returns an empty list when the mirror is absent -- it is a build artifact, so
+    a checkout without one is normal and must not fail the push.
+    """
+    import os
+    import sqlite3
+    from pathlib import Path
+
+    if sqlite_path is None:
+        sqlite_path = os.environ.get("GUTDB_SQLITE", "gut_microbiome.sqlite")
+    if not Path(sqlite_path).exists():
+        return []
+    checks = {label: sql for label, sql in _validate_checks().items()
+              if label not in _MYSQL_ONLY_CHECKS}
+    connection = sqlite3.connect(sqlite_path)
+    try:
+        cursor = connection.cursor()
+        results = []
+        for label, sql in checks.items():
+            try:
+                cursor.execute(sql)
+                results.append((f"sqlite_{label}", int(cursor.fetchone()[0])))
+            except sqlite3.Error as error:
+                # A check that cannot run is reported as a failure rather than
+                # skipped: a silently absent counter is how the mirror went
+                # unchecked in the first place.
+                results.append((f"sqlite_{label}_FAILED_TO_RUN", 1))
+                results.append((f"sqlite_{label}_error_{type(error).__name__}", 1))
+        return results
+    finally:
+        connection.close()

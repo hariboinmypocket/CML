@@ -31,6 +31,7 @@ from .pipeline import (
     sync_legacy_microbiome_tables,
     sync_mgnify_study,
     validate_database,
+    validate_sqlite_mirror,
 )
 
 
@@ -377,6 +378,11 @@ def main(argv: list[str] | None = None) -> int:
                     print_stats(path, load_associations(connection, path, args.overwrite))
             elif args.command == "validate":
                 for label, count in validate_database(connection):
+                    print(f"{label}: {count:,}")
+                # The mirror's counters carry a `sqlite_` prefix, so the
+                # pre-push gate picks them up with no change on its side.
+                # Absent mirror -> no rows, normal in a fresh checkout.
+                for label, count in validate_sqlite_mirror():
                     print(f"{label}: {count:,}")
         return 0
     except Exception as error:

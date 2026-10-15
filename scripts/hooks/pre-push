@@ -66,7 +66,11 @@ while read -r label value _rest; do
     key="${label%:}"
     [ "$key" = "$label" ] && continue        # not a "label: value" line
     [ -z "$value" ] && continue
-    case " $CENSUS " in *" $key "*) continue ;; esac
+    # The mirror's counters repeat every label with a `sqlite_` prefix, census
+    # figures included, so the prefix is stripped before this comparison. Listing
+    # them twice would mean a new census figure had to be added in two places and
+    # forgetting the second would abort every push.
+    case " $CENSUS " in *" ${key#sqlite_} "*) continue ;; esac
     value="$(printf '%s' "$value" | tr -d ',')"
     case "$value" in ''|*[!0-9]*) continue ;; esac   # not a plain integer
     CHECKED=$((CHECKED + 1))

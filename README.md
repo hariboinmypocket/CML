@@ -1095,6 +1095,50 @@ returns them with `concept` NULL rather than hiding them. `boolean_undecoded`
 flags any boolean value the map does not cover — currently **0** — so an
 unanticipated answer surfaces instead of being guessed at.
 
+### Nothing validated the mirror, and it was holding a repaired defect
+
+`validate_database` is typed to MySQL, so the mirror's 8 views and 8 tables had
+**no invariants at all** while MySQL's had twelve. That is this project's
+signature defect — a guard that reached one store only — showing up in the
+*checking* rather than in the data, after the `(SeqCode)` annotations,
+`body_site`, the trait vocabularies and `studies.data_type` had each been it in
+the data.
+
+`validate_sqlite_mirror()` runs the **same query objects**, not rewritten copies,
+so the two stores cannot be checked against different definitions. 17 of the 20
+checks are portable; three depend on `sample_attributes`, which the mirror has
+no table for. Labels are prefixed `sqlite_`, which means the inverted gate from
+the previous round picks them up with **no change on the hook's side** — the
+fail-safe default paying for itself one round later.
+
+It found two things immediately.
+
+**`gram_stain_against_phylum` could not run at all**, because it used
+`SUBSTRING_INDEX` and `GROUP_CONCAT` to pick a per-phylum majority. Rewritten
+with CTEs it runs on both — and the mirror reported **6**. A concurrent session
+had corrected those seven gram stains in MySQL; the mirror still carried six of
+them, including *Parabacteroides distasonis* with **9,291 abundance rows there**.
+The check reports a query that cannot run as a failure rather than skipping it,
+because a silently absent counter is how the mirror went unchecked in the first
+place.
+
+**The repair script keyed on MySQL `id`.** Extending it to the mirror keyed on
+`scientific_name` instead, because the mirror has its own id space: *Vibrio
+fischeri* is 1907 in MySQL and **1904** there, so reusing those ids would have
+corrected whatever organisms happened to hold them. The phylum and
+wrong-value guards still have to pass, and a row with no gram stain recorded is
+reported as nothing-to-do rather than counted as a skip, so the exit code stays
+reserved for a row that needs a human.
+
+**And the gate needed one fix of mine.** The mirror repeats every label with the
+prefix, census figures included, so `sqlite_taxa: 5,308` read as a defect and
+would have aborted every push — which I caught by running the gate against real
+`validate` output before installing it. It strips the prefix before the census
+comparison rather than listing all eight twice, since a new census figure added
+in one place and forgotten in the other would block every push.
+
+Both stores now read 0 on all 21 defect counters.
+
 ### Seven counters that gated nothing, and a hook list that had drifted twice
 
 Nothing in the test suite reaches a SQL view. The 133 tests are pure functions so
