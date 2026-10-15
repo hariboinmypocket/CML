@@ -44,23 +44,47 @@ VALIDATE_OUT="$(cd "$RUNDIR" && "$PY" populate_database.py validate 2>&1)" || {
     echo "$VALIDATE_OUT" | sed 's/^/    /'
     exit 1
 }
-# Counters that must read zero. Values are printed with thousands separators.
+# EVERY counter must read zero, except the census figures listed here.
+#
+# This used to be a hand-written list of the counters to check, and it drifted
+# twice: gram_stain_against_phylum and the seven view-cardinality counters were
+# all added to validate and none of them gated anything, so a defect they
+# detected would have been printed and pushed anyway. A counter nothing gates on
+# is decorative.
+#
+# Inverting it makes the default fail-safe. A new defect counter is enforced the
+# moment it exists, and adding a CENSUS figure -- a count of how much data there
+# is, which is never zero and never a defect -- takes an explicit entry below.
+# Getting that wrong fails loudly (a census figure treated as a defect blocks
+# every push) rather than silently.
+CENSUS="taxa taxa_observed taxa_reference_only diseases studies associations \
+        samples abundance_rows"
 BAD=""
-for key in taxa_missing_genus orphan_associations orphan_abundances \
-           abundance_rank_groups_not_summing_to_1; do
-    value="$(printf '%s\n' "$VALIDATE_OUT" | awk -v k="$key:" '$1==k {gsub(/,/,"",$2); print $2}')"
-    if [ -z "$value" ]; then
-        echo "  validate: counter '$key' missing from output"
-        exit 1
-    fi
+CHECKED=0
+# validate prints "label: value", values with thousands separators.
+while read -r label value _rest; do
+    key="${label%:}"
+    [ "$key" = "$label" ] && continue        # not a "label: value" line
+    [ -z "$value" ] && continue
+    case " $CENSUS " in *" $key "*) continue ;; esac
+    value="$(printf '%s' "$value" | tr -d ',')"
+    case "$value" in ''|*[!0-9]*) continue ;; esac   # not a plain integer
+    CHECKED=$((CHECKED + 1))
     [ "$value" = "0" ] || BAD="$BAD $key=$value"
-done
+done <<EOF
+$VALIDATE_OUT
+EOF
+if [ "$CHECKED" -eq 0 ]; then
+    echo "  validate: no defect counters found in output -- refusing to pass"
+    echo "$VALIDATE_OUT" | sed 's/^/    /'
+    exit 1
+fi
 if [ -n "$BAD" ]; then
     echo "  validate: NOT clean -$BAD"
     echo "pre-push: aborted. Nothing was pushed."
     exit 1
 fi
-echo "  validate: clean"
+echo "  validate: clean ($CHECKED defect counters, all zero)"
 
 # --- check 2: phylum reconciliation (dry run, writes nothing) ---------------
 PHYLUM_OUT="$(cd "$RUNDIR" && GUTDB_TAXDUMP="$TAXDUMP" \

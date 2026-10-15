@@ -2269,6 +2269,63 @@ def validate_database(connection: MySQLConnection) -> list[tuple[str, int]]:
                 HAVING ABS(total - 1.0) > 0.01
             ) bad
         """,
+        # --- view cardinality ------------------------------------------------
+        #
+        # Nothing in the test suite reaches a SQL view: the tests are pure
+        # functions so they need no credentials, and the views carry some of the
+        # most load-bearing logic here. v_taxon_disease_evidence reversed 33
+        # directions when it was wrong, v_ml_ready_samples overclaimed what its
+        # flag guaranteed, and two defects in v_attribute_concept_coverage were
+        # caught by reading its output rather than by any check.
+        #
+        # These counters close the gap for the failure a view hides best. A view
+        # that LEFT JOINs a table on a non-unique key FANS OUT -- one base row
+        # becomes several -- and every count, mean and fraction computed from it
+        # is then silently wrong while each individual row still looks correct.
+        # v_sample_attributes_canonical joins two alias tables and would be the
+        # first to go; a duplicate (attribute, raw_value) is barred by its
+        # primary key today, and this is what notices if that stops being true.
+        #
+        # Each counter is a DIFFERENCE from the base table's own count, so zero
+        # is the only passing value and the pre-push hook already gates on it.
+        "v_ml_ready_samples_row_drift": """
+            SELECT ABS((SELECT COUNT(*) FROM v_ml_ready_samples)
+                       - (SELECT COUNT(*) FROM samples))
+        """,
+        "v_sample_attributes_canonical_row_drift": """
+            SELECT ABS((SELECT COUNT(*) FROM v_sample_attributes_canonical)
+                       - (SELECT COUNT(*) FROM sample_attributes))
+        """,
+        # Every abundance row belongs to exactly one rank view, so the two must
+        # partition the table: a gap means a rank nothing exposes, an overlap
+        # means a row counted twice.
+        "abundance_rank_views_not_partitioning": """
+            SELECT ABS((SELECT COUNT(*) FROM v_abundance_genus)
+                       + (SELECT COUNT(*) FROM v_abundance_species)
+                       - (SELECT COUNT(*) FROM sample_taxon_abundances))
+        """,
+        "v_sample_attribute_keys_row_drift": """
+            SELECT ABS((SELECT COUNT(*) FROM v_sample_attribute_keys)
+                       - (SELECT COUNT(DISTINCT attribute) FROM sample_attributes))
+        """,
+        "v_taxon_disease_summary_row_drift": """
+            SELECT ABS((SELECT COUNT(*) FROM v_taxon_disease_summary)
+                       - (SELECT COUNT(*) FROM taxon_disease_associations))
+        """,
+        # n_taxa_profiled counts rows across every rank at once; the per-rank
+        # columns must account for all of them, or a filter written against one
+        # of them silently misses a rank.
+        "ml_ready_per_rank_counts_not_adding_up": """
+            SELECT COUNT(*) FROM v_ml_ready_samples
+            WHERE n_genera_profiled + n_species_profiled <> n_taxa_profiled
+        """,
+        # A boolean concept whose value the alias map does not cover would let a
+        # modeller pool a key with an inverted encoding -- the error the alias
+        # tables exist to prevent.
+        "attribute_booleans_undecoded": """
+            SELECT COUNT(*) FROM v_sample_attributes_canonical
+            WHERE boolean_undecoded = 1
+        """,
     }
     cursor = connection.cursor()
     results = []

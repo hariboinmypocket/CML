@@ -1095,6 +1095,40 @@ returns them with `concept` NULL rather than hiding them. `boolean_undecoded`
 flags any boolean value the map does not cover — currently **0** — so an
 unanticipated answer surfaces instead of being guessed at.
 
+### Seven counters that gated nothing, and a hook list that had drifted twice
+
+Nothing in the test suite reaches a SQL view. The 133 tests are pure functions so
+they need no credentials — which is the right trade — but the views carry some of
+the most load-bearing logic here: `v_taxon_disease_evidence` reversed 33
+directions when it was wrong, `v_ml_ready_samples` overclaimed what its flag
+guaranteed, and the two defects in `v_attribute_concept_coverage` above were
+caught by reading its output, not by any check.
+
+`validate` now carries seven **view-cardinality** counters, because fan-out is
+the failure a view hides best: a `LEFT JOIN` on a non-unique key turns one base
+row into several, and every count, mean and fraction built on it is silently
+wrong while each individual row still looks right.
+`v_sample_attributes_canonical` joins two alias tables and would be first to go.
+All seven read 0, and `validate` takes 32s.
+
+**Then the counters turned out to gate nothing.** The pre-push hook checked a
+hand-written list of four, and that list had drifted **twice**:
+`gram_stain_against_phylum` (added by a concurrent session) and all seven new
+ones were printed and ignored, so a defect they caught would have been pushed
+anyway. A counter nothing gates on is decorative — the same lesson as the
+`homonym_discarded` guard that was silent until it was printed.
+
+So the list is **inverted**: every counter must read zero *except* the census
+figures (`taxa`, `samples`, `abundance_rows`, …) named explicitly. That makes the
+default fail-safe — a new defect counter is enforced the moment it exists, and
+adding a census figure takes a deliberate entry. Getting *that* wrong fails
+loudly, since a census figure treated as a defect blocks every push.
+
+Checked against six synthetic cases before installing, including the one that
+matters: **a counter nobody added to any list, non-zero, aborts the push.** The
+hook also refuses to pass when `validate` prints no defect counters at all,
+rather than reading an empty result as clean.
+
 ### Reaching the concepts showed they are too sparse to pool
 
 The alias tables make a question reachable. `v_attribute_concept_coverage` says
