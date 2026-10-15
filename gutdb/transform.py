@@ -864,6 +864,17 @@ LINEAGE_SYNONYMS = {
     "obscuribacteraceae": "Candidatus Obscuribacteraceae",  # 1 -> 1, tie
     # class
     "actinomycetia": "Actinomycetes",                 #   1 -> 408
+    # The Candidatus status marker, which NCBI writes as part of the designation
+    # for an uncultivated taxon. Neither store held both forms internally, but
+    # they disagreed with each other across 5 values -- MySQL keeping the prefix,
+    # the mirror dropping it -- so a lineage string read from one store did not
+    # match the other. Folding onto the prefixed form matches NCBI and the
+    # Saccharimonadales/Obscuribacteraceae entries above.
+    "cloacimonadia": "Candidatus Cloacimonadia",
+    "cloacimonadales": "Candidatus Cloacimonadales",
+    "cloacimonadaceae": "Candidatus Cloacimonadaceae",
+    "hepatoplasmataceae": "Candidatus Hepatoplasmataceae",
+    "nucleicultricaceae": "Candidatus Nucleicultricaceae",
 }
 
 

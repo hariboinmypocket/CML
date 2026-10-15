@@ -373,6 +373,98 @@ CREATE TABLE IF NOT EXISTS sample_attributes (
         ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+-- A curated map from the source's own attribute names onto one concept each.
+--
+-- sample_attributes keeps 362 keys exactly as the source wrote them, which is
+-- right -- a value can always be traced back to the file and column it came
+-- from -- and useless for asking a question. Antibiotic exposure is spread over
+-- SEVEN yes/no keys, so `WHERE attribute = 'Antibiotics'` finds 518 of 1,423
+-- rows that answer it.
+--
+-- THE ENCODING IS WHY THIS NEEDS A VALUE MAP AND NOT JUST A NAME MAP. `1` means
+-- YES under `Antibiotics` and NO under
+-- `Antibiotic_in_the_past_month._1_no_2_yes`. Pooling the two on name alone
+-- inverts 343 rows -- the same family of error as an LDA score pooled without
+-- its comparison order. sample_attribute_value_aliases below carries the
+-- per-key decoding, so the canonical value is never inferred from the raw one.
+--
+-- `concept` is the QUESTION, not the topic. Antibiotics carry three of them --
+-- was there exposure, which agent, and when -- and collapsing those into one
+-- `antibiotic` concept would put drug names and booleans in one column.
+--
+-- Deliberately NOT mapped, because a shared word is not a shared concept:
+-- `steroids` and `mesalamine` are distinct drugs rather than members of an
+-- immunosuppressant concept; `Breast cancer` is a diagnosis that a naive
+-- '%breast%' match pulls in beside the infant-feeding keys; and the
+-- `GADA_Level` / `IA2A_Level` / `IAA_Level` family are different autoantibodies,
+-- not one 'level'. Each of those was a false cluster a name heuristic produced
+-- and a look at the values rejected.
+--
+-- Unmapped keys are the normal case, not a backlog: most of the 362 are a single
+-- cohort's own question and need no alias. v_sample_attributes_canonical returns
+-- them with concept NULL rather than hiding them.
+CREATE TABLE IF NOT EXISTS sample_attribute_aliases (
+    attribute VARCHAR(80) NOT NULL,
+    -- The question this key answers, snake_case.
+    concept VARCHAR(64) NOT NULL,
+    -- What the values are, which decides how they may be used:
+    --   boolean   decoded through sample_attribute_value_aliases
+    --   category  a closed set of labels, decoded the same way where it helps
+    --   quantity  a number in `value_numeric`, comparable within the key
+    --   interval  a range like '1-3' or '3+', NOT a number
+    --   agent     a drug or product name, free text
+    --   date      a date string, not a quantity
+    --   free_text prose
+    value_kind ENUM('boolean','category','quantity','interval','agent','date',
+                    'free_text') NOT NULL,
+    -- Why this key maps here, where the reason is not obvious from the name.
+    notes VARCHAR(255) NULL,
+    PRIMARY KEY (attribute),
+    KEY ix_attr_alias_concept (concept),
+    CONSTRAINT fk_attr_alias_attribute_exists CHECK (attribute <> '')
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- Per-key value decoding. Keyed on (attribute, value) because the SAME raw
+-- value means opposite things under different keys: '1' is yes under
+-- `Antibiotics` and no under `Antibiotic_in_the_past_month._1_no_2_yes`.
+CREATE TABLE IF NOT EXISTS sample_attribute_value_aliases (
+    attribute VARCHAR(80) NOT NULL,
+    raw_value VARCHAR(512) NOT NULL,
+    canonical_value VARCHAR(64) NOT NULL,
+    PRIMARY KEY (attribute, raw_value),
+    KEY ix_attr_value_alias_canonical (canonical_value),
+    CONSTRAINT fk_attr_value_alias_attr FOREIGN KEY (attribute)
+        REFERENCES sample_attribute_aliases(attribute)
+        ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- sample_attributes with the concept and decoded value beside the raw ones.
+--
+-- The raw columns are kept, not replaced: `attribute` and `value` are the
+-- provenance, and a canonical value that cannot be traced back to what the
+-- source actually said is worth less than one that can. canonical_value is NULL
+-- for a key with no decoding (a quantity, a date, free text) and for a value the
+-- map does not cover, which is how an unanticipated answer stays visible.
+CREATE OR REPLACE VIEW v_sample_attributes_canonical AS
+SELECT
+    a.sample_id,
+    a.attribute,
+    a.value,
+    a.value_numeric,
+    al.concept,
+    al.value_kind,
+    va.canonical_value,
+    (al.concept IS NOT NULL)                       AS has_concept,
+    (al.value_kind = 'boolean' AND va.canonical_value IS NULL
+     AND a.value IS NOT NULL)                      AS boolean_undecoded
+FROM sample_attributes a
+LEFT JOIN sample_attribute_aliases al ON al.attribute = a.attribute
+LEFT JOIN sample_attribute_value_aliases va
+       ON va.attribute = a.attribute AND va.raw_value = a.value;
+
+
 -- Per-key coverage for sample_attributes, so a mean always has its denominator.
 --
 -- 362 keys, and 13 of them mix numbers with words. Without this view

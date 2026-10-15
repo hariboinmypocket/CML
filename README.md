@@ -721,32 +721,49 @@ found a correctness bug and a constraint that enforced it.
 fell back to KEGG**. But a KEGG compound id is often a *lipid class* rather than
 a molecule:
 
-| KEGG id | what it is | distinct HMDB species it covers |
+| KEGG id | what it is | distinct HMDB species in the maps |
 |---|---|---|
-| `C00422` | triacylglycerol | **28** |
+| `C00422` | triacylglycerol | 28 — **but see the caveat below** |
 | `C00157` | phosphatidylcholine | 16 |
 | `C04230` | lysophosphatidylcholine | 15 |
 | `C00165` | diacylglycerol | 10 |
 | `C02530` | cholesterol ester | 8 |
 
-So the second triacylglycerol to arrive missed on its own HMDB id, fell back to
-`C00422`, found the **first one's row**, and silently reused it — two different
-molecules on one row, with the loser's levels colliding on the
+So the second phosphatidylcholine to arrive missed on its own HMDB id, fell back
+to `C00157`, found the **first one's row**, and silently reused it — two
+different molecules on one row, with the loser's levels colliding on the
 `(sample_id, metabolite_id)` key or dropped. `UNIQUE (kegg_id)` then made the
 alternative impossible: only one member of each family could exist at all.
-
-**202 of the 1,376 HMDB compounds in the source maps are absent from the
-database** (15%), at least **109** traceable to a KEGG class collision — and they
-are mostly lipid species, which are the bulk of an untargeted panel.
 
 Two changes: the KEGG lookup now runs **only** for a compound with no HMDB id of
 its own, and `kegg_id` is a non-unique annotation (`ix_metabolite_kegg`) rather
 than an identity, with `hmdb_id` carrying identity as before.
 
-**Recovering the 109 needs a reload**, which I have not run: `load_muller2022.py
---apply` writes ~515k level rows against a database two other sessions are also
-writing to, so that is your call on timing. The fix stops the loss recurring; the
-reload is what undoes it.
+**What the reload actually recovered**, measured against a snapshot pinned
+beforehand:
+
+| | before | after |
+|---|---|---|
+| metabolites | 1,222 | **1,248** |
+| metabolite levels | 514,359 | **522,707** |
+| metabolites with no levels | 1 | **0** |
+| samples / abundance rows / attributes | — | **unchanged** |
+
+**50 rows now sit in a shared-KEGG group**, across 24 KEGG ids — molecules that
+could not all have existed under the old constraint. `C00157` holds all three of
+its species (`HMDB0007972`, `HMDB0007973`, `HMDB0008038`) with 720 levels
+between them, and `1-palmitoyl-2-linoleoyl-GPC` is no longer a compound with no
+measurements.
+
+**Two numbers above were overstated before the reload, and the reload is what
+showed it.** `C00422`'s 28 triacylglycerol species live *only* in
+`iHMP_IBDMDB_2019`, which is in `SKIP_COHORTS` — so that family was never in the
+database and the reload could not recover it. Using it as the headline example
+was wrong. And the earlier claim that "at least 109" compounds were blocked by
+the constraint was an upper bound computed across *all* map files, including that
+skipped cohort; the realized figure is 26 new rows. The 202-of-1,376 absence
+figure stands, but most of it is the skipped cohort and the 216 within-cohort
+identity collisions, not the KEGG constraint.
 
 One thing this is *not*: the loader's "216 columns dropped for sharing an
 identifier within a cohort" is a separate and deliberate behaviour, keyed on
@@ -755,6 +772,35 @@ genuine upstream annotation errors — ERAWIJANTARI labels both
 3-phosphoglycerate and glycerol-3-phosphate `HMDB0000807`. Distinct HMDB species
 sharing a KEGG id have distinct identities and never collided there. That
 comment's count was stale at 124 and is now 216.
+
+### Two store divergences left after everything else
+
+Re-auditing every column this sweep touched, as value *sets* in both stores,
+separated the real problems from the noise. Most differences are **membership** —
+the mirror holds a different subset of taxa, so `Caryophyllales` and `Amelidae`
+appear only there and `Viruses` only in MySQL. Two were not.
+
+**`studies.data_type` in the mirror still held the raw source vocabulary for
+every study with no samples**: `AMPLICON` (59 studies), `16S rRNA` (28),
+`shotgun metagenomics` (9). The derivation pass only touched studies that *have*
+samples, since a sample-less study has nothing to derive from — but normalizing
+a stored value is not a derivation, and skipping it meant
+`WHERE data_type = '16S'` matched **122 studies in the mirror against 236 in
+MySQL**. Those 96 now fold through `normalize_platform`, which leaves `mixed` and
+`meta-analysis` alone so nothing gains a platform it has no evidence for. The
+mirror reads `16S` (209), `mNGS` (101), `meta-analysis` (2) — one vocabulary, and
+no `mixed` because none of *its* studies span both platforms.
+
+**The `Candidatus` prefix differed across stores for the same taxon.** Taxid
+456826 carried `Candidatus Cloacimonadia` / `Cloacimonadales` /
+`Cloacimonadaceae` in MySQL and the bare forms in the mirror — 5 values across
+class, order and family. Neither store held both forms *internally*, so this was
+invisible to any single-store check. `Candidatus` is how NCBI writes the
+designation of an uncultivated taxon, so the fold keeps it, matching the
+`Saccharimonadales` and `Obscuribacteraceae` entries already in the map.
+
+Prefix splits remaining: **0** across all three ranks. What is left between the
+stores is membership only.
 
 ### The class, order and family layers had the Firmicutes/Bacillota split too
 
@@ -992,6 +1038,62 @@ deduplicated rows. A longitudinal *GMrepo* study is invisible to it, and it only
 genuinely constrains the 2,367 MullerMM and PubMed rows. It is an improvement on
 `ml_ready_deduplicated`, not a solution to pseudo-replication. (The SQLite mirror
 has no `subject_id` column at all, so the flag is MySQL-only.)
+
+### A key-alias table, so a question can find all of its data
+
+`sample_attributes` keeps 362 keys exactly as the source wrote them, which is
+right — a value can always be traced back to the file and column it came from —
+and useless for asking a question. **Antibiotic exposure is spread over seven
+yes/no keys**, so `WHERE attribute = 'Antibiotics'` finds 518 of the 1,484 rows
+that answer it.
+
+`sample_attribute_aliases` maps each key to a **concept**, and
+`sample_attribute_value_aliases` carries the **per-key decoding**.
+`v_sample_attributes_canonical` joins both beside the raw columns.
+
+| concept | keys | rows |
+|---|---|---|
+| `antibiotic_exposure` | 7 | 1,484 |
+| `smoking_status` | 3 | 499 |
+| `alcohol_amount` | 2 | 455 |
+| `immunosuppressant_use` | 2 | 360 |
+| `antibiotic_agent` | 5 | 309 |
+| `infant_feeding` | 3 | 226 |
+| `delivery_mode` | 2 | 173 |
+
+**The value map is the point, not the name map.** `1` means *yes* under
+`Antibiotics` and *no* under `Antibiotic_in_the_past_month._1_no_2_yes`. A
+name-only alias would let those pool, and the damage is measurable:
+
+| read | "yes" count |
+|---|---|
+| naive — treat `1`/`yes`/`TRUE` as yes | **602** |
+| decoded per key | **309** |
+| rows the naive read inverts | **293** |
+
+Same family of error as pooling an LDA score without its comparison order, which
+this schema already guards against.
+
+**`concept` is the question, not the topic.** Antibiotics carry three —
+`antibiotic_exposure`, `antibiotic_agent`, `antibiotic_start_date` — and one
+`antibiotic` concept would put drug names and booleans in the same column.
+
+**Three false clusters were produced by name heuristics and rejected by reading
+the values**, and they are in the tests so they stay rejected:
+
+- `steroids` and `mesalamine` are **distinct drugs**, not members of an
+  immunosuppressant concept. Only `immunosuppressant` and
+  `Immunosuppressive_medication` answer one question.
+- **`Breast cancer` is a diagnosis** — a `%breast%` match pulls it in beside the
+  infant-feeding keys.
+- `GADA_Level`, `IA2A_Level`, `IAA_Level`, `AAB_Level`, `ICA_Level` are **five
+  different autoantibodies**, not one "level".
+
+**331 of the 362 keys are unmapped, and that is the normal case** rather than a
+backlog: most are a single cohort's own question and need no alias. The view
+returns them with `concept` NULL rather than hiding them. `boolean_undecoded`
+flags any boolean value the map does not cover — currently **0** — so an
+unanticipated answer surfaces instead of being guessed at.
 
 ### `value_numeric` held numbers that were not quantities
 
