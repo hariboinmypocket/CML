@@ -1095,6 +1095,43 @@ returns them with `concept` NULL rather than hiding them. `boolean_undecoded`
 flags any boolean value the map does not cover — currently **0** — so an
 unanticipated answer surfaces instead of being guessed at.
 
+### Reaching the concepts showed they are too sparse to pool
+
+The alias tables make a question reachable. `v_attribute_concept_coverage` says
+whether reaching it is worth anything, and for every concept seeded the answer is
+**only within a few studies**:
+
+| concept | kinds | ml cohort | studies | studies where it varies |
+|---|---|---|---|---|
+| `antibiotic_exposure` | boolean | **709** (5.3%) | 5 | **5** |
+| `alcohol_amount` | quantity, interval | 455 | 2 | n/a |
+| `probiotic_exposure` | boolean | 344 | 1 | 1 |
+| `smoking_status` | category | 259 | 3 | 2 |
+| `immunosuppressant_use` | boolean | 162 | 2 | **1** |
+| `antibiotic_start_date` | date | **0** | 1 | n/a |
+
+**The best-covered concept reaches 5.3% of the modelling cohort**, and all five
+of its studies are MullerMM — so **no GMrepo sample carries antibiotic exposure
+at all**. A model trained on the pooled cohort cannot adjust for antibiotic use,
+however cleanly the concept now decodes. `antibiotic_start_date` reaches 34
+samples and none of the cohort.
+
+`n_studies_with_both_values` is what separates sparse-but-usable from useless: a
+covariate that is single-valued inside every study it appears in is collinear
+with the study itself, the same trap as a disease arm drawn from one cohort. All
+five antibiotic studies carry both values, so *within* those five it is a real
+covariate — it is the pooling it cannot survive. `immunosuppressant_use` has two
+studies and only one that varies, because `Immunosuppressive_medication` records
+only "No".
+
+**Two defects in that view were mine, and they are the pattern this sweep keeps
+finding.** `MIN(value_kind)` over the ENUM reported `infant_feeding` as
+`boolean` when it mixes a category key with two booleans — a column answering a
+different question than its name — so it now reports every kind. And
+`n_studies_with_both_values` returned **0** for a quantity, which read as "never
+varies" when it only meant "no value map applies"; `smoking_exposure_index` is a
+Brinkman score that plainly does vary. It is NULL there now.
+
 ### `value_numeric` held numbers that were not quantities
 
 `sample_attributes.value_numeric` was documented as *"populated only when `value`
