@@ -707,3 +707,81 @@ def coarser_than_genus(ncbi_rank) -> bool:
     if not rank:
         return False
     return rank not in RANKS_AT_OR_BELOW_GENUS
+
+
+# --- class, order and family synonyms ---------------------------------------
+#
+# PHYLUM_SYNONYMS solved this for one rank. The other three never got it:
+# scripts/backfill_lineage.py passes ONLY `phylum` through normalize_phylum and
+# writes class, order and family verbatim from the dump, so a row filled from
+# NCBI carries the current scientific name while one loaded earlier keeps the
+# old one, and the two sit side by side. Measured by the tax ID identity test --
+# two stored names resolving to the SAME NCBI node are synonyms of one taxon,
+# never a reclassification:
+#
+#     class_name    1 node  split over   409 rows
+#     order_name   10 nodes split over 1,500 rows
+#     family       13 nodes split over   557 rows
+#
+# So `GROUP BY order_name` reported Clostridiales as two orders -- 413 rows under
+# Eubacteriales and 127 under Clostridiales -- which is the Firmicutes/Bacillota
+# defect again one rank down.
+#
+# THE TARGET IS THE MAJORITY STORED NAME, NOT NCBI'S SCIENTIFIC NAME, and that
+# is deliberate. Folding onto the scientific name would have:
+#
+#   re-introduced the nomenclatural code this schema strips --
+#   Saccharimonadales (SeqCode), Saccharimonadaceae (SeqCode) and
+#   Obscuribacteraceae (SeqCode) are NCBI's scientific names for three of these
+#   nodes, and writing them back would fail the pre-push phylum check; and
+#
+#   moved 107 Streptomycetales rows onto Kitasatosporales, which NCBI prefers and
+#   almost nobody uses -- the same reason PHYLUM_SYNONYMS keeps Firmicutes over
+#   Bacillota.
+#
+# Every target below is a name already present in this database. The map is
+# explicit rather than computed at run time so the fold cannot drift as row
+# counts change; the counts in the comments are from 2026-10-14.
+LINEAGE_SYNONYMS = {
+    # order: the 2021-era renamings, each confirmed by a shared tax ID
+    "clostridiales": "Eubacteriales",                 # 127 -> 413
+    "bacillales": "Caryophanales",                    # 122 -> 167
+    "rhizobiales": "Hyphomicrobiales",                #  36 -> 113
+    "corynebacteriales": "Mycobacteriales",           #  26 ->  79
+    "enterobacteriales": "Enterobacterales",          #  15 -> 230
+    "xanthomonadales": "Lysobacterales",              #   4 ->  37
+    "kitasatosporales": "Streptomycetales",           #   3 -> 107, against NCBI
+    "erysiphales": "Helotiales",                      #   1 ->   6
+    "haloferacales": "Halobacteriales",               #   1 ->   8
+    "saccharimonadales": "Candidatus Saccharimonadales",   # 1 -> 4
+    # family
+    "ruminococcaceae": "Oscillospiraceae",            #  32 -> 161
+    "leuconostocaceae": "Lactobacillaceae",           #   8 -> 189
+    "planococcaceae": "Caryophanaceae",               #   8 ->  13
+    "bradyrhizobiaceae": "Nitrobacteraceae",          #   6 ->   7
+    "rhodobacteraceae": "Paracoccaceae",              #   6 ->  32
+    "xanthomonadaceae": "Lysobacteraceae",            #   4 ->  26
+    "hungateiclostridiaceae": "Oscillospiraceae",     #   3 -> 161
+    "nocardiopsidaceae": "Nocardiopsaceae",           #   2 ->   3, against NCBI
+    "clostridiales family xiii. incertae sedis": "Anaerovoracaceae",  # 1 -> 36
+    "methanosaetaceae": "Methanotrichaceae",          #   1 ->   2
+    "sinobacteraceae": "Nevskiaceae",                 #   1 ->   7
+    "thiovulaceae": "Sulfurimonadaceae",              #   1 ->   2
+    "saccharimonadaceae": "Candidatus Saccharimonadaceae",  # 1 -> 3
+    "obscuribacteraceae": "Candidatus Obscuribacteraceae",  # 1 -> 1, tie
+    # class
+    "actinomycetia": "Actinomycetes",                 #   1 -> 408
+}
+
+
+def normalize_lineage_name(value) -> str:
+    """Fold a class, order or family name onto one name per NCBI node.
+
+    Applied AFTER strip_nomenclatural_code, so a stored '(SeqCode)' value folds
+    on its bare name. Returns the value unchanged when it is not a known synonym,
+    so a name nobody has mapped is never discarded.
+    """
+    text = strip_nomenclatural_code(value)
+    if not text:
+        return ""
+    return LINEAGE_SYNONYMS.get(text.casefold(), text)

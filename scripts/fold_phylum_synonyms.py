@@ -46,7 +46,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from gutdb.config import Settings
 from gutdb.db import connect
-from gutdb.transform import normalize_phylum, strip_nomenclatural_code
+from gutdb.transform import (normalize_lineage_name, normalize_phylum,
+                             strip_nomenclatural_code)
 
 DRY_RUN = "--apply" not in sys.argv
 SQLITE = os.environ.get("GUTDB_SQLITE", "gut_microbiome.sqlite")
@@ -75,6 +76,42 @@ def strip_annotations(label: str, cur, placeholder: str) -> int:
                             f"WHERE {column} = {placeholder}", (tidy, value))
                 cleaned += cur.rowcount
     return cleaned
+
+
+# class, order and family get the same treatment the phylum got, one rank down.
+LINEAGE_RANK_COLUMNS = ("class_name", "order_name", "family")
+
+
+def fold_lineage_ranks(label: str, cur, placeholder: str) -> int:
+    """Fold class, order and family onto one name per NCBI node.
+
+    PHYLUM_SYNONYMS covered one rank; backfill_lineage.py writes the other three
+    verbatim from the dump, so a row filled from NCBI carried the current
+    scientific name while one loaded earlier kept the old one. The tax ID
+    identity test found 24 nodes split that way over 2,466 rows -- Clostridiales
+    413/127 against Eubacteriales, Ruminococcaceae 32 against Oscillospiraceae's
+    161 -- which is the Firmicutes/Bacillota defect at class, order and family.
+    See LINEAGE_SYNONYMS in gutdb/transform.py for why the target is the majority
+    stored name rather than NCBI's.
+    """
+    total = 0
+    for column in LINEAGE_RANK_COLUMNS:
+        cur.execute(f"SELECT {column}, COUNT(*) FROM taxa "
+                    f"WHERE {column} IS NOT NULL AND {column} <> '' "
+                    f"GROUP BY {column}")
+        stored = cur.fetchall()
+        counts = dict(stored)
+        for value, n in sorted(stored, key=lambda r: -r[1]):
+            folded = normalize_lineage_name(value)
+            if not folded or folded == value:
+                continue
+            total += n
+            print(f"   {label}: {column} {value!r} -> {folded!r}  {n} rows "
+                  f"(joins {counts.get(folded, 0)})")
+            if not DRY_RUN:
+                cur.execute(f"UPDATE taxa SET {column} = {placeholder} "
+                            f"WHERE {column} = {placeholder}", (folded, value))
+    return total
 
 
 def fold_store(label: str, cur, placeholder: str) -> int:
@@ -145,11 +182,18 @@ def main() -> int:
         conn.commit()
         print(f"   mysql: cleaned {n} rows")
 
+    print("\nclass, order and family synonyms:")
+    folded = fold_lineage_ranks("mysql", cur, "%s")
+    if not DRY_RUN:
+        conn.commit()
+        print(f"   mysql: folded {folded} rows across class/order/family")
+
     if Path(SQLITE).exists():
         print("\nsqlite mirror:")
         sq = sqlite3.connect(SQLITE)
         sc = sq.cursor()
-        n = fold_store("sqlite", sc, "?") + strip_annotations("sqlite", sc, "?")
+        n = (fold_store("sqlite", sc, "?") + strip_annotations("sqlite", sc, "?")
+             + fold_lineage_ranks("sqlite", sc, "?"))
         if not DRY_RUN:
             sq.commit()
             print(f"   sqlite: updated {n} rows")

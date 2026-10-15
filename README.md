@@ -711,6 +711,102 @@ What changed, since again nothing is deleted:
 - **`scripts/richness_audit.py`** writes `data/richness_audit.csv` and
   `data/richness_arm_imbalance.csv`.
 
+### The class, order and family layers had the Firmicutes/Bacillota split too
+
+`PHYLUM_SYNONYMS` solved this for one rank. The other three never got it:
+`backfill_lineage.py` passes **only `phylum`** through `normalize_phylum` and
+writes class, order and family verbatim from the dump. So a row filled from NCBI
+carries the current scientific name while one loaded earlier keeps the old one,
+and they sit side by side. Measured with the **tax ID identity test** — two
+stored names resolving to the *same* NCBI node are synonyms of one taxon, never
+a reclassification:
+
+| rank | nodes split | rows |
+|---|---|---|
+| `class_name` | 1 | 409 |
+| `order_name` | **10** | **1,500** |
+| `family` | **13** | 557 |
+
+`GROUP BY order_name` reported Clostridiales as two orders — 413 rows under
+`Eubacteriales`, 127 under `Clostridiales`. Others: `Bacillales`/`Caryophanales`
+(122/167), `Rhizobiales`/`Hyphomicrobiales` (36/113),
+`Ruminococcaceae`/`Oscillospiraceae` (32/161).
+
+**The target is the majority stored name, not NCBI's scientific name**, and that
+choice mattered. Folding onto the scientific name would have:
+
+- **re-introduced the nomenclatural code this schema strips.**
+  `Saccharimonadales (SeqCode)`, `Saccharimonadaceae (SeqCode)` and
+  `Obscuribacteraceae (SeqCode)` are NCBI's scientific names for three of these
+  nodes, and writing them back **would have failed the pre-push check** I fixed
+  yesterday;
+- moved 107 `Streptomycetales` rows onto `Kitasatosporales`, which NCBI prefers
+  and almost nobody uses — the same reason `PHYLUM_SYNONYMS` keeps *Firmicutes*
+  over *Bacillota*.
+
+The map is **explicit rather than computed at run time**, and that is load-bearing
+for a reason this sweep keeps running into: the mirror's majorities differ from
+MySQL's (`Bacillales` 183 vs `Caryophanales` 87 there), so a per-store majority
+rule would have picked different winners in each store and **re-created the
+two-store divergence** the rest of this work removed. One fixed map, both stores,
+25 folds, 0 un-folded synonyms left in either.
+
+### Filling the lineage from the row's own genus
+
+143 taxa had no phylum. `backfill_lineage.py` resolves from the NCBI dump, which
+cannot help most of them — 91 have no tax ID at all. But **62 did not need NCBI**,
+because the answer was already in the database: rows sharing their `genus_key`
+carried a phylum and they did not. An internal inconsistency, not missing
+knowledge, and not marginal — `Waltera` has 7,944 abundance rows,
+*Merdimmobilis hominis* 3,195, *Faecalibacterium butyricigenerans* 3,169 beside
+nine `faecalibacterium` peers all saying Firmicutes.
+
+**The guard is the point.** A `genus_key` is derived from a name's first token, so
+it can group organisms that are not relatives. Two keys are ambiguous, and
+checking them was worth it:
+
+- **`bacteroides`** carries both Bacteroidetes (77 rows) and Firmicutes (1) — and
+  **the Firmicutes one is right.** NCBI writes it `[Bacteroides] pectinophilus`,
+  brackets meaning the name is misapplied; the organism is a *Clostridium*
+  relative. One name whose genus token contradicts its lineage.
+- **`unclassified`** carries Proteobacteria and Firmicutes across three MiMeDB
+  rows named "Unclassified *&lt;family&gt;* bacterium …", where the first token is
+  the word *Unclassified*. Both lineages are correct for their families; the key
+  is simply meaningless there.
+
+Neither has a phylum-less row waiting on it, so nothing was skipped — the guard
+exists so that when one arrives it is skipped rather than guessed. Phylum-less
+taxa: **143 → 81** in MySQL, 40 → 36 in the mirror. The remaining 81 have no
+peer carrying a phylum either, so nothing in the database can answer for them.
+
+### The backfill surfaced a cross-kingdom homonym the empty cell had hidden
+
+Filling those 62 phyla made the pre-push check fail with one disagreement:
+`Firmicutes -> Arthropoda`. The fill was **correct**; what it did was expose a
+collision that an empty cell had kept invisible, because a NULL phylum has
+nothing to disagree with.
+
+`Moorella` is two genera. NCBI holds taxid 44260 `Moorella <firmicutes>` as a
+**synonym** and 216400 `Moorella <wasps, ants & bees>` as the **scientific
+name** — and `normalize_reclassified_phyla.py` matches a row with no tax ID by
+name, preferring scientific names. So it resolved our Firmicute to the wasp and
+reported an animal phylum. *Bosea* (plant and bacterium), *Bogoriella* and
+*Copromorpha* are the same shape, already known here.
+
+Adding the pair to `APPROVED` would have been the wrong fix: that set authorizes
+a *reclassification*, so the entry would have permitted moving **every**
+Firmicutes row to Arthropoda. Instead the collision is discarded, by a rule that
+generalises — when a row matched **by name** has a stored superkingdom that
+disagrees with the resolved node's domain, the match is a homonym and is thrown
+away. Rows carrying their own tax ID are exempt, since they are not homonym
+victims and a genuine cross-domain move would be real.
+
+The counter is reported as `homonym_discarded` rather than left silent, which is
+the same lesson as the rest of this sweep: a guard nobody can see is a guard
+nobody can check. (The dump also ranks Bacteria and Archaea as `domain` now
+rather than `superkingdom`; both spellings are accepted so the guard does not go
+inert when the dump is refreshed.)
+
 ### Two association-layer "defects" that turned out to be deliberate
 
 Both looked like the vocabulary fragmentation this sweep had already fixed four

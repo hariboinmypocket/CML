@@ -4,6 +4,7 @@ from pathlib import Path
 
 from gutdb.transform import (
     GRAM,
+    LINEAGE_SYNONYMS,
     NOT_A_PLATFORM,
     derive_metabolite_scale,
     derive_study_platform,
@@ -22,6 +23,7 @@ from gutdb.transform import (
     derive_primary_food_source,
     extract_species_epithet,
     normalize_genus,
+    normalize_lineage_name,
     normalize_phylum,
     resolve_effect_type,
     strip_nomenclatural_code,
@@ -522,3 +524,67 @@ class EffectTypeSentinelTests(unittest.TestCase):
     def test_nothing_declared_defaults_to_the_column_default(self):
         self.assertEqual(resolve_effect_type("", None), "LDA")
         self.assertEqual(resolve_effect_type(None, None), "LDA")
+
+
+class LineageSynonymTests(unittest.TestCase):
+    """class, order and family get one name per NCBI node, as phylum already did.
+
+    Measured by the tax ID identity test: two stored names resolving to the SAME
+    node are synonyms of one taxon, never a reclassification. 24 nodes were split
+    over 2,466 rows -- Clostridiales 127 beside Eubacteriales 413 -- which is the
+    Firmicutes/Bacillota defect one rank down.
+    """
+
+    def test_the_2021_order_renamings_fold(self):
+        for old, new in (("Clostridiales", "Eubacteriales"),
+                         ("Bacillales", "Caryophanales"),
+                         ("Rhizobiales", "Hyphomicrobiales"),
+                         ("Corynebacteriales", "Mycobacteriales"),
+                         ("Enterobacteriales", "Enterobacterales")):
+            self.assertEqual(normalize_lineage_name(old), new, old)
+
+    def test_family_renamings_fold(self):
+        self.assertEqual(normalize_lineage_name("Ruminococcaceae"),
+                         "Oscillospiraceae")
+        self.assertEqual(normalize_lineage_name("Leuconostocaceae"),
+                         "Lactobacillaceae")
+
+    def test_a_target_is_already_folded(self):
+        """Idempotent: the fold must be a no-op on its own output."""
+        for name in ("Eubacteriales", "Oscillospiraceae", "Caryophanales",
+                     "Actinomycetes", "Streptomycetales"):
+            self.assertEqual(normalize_lineage_name(name), name, name)
+
+    def test_the_nomenclatural_code_is_stripped_before_folding(self):
+        """Folding onto NCBI's scientific name would re-add '(SeqCode)'.
+
+        Saccharimonadales (SeqCode) is NCBI's scientific name for that node, and
+        writing it back would fail the pre-push phylum check. The map targets the
+        stored Candidatus name instead.
+        """
+        self.assertEqual(normalize_lineage_name("Saccharimonadales (SeqCode)"),
+                         "Candidatus Saccharimonadales")
+        self.assertEqual(normalize_lineage_name("Obscuribacteraceae (ICNP)"),
+                         "Candidatus Obscuribacteraceae")
+
+    def test_the_common_name_wins_over_ncbis_preference(self):
+        """107 Streptomycetales rows must not move onto Kitasatosporales.
+
+        Same reason PHYLUM_SYNONYMS keeps Firmicutes over Bacillota.
+        """
+        self.assertEqual(normalize_lineage_name("Kitasatosporales"),
+                         "Streptomycetales")
+
+    def test_an_unmapped_name_is_returned_unchanged(self):
+        for name in ("Lachnospiraceae", "Bacteroidales", "Something Novel"):
+            self.assertEqual(normalize_lineage_name(name), name, name)
+
+    def test_empty_stays_empty(self):
+        for value in (None, "", "   "):
+            self.assertEqual(normalize_lineage_name(value), "")
+
+    def test_no_target_is_itself_a_synonym_key(self):
+        """A target that was also a key would make the fold order-dependent."""
+        keys = set(LINEAGE_SYNONYMS)
+        for target in LINEAGE_SYNONYMS.values():
+            self.assertNotIn(target.casefold(), keys, target)
