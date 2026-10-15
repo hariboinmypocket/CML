@@ -70,7 +70,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from gutdb.config import Settings
 from gutdb.db import connect
-from gutdb.transform import normalize_phylum
+from gutdb.transform import normalize_phylum, numeric_value_is_trustworthy
 
 csv.field_size_limit(10 ** 9)
 
@@ -318,14 +318,22 @@ def attribute_rows(sample_id: int, row: dict,
             truncated.append((column, len(value)))
             value = value[:ATTR_VALUE_MAX]
         numeric = None
-        try:
-            candidate = float(value)
-        except ValueError:
-            pass
-        else:
-            # Reject inf/nan, which float() accepts and MySQL will not store.
-            if candidate == candidate and abs(candidate) != float("inf"):
-                numeric = candidate
+        # numeric_value_is_trustworthy, not a bare float(). float() accepts
+        # Python's digit separator, so float('10007539_0') is 100075390.0 -- which
+        # is how 434 unique_id cells came to hold a fabricated number that can
+        # collide ('1000753_90' gives the same one). It also refuses a value whose
+        # key declares its own code mapping, because the mean of '1_no_2_yes'
+        # labels is meaningless. Without this the loader would undo
+        # scripts/fix_attribute_numerics.py on every reload.
+        if numeric_value_is_trustworthy(column, value):
+            try:
+                candidate = float(value)
+            except ValueError:
+                pass
+            else:
+                # Reject inf/nan, which float() accepts and MySQL will not store.
+                if candidate == candidate and abs(candidate) != float("inf"):
+                    numeric = candidate
         out.append((sample_id, column[:80], value, numeric))
     return out
 
