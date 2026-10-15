@@ -721,32 +721,49 @@ found a correctness bug and a constraint that enforced it.
 fell back to KEGG**. But a KEGG compound id is often a *lipid class* rather than
 a molecule:
 
-| KEGG id | what it is | distinct HMDB species it covers |
+| KEGG id | what it is | distinct HMDB species in the maps |
 |---|---|---|
-| `C00422` | triacylglycerol | **28** |
+| `C00422` | triacylglycerol | 28 — **but see the caveat below** |
 | `C00157` | phosphatidylcholine | 16 |
 | `C04230` | lysophosphatidylcholine | 15 |
 | `C00165` | diacylglycerol | 10 |
 | `C02530` | cholesterol ester | 8 |
 
-So the second triacylglycerol to arrive missed on its own HMDB id, fell back to
-`C00422`, found the **first one's row**, and silently reused it — two different
-molecules on one row, with the loser's levels colliding on the
+So the second phosphatidylcholine to arrive missed on its own HMDB id, fell back
+to `C00157`, found the **first one's row**, and silently reused it — two
+different molecules on one row, with the loser's levels colliding on the
 `(sample_id, metabolite_id)` key or dropped. `UNIQUE (kegg_id)` then made the
 alternative impossible: only one member of each family could exist at all.
-
-**202 of the 1,376 HMDB compounds in the source maps are absent from the
-database** (15%), at least **109** traceable to a KEGG class collision — and they
-are mostly lipid species, which are the bulk of an untargeted panel.
 
 Two changes: the KEGG lookup now runs **only** for a compound with no HMDB id of
 its own, and `kegg_id` is a non-unique annotation (`ix_metabolite_kegg`) rather
 than an identity, with `hmdb_id` carrying identity as before.
 
-**Recovering the 109 needs a reload**, which I have not run: `load_muller2022.py
---apply` writes ~515k level rows against a database two other sessions are also
-writing to, so that is your call on timing. The fix stops the loss recurring; the
-reload is what undoes it.
+**What the reload actually recovered**, measured against a snapshot pinned
+beforehand:
+
+| | before | after |
+|---|---|---|
+| metabolites | 1,222 | **1,248** |
+| metabolite levels | 514,359 | **522,707** |
+| metabolites with no levels | 1 | **0** |
+| samples / abundance rows / attributes | — | **unchanged** |
+
+**50 rows now sit in a shared-KEGG group**, across 24 KEGG ids — molecules that
+could not all have existed under the old constraint. `C00157` holds all three of
+its species (`HMDB0007972`, `HMDB0007973`, `HMDB0008038`) with 720 levels
+between them, and `1-palmitoyl-2-linoleoyl-GPC` is no longer a compound with no
+measurements.
+
+**Two numbers above were overstated before the reload, and the reload is what
+showed it.** `C00422`'s 28 triacylglycerol species live *only* in
+`iHMP_IBDMDB_2019`, which is in `SKIP_COHORTS` — so that family was never in the
+database and the reload could not recover it. Using it as the headline example
+was wrong. And the earlier claim that "at least 109" compounds were blocked by
+the constraint was an upper bound computed across *all* map files, including that
+skipped cohort; the realized figure is 26 new rows. The 202-of-1,376 absence
+figure stands, but most of it is the skipped cohort and the 216 within-cohort
+identity collisions, not the KEGG constraint.
 
 One thing this is *not*: the loader's "216 columns dropped for sharing an
 identifier within a cohort" is a separate and deliberate behaviour, keyed on

@@ -588,11 +588,21 @@ def ensure_metabolite_rows(cur, compounds: dict[str, dict], cache: dict) -> dict
             out[col] = cache[key]
             continue
         row = None
+        # ORDER BY id LIMIT 1 on both, because kegg_id is no longer UNIQUE -- a
+        # KEGG class id legitimately covers several molecules now. Without the
+        # LIMIT the kegg lookup returns every member of the class, fetchone()
+        # reads one and leaves the rest, and the NEXT execute on this cursor dies
+        # with "Unread result found". The order makes the choice deterministic
+        # rather than whatever the storage engine returns first; it only applies
+        # to a compound that has no HMDB id of its own, so it never decides
+        # between two identified molecules.
         if meta["hmdb_id"]:
-            cur.execute("SELECT id FROM metabolites WHERE hmdb_id = %s", (meta["hmdb_id"],))
+            cur.execute("SELECT id FROM metabolites WHERE hmdb_id = %s "
+                        "ORDER BY id LIMIT 1", (meta["hmdb_id"],))
             row = cur.fetchone()
         elif meta["kegg_id"]:
-            cur.execute("SELECT id FROM metabolites WHERE kegg_id = %s", (meta["kegg_id"],))
+            cur.execute("SELECT id FROM metabolites WHERE kegg_id = %s "
+                        "ORDER BY id LIMIT 1", (meta["kegg_id"],))
             row = cur.fetchone()
         if row is not None:
             cache[key] = out[col] = row[0]
