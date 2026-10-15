@@ -1,0 +1,6 @@
+store,source_database,stored_body_site,normalized,basis,n_samples
+mysql,GMrepo,feces,feces,source_scope,33630
+mysql,MGnify,gastric mucosa,gastric mucosa,reported,120
+mysql,PubMed,feces,feces,source_scope,479
+mysql,MullerMM,feces,feces,source_scope,2464
+sqlite,GMrepo,feces,feces,source_scope,23494

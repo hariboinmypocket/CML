@@ -101,3 +101,45 @@ def richness_confound(meta: pd.DataFrame, richness: str = "n_genera_profiled",
         "median_richness_control": float(meta.loc[y == 0, richness].median()),
         "per_study_depth": ratios,
     }
+
+
+def body_site_confound(meta: pd.DataFrame, site: str = "body_site",
+                       label: str = "phenotype", control: str = "Health") -> dict:
+    """Whether a cohort's two arms were taken from different material.
+
+    Richness at least measures something about the sample. Body site does not
+    even do that: if the cases are stomach biopsies and the controls are stool,
+    the contrast answers "which organ is this" and the answer happens to
+    correlate perfectly with the label.
+
+    MGYS00001188 is the case in this database. It contributes 120 gastric mucosa
+    samples and NO control arm of its own, so Gastritis, Metaplasia and Stomach
+    Neoplasms are each scored against pooled stool controls. All three reach an
+    AUC of exactly 1.000 on CLR genus features, and body site alone -- one
+    indicator variable -- also reaches exactly 1.000. The communities share no
+    abundant genus: Haematomicrobium, Helicobacter, Tsukamurella, Gordonia and
+    Thermus against Bacteroides, Phocaeicola, Faecalibacterium, Prevotella and
+    Bifidobacterium.
+
+    `sites_in_one_arm_only` is the number that decides it. A site present in both
+    arms can be adjusted for; a site that appears only among the cases cannot,
+    because there is no control at that site to compare against.
+    """
+    y = (meta[label] != control).astype(int)
+    case_sites = set(meta.loc[y == 1, site].dropna())
+    control_sites = set(meta.loc[y == 0, site].dropna())
+    exclusive = (case_sites ^ control_sites)
+
+    # Scored as "does this sample sit at a site the cases occupy", which is the
+    # strongest single indicator a model could build out of body site alone.
+    indicator = meta[site].isin(case_sites - control_sites).astype(int)
+    return {
+        "case_sites": sorted(case_sites),
+        "control_sites": sorted(control_sites),
+        "shared_sites": sorted(case_sites & control_sites),
+        "sites_in_one_arm_only": sorted(exclusive),
+        "site_auc": (None if not (case_sites - control_sites)
+                     else round(rank_auc(y, indicator) or 0.5, 3)),
+        "n_case_at_unmatched_site": int(
+            ((y == 1) & meta[site].isin(case_sites - control_sites)).sum()),
+    }

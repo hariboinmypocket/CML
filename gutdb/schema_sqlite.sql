@@ -139,6 +139,12 @@ CREATE TABLE IF NOT EXISTS samples (
     bmi REAL,
     country TEXT,
     qc_status TEXT,
+    -- Per-sample platform; studies.data_type is 'mixed' for 10 GMrepo projects
+    -- that contain both amplicon and shotgun runs. See gutdb/schema.sql.
+    sequencing_platform TEXT,
+    -- 'feces' or 'gastric mucosa'; a per-study constant, never per-sample
+    -- metadata. This store said 'gut' for every GMrepo sample while MySQL said
+    -- NULL -- see gutdb/schema.sql and scripts/normalize_body_site.py.
     body_site TEXT
 );
 CREATE INDEX IF NOT EXISTS ix_sample_study ON samples (study_id);
@@ -187,6 +193,7 @@ SELECT
     st.project_accession,
     st.source_database AS study_source,
     st.data_type,
+    s.sequencing_platform,
     d.name AS phenotype,
     d.mesh_id,
     CASE WHEN d.name = 'Health' THEN 1 ELSE 0 END AS is_control,

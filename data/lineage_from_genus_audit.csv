@@ -1,0 +1,55 @@
+store,taxon_id,scientific_name,taxonomic_rank,column,filled_with,peer_rows,abundance_rows,note
+mysql,1759324,Brevibacterium sp. jcm 18882,species,class_name,,16,,skipped: genus_key maps to Actinobacteria | Actinomycetes
+mysql,2287421,Veillonella intestinalis,species,class_name,,17,,skipped: genus_key maps to Clostridia | Negativicutes
+mysql,2358129,Corynebacterium yonathiae,species,class_name,,65,,skipped: genus_key maps to Actinobacteria | Actinomycetes
+mysql,7701,Faecalibacterium butyricigenerans,species,order_name,,9,,skipped: genus_key maps to Eubacteriales | Oscillospirales
+mysql,13363,Acidaminococcus provencensis,species,order_name,,5,,skipped: genus_key maps to Acidaminococcales | Selenomonadales
+mysql,80742,Clostridium clostridioforme,species,order_name,,103,,skipped: genus_key maps to Clostridiales | Eubacteriales | Lachnospirales
+mysql,80746,Clostridium ramosum,species,order_name,,103,,skipped: genus_key maps to Clostridiales | Eubacteriales | Lachnospirales
+mysql,483511,Heyndrickxia,genus,order_name,,2,,skipped: genus_key maps to Bacillales | Caryophanales
+mysql,1401546,Clostridiales,genus,order_name,,6,,skipped: genus_key maps to Eubacteriales | Peptostreptococcales
+mysql,2287421,Veillonella intestinalis,species,order_name,,17,,skipped: genus_key maps to Clostridiales | Selenomonadales | Veillonellales
+mysql,2358129,Corynebacterium yonathiae,species,order_name,,65,,skipped: genus_key maps to Actinomycetales | Corynebacteriales | Mycobacteriales
+mysql,2468055,Bradyrhizobium denitrificans,species,order_name,,3,,skipped: genus_key maps to Hyphomicrobiales | Rhizobiales
+mysql,2668880,Clostridium sp af34 10bh,species,order_name,,103,,skipped: genus_key maps to Clostridiales | Eubacteriales | Lachnospirales
+mysql,2668907,Faecalibacterium sgb15346,species,order_name,,9,,skipped: genus_key maps to Eubacteriales | Oscillospirales
+mysql,2668910,Blautia massiliensis,species,order_name,,29,,skipped: genus_key maps to Clostridiales | Lachnospirales
+mysql,2668916,Clostridium sp af36 4,species,order_name,,103,,skipped: genus_key maps to Clostridiales | Eubacteriales | Lachnospirales
+mysql,2668924,Clostridium sp am22 11ac,species,order_name,,103,,skipped: genus_key maps to Clostridiales | Eubacteriales | Lachnospirales
+mysql,2668928,Lachnospira sgb5077,species,order_name,,8,,skipped: genus_key maps to Clostridiales | Lachnospirales
+mysql,2668931,Clostridium sp am49 4bh,species,order_name,,103,,skipped: genus_key maps to Clostridiales | Eubacteriales | Lachnospirales
+mysql,2668950,Clostridium sp af15 49,species,order_name,,103,,skipped: genus_key maps to Clostridiales | Eubacteriales | Lachnospirales
+mysql,2668954,Roseburia sp af02 12,species,order_name,,12,,skipped: genus_key maps to Clostridiales | Lachnospirales
+mysql,2668956,Clostridium sp af34 13,species,order_name,,103,,skipped: genus_key maps to Clostridiales | Eubacteriales | Lachnospirales
+mysql,2668957,Lachnospira sp nsj 43,species,order_name,,8,,skipped: genus_key maps to Clostridiales | Lachnospirales
+mysql,2668964,Ruminococcus sp nsj 71,species,order_name,,18,,skipped: genus_key maps to Clostridiales | Eubacteriales
+mysql,2668977,Clostridium sp at4,species,order_name,,103,,skipped: genus_key maps to Clostridiales | Eubacteriales | Lachnospirales
+mysql,2673804,Roseburia zhanili,species,order_name,,12,,skipped: genus_key maps to Clostridiales | Lachnospirales
+mysql,7701,Faecalibacterium butyricigenerans,species,family,,9,,skipped: genus_key maps to Oscillospiraceae | Ruminococcaceae
+mysql,57919,Mitsuaria,genus,family,,2,,skipped: genus_key maps to Comamonadaceae | Sphaerotilaceae
+mysql,58806,Erysipelatoclostridium,genus,family,,4,,skipped: genus_key maps to Coprobacillaceae | Erysipelotrichaceae
+mysql,80742,Clostridium clostridioforme,species,family,,103,,skipped: genus_key maps to Clostridiaceae | Lachnospiraceae | Oscillospiraceae
+mysql,80746,Clostridium ramosum,species,family,,103,,skipped: genus_key maps to Clostridiaceae | Lachnospiraceae | Oscillospiraceae
+mysql,2287421,Veillonella intestinalis,species,family,,17,,skipped: genus_key maps to Selenomonadaceae | Veillonellaceae
+mysql,2468055,Bradyrhizobium denitrificans,species,family,,3,,skipped: genus_key maps to Bradyrhizobiaceae | Nitrobacteraceae
+mysql,2635169,Exiguobacterium acetylicum,species,family,,2,,skipped: genus_key maps to Bacillales Incertae Sedis XII | Exiguobacteraceae
+mysql,2668880,Clostridium sp af34 10bh,species,family,,103,,skipped: genus_key maps to Clostridiaceae | Lachnospiraceae | Oscillospiraceae
+mysql,2668907,Faecalibacterium sgb15346,species,family,,9,,skipped: genus_key maps to Oscillospiraceae | Ruminococcaceae
+mysql,2668916,Clostridium sp af36 4,species,family,,103,,skipped: genus_key maps to Clostridiaceae | Lachnospiraceae | Oscillospiraceae
+mysql,2668924,Clostridium sp am22 11ac,species,family,,103,,skipped: genus_key maps to Clostridiaceae | Lachnospiraceae | Oscillospiraceae
+mysql,2668931,Clostridium sp am49 4bh,species,family,,103,,skipped: genus_key maps to Clostridiaceae | Lachnospiraceae | Oscillospiraceae
+mysql,2668950,Clostridium sp af15 49,species,family,,103,,skipped: genus_key maps to Clostridiaceae | Lachnospiraceae | Oscillospiraceae
+mysql,2668956,Clostridium sp af34 13,species,family,,103,,skipped: genus_key maps to Clostridiaceae | Lachnospiraceae | Oscillospiraceae
+mysql,2668964,Ruminococcus sp nsj 71,species,family,,18,,skipped: genus_key maps to Oscillospiraceae | Ruminococcaceae
+mysql,2668977,Clostridium sp at4,species,family,,103,,skipped: genus_key maps to Clostridiaceae | Lachnospiraceae | Oscillospiraceae
+sqlite,2772,Eubacterium hominis,species,order_name,,30,,skipped: genus_key maps to Clostridiales | Eubacteriales | Peptostreptococcales
+sqlite,3021,Roseburia zhanili,species,order_name,,12,,skipped: genus_key maps to Clostridiales | Lachnospirales
+sqlite,3030,Clostridium clostridioforme,species,order_name,,107,,skipped: genus_key maps to Clostridiales | Erysipelotrichales | Eubacteriales | Lachnospirales
+sqlite,3032,Clostridium ramosum,species,order_name,,107,,skipped: genus_key maps to Clostridiales | Erysipelotrichales | Eubacteriales | Lachnospirales
+sqlite,3054,Pseudoflavonifractor sp af19 9ac,species,order_name,,9,,skipped: genus_key maps to Clostridiales | Eubacteriales | Oscillospirales
+sqlite,3283,Ruminococcus sp 210702 sl 1 03,species,order_name,,22,,skipped: genus_key maps to Clostridiales | Eubacteriales | Lachnospirales
+sqlite,4043,Ruminococcus sp oa3,species,order_name,,22,,skipped: genus_key maps to Clostridiales | Eubacteriales | Lachnospirales
+sqlite,2772,Eubacterium hominis,species,family,,30,,skipped: genus_key maps to Anaerovoracaceae | Clostridiales Incertae Sedis XIII | Eubacteriaceae | Oscillospiraceae | Ruminococcaceae
+sqlite,3054,Pseudoflavonifractor sp af19 9ac,species,family,,9,,skipped: genus_key maps to Oscillospiraceae | Ruminococcaceae
+sqlite,3283,Ruminococcus sp 210702 sl 1 03,species,family,,22,,skipped: genus_key maps to Lachnospiraceae | Oscillospiraceae | Ruminococcaceae
+sqlite,4043,Ruminococcus sp oa3,species,family,,22,,skipped: genus_key maps to Lachnospiraceae | Oscillospiraceae | Ruminococcaceae

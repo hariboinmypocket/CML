@@ -711,6 +711,524 @@ What changed, since again nothing is deleted:
 - **`scripts/richness_audit.py`** writes `data/richness_audit.csv` and
   `data/richness_arm_imbalance.csv`.
 
+### A KEGG id is a lipid class, and it was being used as an identity
+
+One metabolite held no levels at all —
+`1-palmitoyl-2-linoleoyl-GPC (16:0/18:2)`, recorded but unmeasurable. Tracing it
+found a correctness bug and a constraint that enforced it.
+
+`ensure_metabolite_rows` resolved a compound by HMDB id and, **if that missed,
+fell back to KEGG**. But a KEGG compound id is often a *lipid class* rather than
+a molecule:
+
+| KEGG id | what it is | distinct HMDB species it covers |
+|---|---|---|
+| `C00422` | triacylglycerol | **28** |
+| `C00157` | phosphatidylcholine | 16 |
+| `C04230` | lysophosphatidylcholine | 15 |
+| `C00165` | diacylglycerol | 10 |
+| `C02530` | cholesterol ester | 8 |
+
+So the second triacylglycerol to arrive missed on its own HMDB id, fell back to
+`C00422`, found the **first one's row**, and silently reused it — two different
+molecules on one row, with the loser's levels colliding on the
+`(sample_id, metabolite_id)` key or dropped. `UNIQUE (kegg_id)` then made the
+alternative impossible: only one member of each family could exist at all.
+
+**202 of the 1,376 HMDB compounds in the source maps are absent from the
+database** (15%), at least **109** traceable to a KEGG class collision — and they
+are mostly lipid species, which are the bulk of an untargeted panel.
+
+Two changes: the KEGG lookup now runs **only** for a compound with no HMDB id of
+its own, and `kegg_id` is a non-unique annotation (`ix_metabolite_kegg`) rather
+than an identity, with `hmdb_id` carrying identity as before.
+
+**Recovering the 109 needs a reload**, which I have not run: `load_muller2022.py
+--apply` writes ~515k level rows against a database two other sessions are also
+writing to, so that is your call on timing. The fix stops the loss recurring; the
+reload is what undoes it.
+
+One thing this is *not*: the loader's "216 columns dropped for sharing an
+identifier within a cohort" is a separate and deliberate behaviour, keyed on
+`identity` (which prefers HMDB), covering two LC modes of one analyte and
+genuine upstream annotation errors — ERAWIJANTARI labels both
+3-phosphoglycerate and glycerol-3-phosphate `HMDB0000807`. Distinct HMDB species
+sharing a KEGG id have distinct identities and never collided there. That
+comment's count was stale at 124 and is now 216.
+
+### The class, order and family layers had the Firmicutes/Bacillota split too
+
+`PHYLUM_SYNONYMS` solved this for one rank. The other three never got it:
+`backfill_lineage.py` passes **only `phylum`** through `normalize_phylum` and
+writes class, order and family verbatim from the dump. So a row filled from NCBI
+carries the current scientific name while one loaded earlier keeps the old one,
+and they sit side by side. Measured with the **tax ID identity test** — two
+stored names resolving to the *same* NCBI node are synonyms of one taxon, never
+a reclassification:
+
+| rank | nodes split | rows |
+|---|---|---|
+| `class_name` | 1 | 409 |
+| `order_name` | **10** | **1,500** |
+| `family` | **13** | 557 |
+
+`GROUP BY order_name` reported Clostridiales as two orders — 413 rows under
+`Eubacteriales`, 127 under `Clostridiales`. Others: `Bacillales`/`Caryophanales`
+(122/167), `Rhizobiales`/`Hyphomicrobiales` (36/113),
+`Ruminococcaceae`/`Oscillospiraceae` (32/161).
+
+**The target is the majority stored name, not NCBI's scientific name**, and that
+choice mattered. Folding onto the scientific name would have:
+
+- **re-introduced the nomenclatural code this schema strips.**
+  `Saccharimonadales (SeqCode)`, `Saccharimonadaceae (SeqCode)` and
+  `Obscuribacteraceae (SeqCode)` are NCBI's scientific names for three of these
+  nodes, and writing them back **would have failed the pre-push check** I fixed
+  yesterday;
+- moved 107 `Streptomycetales` rows onto `Kitasatosporales`, which NCBI prefers
+  and almost nobody uses — the same reason `PHYLUM_SYNONYMS` keeps *Firmicutes*
+  over *Bacillota*.
+
+The map is **explicit rather than computed at run time**, and that is load-bearing
+for a reason this sweep keeps running into: the mirror's majorities differ from
+MySQL's (`Bacillales` 183 vs `Caryophanales` 87 there), so a per-store majority
+rule would have picked different winners in each store and **re-created the
+two-store divergence** the rest of this work removed. One fixed map, both stores,
+25 folds, 0 un-folded synonyms left in either.
+
+### Filling the lineage from the row's own genus
+
+143 taxa had no phylum. `backfill_lineage.py` resolves from the NCBI dump, which
+cannot help most of them — 91 have no tax ID at all. But **62 did not need NCBI**,
+because the answer was already in the database: rows sharing their `genus_key`
+carried a phylum and they did not. An internal inconsistency, not missing
+knowledge, and not marginal — `Waltera` has 7,944 abundance rows,
+*Merdimmobilis hominis* 3,195, *Faecalibacterium butyricigenerans* 3,169 beside
+nine `faecalibacterium` peers all saying Firmicutes.
+
+**The guard is the point.** A `genus_key` is derived from a name's first token, so
+it can group organisms that are not relatives. Two keys are ambiguous, and
+checking them was worth it:
+
+- **`bacteroides`** carries both Bacteroidetes (77 rows) and Firmicutes (1) — and
+  **the Firmicutes one is right.** NCBI writes it `[Bacteroides] pectinophilus`,
+  brackets meaning the name is misapplied; the organism is a *Clostridium*
+  relative. One name whose genus token contradicts its lineage.
+- **`unclassified`** carries Proteobacteria and Firmicutes across three MiMeDB
+  rows named "Unclassified *&lt;family&gt;* bacterium …", where the first token is
+  the word *Unclassified*. Both lineages are correct for their families; the key
+  is simply meaningless there.
+
+Neither has a phylum-less row waiting on it, so nothing was skipped — the guard
+exists so that when one arrives it is skipped rather than guessed. Phylum-less
+taxa: **143 → 81** in MySQL, 40 → 36 in the mirror. The remaining 81 have no
+peer carrying a phylum either, so nothing in the database can answer for them.
+
+### The backfill surfaced a cross-kingdom homonym the empty cell had hidden
+
+Filling those 62 phyla made the pre-push check fail with one disagreement:
+`Firmicutes -> Arthropoda`. The fill was **correct**; what it did was expose a
+collision that an empty cell had kept invisible, because a NULL phylum has
+nothing to disagree with.
+
+`Moorella` is two genera. NCBI holds taxid 44260 `Moorella <firmicutes>` as a
+**synonym** and 216400 `Moorella <wasps, ants & bees>` as the **scientific
+name** — and `normalize_reclassified_phyla.py` matches a row with no tax ID by
+name, preferring scientific names. So it resolved our Firmicute to the wasp and
+reported an animal phylum. *Bosea* (plant and bacterium), *Bogoriella* and
+*Copromorpha* are the same shape, already known here.
+
+Adding the pair to `APPROVED` would have been the wrong fix: that set authorizes
+a *reclassification*, so the entry would have permitted moving **every**
+Firmicutes row to Arthropoda. Instead the collision is discarded, by a rule that
+generalises — when a row matched **by name** has a stored superkingdom that
+disagrees with the resolved node's domain, the match is a homonym and is thrown
+away. Rows carrying their own tax ID are exempt, since they are not homonym
+victims and a genuine cross-domain move would be real.
+
+The counter is reported as `homonym_discarded` rather than left silent, which is
+the same lesson as the rest of this sweep: a guard nobody can see is a guard
+nobody can check. (The dump also ranks Bacteria and Archaea as `domain` now
+rather than `superkingdom`; both spellings are accepted so the guard does not go
+inert when the dump is refreshed.)
+
+### Two association-layer "defects" that turned out to be deliberate
+
+Both looked like the vocabulary fragmentation this sweep had already fixed four
+times. Neither was, and measuring is the only reason nothing broke.
+
+**`phenotype_comparisons.method`** holds `LEfSe` (468) beside
+`as reported (lefse)` (1), plus `as reported (wilcoxon)`, `(t_test)`, `(anova)`
+and `(anova_tukey)`. That reads as one method under a wrapper phrase. It is not:
+**three of those five sit beside MicrobiomeHD's standardized re-analysis of the
+very same study, arms and rank.**
+
+| study | the paper's own result | MicrobiomeHD's re-analysis |
+|---|---|---|
+| pmid25432777 | `as reported (wilcoxon)` — 13 assoc | `Kruskal-Wallis + BH FDR` — 11 |
+| pmid24034618 | `as reported (anova)` — 10 | `Kruskal-Wallis + BH FDR` — 16 |
+| pmid25417156 | `as reported (t_test)` — 9 | `Kruskal-Wallis + BH FDR` — 11 |
+
+The prefix is what keeps publication apart from re-analysis, and `method` is part
+of `comparison_key` precisely so both can coexist —
+`resolve_comparison_method()` in `pipeline.py` already says so. Folding
+`as reported (lefse)` onto the 468 GMrepo-sourced `LEfSe` comparisons would also
+mix publication-reported findings with repository-sourced ones. **Normalizing
+this column is not a cleanup; it is a loss.**
+
+**`taxon_disease_associations.effect_type`** holds three labels for rows with no
+`effect_size` — `reported` (359), `q_value` (59), `consensus` (71) — which looks
+like three ways of saying the same nothing. But the column is part of
+`uq_taxon_disease_evidence`, and `load_microbiomehd.py` uses it as a
+**supersession marker**: it deletes rows for the same `(taxon, disease,
+comparison)` whose `effect_type` differs, so a finding that arrives as `q_value`
+and later gains an effect from the S5 table *flips* to `log2_fold_change` rather
+than inserting a second row. A fold would break that, lose the distinction
+between "we hold a q-value" and "we hold only a direction", and **be undone on
+the next load**.
+
+Neither column had a schema comment, which is why both read as defects an hour
+ago. Both now carry one, and `EffectTypeSentinelTests` pins the sentinels so a
+future tidy-up fails in the test suite rather than in the data.
+
+### 408 rows disagree with NCBI about their own rank
+
+`taxonomic_rank` in this database is the abundance **layer** a row was loaded
+into -- GMrepo publishes a genus array and a species array, and the
+per-`(sample, rank)` sum to 1 is defined over that split. It is not a claim about
+what the organism is, and for 408 rows the two differ:
+
+| stored | NCBI says | rows | examples |
+|---|---|---|---|
+| genus | **family** | 90 | *Muribaculaceae* (2005473), *Tannerellaceae* |
+| genus | **order** | 19 | *Candidatus Gastranaerophilales*, *Bivalvulida* |
+| genus | **class** | 7 | *Candidatus Sericytochromatia*, **Mammalia** |
+| genus | **phylum** | 5 | *Candidatus Latescibacterota* |
+| species | **strain** | 277 | *Bifidobacterium longum* (1322347) |
+| species | subspecies | 4 | *Streptomyces lavendulae* (58340) |
+
+**The 123 coarse genus-layer rows are not an error to move**, and checking that
+was the point. GMrepo's own export labels them `taxonomic_rank = genus`, so the
+database is faithful. More importantly they are the unclassified **residual**
+within a family rather than a duplicate of it: mean shares run 0.2% to 1.6% while
+the real genera beside them carry far more, which is exactly what a 16S
+classifier produces when it places a read to family but no further. 3,443 samples
+hold such a row alongside genuine genera of the same family, the parts are
+**disjoint**, and the sum to 1 is correct. Taking them out of the genus layer
+would break that invariant and discard real mass -- 16,098 abundance rows and
+about 1% of the layer's total.
+
+So nothing moved. What was missing was never the rows; it was that nothing *said*
+they were coarser, so a model treated *Muribaculaceae* as a peer of
+*Bacteroides*. `taxa.ncbi_rank` records the fact and `v_abundance_genus` exposes
+`coarser_than_genus`.
+
+One of them ties back to an earlier finding: **`Bivalvulida` is an order**, and it
+was the lone survivor in 82 of the 269 one-genus profiles. A degenerate profile
+whose single feature is a myxozoan *order* is now visibly that.
+
+**The 283 species-layer rows are left alone deliberately.** A species-named row
+carrying a strain tax ID is the `retaxid` case in `merge_duplicate_taxa.py`'s
+`OVERRIDES`, and two concurrent branches are working through taxon identity right
+now -- the concatenated-genus repair and the gram-stain corrections both came out
+of it. Repointing tax IDs from here would collide with that, so they are recorded
+in `data/ncbi_rank_audit.csv` and reported, not touched.
+
+### The same metabolite zero meant absence in 11 cohorts and "average" in 2
+
+`sample_metabolite_levels` mixes scales that differ **in kind**, and nothing
+recorded which:
+
+| cohort | levels | negative | zero | max |
+|---|---|---|---|---|
+| YACHIDA_CRC_2019 | 130,242 | 0 | 78,400 | 665,180 |
+| KIM_ADENOMAS_2020 | 89,760 | **46,514** | 513 | 3.3 |
+| SINHA_CRC_2016 | 46,374 | **23,553** | 281 | 7.6 |
+| KOSTIC_INFANTS_DIABETES_2015 | 13,471 | 0 | 13 | 3.07×10¹⁰ |
+| KANG_AUTISM_2017 | 2,596 | 0 | 407 | 461 |
+
+Two cohorts arrive **already log- or z-transformed** -- SINHA holds 23,553
+negative levels against 22,540 positive with a mean of −0.04 -- while eleven are
+non-negative with maxima spanning **nine orders of magnitude**.
+
+**The hazard is the zero.** On a non-negative scale it means the compound was
+not detected: 78,400 of YACHIDA's 130,242 levels, **60% of them**. On a centred
+scale a zero sits mid-distribution and means *at this cohort's average* -- the
+opposite. Across the table that is **127,836 zeros meaning absence and 794
+meaning average**, with nothing to tell them apart.
+
+The standing rule to "normalize within study" does not cover this. A uniform
+`log1p` over the table returns **NaN on 70,067 rows** and takes the log of a log
+on 136,134 more.
+
+`studies.metabolite_scale` now records it, derived from each cohort's own range
+rather than asserted: a negative level cannot be a concentration, so it is
+positive evidence of an upstream transform. The absence of negatives is *not*
+evidence of a unit, only of non-negativity -- which is exactly what the other
+label says, because the source records units nowhere.
+
+### `ml_ready_deduplicated` keeps one run per sample, not one sample per person
+
+The comment on that flag said it "keeps one run per biological sample, which is
+what a split should use". The second clause overstated it. A longitudinal study
+sampling one subject at seven timepoints produces seven *distinct biological
+samples*, and all seven survive the flag:
+
+| phenotype | rows | people | overstatement |
+|---|---|---|---|
+| Irritable Bowel Syndrome | 305 | **51** | ×6.0 |
+| Diabetes Mellitus, Type 1 | 66 | **11** | ×6.0 |
+| Fatigue Syndrome, Chronic | 319 | 147 | ×2.2 |
+| Health | 1,103 | 613 | ×1.8 |
+
+389 subjects contribute 1,340 of the cohort's rows, so **971 are repeat visits by
+someone already in it** -- and a random split puts the same person on both sides.
+`ml_ready_one_per_subject` keeps one row per person where the source names the
+person, taking the cohort from 13,328 to 12,357.
+
+**Read that flag knowing what it cannot see.** `subject_id` is NULL for all
+33,630 GMrepo samples and all 120 from MGnify -- 10,961 of the 13,328
+deduplicated rows. A longitudinal *GMrepo* study is invisible to it, and it only
+genuinely constrains the 2,367 MullerMM and PubMed rows. It is an improvement on
+`ml_ready_deduplicated`, not a solution to pseudo-replication. (The SQLite mirror
+has no `subject_id` column at all, so the flag is MySQL-only.)
+
+### `value_numeric` held numbers that were not quantities
+
+`sample_attributes.value_numeric` was documented as *"populated only when `value`
+parses as a number ... lets a numeric trait be filtered and aggregated"*. Both
+halves were false.
+
+**A number fabricated from a string that is not one** (434 rows). `unique_id`
+held `'10007539_0'` with `value_numeric = 100075390` -- the underscore dropped
+and the digits run together. Not a parse, and it **collides**: `'1000753_90'`
+reduces to the same number.
+
+**A code, not a quantity** (687 rows, 2 keys). `Antibiotic_in_the_past_month._1_no_2_yes`
+stores 1 and 2 as labels. Averaging labels is meaningless, and the encoding
+**inverts against its neighbour** -- `1` means *no* there, while under
+`Antibiotics` `1` means *yes*. Pooling the two silently flips 343 rows: the same
+family of error as the LDA sign ambiguity this schema already guards against.
+
+Both cleared. 8,048 genuine quantities kept.
+
+**The third class is the interesting one, and it is not a deletion problem.**
+13 keys mix numbers with words, and there the number is *correct* for whichever
+rows have one -- what is missing is the denominator:
+
+| key | numeric | rows | `AVG(value_numeric)` |
+|---|---|---|---|
+| `Stage` | 27 | 150 | **0.0** (real values run I to IVB) |
+| `Antibiotics` | 74 | 518 | 0.85 |
+| `Race` | 131 | 371 | 0.18 |
+| `PhysicalExercise_LastWeek.h.` | 4 | 49 | **0.0** |
+
+The activity keys are the sharpest case. Under
+`PhysicalExercise_LastWeek.h.` the **only point answer is `0`**, given by 4 of 49
+respondents; the other 45 answered `'1-'`, `'1-3'` or `'3+'`. So the mean is
+exactly 0.0 -- not merely incomplete but **anti-correlated with the truth**,
+because the rows carrying a number are precisely the people who did nothing.
+`Cycling_LastWeek.h.` and `Housework_Childcare_LastWeek.h.` are identical in
+shape.
+
+Deleting those zeros would not help -- they are right. This is the same defect as
+absence in the abundance matrix, where the number was never wrong and the
+denominator was missing, so the fix is the same: **expose it**.
+`v_sample_attribute_keys` carries `n_rows`, `n_numeric`, `numeric_fraction`,
+`mixes_numbers_and_words` and `looks_like_an_interval` for all 362 keys, so a
+mean can be read against what it was taken over.
+
+**Still outstanding, and worth knowing before you use it:** antibiotic exposure
+is spread across **8 keys** with three incompatible encodings --
+`Antibiotics` (no/yes/0/1), `Antibiotic_in_the_past_month._1_no_2_yes` (1/2,
+where 1 is *no*), `antibiotic` (No/Yes), `Antibiotics_Last3months`
+(No / "Yes, 2 months ago"), `maternal_antibiotics` (0/1), plus
+`antibiotic_type`, `Antibiotic_start_date` and `Antibiotic_used`. A query for
+antibiotic exposure finds a fraction of the data, and pooling the coded keys
+naively inverts 343 rows. Harmonising 362 source-named keys into a controlled
+vocabulary is a design decision rather than a repair, so it is reported here
+rather than done.
+
+### `data_type` answered at the wrong granularity, and the stores disagreed on it
+
+Fourth instance, on the column that governs taxonomic resolution. GMrepo records
+the platform **per run** -- `AMPLICON` or `Metagenomics` in
+`data/gmrepo_project_samples.csv` -- and 10 of its projects contain both, so the
+loader collapsed them to `data_type = 'mixed'`:
+
+| project | shotgun | amplicon |
+|---|---|---|
+| PRJNA763023 | 200 | 1,038 |
+| PRJNA888860 | 230 | 264 |
+| PRJNA604850 | 134 | 354 |
+| PRJNA648321 | 48 | 428 |
+| PRJEB42155 | 208 | 211 |
+| PRJNA905444 | 88 | 236 |
+| PRJNA813705 | 60 | 60 |
+| PRJEB21933 | 75 | 40 |
+| PRJNA730640 | 40 | 32 |
+| PRJEB53891 | 20 | 20 |
+
+**3,786 samples** -- 2,683 amplicon and 1,103 shotgun -- whose platform the
+source knew for every single one.
+
+That is not cosmetic. Platform sets the taxonomic floor: amplicon reads one
+marker gene, near-identical between species of a genus, so it resolves to genus
+and no further. Inside a `'mixed'` study some samples therefore carry
+species-rank profiles and some cannot, with nothing recording which. Platform is
+also the strongest batch covariate here, and both `loso_audit.py` and
+`export_ml_matrix.py` read the **study's** `data_type` -- so for these samples
+the covariate they carried was the literal word `'mixed'`.
+
+It showed up in the committed audit: `Diabetes Mellitus, Type 1` was reported as
+`platforms = 16S+mixed`, treating a summary as a third platform. It now reads
+`16S+mNGS`. The aggregate platform-mixing figures are unchanged (+0.175 across
+platforms against +0.060 within), because `16S+mixed` already contained a `+`
+and was counted as cross-platform either way -- but the label was wrong and any
+finer attribution built on it would have been too.
+
+**And the two stores disagreed about `data_type` itself.** The mirror held four
+vocabularies for two platforms:
+
+| store | values |
+|---|---|
+| MySQL | `16S` (236), `mNGS` (96), `mixed` (12), `meta-analysis` (3) |
+| SQLite | `AMPLICON` (191), `Metagenomics` (82), `16S rRNA` (28), `shotgun metagenomics` (9), `meta-analysis` (2) |
+
+So `WHERE data_type = '16S'` matched **236 studies against MySQL and zero
+against the mirror**. The mirror was also actively wrong rather than merely
+differently spelled: it had no `'mixed'` at all, so 10 projects were labelled
+`AMPLICON` when the runs the mirror actually holds from them are shotgun --
+PRJNA763023 keeps exactly its 200 `Metagenomics` runs and none of its 1,038
+amplicon ones.
+
+The fix removes the class rather than the instance. `samples.sequencing_platform`
+records the platform per sample, filled from the run where the source has it and
+from the study only where the study names a single platform -- never inheriting
+`'mixed'` or `'meta-analysis'`, which are not platforms. `studies.data_type` is
+then **derived** from those samples by `derive_study_platform()` in
+`gutdb/transform.py`, so `'mixed'` is now a summary of a recorded fact instead of
+a value that replaced one, and neither store can drift from the other. Studies
+with no samples keep their value, since an association-only study has nothing to
+derive from and `meta-analysis` is true of those.
+
+### The taxa trait vocabularies, fixed in the mirror only since they were written
+
+Third instance of the same shape. `cleanup_gutdb.py` has normalized these
+columns for as long as it has existed, but it runs **only against the SQLite
+mirror**, so the two stores held different vocabularies for the same rows:
+
+| column | MySQL distinct | mirror distinct |
+|---|---|---|
+| `oxygen_requirement` | 21 | 10 |
+| `gram_stain` | 7 | 4 |
+| `temperature_range` | 6 | 5 |
+| `sporulation` | 32 | 2 |
+
+`oxygen_requirement` is the one that costs something. `anaerobe` (576),
+`Anaerobic` (50) and `Obligate anaerobe` (35) were three groups rather than one;
+`aerobe` (486), `Aerobic` (161), `obligate aerobe` (8) and `Obligate aerobic`
+(1) were four. Oxygen tolerance is among the few genuinely mechanistic traits
+for a gut community -- the lumen is anaerobic, and a shift toward aerotolerant
+taxa is a recognised dysbiosis signature -- so splitting it across case variants
+quietly weakens anything that groups on it.
+
+**`sporulation` held three different kinds of value at once:**
+
+| what it held | taxa | what it actually is |
+|---|---|---|
+| `0` / `1` | 429 | a yes/no flag as integers |
+| `Sporulating` / `Nonsporulating` | 183 | the same flag as words |
+| `Sporulating (ascospores); reproduction also by budding` | 216 | prose about spore type |
+| `Singles`, `Pairs - Singles`, `Chains - Pairs` | 128 | **cell arrangement** -- another axis |
+
+The last group is the real defect: that text answers how cells sit next to each
+other, which `cell_arrangement` already exists for. Those move rather than being
+deleted, and only where `cell_arrangement` is empty -- which turns out to be **2
+of the 128**. For the other 126 `cell_arrangement` already holds the same
+reading, so nothing was ever stored *only* in the wrong column.
+
+Fixing the instance without fixing the cause would invite a fourth, so the
+vocabularies now live in `gutdb/transform.py` and `cleanup_gutdb.py` imports
+them. `scripts/normalize_trait_vocabularies.py` applies them to MySQL. Seven of
+the eight columns now hold **identical value sets** in both stores; the two
+remaining differences are membership, not vocabulary (MySQL holds one virus the
+mirror lacks, the mirror has `Coenocytic Hyphae` filled for three *Mucor* rows
+where MySQL has it NULL).
+
+Two things deliberately left alone. `shape` keeps `Yeast-like cell/globose to
+elongate` beside `Yeast-like cell, globose to elongate`: they differ by
+punctuation inside free prose, and there is no closed vocabulary for shape to
+fold them onto -- inventing one would be a taxonomic judgement rather than a
+repair. And any value no rule recognises keeps its cell, because the alternative
+is discarding a category nobody anticipated.
+
+### `body_site` was three vocabularies across two stores
+
+| store | source | value | samples |
+|---|---|---|---|
+| MySQL | GMrepo | `NULL` | 33,630 |
+| MySQL | MullerMM | `NULL` | 2,464 |
+| MySQL | PubMed | `feces` | 479 |
+| MySQL | MGnify | `human gastric mucosa` | 120 |
+| SQLite | GMrepo | `gut` | 23,494 |
+
+`cleanup_gutdb.py` has filled the mirror's NULLs with `'gut'` since it was
+written; nothing ever did the same to MySQL. So `WHERE body_site = 'feces'`
+returned 479 rows against one store and none against the other -- the same defect
+shape as the `(SeqCode)` annotations, a repair applied to one store only.
+
+`'gut'` was also the wrong word for the job: **the stomach is part of the gut**,
+so it could not separate the gastric biopsies from the stool, which is the only
+distinction this column is here for. The vocabulary is now the sampled material
+-- `feces` (36,573) and `gastric mucosa` (120) -- in both stores.
+
+**Why it was worth fixing.** MGYS00001188 contributes 120 gastric mucosa samples
+and **no control arm of its own**, so Gastritis, Metaplasia and Stomach Neoplasms
+are each modelled by comparing stomach biopsies against pooled stool controls:
+
+| disease | CLR genus 5-fold AUC | body site alone |
+|---|---|---|
+| Stomach Neoplasms | **1.000** | **1.000** |
+| Gastritis | **1.000** | **1.000** |
+| Metaplasia | **1.000** | **1.000** |
+
+Exactly 1.000, and a single indicator variable matches it. The two communities
+share no abundant genus -- *Haematomicrobium*, *Helicobacter*, *Tsukamurella*,
+*Gordonia*, *Thermus* in the mucosa against *Bacteroides*, *Phocaeicola*,
+*Faecalibacterium*, *Prevotella*, *Bifidobacterium* in stool. These were never
+disease models. (`Metaplasia` also mixes 30 mucosa with 10 GMrepo stool samples
+inside one label, though the stool ten lack demographics and so never reach the
+ML cohort.)
+
+`body_site` is a **per-study constant everywhere** -- no source in this database
+reports it per sample -- and for every source but MGnify the value is the
+source's *documented scope* rather than a reading. `data/body_site_audit.csv`
+records which is which in its `basis` column, and
+`scripts/normalize_body_site.py` refuses to proceed if any study ever starts
+holding two values. `body_site_confound()` and the exporter now warn when an arm
+sits at a site with no control to compare against.
+
+### `metabolomics_method` named a file that holds no method
+
+All 13 metabolomics studies held the literal string `'see mtb.map.tsv'`. That
+file exists -- its columns are `Compound, KEGG, HMDB,
+High.Confidence.Annotation`. It is a compound-to-identifier map. **No method, no
+instrument, no units.**
+
+This column carries a standing rule: metabolite levels are the one measurement
+here that cannot be pooled across studies, so check `metabolomics_method` before
+combining anything. That rule was **uncheckable** -- every study gave the same
+answer and the answer pointed at the wrong file.
+
+The method is not in the Muller collection, which redistributes matrices rather
+than protocols. What every cohort's `metadata.tsv` does carry is the protocol's
+**DOI**, so that is what the column holds now, as `doi:<doi>`. It identifies the
+protocol uniquely and makes the rule mechanical: levels are poolable only where
+the value matches. **No two of the 13 cohorts share one**, which is the honest
+answer to "can I combine these". `load_muller2022.py` writes the DOI going
+forward instead of the placeholder.
+
 ### Two columns holding the wrong vocabulary
 
 Both were caught by listing distinct values per column, and both are the same
@@ -760,16 +1278,23 @@ here: Streptophyta and Nematoda are *correct* for those rows. The remaining 275
 are ordinary bacteria that simply have not turned up in any study yet, which is a
 statement about study coverage rather than about the rows.
 
-**The real defect was the count, not the data.** `validate` reported `taxa: 5,897`
-with no indication that a quarter of it is reference material, so anyone reading
-that as the number of organisms this database has observed overstates it by
-1,416. It now reports all three:
+**The real defect was the count, not the data.** `validate` reported a single
+`taxa:` figure with no indication that a quarter of it is reference material, so
+anyone reading that as the number of organisms this database has *observed*
+overstated it by the whole reference set. It now reports all three, so the
+distinction is visible without having to know it exists:
 
 ```
-taxa: 5,897
+taxa: 5,835              <- snapshot, 2026-10-14
 taxa_observed: 4,481
-taxa_reference_only: 1,416
+taxa_reference_only: 1,354
 ```
+
+Treat those as a snapshot, not a fact about the schema. The database is written
+to by more than one session: the figure was 5,897 / 4,481 / 1,416 earlier the
+same day, and dropped by 62 when a concurrent branch merged 62 mangled
+double-genus names into the correctly named rows that already held their
+evidence. Run `validate` rather than quoting a number from here.
 
 ### Backfilling the lineage that was never loaded
 

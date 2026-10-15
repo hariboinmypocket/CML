@@ -522,8 +522,13 @@ def load_metabolites(study_dir: Path) -> tuple[dict, dict, dict]:
     # Averaging would invent a number across two different molecules in the
     # second case, and letting the last insert win would discard a measurement
     # silently in both. The colliding identities are therefore dropped from this
-    # cohort and reported. 124 of 17,066 columns are affected, and the compounds
+    # cohort and reported. 216 of 17,066 columns are affected, and the compounds
     # remain available from the cohorts where they do not collide.
+    #
+    # This is keyed on `identity`, which prefers HMDB, so it is a DIFFERENT
+    # problem from the KEGG class collision described in
+    # ensure_metabolite_rows: two distinct HMDB species sharing a KEGG id have
+    # distinct identities and do not collide here.
     seen: dict[str, list[str]] = defaultdict(list)
     for col, meta in compounds.items():
         seen[meta["identity"]].append(col)
@@ -548,7 +553,26 @@ def load_metabolites(study_dir: Path) -> tuple[dict, dict, dict]:
 
 
 def ensure_metabolite_rows(cur, compounds: dict[str, dict], cache: dict) -> dict[str, int]:
-    """Resolve each compound to a metabolites row, keyed on HMDB then KEGG."""
+    """Resolve each compound to a metabolites row: HMDB is identity, KEGG is not.
+
+    A KEGG compound id is often a LIPID CLASS rather than a molecule. C00422 is
+    triacylglycerol and covers 28 distinct HMDB species in this collection;
+    C00157 (phosphatidylcholine) covers 16, C04230 (lysophosphatidylcholine) 15,
+    C00165 (diacylglycerol) 10. HMDB resolves individual acyl species, KEGG does
+    not.
+
+    So the KEGG lookup below runs ONLY for a compound with no HMDB id of its own.
+    It used to run whenever the HMDB lookup missed, which meant the second
+    triacylglycerol to arrive found the first one's row under their shared C00422
+    and silently reused it -- two different molecules on one row, with the
+    loser's levels either colliding or dropped as "sharing an identifier within
+    a cohort". 202 of the 1,376 HMDB compounds in the source maps are absent from
+    the database for this reason, at least 109 of them traceable to a KEGG class
+    collision, and they are mostly lipid species: the bulk of an untargeted
+    panel.
+
+    Recovering them needs a reload; this stops the loss recurring.
+    """
     out: dict[str, int] = {}
     for col, meta in compounds.items():
         key = meta["hmdb_id"] or f"kegg:{meta['kegg_id']}"
@@ -559,7 +583,7 @@ def ensure_metabolite_rows(cur, compounds: dict[str, dict], cache: dict) -> dict
         if meta["hmdb_id"]:
             cur.execute("SELECT id FROM metabolites WHERE hmdb_id = %s", (meta["hmdb_id"],))
             row = cur.fetchone()
-        if row is None and meta["kegg_id"]:
+        elif meta["kegg_id"]:
             cur.execute("SELECT id FROM metabolites WHERE kegg_id = %s", (meta["kegg_id"],))
             row = cur.fetchone()
         if row is not None:
@@ -644,7 +668,14 @@ def main() -> int:
                    ON DUPLICATE KEY UPDATE data_type = VALUES(data_type),
                        source_database = VALUES(source_database)""",
                 (f"{SOURCE_DB}_{study}", meta[0].get("Publication.Name", study)[:500],
-                 platform, SOURCE_DB, "see mtb.map.tsv" if compounds else None))
+                 platform, SOURCE_DB,
+                 # The DOI of the paper describing the protocol, not a method
+                 # name: this collection redistributes matrices, not protocols,
+                 # and mtb.map.tsv is a compound-to-KEGG/HMDB map with no method
+                 # in it. The DOI is what makes the comparability rule mechanical
+                 # -- levels are poolable only where it matches.
+                 (f"doi:{clean(meta[0].get('DOI'))}"
+                  if compounds and clean(meta[0].get("DOI")) else None)))
             cur.execute("SELECT id FROM studies WHERE project_accession = %s",
                         (f"{SOURCE_DB}_{study}",))
             study_id = cur.fetchone()[0]

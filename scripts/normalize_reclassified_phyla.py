@@ -82,8 +82,8 @@ APPROVED = {
 }
 
 
-def load_taxdump() -> tuple[dict[str, int], dict[int, str]]:
-    """Return (scientific/synonym name -> taxid, taxid -> phylum name).
+def load_taxdump() -> tuple[dict[str, int], dict[int, str], dict[int, str]]:
+    """Return (name -> taxid, taxid -> phylum name, taxid -> domain name).
 
     Parsed the same way cleanup_gutdb.py does it: names.dmp for identity,
     nodes.dmp for the parent chain, then names.dmp again for ancestor names.
@@ -111,6 +111,10 @@ def load_taxdump() -> tuple[dict[str, int], dict[int, str]]:
 
     parent: dict[int, int] = {}
     is_phylum: set[int] = set()
+    # This dump ranks Bacteria, Archaea and Eukaryota as 'domain'; older ones say
+    # 'superkingdom'. Both are accepted so the homonym guard below does not go
+    # quietly inert when the dump is refreshed.
+    is_domain: set[int] = set()
     with open(nodes_path, encoding="utf-8", errors="replace") as handle:
         for line in handle:
             parts = line.split("\t|")
@@ -118,8 +122,11 @@ def load_taxdump() -> tuple[dict[str, int], dict[int, str]]:
             parent[taxid] = par
             if rank == "phylum":
                 is_phylum.add(taxid)
+            elif rank in ("domain", "superkingdom"):
+                is_domain.add(taxid)
 
     phylum_name: dict[int, str] = {}
+    domain_name: dict[int, str] = {}
     with open(names_path, encoding="utf-8", errors="replace") as handle:
         for line in handle:
             parts = line.split("\t|")
@@ -128,6 +135,8 @@ def load_taxdump() -> tuple[dict[str, int], dict[int, str]]:
             taxid = int(parts[0])
             if taxid in is_phylum:
                 phylum_name[taxid] = parts[1].strip()
+            if taxid in is_domain:
+                domain_name[taxid] = parts[1].strip()
 
     # Resolve each node to its phylum ancestor once, memoised up the chain.
     phylum_of: dict[int, str] = {}
@@ -148,27 +157,70 @@ def load_taxdump() -> tuple[dict[str, int], dict[int, str]]:
             phylum_of[link] = found
         return found
 
+    domain_of: dict[int, str] = {}
+
+    def resolve_domain(taxid: int) -> str:
+        chain, node, guard = [], taxid, 0
+        while node and node != 1 and guard < 60:
+            if node in domain_of:
+                break
+            if node in is_domain:
+                domain_of[node] = domain_name.get(node, "")
+                break
+            chain.append(node)
+            node = parent.get(node, 0)
+            guard += 1
+        found = domain_of.get(node, "")
+        for link in chain:
+            domain_of[link] = found
+        return found
+
     for taxid in list(parent):
         if taxid not in phylum_of:
             resolve(taxid)
-    return name_to_taxid, phylum_of
+        if taxid not in domain_of:
+            resolve_domain(taxid)
+    return name_to_taxid, phylum_of, domain_of
 
 
 def rows_for(store: str, cursor) -> list[tuple]:
     cursor.execute(
-        "SELECT id, scientific_name, taxonomic_rank, ncbi_tax_id, phylum FROM taxa "
-        "WHERE phylum IS NOT NULL AND phylum <> ''")
+        "SELECT id, scientific_name, taxonomic_rank, ncbi_tax_id, phylum, "
+        "superkingdom FROM taxa WHERE phylum IS NOT NULL AND phylum <> ''")
     return cursor.fetchall()
 
 
-def reconcile(store: str, cursor, name_to_taxid, phylum_of, audit: list[dict]) -> Counter:
+def reconcile(store: str, cursor, name_to_taxid, phylum_of, domain_of,
+              audit: list[dict]) -> Counter:
     stats = Counter()
-    for taxon_id, sci, rank, taxid, stored in rows_for(store, cursor):
+    for taxon_id, sci, rank, taxid, stored, superkingdom in rows_for(store, cursor):
+        resolved_by_name = False
         if not taxid:
             taxid = name_to_taxid.get(clean_str(sci).casefold())
+            resolved_by_name = True
         if not taxid:
             stats["unresolvable"] += 1
             continue
+
+        # CROSS-KINGDOM HOMONYM GUARD. A row with no tax ID is matched by NAME,
+        # and a bacterial genus can share its name with an animal or a plant:
+        # `Moorella` is taxid 44260 'Moorella <firmicutes>' as a SYNONYM and
+        # 216400 'Moorella <wasps, ants & bees>' as the scientific name, so the
+        # lookup above prefers the wasp and this script then reported
+        # "Firmicutes -> Arthropoda" for a Firmicute. Bosea (plant and
+        # bacterium), Bogoriella and Copromorpha are the same shape.
+        #
+        # Approving that pair would authorize moving EVERY Firmicutes row to
+        # Arthropoda, so the collision is discarded instead. Only name-resolved
+        # rows are checked: a row carrying its own tax ID is not a homonym
+        # victim, and a genuine cross-domain reclassification would be real.
+        if resolved_by_name and clean_str(superkingdom):
+            resolved_domain = clean_str(domain_of.get(int(taxid), ""))
+            if resolved_domain and resolved_domain.casefold() != clean_str(
+                    superkingdom).casefold():
+                stats["homonym_discarded"] += 1
+                continue
+
         current = normalize_phylum(phylum_of.get(int(taxid), ""))
         if not current:
             stats["no_phylum_at_ncbi"] += 1
@@ -275,7 +327,7 @@ def fold_by_genus_consensus(store: str, cursor, audit: list[dict]) -> Counter:
 
 def main() -> int:
     print(f"loading taxdump from {TAXDUMP}/ ...")
-    name_to_taxid, phylum_of = load_taxdump()
+    name_to_taxid, phylum_of, domain_of = load_taxdump()
     print(f"  names: {len(name_to_taxid):,}   nodes with a phylum: {len(phylum_of):,}")
 
     audit: list[dict] = []
@@ -283,7 +335,7 @@ def main() -> int:
 
     mysql = connect(Settings.from_env(".env"))
     cursor = mysql.cursor()
-    results["mysql"] = reconcile("mysql", cursor, name_to_taxid, phylum_of, audit)
+    results["mysql"] = reconcile("mysql", cursor, name_to_taxid, phylum_of, domain_of, audit)
     results["mysql"] += fold_by_genus_consensus("mysql", cursor, audit)
     if not DRY_RUN:
         mysql.commit()
@@ -293,7 +345,7 @@ def main() -> int:
     if os.path.exists(SQLITE_PATH):
         lite = sqlite3.connect(SQLITE_PATH)
         cursor = lite.cursor()
-        results["sqlite"] = reconcile("sqlite", cursor, name_to_taxid, phylum_of, audit)
+        results["sqlite"] = reconcile("sqlite", cursor, name_to_taxid, phylum_of, domain_of, audit)
         results["sqlite"] += fold_by_genus_consensus("sqlite", cursor, audit)
         if not DRY_RUN:
             lite.commit()
@@ -308,7 +360,7 @@ def main() -> int:
     for store, stats in results.items():
         print(f"\n{store}")
         for key in ("agrees", "normalized", "case_folded", "folded_by_genus",
-                    "disagrees_unapproved",
+                    "disagrees_unapproved", "homonym_discarded",
                     "no_phylum_at_ncbi", "unresolvable"):
             print(f"    {key:24} {stats[key]}")
 
