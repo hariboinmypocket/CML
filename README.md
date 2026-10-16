@@ -1095,6 +1095,55 @@ returns them with `concept` NULL rather than hiding them. `boolean_undecoded`
 flags any boolean value the map does not cover — currently **0** — so an
 unanticipated answer surfaces instead of being guessed at.
 
+### Unwinding the misattribution: 5.29 of mass taken back out of three genera
+
+The repoint left no audit, so the amount could not be looked up — it had to be
+**measured**, and that is what made the reversal safe. For every candidate
+sample the script requires MySQL's stored genus value to equal
+`source(parent) + source(bracket)` to within 1e-6 before touching it. **All 1,215
+reconcile; none was skipped.**
+
+The source files disagree for 682 of them — `gmrepo_reload.csv` holds *exactly
+twice* the value in `gmrepo_run_abundances.csv`, a post-duplication artifact — so
+rather than pick a file, the reconciliation tries every candidate and accepts the
+one that balances against what the database actually stores. **The database
+decides, not the CSV.**
+
+| parent genus | samples | what happened |
+|---|---|---|
+| *Clostridium* | 953 | 1,006 split, **209 whole-row moves** |
+| *Bacteroides* | 218 | |
+| *Eubacterium* | 44 | |
+
+**209 of those samples had no real *Bacteroides*/*Clostridium*/*Eubacterium* at
+all** — the genus row existed *only* because of the repoint. `SRR10377248` is the
+clearest: 11.6% of its genus composition was filed under *Bacteroides* and none
+of it was *Bacteroides*.
+
+**5.2950** of summed relative abundance moved out of the three genera and onto
+three new genus-rank features — `[Bacteroides] pectinophilus` and friends, with
+Firmicutes and the NCBI family, matching what the mirror now holds. Mass is
+conserved exactly, so sum-to-1 never moved off 0 and that was the end-to-end
+check.
+
+**Two of my own bugs surfaced doing it.**
+
+The `taxon_counted_twice_in_a_sample` counter I added last round grouped by
+`(sample, tax ID)` **across ranks**. The genus and species layers are separate
+compositions, so one organism in both is normal — that is how every organism
+works. It read 0 by luck and would have fired the moment a genus-layer feature
+took the tax ID its species-layer twin already had, which is precisely what this
+fix creates. It now groups per rank.
+
+And a clean re-run **overwrote the recovery record with 0 rows**. This audit
+records what was *done*, so it must persist — the opposite of
+`phylum_reclassification_audit.csv`, which records what is *outstanding* and is
+correctly truncated when a run comes back clean. I drew that distinction after
+wiping 1,215 rows, and rebuilt the file from the database: the bracket row holds
+the value that moved, the parent holds the remainder, and their sum is what was
+stored before. The reconstruction matched the apply exactly — 1,006/209,
+218/953/44, 5.2950 — which independently confirms the write did what it planned.
+
 ### A repair script whose premise had expired, and would have destroyed 1.27M rows
 
 Extending `fix_genus_layer_purity.py` to the mirror meant reading it first, and

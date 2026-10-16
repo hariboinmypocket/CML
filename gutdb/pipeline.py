@@ -2500,13 +2500,20 @@ def _validate_checks() -> dict[str, str]:
         # (a mis-assignment, not a duplicate), and three bracket-notation
         # artifacts that sit at a different rank from their twin and so must
         # never be merged. None of them is counted twice in any sample.
+        # GROUPED PER RANK, which the first version of this counter was not. The
+        # genus and species layers are separate compositions, each summing to 1,
+        # so one organism appearing in both is normal -- that is how every
+        # organism works. Only two rows at the SAME rank sharing a tax ID in one
+        # sample are the same measurement counted twice. Grouping across ranks
+        # read 0 by luck and would have fired the moment a genus-layer feature
+        # was given the tax ID its species-layer twin already had.
         "taxon_counted_twice_in_a_sample": """
             SELECT COUNT(*) FROM (
-                SELECT a.sample_id, t.ncbi_tax_id
+                SELECT a.sample_id, t.taxonomic_rank, t.ncbi_tax_id
                 FROM sample_taxon_abundances a
                 JOIN taxa t ON t.id = a.taxon_id
                 WHERE t.ncbi_tax_id IS NOT NULL
-                GROUP BY a.sample_id, t.ncbi_tax_id
+                GROUP BY a.sample_id, t.taxonomic_rank, t.ncbi_tax_id
                 HAVING COUNT(DISTINCT a.taxon_id) > 1
             ) d
         """,
