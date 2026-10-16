@@ -520,7 +520,7 @@ def upsert_study(connection: MySQLConnection, row: Mapping[str, Any]) -> int:
             title = COALESCE(NULLIF(VALUES(title), ''), title),
             description = COALESCE(NULLIF(VALUES(description), ''), description),
             data_type = COALESCE(NULLIF(VALUES(data_type), ''), data_type),
-            data_quality = VALUES(data_quality)
+            data_quality = IF(%s, VALUES(data_quality), data_quality)
         """,
         (
             project,
@@ -536,6 +536,7 @@ def upsert_study(connection: MySQLConnection, row: Mapping[str, Any]) -> int:
                           normalize_platform(first_value(row, "data_type", "experiment_type"))),
             first_value(row, "source_database") or "GMrepo",
             first_value(row, "data_quality") if first_value(row, "data_quality") in {"curated", "qualified"} else "unknown",
+            bool(first_value(row, "data_quality")),
         ),
     )
     cursor.execute("SELECT id FROM studies WHERE project_accession = %s", (project,))
@@ -767,7 +768,7 @@ def load_associations(
 
 
 GMREPO_ASSOCIATION_FIELDS = [
-    "project_id", "project_title", "project_description", "data_type", "data_quality",
+    "project_id", "project_title", "data_type", "data_quality",
     "scientific_name", "taxonomic_rank", "ncbi_tax_id", "disease_name", "mesh_id",
     "phenotype_a", "phenotype_a_mesh_id", "phenotype_b", "phenotype_b_mesh_id",
     "negative_enriched_in", "positive_enriched_in", "method", "effect_type", "lda_score",
@@ -803,7 +804,6 @@ def sync_gmrepo_comparison(
             {
                 "project_id": project_id,
                 "project_title": f"GMrepo curated {phenotype1} vs. {phenotype2}",
-                "project_description": "Curated project-level marker taxa from GMrepo",
                 "data_type": clean_str(marker.get("experiment_type")),
                 "data_quality": "curated",
                 "scientific_name": clean_str(marker.get("scientific_name")),
@@ -866,7 +866,6 @@ def _comparison_rows(
                 {
                     "project_id": project_id,
                     "project_title": f"GMrepo curated {phenotype1} vs. {phenotype2}",
-                    "project_description": "Curated project-level marker taxa from GMrepo",
                     "data_type": clean_str(marker.get("experiment_type")),
                     "data_quality": "curated",
                     "scientific_name": scientific_name,
@@ -956,9 +955,9 @@ def sync_all_gmrepo_comparisons(
 
 
 GMREPO_SAMPLE_FIELDS = [
-    "project_id", "data_type", "data_quality", "run_id", "sample_id", "disease_name",
+    "project_id", "data_type", "run_id", "sample_id", "disease_name",
     "mesh_id", "sex", "age_years", "bmi", "country", "qc_status", "instrument_model",
-    "nr_reads_sequenced", "longitude", "latitude", "phenotypes", "nr_phenotypes",
+    "nr_reads_sequenced",
 ]
 
 
@@ -1008,6 +1007,75 @@ def _choose_sample_phenotype(value: Any) -> tuple[str, str]:
     return clean_str(chosen.get("term")), clean_str(chosen.get("disease"))
 
 
+def prepare_gmrepo_sample_export(
+    connection: MySQLConnection, rows: list[dict[str, Any]]
+) -> tuple[list[dict[str, Any]], list[dict[str, str]]]:
+    """Reconcile an export with stored sample metadata using exact accessions.
+
+    Existing database demographics/labels include cMD/NCBI enrichment and
+    curation that the raw GMrepo API does not carry. Preserve that work in the
+    CSV as well. Missing measurements stay blank; no statistical imputation.
+    Raw phenotype JSON is parsed transiently, never retained as an export field.
+    """
+    cursor = connection.cursor(dictionary=True)
+    try:
+        cursor.execute("""SELECT s.run_accession, s.gmrepo_sample_id,
+            st.project_accession, s.sex, s.age_years, s.bmi,
+            d.name AS disease_name, d.mesh_id
+            FROM samples s JOIN studies st ON st.id = s.study_id
+            LEFT JOIN diseases d ON d.id = s.disease_id""")
+        stored = {r["run_accession"]: r for r in cursor.fetchall()}
+    finally:
+        cursor.close()
+    output, audit = [], []
+    for raw in rows:
+        run = clean_str(raw.get("run_id"))
+        current = stored.get(run, {})
+        if current and (
+            clean_str(current["project_accession"]) != clean_str(raw.get("project_id"))
+            or (clean_str(current["gmrepo_sample_id"]) and clean_str(raw.get("sample_id"))
+                and clean_str(current["gmrepo_sample_id"]) != clean_str(raw["sample_id"]))
+        ):
+            raise ValueError(f"Sample identity mismatch for {run}; export was not written")
+        row = {field: raw.get(field, "") for field in GMREPO_SAMPLE_FIELDS}
+        sources = {}
+        for field, parser in (("sex", parse_host_sex),
+                              ("age_years", lambda x: _plausible_age(nullable_float(x))),
+                              ("bmi", lambda x: _plausible_bmi(nullable_float(x)))):
+            original = parser(raw.get(field))
+            recovered = parser(current.get(field))
+            value = recovered if recovered is not None else original
+            row[field] = "" if value is None else str(value)
+            sources[field] = ("mysql.samples" if recovered is not None
+                              else "source_validation")
+        parsed_name, parsed_mesh = _choose_sample_phenotype(raw.get("phenotypes"))
+        if not clean_str(row["disease_name"]) and not clean_str(row["mesh_id"]):
+            row["disease_name"], row["mesh_id"] = parsed_name, parsed_mesh
+        for field in ("disease_name", "mesh_id"):
+            if current.get(field) is not None:
+                row[field] = current[field]
+                sources[field] = "mysql.diseases"
+            else:
+                row[field] = clean_str(row[field])
+                sources[field] = "phenotype_json_or_existing_label"
+        for field in ("sex", "age_years", "bmi", "disease_name", "mesh_id"):
+            before, after = clean_str(raw.get(field)), clean_str(row[field])
+            if before != after:
+                audit.append({"run_id": run, "field": field, "before": before,
+                              "after": after, "source": sources[field]})
+        output.append(row)
+    return output, audit
+
+
+def write_sample_export_audit(path: str | Path, rows: list[dict[str, str]]) -> None:
+    destination = Path(path)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    with destination.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=["run_id", "field", "before", "after", "source"])
+        writer.writeheader()
+        writer.writerows(rows)
+
+
 def _study_projects(connection: MySQLConnection) -> list[str]:
     cursor = connection.cursor()
     cursor.execute("SELECT project_accession FROM studies ORDER BY project_accession")
@@ -1044,7 +1112,6 @@ def sync_gmrepo_samples(
                     {
                         "project_id": clean_str(raw.get("project_id")) or project_id,
                         "data_type": clean_str(raw.get("experiment_type")),
-                        "data_quality": "curated",
                         "run_id": clean_str(raw.get("run_id")),
                         "sample_id": clean_str(raw.get("sample_id")),
                         "disease_name": disease_name,
@@ -1059,23 +1126,22 @@ def sync_gmrepo_samples(
                         "qc_status": raw.get("QCStatus"),
                         "instrument_model": clean_str(raw.get("instrument_model")),
                         "nr_reads_sequenced": raw.get("nr_reads_sequenced"),
-                        "longitude": raw.get("longitude"),
-                        "latitude": raw.get("latitude"),
-                        "phenotypes": raw.get("phenotypes"),
-                        "nr_phenotypes": raw.get("nr_phenotypes"),
                     }
                 )
             if len(page) < limit:
                 break
             skip += limit
 
-    rows = list(by_run.values())
+    rows, audit = prepare_gmrepo_sample_export(connection, list(by_run.values()))
     destination = Path(output_path)
     destination.parent.mkdir(parents=True, exist_ok=True)
     with destination.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=GMREPO_SAMPLE_FIELDS)
         writer.writeheader()
         writer.writerows(rows)
+    write_sample_export_audit(
+        destination.with_name(destination.stem + "_enrichment_audit.csv"), audit
+    )
 
     loaded = load_samples(connection, destination)
     metadata = {

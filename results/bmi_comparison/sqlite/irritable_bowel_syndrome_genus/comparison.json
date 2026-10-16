@@ -1,0 +1,39 @@
+{
+  "status": "not_scored_insufficient_studies",
+  "disease": "Irritable Bowel Syndrome",
+  "snapshot": {
+    "store": "sqlite",
+    "read_started_utc": "2026-10-16T15:55:12.259109+00:00",
+    "census": {
+      "samples": 23494,
+      "studies": 312,
+      "taxa": 5209,
+      "sample_taxon_abundances": 2050969
+    }
+  },
+  "selection": {
+    "candidate_rows": 668,
+    "rank": "genus",
+    "min_taxa": 3,
+    "subject_ids_available_in_store": false,
+    "fecal_nonfailed_rows": 668,
+    "profile_eligible_rows_before_dedup": 613,
+    "representative_rows": 613,
+    "representatives_without_known_subject_id": 613
+  },
+  "eligible_studies": [
+    "PRJEB37924",
+    "PRJNA637763"
+  ],
+  "required_studies": 3,
+  "reason": "Only 2 eligible both-arm studies; need 3",
+  "uncertainty_masking": {
+    "report_available": true,
+    "report_sha256": "68f7db316cf72fe40785efd9ecbbf6172955773599f84ad01146facea14540d1",
+    "masked_cells": {
+      "bmi": 0,
+      "age_years": 0,
+      "sex": 0
+    }
+  }
+}

@@ -33,11 +33,12 @@ Edit `.env` with the MySQL credentials you use in MySQL Workbench. The MySQL use
 
 ## 2. Populate the database
 
-Load the two local data sources and the IBS marker set recovered from the supplied workflow:
+Load the two local taxon sources and the consolidated GMrepo association export
+(including all four IBS projects):
 
 ```bash
 python populate_database.py all \
-  --associations data/gmrepo_PRJNA705217_ibs_markers.csv
+  --associations data/gmrepo_all_disease_associations.csv
 ```
 
 This command:
@@ -46,7 +47,8 @@ This command:
 2. Loads `gut_microbiome_new_full.csv`.
 3. Collapses MiMeDB strain rows to species and derives `energy_mode` and `primary_food_source`.
 4. Fills missing taxon attributes without overwriting curated values.
-5. Loads the PRJNA705217 Health-vs-IBS LDA associations.
+5. Loads the consolidated GMrepo disease associations, including PRJNA705217
+   and the other IBS projects.
 
 To intentionally replace existing taxon attributes/statistics, add `--overwrite`.
 
@@ -76,6 +78,69 @@ significance, while a hand-curated marker file often carries the reverse.
 The parser accepts CSV or TSV and recognizes common alternate headers such as
 `marker_taxon`, `effect_size`, `experiment_type`, and `direction`.
 
+### One GMrepo association input
+
+Use `data/gmrepo_all_disease_associations.csv` for GMrepo association imports.
+`project_description` is omitted from this file and future GMrepo association
+exports; project-level descriptions can still be held once in `studies`.
+The PRJNA705217 transcription and the additional IBS-project export were
+consolidated on 2026-10-16. The main file now contains 255 IBS association
+records across four projects: PRJEB37924 (153), PRJNA682378 (34), PRJNA637763
+(13), and PRJNA705217 (55). Genus and species evidence remain separate.
+
+The older CSVs are preserved under `data/archive/gmrepo_ibs_consolidation_2026-10-16/`
+and are no longer loaded separately. Its README records the overlap, score
+disagreements, and two unmatched transcribed taxon labels retained pending
+taxonomy review. MySQL already held all of these records in
+`taxon_disease_associations`; this file consolidation does not reload or alter
+the database. `q5_ibs_markers.csv` is a derived query report, not another input.
+
+### Normalized LDA scores
+
+`taxon_disease_associations.lda_score_normalized` is a generated column using
+the fixed **softsign** transformation:
+
+```text
+lda_score_normalized = ROUND(effect_size / (1 + ABS(effect_size)), 3)
+```
+
+It is populated only for `effect_type = 'LDA'`; missing scores and other effect
+types return NULL. Existing `effect_size` values are retained as stored. New
+inserts and score corrections automatically refresh the generated value. The
+summary view also exposes `lda_score_normalized`.
+
+Three decimal places retain more resolution on the smaller scale: -4 maps to
+-0.800, 0 to 0.000, and +4 to +0.800. The unrounded transformation is strictly
+increasing and bounded between -1 and +1; rounding may create ties and, for
+extreme future scores, endpoints. SQLite and some clients may omit trailing
+zeros when displaying numbers; this does not change their numeric value.
+
+This is a nonlinear rescaling, not min-max or z-score standardization. It needs
+no fitted dataset parameters, so adding studies does not change previous values
+and the transform does not use held-out data. It compresses magnitude differences;
+retain `effect_size` for original thresholds and analyses requiring that scale.
+It is not a probability or a correction for study/method differences. Its sign
+follows the source comparison order; use `direction` and the comparison groups
+to interpret disease enrichment/depletion. Disease-labelled association scores
+must not be treated as independently measured patient features for predicting
+those same disease labels.
+
+Apply to an existing MySQL database and, separately, its SQLite mirror:
+
+```bash
+python3 scripts/normalize_lda_scores.py --apply
+python3 scripts/normalize_lda_scores.py --sqlite gut_microbiome.sqlite --apply
+```
+
+Omit `--apply` for a preview. The migration verifies every derived value and
+checks that all original association fields are unchanged. New databases get
+the generated column from their schema. This does not change the legacy
+`microbiome_dataset` tables, which do not store project-level LDA scores.
+
+For a model needing a learned scaler instead, fit it inside each training fold
+and apply that fitted scaler to validation/test data, as described in
+[scikit-learn's preprocessing guidance](https://scikit-learn.org/stable/modules/preprocessing.html).
+
 ### Clinical sample metadata
 
 Normalize GMrepo project/run metadata to these columns:
@@ -89,6 +154,32 @@ Required: `project_id`, `run_id`. Optional: `sample_id`, `disease_name`, `mesh_i
 aliases — `project_accession` for `project_id`, `run_accession` for `run_id`,
 `gender` for `sex`, `age` for `age_years`, `disease`/`phenotype` for
 `disease_name`.
+
+The GMrepo sample export uses the readable `disease_name` and `mesh_id` fields
+instead of raw `phenotypes` JSON. `nr_phenotypes`, `longitude`, `latitude`, and
+`data_quality` are also omitted. This affects the CSV, not the database schema.
+The sample loader preserves a study's existing quality classification when the
+input omits `data_quality`.
+
+To refresh the sample CSV from the demographics and curated disease labels
+already recovered in MySQL:
+
+```bash
+python3 scripts/clean_gmrepo_samples.py --apply
+```
+
+Omit `--apply` to preview. Exact run/project/sample identifiers are checked
+before merging. The script keeps an original backup (including raw phenotype
+JSON) and a field-level change audit in `data/archive/`. Missing measurements
+remain blank when no source value exists; BMI 0 and invalid age sentinels are
+removed. It does not modify MySQL. Existing disease labels are reconciled with
+the database's current curated disease/MeSH pair.
+
+Future `sync-gmrepo-samples` exports use this same reconciliation step, retain
+enriched demographics, and write an `_enrichment_audit.csv` alongside the
+export. This prevents a raw API refresh from losing the recovered metadata.
+New ambiguous phenotype lists stay unlabelled until an actual sample label
+is available; choosing a disease from a cohort's list is not sufficient.
 
 `age_years` and `bmi` are checked on the way in: a BMI of 0 or above 200 and an
 age below 0 or above 110 are stored as NULL, because GMrepo serves those as
@@ -154,6 +245,17 @@ run writes a full audit CSV (default `data/ncbi_biosample_demographics.csv`) rec
 resolved value and parsing note for every sample it touched, and logs to `ingestion_runs` like
 every other loader. Not every gap is fillable — many source projects simply never submitted this
 metadata to NCBI either, so `sex` and `age_years` will still have real gaps after running it.
+
+The CKD supplement audit, `data/ckd_study_demographics_audit.csv`, keeps
+`run_accession`, `supplement_id`, `library_name`, `join_basis`, `age_years`,
+`sex`, and `bmi`. Duplicate `filled_*` values are omitted; the cohort series
+is already encoded in `supplement_id`.
+`join_basis` must be retained to describe the source identifier match. Following
+source verification, only 57 HzCKD mappings remain active. The 273 HC and 159 CKD
+unverified mappings were archived and their imported demographics withdrawn from
+MySQL and the sample CSV. SQLite now contains only the verified demographics for
+these runs. Samples and abundance data were preserved. The importer no longer
+guesses numeric-prefix joins; see [CKD cleanup details](docs/ckd_demographic_cleanup.md).
 
 ## 4. Validate and query
 
@@ -550,6 +652,13 @@ score. `project_accession` is written into every matrix so cross-validation can
 be grouped on it.
 
 ### What the cohort can actually support: leave-one-study-out
+
+For a paired no-BMI baseline versus adding BMI **without requiring complete
+sex/age metadata**, use `python3 scripts/compare_bmi_models.py`. The new workflow
+fits prevalence filtering and demographic preprocessing inside each training
+fold, reads either store without changing it, and records snapshot-specific
+results. See [BMI comparison](docs/bmi_model_comparison.md). The older audit
+below uses the complete-demographics cohort and a different experiment design.
 
 ```bash
 python scripts/loso_audit.py      # writes data/loso_audit.csv

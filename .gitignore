@@ -74,3 +74,17 @@ data/muller2022/
 # experiment, so pinning one would imply a choice that belongs to the experiment.
 data/ml_matrix_*.csv
 data/ml_matrix_*.json
+
+# Local model bundles include the exact experiment inputs; reports remain trackable.
+results/bmi_comparison/**/*.joblib
+
+# Pre-write recovery snapshots written by the repair scripts (--apply takes one
+# before writing). These are LOCAL safety copies, not repo content: the CKD
+# backup alone is 117 MB because it pins a whole SQLite mirror. The scripts
+# report their path on every run, and results/*/\*.json carries the
+# machine-readable record that belongs in the repo.
+data/archive/
+
+# Spreadsheet working copies opened from a CSV. gmrepo_cmd_followup.numbers is
+# 4.1 MB, three times the CSV it came from.
+*.numbers

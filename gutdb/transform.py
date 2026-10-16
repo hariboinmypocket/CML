@@ -10,6 +10,50 @@ from typing import Any, Iterable, Mapping
 NA_VALUES = {"", "n/a", "na", "none", "null", "nan", "unknown", "not available"}
 
 
+def verified_demographic_link(record: Mapping[str, Any]) -> bool:
+    """A plausible library prefix is not a clinical-to-run identifier match."""
+    return all(record.get(key) is True for key in (
+        "published_values_match_audit", "ena_library_to_run_verified",
+        "exact_source_identifier_in_ena",
+    ))
+
+
+def same_demographic_value(field: str, left: Any, right: Any) -> bool:
+    """Compare CSV and SQL values without treating missing values as evidence."""
+    a, b = clean_str(left), clean_str(right)
+    if not a or not b:
+        return False
+    if field == "sex":
+        return a.casefold() == b.casefold()
+    try:
+        return abs(Decimal(a) - Decimal(b)) < Decimal("0.000001")
+    except (ValueError, ArithmeticError):
+        return False
+
+
+def reconcile_demographic_cells(current: Mapping[str, Any], source: Mapping[str, Any],
+                                verified: bool) -> tuple[dict[str, Any], list[str]]:
+    """Withdraw matching unsafe imports, fill verified gaps, preserve conflicts.
+
+    Shared by both database stores and CSV repair. Never overwrite an independent
+    nonmissing measurement, and never manufacture a source-missing measurement.
+    """
+    changes, conflicts = {}, []
+    for field in ("sex", "age_years", "bmi"):
+        present, imported = current.get(field), source.get(field)
+        if not clean_str(imported):
+            continue
+        if not clean_str(present):
+            if verified:
+                changes[field] = imported
+        elif same_demographic_value(field, present, imported):
+            if not verified:
+                changes[field] = None
+        else:
+            conflicts.append(field)
+    return changes, conflicts
+
+
 def clean_str(value: Any) -> str:
     if value is None:
         return ""

@@ -77,10 +77,12 @@ class TransformTests(unittest.TestCase):
             association_direction(3.2, "IBS", "IBS", "Health"), "enriched"
         )
 
-    def test_seed_marker_file_has_both_directions(self):
-        path = Path(__file__).parents[1] / "data" / "gmrepo_PRJNA705217_ibs_markers.csv"
+    def test_consolidated_ibs_project_has_both_directions(self):
+        path = Path(__file__).parents[1] / "data" / "gmrepo_all_disease_associations.csv"
         with path.open(encoding="utf-8", newline="") as handle:
-            rows = list(csv.DictReader(handle))
+            rows = [row for row in csv.DictReader(handle)
+                    if row["project_id"] == "PRJNA705217"
+                    and row["disease_name"] == "Irritable Bowel Syndrome"]
         directions = {
             association_direction(
                 float(row["lda_score"]),
@@ -90,7 +92,8 @@ class TransformTests(unittest.TestCase):
             )
             for row in rows
         }
-        self.assertEqual(len(rows), 34)
+        self.assertEqual(len(rows), 55)
+        self.assertEqual(len({(r["scientific_name"], r["taxonomic_rank"]) for r in rows}), 55)
         self.assertEqual(directions, {"enriched", "depleted"})
 
 

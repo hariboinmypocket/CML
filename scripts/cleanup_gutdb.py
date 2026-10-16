@@ -88,8 +88,7 @@ def source_mesh_map() -> dict[str, str]:
     """disease/phenotype name (casefolded) -> MeSH id, from every source CSV."""
     mapping: dict[str, str] = {}
     files = [os.path.join(REPO, "data", f) for f in (
-        "gmrepo_all_disease_associations.csv", "gmrepo_ibs_additional_projects.csv",
-        "gmrepo_PRJNA705217_ibs_markers.csv", "gmrepo_project_samples.csv")]
+        "gmrepo_all_disease_associations.csv", "gmrepo_project_samples.csv")]
     files += sorted(glob.glob(os.path.join(REPO, "data", "literature_*_markers.csv")))
     pairs = [("disease_name", "mesh_id"), ("phenotype_a", "phenotype_a_mesh_id"),
              ("phenotype_b", "phenotype_b_mesh_id")]

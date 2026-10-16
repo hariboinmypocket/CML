@@ -213,6 +213,13 @@ CREATE TABLE IF NOT EXISTS taxon_disease_associations (
     -- exactly one effect_type, so nothing is currently duplicated beneath it.
     effect_type VARCHAR(50) NOT NULL DEFAULT 'LDA',
     effect_size DOUBLE NULL,
+    -- Fixed softsign scale; no population statistics or fitting required.
+    -- The sign retains the comparison order, not an intrinsic disease effect.
+    lda_score_normalized DECIMAL(4,3) GENERATED ALWAYS AS (
+        CASE WHEN effect_type = 'LDA' THEN
+            ROUND(effect_size / (1.0 + ABS(effect_size)), 3)
+        ELSE NULL END
+    ) VIRTUAL,
     -- Significance, where the source reports it. These are independent of
     -- effect_size, not derived from it: GMrepo's LEfSe export carries an LDA
     -- score and no p/q value, while MicrobiomeHD's standardized re-analysis
@@ -636,7 +643,8 @@ SELECT
     a.direction,
     a.effect_type,
     a.effect_size,
-    s.project_accession
+    s.project_accession,
+    a.lda_score_normalized
 FROM taxon_disease_associations a
 JOIN taxa t ON t.id = a.taxon_id
 JOIN diseases d ON d.id = a.disease_id

@@ -123,6 +123,12 @@ CREATE TABLE IF NOT EXISTS taxon_disease_associations (
         CHECK (direction IN ('enriched', 'depleted', 'marker', 'no_difference')),
     effect_type TEXT NOT NULL DEFAULT 'LDA',
     effect_size REAL,
+    -- Same fixed softsign scale as MySQL. Only LDA scores are transformed.
+    lda_score_normalized REAL GENERATED ALWAYS AS (
+        CASE WHEN effect_type = 'LDA' THEN
+            ROUND(effect_size / (1.0 + ABS(effect_size)), 3)
+        ELSE NULL END
+    ) VIRTUAL,
     p_value REAL,
     q_value REAL,
     source_database TEXT NOT NULL DEFAULT 'GMrepo',
@@ -174,7 +180,8 @@ SELECT
     a.direction,
     a.effect_type,
     a.effect_size,
-    s.project_accession
+    s.project_accession,
+    a.lda_score_normalized
 FROM taxon_disease_associations a
 JOIN taxa t ON t.id = a.taxon_id
 JOIN diseases d ON d.id = a.disease_id
