@@ -1095,6 +1095,63 @@ returns them with `concept` NULL rather than hiding them. `boolean_undecoded`
 flags any boolean value the map does not cover — currently **0** — so an
 unanticipated answer surfaces instead of being guessed at.
 
+### A repair script whose premise had expired, and would have destroyed 1.27M rows
+
+Extending `fix_genus_layer_purity.py` to the mirror meant reading it first, and
+it is **no longer safe to run at all**.
+
+It selects strays with `WHERE t.taxonomic_rank <> 'genus'`, which was exact when
+every abundance in the database was a genus-level layer. The **species layer was
+loaded afterwards** and now holds 1,277,809 rows — every one of which that
+selector matches. Its dry run today reports:
+
+```
+abundance rows at a non-genus rank: 1277809
+  rows moved to genus : 1277809
+```
+
+One `--apply` from collapsing the entire species layer into the genus layer and
+adding species mass to genus values. It now **refuses to run** when the species
+layer is present, rather than relying on whoever reads the output to notice the
+count.
+
+### And the repair it performed is itself questionable
+
+NCBI's square brackets mean the name is **misapplied**, which is exactly the
+warning against repointing to the leading token. For all three organisms NCBI
+assigns **no genus at all** — they are *incertae sedis*, and all three are
+Bacillota:
+
+| tax ID | name | NCBI family | NCBI genus |
+|---|---|---|---|
+| 84026 | `[Clostridium] methylpentosum` | Oscillospiraceae | **none** |
+| 384638 | `[Bacteroides] pectinophilus` | none | **none** |
+| 51123 | `[Eubacterium] saphenum` | Anaerovoracaceae | **none** |
+
+So repointing put a **Firmicute's mass under the Bacteroidetes genus
+*Bacteroides***. Measured in the mirror, which still holds the un-repointed rows:
+**142 rows averaging 1.5% of a sample's genus composition and reaching 11.6%** —
+in the most-measured genus in this database. Not a rounding error.
+
+**So I did not replicate it.** `fix_mirror_bracket_names.py` restores the lost
+opening bracket — `Clostridium] methylpentosum` → `[Clostridium] methylpentosum`
+— and **leaves the abundance exactly where it is**. Mass untouched, so no rank
+group changes and no renormalisation is needed; sum-to-1 stayed at 0 violations
+through the whole operation. The row remains a genus-layer feature that is now
+honestly named, and `taxa.ncbi_rank` already describes it as something NCBI ranks
+as a species with no genus — which `v_abundance_genus` surfaces as
+`coarser_than_genus`.
+
+Those three stay listed as `spans_two_ranks` in the merge audit, which is
+correct: one is genus-layer mass and the other a species-layer taxon, and merging
+across ranks is what broke 663 rank groups earlier.
+
+**Outstanding, and yours to call:** MySQL's genus layer still carries that
+misattributed mass, and the repoint left no audit — but the mirror holds the
+original un-repointed values, so it **is** recoverable by reading across. Undoing
+it means taking mass back out of *Bacteroides* in ~142 samples and renormalising,
+which is a real change to the most-measured genus here.
+
 ### The mirror was double-counting an organism in 582 cells, invisibly
 
 `merge_duplicate_taxa.py` fixed this for MySQL and is MySQL-only, so the mirror
