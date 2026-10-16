@@ -2485,6 +2485,31 @@ def _validate_checks() -> dict[str, str]:
                          ELSE c.negative_score_enriched_in_id END = a.disease_id)
                    <> (a.direction = 'enriched'))
         """,
+        # ONE ORGANISM COUNTED TWICE IN ONE SAMPLE. Two taxa rows sharing a tax
+        # ID are the same organism, so a sample holding both counts it twice --
+        # it takes double share while every other taxon there is squeezed. The
+        # sum-to-1 counter CANNOT see this, because renormalisation happened
+        # after the duplication, which is why the mirror carried 582 such cells
+        # across 12,392 of its 23,494 samples while every one of validate's other
+        # counters read zero.
+        #
+        # This gates on the harm rather than on duplicate tax IDs, because five
+        # duplicate groups legitimately remain in the mirror and are listed in
+        # data/taxa_merge_mirror_audit.csv: one whose OVERRIDES action names
+        # MySQL row ids, one where two different Vibrio species share a tax ID
+        # (a mis-assignment, not a duplicate), and three bracket-notation
+        # artifacts that sit at a different rank from their twin and so must
+        # never be merged. None of them is counted twice in any sample.
+        "taxon_counted_twice_in_a_sample": """
+            SELECT COUNT(*) FROM (
+                SELECT a.sample_id, t.ncbi_tax_id
+                FROM sample_taxon_abundances a
+                JOIN taxa t ON t.id = a.taxon_id
+                WHERE t.ncbi_tax_id IS NOT NULL
+                GROUP BY a.sample_id, t.ncbi_tax_id
+                HAVING COUNT(DISTINCT a.taxon_id) > 1
+            ) d
+        """,
         # effect_type records what the stored number IS, not how it was
         # produced, and resolve_effect_type() exists to make that conversion.
         # The mirror held 123 rows reading 'LEfSe' -- a method -- because its

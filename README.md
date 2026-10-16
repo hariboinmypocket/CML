@@ -1095,6 +1095,58 @@ returns them with `concept` NULL rather than hiding them. `boolean_undecoded`
 flags any boolean value the map does not cover — currently **0** — so an
 unanticipated answer surfaces instead of being guessed at.
 
+### The mirror was double-counting an organism in 582 cells, invisibly
+
+`merge_duplicate_taxa.py` fixed this for MySQL and is MySQL-only, so the mirror
+held the pre-merge state: **104 tax IDs over 208 rows**. They are the
+species-level form of the Firmicutes/Bacillota split already repaired at four
+higher ranks — same tax ID, two names, one organism:
+
+| tax ID | the two names | abundances split |
+|---|---|---|
+| 33038 | *Ruminococcus gnavus* / *Mediterraneibacter gnavus* | 8,363 |
+| 40520 | *Blautia obeum* / *Ruminococcus obeum* | 8,029 |
+| 165179 | *Prevotella copri* / *Segatella copri* | 4,688 |
+
+And **582 `(sample, tax ID)` cells counted one organism twice**, across 12,392 of
+the mirror's 23,494 samples. The per-rank sums were still exactly 1.0, because
+renormalisation happened *after* the duplication — so the sum-to-1 counter could
+not see it and **none of validate's 47 counters did**. The duplicated organism
+held double share while every other taxon in those samples was squeezed.
+
+The decision logic is **imported** from the MySQL script, not reimplemented: a
+second canonicalisation rule would be a second answer to "which name is this
+organism", and the stores would disagree about it the way they disagreed about
+everything else here. NCBI's current names come from the local taxdump instead of
+the API, so it needs no network. 99 merges applied, every one keeping NCBI's
+current name — *Klebsiella aerogenes* over *Enterobacter aerogenes*,
+*Lancefieldella parvula* over *Atopobium parvulum*.
+
+**I got it wrong twice, and the backup is why that was cheap.**
+
+First run: **663 rank groups stopped summing to 1**, some down to 1e-04. Three
+duplicate groups span *two ranks* — the bracket-notation artifacts,
+`Eubacterium saphenum` beside `Eubacterium] saphenum` with the opening bracket
+lost — and the mangled row sits at genus rank carrying genus-layer abundance.
+Repointing it onto a species-rank canonical moved mass from one composition into
+another. The abundance layer is defined per rank, so a group spanning two ranks
+is never mergeable whatever the tax ID says. MySQL never hit this because
+`fix_genus_layer_purity.py` had already repointed its genus-layer binomials; the
+script that fixed MySQL never had to refuse them.
+
+Second run: **49 groups still off**, at about 0.99. That one is correct
+arithmetic rather than damage — removing a double-counted row *should* drop the
+group below 1.0, because the values were normalised while the duplicate was
+present. The MySQL script rescales the touched groups afterwards and I had
+omitted the step. 557 samples lost a copy; **891 rank groups rescaled**.
+
+Five duplicate groups remain and are listed in the audit: one whose `OVERRIDES`
+action names MySQL row ids, one where ***Vibrio fischeri* and *V. furnissii*
+share a tax ID** — a mis-assignment, not a duplicate, which the automatic rule
+correctly refused — and the three cross-rank artifacts. The new counter therefore
+gates on **the harm**, `taxon_counted_twice_in_a_sample`, which is 0 in both
+stores, rather than on duplicate tax IDs with five documented exceptions.
+
 ### The LDA sign machinery had no invariant either, and two rows needed it
 
 An LDA score's sign is meaningless without its comparison order — this schema's
