@@ -2517,6 +2517,16 @@ def _validate_checks() -> dict[str, str]:
                 HAVING COUNT(DISTINCT a.taxon_id) > 1
             ) d
         """,
+        # The three rank flags on v_abundance_genus must stay consistent:
+        # coarser and finer are mutually exclusive, and not_a_genus is exactly
+        # their union. They are three hand-written rank lists over one fact, so
+        # an edit to one that misses another would silently disagree -- a feature
+        # reported as neither coarser nor finer yet not a genus, or as both.
+        "genus_rank_flags_inconsistent": """
+            SELECT COUNT(*) FROM v_abundance_genus
+            WHERE (coarser_than_genus = 1 AND finer_than_genus = 1)
+               OR (not_a_genus <> (coarser_than_genus OR finer_than_genus))
+        """,
         # effect_type records what the stored number IS, not how it was
         # produced, and resolve_effect_type() exists to make that conversion.
         # The mirror held 123 rows reading 'LEfSe' -- a method -- because its

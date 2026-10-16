@@ -690,6 +690,35 @@ RANKS_AT_OR_BELOW_GENUS = frozenset({
 })
 
 
+def ncbi_rank_differs(ncbi_rank, layer_rank: str) -> bool:
+    """Whether NCBI puts this taxon at a rank other than the layer it sits in.
+
+    Covers both directions, because both are the same statement -- "this feature
+    is not what its layer says" -- and only one of them was exposed:
+
+      COARSER. 123 genus-layer features are families, orders, classes or phyla,
+      carrying 16,098 abundance rows. coarser_than_genus() has flagged these
+      since they were found.
+
+      FINER. 4 genus-layer features are species, carrying 1,233 rows: the three
+      bracket organisms NCBI leaves without a genus, plus Phenoliferia
+      psychrophila. Nothing flagged them, and three of them exist because
+      unwind_bracket_genus_repoint.py created them -- so the gap was opened by
+      the fix for a different one.
+
+      And 181 SPECIES-layer features are strains, carrying 189,390 rows, 14.8%
+      of that layer, with v_abundance_species exposing neither the rank nor a
+      flag.
+
+    'no rank' and 'clade' assert nothing, so they are not a difference. An empty
+    rank is not either -- 39 taxa carry a tax ID the local dump does not list.
+    """
+    rank = clean_str(ncbi_rank).casefold()
+    if not rank or rank in ("no rank", "clade"):
+        return False
+    return rank != clean_str(layer_rank).casefold()
+
+
 def coarser_than_genus(ncbi_rank) -> bool:
     """Whether a genus-layer feature is really a family, order, class or phylum.
 

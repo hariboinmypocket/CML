@@ -1095,6 +1095,46 @@ returns them with `concept` NULL rather than hiding them. `boolean_undecoded`
 flags any boolean value the map does not cover — currently **0** — so an
 unanticipated answer surfaces instead of being guessed at.
 
+### The flag only covered one direction, and my own fix exposed the other
+
+`coarser_than_genus` flags a genus-layer feature that NCBI ranks as a family,
+order, class or phylum — 123 taxa, 16,098 abundance rows. It says nothing about
+the opposite case, and **the previous fix created four of those**: the three
+bracket organisms NCBI leaves without a genus, plus *Phenoliferia psychrophila*,
+carrying 1,233 rows. A modeller saw them as ordinary genera.
+
+Worse, the species layer had the same hole and no flag at all — not even
+`ncbi_rank`:
+
+| layer | features | abundance rows | share of layer |
+|---|---|---|---|
+| genus, coarser | 123 | 16,098 | 0.9% |
+| genus, finer | 5 | 1,237 | 0.07% |
+| **species, rank differs** | **183** | **189,397** | **14.8%** |
+
+Both views now expose the rank and the flags, with `not_a_genus` as the single
+predicate for "features that are genuinely genera".
+
+**The species-layer flag is carefully worded, because the obvious reading is
+wrong.** Those 181 are *not* strain-level features: the name is a species and the
+stored tax ID points below it — *Bifidobacterium longum* carries 1322347, a
+strain, where the species is 216816. That is the `retaxid` class other sessions
+are working through, so the flag means "this identifier needs moving up", not
+"this is a strain".
+
+A counter keeps the three genus flags consistent — they are three hand-written
+rank lists over one fact, so an edit to one that misses another would silently
+disagree. It immediately reported **`FAILED_TO_RUN` against the mirror**, which
+had no `ncbi_rank` column at all because that backfill was MySQL-only. That is
+the one-store gap again, this time in a column rather than a repair, and the
+"a check that cannot run is a failure, not a skip" rule is what surfaced it
+rather than letting the mirror pass quietly. The column, the backfill and the
+view flags now cover both stores: **51 counters, all zero, none failing to run.**
+
+**One thing I did badly:** my first attempt to extend the backfill cut `main()`
+in half, leaving a function referencing variables from the one it was split out
+of. `git checkout` and a surgical append instead of a clever refactor.
+
 ### Unwinding the misattribution: 5.29 of mass taken back out of three genera
 
 The repoint left no audit, so the amount could not be looked up — it had to be

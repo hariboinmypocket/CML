@@ -14,6 +14,7 @@ from gutdb.transform import (
     SUPERKINGDOM,
     canon_trait,
     coarser_than_genus,
+    ncbi_rank_differs,
     split_sporulation,
     quantize_effect_size,
     association_direction,
@@ -605,3 +606,46 @@ class LineageSynonymTests(unittest.TestCase):
         keys = set(LINEAGE_SYNONYMS)
         for target in LINEAGE_SYNONYMS.values():
             self.assertNotIn(target.casefold(), keys, target)
+
+
+class NcbiRankDiffersTests(unittest.TestCase):
+    """Both directions of "this feature is not what its layer says".
+
+    coarser_than_genus covered only one of them. 4 genus-layer features are
+    species and 181 species-layer features are strains -- the second group
+    189,390 abundance rows, 14.8% of that layer -- and nothing flagged either.
+    """
+
+    def test_a_coarser_rank_in_the_genus_layer_differs(self):
+        for rank in ("family", "order", "class", "phylum"):
+            self.assertTrue(ncbi_rank_differs(rank, "genus"), rank)
+
+    def test_a_finer_rank_in_the_genus_layer_also_differs(self):
+        """The direction coarser_than_genus misses."""
+        for rank in ("species", "subspecies", "strain", "subgenus"):
+            self.assertTrue(ncbi_rank_differs(rank, "genus"), rank)
+            self.assertFalse(coarser_than_genus(rank), rank)
+
+    def test_a_strain_in_the_species_layer_differs(self):
+        self.assertTrue(ncbi_rank_differs("strain", "species"))
+        self.assertTrue(ncbi_rank_differs("subspecies", "species"))
+        self.assertTrue(ncbi_rank_differs("isolate", "species"))
+
+    def test_matching_the_layer_is_not_a_difference(self):
+        self.assertFalse(ncbi_rank_differs("genus", "genus"))
+        self.assertFalse(ncbi_rank_differs("species", "species"))
+
+    def test_an_uninformative_rank_is_not_a_difference(self):
+        """'no rank' and 'clade' assert nothing either way."""
+        for rank in ("no rank", "clade"):
+            self.assertFalse(ncbi_rank_differs(rank, "genus"), rank)
+            self.assertFalse(ncbi_rank_differs(rank, "species"), rank)
+
+    def test_an_absent_rank_is_not_a_difference(self):
+        """39 taxa carry a tax ID the local dump does not list."""
+        for rank in (None, "", "   "):
+            self.assertFalse(ncbi_rank_differs(rank, "genus"), repr(rank))
+
+    def test_case_and_whitespace_do_not_change_the_answer(self):
+        self.assertFalse(ncbi_rank_differs(" GENUS ", "genus"))
+        self.assertTrue(ncbi_rank_differs(" Family ", "genus"))

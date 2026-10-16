@@ -1144,6 +1144,19 @@ SELECT
     (t.ncbi_rank IS NOT NULL
      AND t.ncbi_rank NOT IN ('genus', 'subgenus', 'species', 'subspecies',
                              'strain', 'no rank', 'clade')) AS coarser_than_genus,
+    -- The other direction, which coarser_than_genus alone did not cover: 4
+    -- features here are species -- the three bracket organisms NCBI leaves
+    -- without a genus, plus Phenoliferia psychrophila -- carrying 1,233
+    -- abundance rows. Three of them exist because
+    -- unwind_bracket_genus_repoint.py created them, so this gap was opened by
+    -- the fix for a different one.
+    (t.ncbi_rank IS NOT NULL
+     AND t.ncbi_rank IN ('subgenus', 'species', 'subspecies',
+                         'strain')) AS finer_than_genus,
+    -- Filter on this when a model needs features that are genuinely genera.
+    -- 'no rank' and 'clade' assert nothing and are not a difference.
+    (t.ncbi_rank IS NOT NULL
+     AND t.ncbi_rank NOT IN ('genus', 'no rank', 'clade')) AS not_a_genus,
     a.relative_abundance
 FROM sample_taxon_abundances a
 JOIN taxa t ON t.id = a.taxon_id
@@ -1163,6 +1176,19 @@ SELECT
     t.genus,
     t.phylum,
     t.superkingdom,
+    t.ncbi_rank,
+    -- 181 features here carry a tax ID NCBI ranks as a STRAIN, across 189,390
+    -- abundance rows -- 14.8% of this layer -- and nothing exposed it, not even
+    -- the rank.
+    --
+    -- READ IT AS A MIS-ASSIGNED TAX ID, NOT AS A STRAIN-LEVEL FEATURE. The name
+    -- is a species and the stored tax ID points below it: Bifidobacterium
+    -- longum carries 1322347, a strain, where the species is 216816. That is
+    -- the `retaxid` class in merge_duplicate_taxa.py's OVERRIDES, which other
+    -- sessions are working through; the feature is a species whose identifier
+    -- needs moving up, not a strain.
+    (t.ncbi_rank IS NOT NULL
+     AND t.ncbi_rank NOT IN ('species', 'no rank', 'clade')) AS ncbi_rank_differs,
     a.relative_abundance
 FROM sample_taxon_abundances a
 JOIN taxa t ON t.id = a.taxon_id
