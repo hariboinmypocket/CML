@@ -35,6 +35,38 @@ if [ -d "$ROOT/taxdump" ]; then TAXDUMP="$ROOT/taxdump"; else TAXDUMP="$MAIN_WT/
 
 PY="${GUTDB_PYTHON:-python3}"
 
+# --- staleness guard --------------------------------------------------------
+# install.sh COPIES this file rather than symlinking it, so that cleaning up a
+# worktree cannot leave a dangling hook that git skips without a word. The cost
+# is that the installed copy drifts from the tracked one whenever scripts/hooks/
+# changes and nobody re-runs the installer, and the drift is silent in the worst
+# way: an old gate keeps passing pushes while the tracked copy looks correct.
+# That is not hypothetical here -- the counter list this hook gates on had
+# drifted twice before it was inverted, and a stale copy reintroduces exactly
+# that failure while reporting success.
+#
+# Warn rather than abort, and never reinstall automatically. A branch that is
+# itself editing the hook differs legitimately, and a hook that rewrote itself
+# mid-push would run code nobody approved for that push. install.sh stays the
+# only thing that changes the live hook.
+INSTALLED_HOOK="$(git rev-parse --git-common-dir)/hooks/pre-push"
+TRACKED_HOOK="$ROOT/scripts/hooks/pre-push"
+# Skip a symlinked install (the pre-copy scheme), which is identical by
+# construction, and a worktree too old to carry a tracked copy to compare with.
+if [ -f "$INSTALLED_HOOK" ] && [ ! -L "$INSTALLED_HOOK" ] && [ -f "$TRACKED_HOOK" ]; then
+    # install.sh writes a shebang plus a marker line in place of the tracked
+    # shebang, so the bodies align at installed line 3 and tracked line 2.
+    if [ "$(tail -n +3 "$INSTALLED_HOOK" | cksum)" \
+       != "$(tail -n +2 "$TRACKED_HOOK" | cksum)" ]; then
+        echo "pre-push: WARNING - installed hook differs from the tracked copy"
+        echo "    tracked:   $TRACKED_HOOK"
+        echo "    installed: $INSTALLED_HOOK"
+        echo "    The gate below is the INSTALLED copy's, not this worktree's."
+        echo "    Run 'sh scripts/hooks/install.sh' to update it, or ignore this"
+        echo "    if you are editing the hook on this branch."
+    fi
+fi
+
 echo "pre-push: running project checks before mirroring to main..."
 [ "$RUNDIR" = "$ROOT" ] || echo "  (checks run from $RUNDIR -- no .env in this worktree)"
 
