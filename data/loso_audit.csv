@@ -1,13 +1,13 @@
 disease,studies_used,platforms,samples,cases,controls,features,auc_random_split,auc_loso_mean,auc_loso_min,auc_loso_max,optimism,loso_folds
-Irritable Bowel Syndrome,3,16S+mNGS,643,405,238,338,0.923,0.569,0.496,0.613,0.354,3
-COVID-19,3,16S+mNGS,146,58,88,91,0.85,0.503,0.366,0.7,0.347,3
+Irritable Bowel Syndrome,3,16S+mNGS,643,405,238,339,0.922,0.567,0.496,0.608,0.355,3
+COVID-19,3,16S+mNGS,146,58,88,91,0.85,0.505,0.366,0.704,0.345,3
 "Colitis, Ulcerative",8,16S+mNGS,1327,788,539,105,0.824,0.591,0.384,0.77,0.233,8
-"Diabetes Mellitus, Type 1",4,16S+mNGS,278,157,121,116,0.746,0.524,0.434,0.582,0.222,4
-Multiple Sclerosis,4,16S+mNGS,362,272,90,90,0.709,0.555,0.486,0.601,0.155,4
+"Diabetes Mellitus, Type 1",4,16S+mNGS,278,157,121,116,0.746,0.526,0.434,0.577,0.221,4
+Multiple Sclerosis,4,16S+mNGS,362,272,90,91,0.711,0.557,0.487,0.599,0.154,4
 Crohn Disease,9,16S+mNGS,1973,1322,651,105,0.82,0.692,0.275,0.903,0.128,9
-"Diabetes Mellitus, Type 2",5,16S,226,74,152,78,0.636,0.52,0.434,0.731,0.115,5
+"Diabetes Mellitus, Type 2",5,16S,226,74,152,78,0.635,0.521,0.445,0.738,0.114,5
 Parkinson Disease,4,16S+mNGS,350,209,141,108,0.559,0.473,0.356,0.519,0.086,4
-Colorectal Neoplasms,7,16S+mNGS,712,364,348,399,0.734,0.652,0.432,0.843,0.083,7
-Autism Spectrum Disorder,5,16S+mNGS,386,202,184,101,0.587,0.515,0.456,0.63,0.071,5
-"Depressive Disorder, Major",3,16S+mNGS,246,134,112,132,0.602,0.534,0.517,0.561,0.069,3
+Colorectal Neoplasms,7,16S+mNGS,712,364,348,399,0.735,0.653,0.432,0.844,0.082,7
+Autism Spectrum Disorder,5,16S+mNGS,386,202,184,101,0.586,0.515,0.454,0.626,0.072,5
+"Depressive Disorder, Major",3,16S+mNGS,246,134,112,132,0.601,0.533,0.52,0.555,0.068,3
 "Fatigue Syndrome, Chronic",4,mNGS,1014,621,393,98,0.748,0.743,0.692,0.796,0.005,4

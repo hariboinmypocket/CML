@@ -533,7 +533,7 @@ def upsert_study(connection: MySQLConnection, row: Mapping[str, Any]) -> int:
             title = COALESCE(NULLIF(VALUES(title), ''), title),
             description = COALESCE(NULLIF(VALUES(description), ''), description),
             data_type = COALESCE(NULLIF(VALUES(data_type), ''), data_type),
-            data_quality = VALUES(data_quality)
+            data_quality = IF(%s, VALUES(data_quality), data_quality)
         """,
         (
             project,
@@ -549,6 +549,7 @@ def upsert_study(connection: MySQLConnection, row: Mapping[str, Any]) -> int:
                           normalize_platform(first_value(row, "data_type", "experiment_type"))),
             first_value(row, "source_database") or "GMrepo",
             first_value(row, "data_quality") if first_value(row, "data_quality") in {"curated", "qualified"} else "unknown",
+            bool(first_value(row, "data_quality")),
         ),
     )
     cursor.execute("SELECT id FROM studies WHERE project_accession = %s", (project,))
@@ -780,7 +781,7 @@ def load_associations(
 
 
 GMREPO_ASSOCIATION_FIELDS = [
-    "project_id", "project_title", "project_description", "data_type", "data_quality",
+    "project_id", "project_title", "data_type", "data_quality",
     "scientific_name", "taxonomic_rank", "ncbi_tax_id", "disease_name", "mesh_id",
     "phenotype_a", "phenotype_a_mesh_id", "phenotype_b", "phenotype_b_mesh_id",
     "negative_enriched_in", "positive_enriched_in", "method", "effect_type", "lda_score",
@@ -816,7 +817,6 @@ def sync_gmrepo_comparison(
             {
                 "project_id": project_id,
                 "project_title": f"GMrepo curated {phenotype1} vs. {phenotype2}",
-                "project_description": "Curated project-level marker taxa from GMrepo",
                 "data_type": clean_str(marker.get("experiment_type")),
                 "data_quality": "curated",
                 "scientific_name": clean_str(marker.get("scientific_name")),
@@ -879,7 +879,6 @@ def _comparison_rows(
                 {
                     "project_id": project_id,
                     "project_title": f"GMrepo curated {phenotype1} vs. {phenotype2}",
-                    "project_description": "Curated project-level marker taxa from GMrepo",
                     "data_type": clean_str(marker.get("experiment_type")),
                     "data_quality": "curated",
                     "scientific_name": scientific_name,
@@ -969,9 +968,9 @@ def sync_all_gmrepo_comparisons(
 
 
 GMREPO_SAMPLE_FIELDS = [
-    "project_id", "data_type", "data_quality", "run_id", "sample_id", "disease_name",
+    "project_id", "data_type", "run_id", "sample_id", "disease_name",
     "mesh_id", "sex", "age_years", "bmi", "country", "qc_status", "instrument_model",
-    "nr_reads_sequenced", "longitude", "latitude", "phenotypes", "nr_phenotypes",
+    "nr_reads_sequenced",
 ]
 
 
@@ -1021,6 +1020,75 @@ def _choose_sample_phenotype(value: Any) -> tuple[str, str]:
     return clean_str(chosen.get("term")), clean_str(chosen.get("disease"))
 
 
+def prepare_gmrepo_sample_export(
+    connection: MySQLConnection, rows: list[dict[str, Any]]
+) -> tuple[list[dict[str, Any]], list[dict[str, str]]]:
+    """Reconcile an export with stored sample metadata using exact accessions.
+
+    Existing database demographics/labels include cMD/NCBI enrichment and
+    curation that the raw GMrepo API does not carry. Preserve that work in the
+    CSV as well. Missing measurements stay blank; no statistical imputation.
+    Raw phenotype JSON is parsed transiently, never retained as an export field.
+    """
+    cursor = connection.cursor(dictionary=True)
+    try:
+        cursor.execute("""SELECT s.run_accession, s.gmrepo_sample_id,
+            st.project_accession, s.sex, s.age_years, s.bmi,
+            d.name AS disease_name, d.mesh_id
+            FROM samples s JOIN studies st ON st.id = s.study_id
+            LEFT JOIN diseases d ON d.id = s.disease_id""")
+        stored = {r["run_accession"]: r for r in cursor.fetchall()}
+    finally:
+        cursor.close()
+    output, audit = [], []
+    for raw in rows:
+        run = clean_str(raw.get("run_id"))
+        current = stored.get(run, {})
+        if current and (
+            clean_str(current["project_accession"]) != clean_str(raw.get("project_id"))
+            or (clean_str(current["gmrepo_sample_id"]) and clean_str(raw.get("sample_id"))
+                and clean_str(current["gmrepo_sample_id"]) != clean_str(raw["sample_id"]))
+        ):
+            raise ValueError(f"Sample identity mismatch for {run}; export was not written")
+        row = {field: raw.get(field, "") for field in GMREPO_SAMPLE_FIELDS}
+        sources = {}
+        for field, parser in (("sex", parse_host_sex),
+                              ("age_years", lambda x: _plausible_age(nullable_float(x))),
+                              ("bmi", lambda x: _plausible_bmi(nullable_float(x)))):
+            original = parser(raw.get(field))
+            recovered = parser(current.get(field))
+            value = recovered if recovered is not None else original
+            row[field] = "" if value is None else str(value)
+            sources[field] = ("mysql.samples" if recovered is not None
+                              else "source_validation")
+        parsed_name, parsed_mesh = _choose_sample_phenotype(raw.get("phenotypes"))
+        if not clean_str(row["disease_name"]) and not clean_str(row["mesh_id"]):
+            row["disease_name"], row["mesh_id"] = parsed_name, parsed_mesh
+        for field in ("disease_name", "mesh_id"):
+            if current.get(field) is not None:
+                row[field] = current[field]
+                sources[field] = "mysql.diseases"
+            else:
+                row[field] = clean_str(row[field])
+                sources[field] = "phenotype_json_or_existing_label"
+        for field in ("sex", "age_years", "bmi", "disease_name", "mesh_id"):
+            before, after = clean_str(raw.get(field)), clean_str(row[field])
+            if before != after:
+                audit.append({"run_id": run, "field": field, "before": before,
+                              "after": after, "source": sources[field]})
+        output.append(row)
+    return output, audit
+
+
+def write_sample_export_audit(path: str | Path, rows: list[dict[str, str]]) -> None:
+    destination = Path(path)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    with destination.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=["run_id", "field", "before", "after", "source"])
+        writer.writeheader()
+        writer.writerows(rows)
+
+
 def _study_projects(connection: MySQLConnection) -> list[str]:
     cursor = connection.cursor()
     cursor.execute("SELECT project_accession FROM studies ORDER BY project_accession")
@@ -1057,7 +1125,6 @@ def sync_gmrepo_samples(
                     {
                         "project_id": clean_str(raw.get("project_id")) or project_id,
                         "data_type": clean_str(raw.get("experiment_type")),
-                        "data_quality": "curated",
                         "run_id": clean_str(raw.get("run_id")),
                         "sample_id": clean_str(raw.get("sample_id")),
                         "disease_name": disease_name,
@@ -1072,23 +1139,22 @@ def sync_gmrepo_samples(
                         "qc_status": raw.get("QCStatus"),
                         "instrument_model": clean_str(raw.get("instrument_model")),
                         "nr_reads_sequenced": raw.get("nr_reads_sequenced"),
-                        "longitude": raw.get("longitude"),
-                        "latitude": raw.get("latitude"),
-                        "phenotypes": raw.get("phenotypes"),
-                        "nr_phenotypes": raw.get("nr_phenotypes"),
                     }
                 )
             if len(page) < limit:
                 break
             skip += limit
 
-    rows = list(by_run.values())
+    rows, audit = prepare_gmrepo_sample_export(connection, list(by_run.values()))
     destination = Path(output_path)
     destination.parent.mkdir(parents=True, exist_ok=True)
     with destination.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=GMREPO_SAMPLE_FIELDS)
         writer.writeheader()
         writer.writerows(rows)
+    write_sample_export_audit(
+        destination.with_name(destination.stem + "_enrichment_audit.csv"), audit
+    )
 
     loaded = load_samples(connection, destination)
     metadata = {
@@ -2201,7 +2267,30 @@ def enrich_cmd_demographics(
 
 
 def validate_database(connection: MySQLConnection) -> list[tuple[str, int]]:
-    checks = {
+    checks = _validate_checks()
+    cursor = connection.cursor()
+    results = []
+    for label, sql in checks.items():
+        cursor.execute(sql)
+        row = cursor.fetchone()
+        # A tuple key means one query returning one row of several counts, so an
+        # expensive view is materialised once while each invariant keeps a name.
+        if isinstance(label, tuple):
+            if len(row) != len(label):
+                raise ValueError(
+                    f"check {label[0]!r} returned {len(row)} columns "
+                    f"for {len(label)} labels")
+            results.extend((name, int(value or 0))
+                           for name, value in zip(label, row))
+        else:
+            results.append((label, int(row[0] or 0)))
+    cursor.close()
+    return results
+
+
+def _validate_checks() -> dict[str, str]:
+    """The integrity checks, shared by both stores so neither drifts."""
+    return {
         "taxa": "SELECT COUNT(*) FROM taxa",
         # A quarter of the taxa table is MiMeDB's trait reference: organisms
         # loaded for their gram stain, oxygen requirement and pathogenicity so
@@ -2241,21 +2330,34 @@ def validate_database(connection: MySQLConnection) -> list[tuple[str, int]]:
         # under the 90% threshold and never flagged. Only 'positive'/'negative'
         # vote and are judged -- 'variable' and 'uncharacterized' are real
         # answers about an organism, not disagreements with its phylum.
+        # Written with CTEs and no SUBSTRING_INDEX/GROUP_CONCAT so it runs on
+        # the SQLite mirror too. The MySQL-only form left this check unable to
+        # run there -- and the mirror turned out to hold six of the seven
+        # dissenters, including Parabacteroides distasonis with 9,291 abundance
+        # rows, because the repair had reached MySQL only.
         "gram_stain_against_phylum": """
+            WITH votes AS (
+                SELECT phylum, LOWER(TRIM(gram_stain)) AS g, COUNT(*) AS n
+                FROM taxa
+                WHERE phylum IS NOT NULL AND TRIM(phylum) <> ''
+                  AND LOWER(TRIM(gram_stain)) IN ('positive', 'negative')
+                GROUP BY phylum, LOWER(TRIM(gram_stain))
+            ),
+            totals AS (
+                SELECT phylum, SUM(n) AS total, MAX(n) AS top
+                FROM votes GROUP BY phylum
+            ),
+            majority AS (
+                SELECT v.phylum, v.g
+                FROM votes v
+                JOIN totals t ON t.phylum = v.phylum AND v.n = t.top
+                WHERE t.total >= 10
+                  AND CAST(t.top AS REAL) / t.total >= 0.90
+            )
             SELECT COUNT(*) FROM taxa t
-            JOIN (
-                SELECT phylum,
-                       SUBSTRING_INDEX(GROUP_CONCAT(g ORDER BY n DESC), ',', 1) AS majority
-                FROM (SELECT phylum, LOWER(TRIM(gram_stain)) g, COUNT(*) n
-                        FROM taxa
-                       WHERE phylum IS NOT NULL AND phylum <> ''
-                         AND LOWER(TRIM(gram_stain)) IN ('positive', 'negative')
-                       GROUP BY phylum, LOWER(TRIM(gram_stain))) d
-                GROUP BY phylum
-               HAVING SUM(n) >= 10 AND MAX(n) / SUM(n) >= 0.90
-            ) c ON c.phylum = t.phylum
+            JOIN majority m ON m.phylum = t.phylum
             WHERE LOWER(TRIM(t.gram_stain)) IN ('positive', 'negative')
-              AND LOWER(TRIM(t.gram_stain)) <> c.majority
+              AND LOWER(TRIM(t.gram_stain)) <> m.g
         """,
         "orphan_associations": """
             SELECT COUNT(*) FROM taxon_disease_associations a
@@ -2282,11 +2384,323 @@ def validate_database(connection: MySQLConnection) -> list[tuple[str, int]]:
                 HAVING ABS(total - 1.0) > 0.01
             ) bad
         """,
+        # --- view cardinality ------------------------------------------------
+        #
+        # Nothing in the test suite reaches a SQL view: the tests are pure
+        # functions so they need no credentials, and the views carry some of the
+        # most load-bearing logic here. v_taxon_disease_evidence reversed 33
+        # directions when it was wrong, v_ml_ready_samples overclaimed what its
+        # flag guaranteed, and two defects in v_attribute_concept_coverage were
+        # caught by reading its output rather than by any check.
+        #
+        # These counters close the gap for the failure a view hides best. A view
+        # that LEFT JOINs a table on a non-unique key FANS OUT -- one base row
+        # becomes several -- and every count, mean and fraction computed from it
+        # is then silently wrong while each individual row still looks correct.
+        # v_sample_attributes_canonical joins two alias tables and would be the
+        # first to go; a duplicate (attribute, raw_value) is barred by its
+        # primary key today, and this is what notices if that stops being true.
+        #
+        # Each counter is a DIFFERENCE from the base table's own count, so zero
+        # is the only passing value and the pre-push hook already gates on it.
+        "v_ml_ready_samples_row_drift": """
+            SELECT ABS((SELECT COUNT(*) FROM v_ml_ready_samples)
+                       - (SELECT COUNT(*) FROM samples))
+        """,
+        "v_sample_attributes_canonical_row_drift": """
+            SELECT ABS((SELECT COUNT(*) FROM v_sample_attributes_canonical)
+                       - (SELECT COUNT(*) FROM sample_attributes))
+        """,
+        # Every abundance row belongs to exactly one rank view, so the two must
+        # partition the table: a gap means a rank nothing exposes, an overlap
+        # means a row counted twice.
+        "abundance_rank_views_not_partitioning": """
+            SELECT ABS((SELECT COUNT(*) FROM v_abundance_genus)
+                       + (SELECT COUNT(*) FROM v_abundance_species)
+                       - (SELECT COUNT(*) FROM sample_taxon_abundances))
+        """,
+        "v_sample_attribute_keys_row_drift": """
+            SELECT ABS((SELECT COUNT(*) FROM v_sample_attribute_keys)
+                       - (SELECT COUNT(DISTINCT attribute) FROM sample_attributes))
+        """,
+        "v_taxon_disease_summary_row_drift": """
+            SELECT ABS((SELECT COUNT(*) FROM v_taxon_disease_summary)
+                       - (SELECT COUNT(*) FROM taxon_disease_associations))
+        """,
+        # n_taxa_profiled counts rows across every rank at once; the per-rank
+        # columns must account for all of them, or a filter written against one
+        # of them silently misses a rank.
+        "ml_ready_per_rank_counts_not_adding_up": """
+            SELECT COUNT(*) FROM v_ml_ready_samples
+            WHERE n_genera_profiled + n_species_profiled <> n_taxa_profiled
+        """,
+        # A boolean concept whose value the alias map does not cover would let a
+        # modeller pool a key with an inverted encoding -- the error the alias
+        # tables exist to prevent.
+        "attribute_booleans_undecoded": """
+            SELECT COUNT(*) FROM v_sample_attributes_canonical
+            WHERE boolean_undecoded = 1
+        """,
+        # --- v_taxon_disease_evidence ----------------------------------------
+        #
+        # The view that reported Faecalibacterium prausnitzii as ENRICHED in
+        # ulcerative colitis, reversing one of the field's most replicated
+        # findings, and 32 others with it. It had no invariant until now, which
+        # is backwards: it is the most consequential view here and the only one
+        # known to have been catastrophically wrong.
+        #
+        # ONLY THE FIRST OF THESE REPRODUCES THAT BUG. The old view pooled
+        # disease-vs-disease comparisons with case/control ones, so all 753 pure
+        # disease-vs-disease pairs carried a direction built from the wrong
+        # question; direction_on_disease_vs_disease fires on every one of them.
+        # The second rule it broke -- two independent COUNT(DISTINCT study_id),
+        # letting one study be counted on both sides -- cannot be caught on
+        # today's data, because no (taxon, disease, study) group has vs-Health
+        # associations that disagree with each other, so n_studies_split is 0
+        # everywhere and the old form would double-count nothing. The partition
+        # counter is therefore a guard against a future regression rather than a
+        # test of the historical defect, and worth keeping on exactly those
+        # terms: two comparison methods inside one study could disagree tomorrow.
+        #
+        # ONE QUERY, EIGHT COUNTERS. A tuple key returns one row of counts, so
+        # this CTE-heavy view is materialised once per store while each invariant
+        # keeps its own name; a single combined total would say a direction was
+        # wrong without saying which rule it broke.
+        #
+        # Measured, because the first version of this comment guessed and was
+        # wrong: eight separate queries cost 0.89s against MySQL and the combined
+        # one 0.16s, so the collapse saves 0.73s -- real, and worth having, but
+        # NOT the reason validate takes a minute. That is the mirror pass, which
+        # is 56% of the total; see validate_sqlite_mirror.
+        (
+            "evidence_direction_on_disease_vs_disease",
+            "evidence_study_votes_not_partitioning",
+            "evidence_votes_exceed_studies",
+            "evidence_direction_without_a_case_control_vote",
+            "evidence_missing_direction_despite_votes",
+            "evidence_direction_contradicts_its_counts",
+            "evidence_agreement_ratio_out_of_range",
+            "evidence_row_drift",
+        ): """
+            SELECT
+              SUM(CASE WHEN contrast_scope = 'disease_vs_disease'
+                        AND consensus_direction IS NOT NULL
+                       THEN 1 ELSE 0 END),
+              -- One study, one vote: the three buckets must partition the
+              -- case/control studies exactly.
+              SUM(CASE WHEN n_studies_enriched + n_studies_depleted
+                            + n_studies_split <> n_studies_case_control
+                       THEN 1 ELSE 0 END),
+              SUM(CASE WHEN n_studies_case_control + n_studies_other_contrast
+                            <> n_studies
+                       THEN 1 ELSE 0 END),
+              -- A direction exists exactly when a case/control study voted,
+              -- checked both ways round so neither a spurious direction nor a
+              -- lost one passes.
+              SUM(CASE WHEN consensus_direction IS NOT NULL
+                        AND n_studies_enriched + n_studies_depleted = 0
+                       THEN 1 ELSE 0 END),
+              SUM(CASE WHEN consensus_direction IS NULL
+                        AND n_studies_enriched + n_studies_depleted > 0
+                       THEN 1 ELSE 0 END),
+              -- The direction must agree with the counts it summarises. This is
+              -- what catches a CASE arm written the wrong way round, the single
+              -- edit that would silently reverse every direction in the table.
+              SUM(CASE WHEN (consensus_direction = 'enriched'
+                             AND n_studies_enriched <= n_studies_depleted)
+                         OR (consensus_direction = 'depleted'
+                             AND n_studies_depleted <= n_studies_enriched)
+                         OR (consensus_direction = 'tied'
+                             AND n_studies_enriched <> n_studies_depleted)
+                       THEN 1 ELSE 0 END),
+              -- agreement_ratio is a majority over a non-empty vote, so it
+              -- cannot fall below half or above one.
+              SUM(CASE WHEN agreement_ratio IS NOT NULL
+                        AND (agreement_ratio < 0.5 OR agreement_ratio > 1.0)
+                       THEN 1 ELSE 0 END),
+              ABS(COUNT(*) - (SELECT COUNT(*) FROM (
+                    SELECT DISTINCT taxon_id, disease_id
+                    FROM taxon_disease_associations) pairs))
+            FROM v_taxon_disease_evidence
+        """,
+        # --- the LDA sign order ----------------------------------------------
+        #
+        # An LDA score's sign is meaningless without its comparison order, which
+        # is why phenotype_comparisons records which phenotype a POSITIVE score
+        # refers to. These two counters are the only things that make that
+        # design self-enforcing.
+        #
+        # One association of 16,400 had a magnitude and no sign order -- 
+        # Bacteroides / Vitiligo at LDA 4.31 -- so the 4.31 could not be read.
+        # Found by hand; this is what finds the next one.
+        #
+        # 56 comparisons carry no sign order and that is FINE: the other 55 hold
+        # only unscored associations, a direction with no magnitude, where sign
+        # order has nothing to disambiguate. So the counter asks about scored
+        # associations, not about comparisons.
+        "scored_associations_without_a_sign_order": """
+            SELECT COUNT(*) FROM taxon_disease_associations a
+            JOIN phenotype_comparisons c ON c.id = a.comparison_id
+            WHERE a.effect_size IS NOT NULL
+              AND c.positive_score_enriched_in_id IS NULL
+              AND c.negative_score_enriched_in_id IS NULL
+        """,
+        # The arm a score's sign points at must be the disease exactly when the
+        # direction says enriched. Written as an XOR rather than two cases
+        # because the obvious form -- "does the signed arm equal the disease" --
+        # is TRUE for enriched and FALSE for depleted, and reading a 0 there as a
+        # failure is a mistake easily made: 9,183 correct rows look like
+        # disagreements under it.
+        "direction_disagrees_with_the_signed_arm": """
+            SELECT COUNT(*) FROM taxon_disease_associations a
+            JOIN phenotype_comparisons c ON c.id = a.comparison_id
+            WHERE a.effect_size IS NOT NULL AND a.effect_size <> 0
+              AND a.direction IN ('enriched', 'depleted')
+              AND CASE WHEN a.effect_size > 0
+                       THEN c.positive_score_enriched_in_id
+                       ELSE c.negative_score_enriched_in_id END IS NOT NULL
+              AND ((CASE WHEN a.effect_size > 0
+                         THEN c.positive_score_enriched_in_id
+                         ELSE c.negative_score_enriched_in_id END = a.disease_id)
+                   <> (a.direction = 'enriched'))
+        """,
+        # ONE ORGANISM COUNTED TWICE IN ONE SAMPLE. Two taxa rows sharing a tax
+        # ID are the same organism, so a sample holding both counts it twice --
+        # it takes double share while every other taxon there is squeezed. The
+        # sum-to-1 counter CANNOT see this, because renormalisation happened
+        # after the duplication, which is why the mirror carried 582 such cells
+        # across 12,392 of its 23,494 samples while every one of validate's other
+        # counters read zero.
+        #
+        # This gates on the harm rather than on duplicate tax IDs, because five
+        # duplicate groups legitimately remain in the mirror and are listed in
+        # data/taxa_merge_mirror_audit.csv: one whose OVERRIDES action names
+        # MySQL row ids, one where two different Vibrio species share a tax ID
+        # (a mis-assignment, not a duplicate), and three bracket-notation
+        # artifacts that sit at a different rank from their twin and so must
+        # never be merged. None of them is counted twice in any sample.
+        # GROUPED PER RANK, which the first version of this counter was not. The
+        # genus and species layers are separate compositions, each summing to 1,
+        # so one organism appearing in both is normal -- that is how every
+        # organism works. Only two rows at the SAME rank sharing a tax ID in one
+        # sample are the same measurement counted twice. Grouping across ranks
+        # read 0 by luck and would have fired the moment a genus-layer feature
+        # was given the tax ID its species-layer twin already had.
+        "taxon_counted_twice_in_a_sample": """
+            SELECT COUNT(*) FROM (
+                SELECT a.sample_id, t.taxonomic_rank, t.ncbi_tax_id
+                FROM sample_taxon_abundances a
+                JOIN taxa t ON t.id = a.taxon_id
+                WHERE t.ncbi_tax_id IS NOT NULL
+                GROUP BY a.sample_id, t.taxonomic_rank, t.ncbi_tax_id
+                HAVING COUNT(DISTINCT a.taxon_id) > 1
+            ) d
+        """,
+        # The three rank flags on v_abundance_genus must stay consistent:
+        # coarser and finer are mutually exclusive, and not_a_genus is exactly
+        # their union. They are three hand-written rank lists over one fact, so
+        # an edit to one that misses another would silently disagree -- a feature
+        # reported as neither coarser nor finer yet not a genus, or as both.
+        "genus_rank_flags_inconsistent": """
+            SELECT COUNT(*) FROM v_abundance_genus
+            WHERE (coarser_than_genus = 1 AND finer_than_genus = 1)
+               OR (not_a_genus <> (coarser_than_genus OR finer_than_genus))
+        """,
+        # effect_type records what the stored number IS, not how it was
+        # produced, and resolve_effect_type() exists to make that conversion.
+        # The mirror held 123 rows reading 'LEfSe' -- a method -- because its
+        # build never called the resolver. MySQL had none, so nothing noticed.
+        # The method names are listed in gutdb/transform.py; this is the
+        # case-folded form of that set.
+        "effect_type_names_a_method": """
+            SELECT COUNT(*) FROM taxon_disease_associations
+            WHERE LOWER(TRIM(effect_type)) IN
+                  ('lefse', 'lefse analysis', 'linear discriminant analysis')
+        """,
+        # A comparison with one arm recorded and not the other is half a fact:
+        # the sign order is only usable as a pair.
+        "comparisons_with_only_one_arm": """
+            SELECT COUNT(*) FROM phenotype_comparisons
+            WHERE (positive_score_enriched_in_id IS NULL)
+               <> (negative_score_enriched_in_id IS NULL)
+        """,
+        # v_taxon_specificity.depleted_fraction had the same contrast-mixing
+        # defect and was fixed the same way; a fraction outside [0, 1] means the
+        # denominator has drifted from the numerator again.
+        "specificity_depleted_fraction_out_of_range": """
+            SELECT COUNT(*) FROM v_taxon_specificity
+            WHERE depleted_fraction IS NOT NULL
+              AND (depleted_fraction < 0 OR depleted_fraction > 1)
+        """,
     }
-    cursor = connection.cursor()
-    results = []
-    for label, sql in checks.items():
-        cursor.execute(sql)
-        results.append((label, int(cursor.fetchone()[0])))
-    cursor.close()
-    return results
+
+
+# Checks that cannot run against the SQLite mirror, because it has no
+# sample_attributes table and so none of the alias machinery built on it.
+_MYSQL_ONLY_CHECKS = frozenset({
+    "v_sample_attributes_canonical_row_drift",
+    "v_sample_attribute_keys_row_drift",
+    "attribute_booleans_undecoded",
+})
+
+
+def validate_sqlite_mirror(sqlite_path: str | None = None) -> list[tuple[str, int]]:
+    """Run the portable checks against the SQLite mirror.
+
+    Nothing validated the mirror at all until now. validate_database is typed to
+    MySQL, so the mirror's 8 views had no invariants while MySQL's had twelve --
+    which is the defect shape this whole schema keeps producing: a guard that
+    reached one store only. The (SeqCode) annotations, body_site, the trait
+    vocabularies and studies.data_type were all the same mistake in data; this
+    was it in the checking.
+
+    The queries are reused rather than rewritten, so the two stores cannot be
+    checked against different definitions. Labels are prefixed `sqlite_`, which
+    means the pre-push hook picks them up with no change: its gate now treats
+    every counter as a defect unless it is named a census figure, so a mirror
+    counter is enforced the moment it appears.
+
+    Returns an empty list when the mirror is absent -- it is a build artifact, so
+    a checkout without one is normal and must not fail the push.
+
+    THIS PASS IS THE BULK OF validate's RUNTIME: 36.8s of 65.2s, against 28.4s
+    for MySQL, mostly the sum-to-1 check over the mirror's 2.05M abundance rows
+    and its own copy of v_taxon_disease_evidence. Validate went from roughly 32s
+    to 65s when this was added -- the cost of checking the second store at all,
+    not of any one counter. Worth knowing before adding more: the pre-push hook
+    pays it on every push.
+    """
+    import os
+    import sqlite3
+    from pathlib import Path
+
+    if sqlite_path is None:
+        sqlite_path = os.environ.get("GUTDB_SQLITE", "gut_microbiome.sqlite")
+    if not Path(sqlite_path).exists():
+        return []
+    checks = {label: sql for label, sql in _validate_checks().items()
+              if isinstance(label, tuple) or label not in _MYSQL_ONLY_CHECKS}
+    connection = sqlite3.connect(sqlite_path)
+    try:
+        cursor = connection.cursor()
+        results = []
+        for label, sql in checks.items():
+            names = label if isinstance(label, tuple) else (label,)
+            try:
+                cursor.execute(sql)
+                row = cursor.fetchone()
+                if len(row) != len(names):
+                    raise sqlite3.DataError(
+                        f"{len(row)} columns for {len(names)} labels")
+                results.extend((f"sqlite_{name}", int(value or 0))
+                               for name, value in zip(names, row))
+            except sqlite3.Error as error:
+                # A check that cannot run is reported as a failure rather than
+                # skipped: a silently absent counter is how the mirror went
+                # unchecked in the first place.
+                results.append((f"sqlite_{names[0]}_FAILED_TO_RUN", 1))
+                results.append(
+                    (f"sqlite_{names[0]}_error_{type(error).__name__}", 1))
+        return results
+    finally:
+        connection.close()

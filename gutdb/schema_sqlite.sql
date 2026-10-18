@@ -50,6 +50,11 @@ CREATE TABLE IF NOT EXISTS taxa (
     taxonomic_rank TEXT NOT NULL DEFAULT 'species'
         CHECK (taxonomic_rank IN ('species', 'genus', 'other')),
     ncbi_tax_id INTEGER,
+    -- The rank NCBI assigns this tax ID; see gutdb/schema.sql. Added here so
+    -- v_abundance_genus can expose the same flags as MySQL's -- without it the
+    -- genus_rank_flags_inconsistent counter could not run against this store at
+    -- all, and reported itself as FAILED_TO_RUN rather than passing quietly.
+    ncbi_rank TEXT,
     gram_stain TEXT,
     oxygen_requirement TEXT,
     ph_preference TEXT,
@@ -118,6 +123,12 @@ CREATE TABLE IF NOT EXISTS taxon_disease_associations (
         CHECK (direction IN ('enriched', 'depleted', 'marker', 'no_difference')),
     effect_type TEXT NOT NULL DEFAULT 'LDA',
     effect_size REAL,
+    -- Same fixed softsign scale as MySQL. Only LDA scores are transformed.
+    lda_score_normalized REAL GENERATED ALWAYS AS (
+        CASE WHEN effect_type = 'LDA' THEN
+            ROUND(effect_size / (1.0 + ABS(effect_size)), 3)
+        ELSE NULL END
+    ) VIRTUAL,
     p_value REAL,
     q_value REAL,
     source_database TEXT NOT NULL DEFAULT 'GMrepo',
@@ -169,7 +180,8 @@ SELECT
     a.direction,
     a.effect_type,
     a.effect_size,
-    s.project_accession
+    s.project_accession,
+    a.lda_score_normalized
 FROM taxon_disease_associations a
 JOIN taxa t ON t.id = a.taxon_id
 JOIN diseases d ON d.id = a.disease_id
@@ -433,6 +445,21 @@ CREATE VIEW v_abundance_genus AS
 SELECT
     a.sample_id, s.run_accession, s.study_id, s.disease_id,
     a.taxon_id, t.scientific_name AS genus, t.phylum, t.superkingdom,
+    -- The same rank flags MySQL's copy exposes. Without them the
+    -- genus_rank_flags_inconsistent counter could not run against this store and
+    -- reported itself as FAILED_TO_RUN -- see gutdb/schema.sql for what each
+    -- means and why both directions are needed.
+    t.ncbi_rank,
+    CASE WHEN t.ncbi_rank IS NOT NULL
+          AND t.ncbi_rank NOT IN ('genus','subgenus','species','subspecies',
+                                  'strain','no rank','clade')
+         THEN 1 ELSE 0 END AS coarser_than_genus,
+    CASE WHEN t.ncbi_rank IS NOT NULL
+          AND t.ncbi_rank IN ('subgenus','species','subspecies','strain')
+         THEN 1 ELSE 0 END AS finer_than_genus,
+    CASE WHEN t.ncbi_rank IS NOT NULL
+          AND t.ncbi_rank NOT IN ('genus','no rank','clade')
+         THEN 1 ELSE 0 END AS not_a_genus,
     a.relative_abundance
 FROM sample_taxon_abundances a
 JOIN taxa t ON t.id = a.taxon_id
@@ -444,6 +471,12 @@ CREATE VIEW v_abundance_species AS
 SELECT
     a.sample_id, s.run_accession, s.study_id, s.disease_id,
     a.taxon_id, t.scientific_name AS species, t.genus, t.phylum, t.superkingdom,
+    -- A tax ID NCBI ranks below the named species means the IDENTIFIER needs
+    -- moving up, not that the feature is a strain; see gutdb/schema.sql.
+    t.ncbi_rank,
+    CASE WHEN t.ncbi_rank IS NOT NULL
+          AND t.ncbi_rank NOT IN ('species','no rank','clade')
+         THEN 1 ELSE 0 END AS ncbi_rank_differs,
     a.relative_abundance
 FROM sample_taxon_abundances a
 JOIN taxa t ON t.id = a.taxon_id

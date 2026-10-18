@@ -151,8 +151,63 @@ def main() -> int:
     print(f"wrote {AUDIT} ({len(disagree)} rows)")
     conn.close()
 
+    backfill_mirror(ranks)
+
     if DRY_RUN:
         print("\n*** DRY RUN - nothing written. Re-run with --apply ***")
+    return 0
+
+
+def backfill_mirror(ranks: dict[int, str]) -> int:
+    """Fill ncbi_rank in the SQLite mirror too, adding the column if absent.
+
+    The mirror had no ncbi_rank column at all until v_abundance_genus's rank
+    flags needed it, which left the genus_rank_flags_inconsistent counter unable
+    to run against this store -- reported as FAILED_TO_RUN rather than passing
+    quietly, which is the one thing that design was for. Same one-store gap this
+    project keeps producing, this time in a column rather than a repair.
+
+    Only the fill is done here, not the disagreement analysis: the audit above
+    reports MySQL's 411 rank disagreements and the mirror's would be the same
+    organisms under different row ids, which is noise rather than information.
+    """
+    import sqlite3
+
+    path = os.environ.get("GUTDB_SQLITE", "gut_microbiome.sqlite")
+    if not Path(path).exists():
+        print(f"\nsqlite mirror {path} not present; skipped")
+        return 0
+
+    print("\nsqlite mirror:")
+    conn = sqlite3.connect(path)
+    cur = conn.cursor()
+    cur.execute("PRAGMA table_info(taxa)")
+    has_column = "ncbi_rank" in {row[1] for row in cur.fetchall()}
+    if not has_column:
+        if DRY_RUN:
+            print("   would add the ncbi_rank column and fill it")
+            conn.close()
+            return 0
+        cur.execute("ALTER TABLE taxa ADD COLUMN ncbi_rank TEXT")
+        print("   added the ncbi_rank column")
+
+    cur.execute("""SELECT id, ncbi_tax_id, ncbi_rank FROM taxa
+                   WHERE ncbi_tax_id IS NOT NULL""")
+    updates = []
+    not_in_dump = 0
+    for taxon_id, taxid, current in cur.fetchall():
+        actual = ranks.get(int(taxid))
+        if not actual:
+            not_in_dump += 1
+            continue
+        if actual != current:
+            updates.append((actual, taxon_id))
+    print(f"   {len(updates)} rows to fill, {not_in_dump} tax IDs not in the dump")
+    if not DRY_RUN and updates:
+        cur.executemany("UPDATE taxa SET ncbi_rank = ? WHERE id = ?", updates)
+        conn.commit()
+        print(f"   ncbi_rank written for {len(updates)} rows")
+    conn.close()
     return 0
 
 

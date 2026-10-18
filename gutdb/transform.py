@@ -10,6 +10,50 @@ from typing import Any, Iterable, Mapping
 NA_VALUES = {"", "n/a", "na", "none", "null", "nan", "unknown", "not available"}
 
 
+def verified_demographic_link(record: Mapping[str, Any]) -> bool:
+    """A plausible library prefix is not a clinical-to-run identifier match."""
+    return all(record.get(key) is True for key in (
+        "published_values_match_audit", "ena_library_to_run_verified",
+        "exact_source_identifier_in_ena",
+    ))
+
+
+def same_demographic_value(field: str, left: Any, right: Any) -> bool:
+    """Compare CSV and SQL values without treating missing values as evidence."""
+    a, b = clean_str(left), clean_str(right)
+    if not a or not b:
+        return False
+    if field == "sex":
+        return a.casefold() == b.casefold()
+    try:
+        return abs(Decimal(a) - Decimal(b)) < Decimal("0.000001")
+    except (ValueError, ArithmeticError):
+        return False
+
+
+def reconcile_demographic_cells(current: Mapping[str, Any], source: Mapping[str, Any],
+                                verified: bool) -> tuple[dict[str, Any], list[str]]:
+    """Withdraw matching unsafe imports, fill verified gaps, preserve conflicts.
+
+    Shared by both database stores and CSV repair. Never overwrite an independent
+    nonmissing measurement, and never manufacture a source-missing measurement.
+    """
+    changes, conflicts = {}, []
+    for field in ("sex", "age_years", "bmi"):
+        present, imported = current.get(field), source.get(field)
+        if not clean_str(imported):
+            continue
+        if not clean_str(present):
+            if verified:
+                changes[field] = imported
+        elif same_demographic_value(field, present, imported):
+            if not verified:
+                changes[field] = None
+        else:
+            conflicts.append(field)
+    return changes, conflicts
+
+
 def clean_str(value: Any) -> str:
     if value is None:
         return ""
@@ -781,6 +825,35 @@ RANKS_AT_OR_BELOW_GENUS = frozenset({
     "genus", "subgenus", "species", "subspecies", "strain", "species group",
     "species subgroup", "isolate", "serotype", "no rank", "clade",
 })
+
+
+def ncbi_rank_differs(ncbi_rank, layer_rank: str) -> bool:
+    """Whether NCBI puts this taxon at a rank other than the layer it sits in.
+
+    Covers both directions, because both are the same statement -- "this feature
+    is not what its layer says" -- and only one of them was exposed:
+
+      COARSER. 123 genus-layer features are families, orders, classes or phyla,
+      carrying 16,098 abundance rows. coarser_than_genus() has flagged these
+      since they were found.
+
+      FINER. 4 genus-layer features are species, carrying 1,233 rows: the three
+      bracket organisms NCBI leaves without a genus, plus Phenoliferia
+      psychrophila. Nothing flagged them, and three of them exist because
+      unwind_bracket_genus_repoint.py created them -- so the gap was opened by
+      the fix for a different one.
+
+      And 181 SPECIES-layer features are strains, carrying 189,390 rows, 14.8%
+      of that layer, with v_abundance_species exposing neither the rank nor a
+      flag.
+
+    'no rank' and 'clade' assert nothing, so they are not a difference. An empty
+    rank is not either -- 39 taxa carry a tax ID the local dump does not list.
+    """
+    rank = clean_str(ncbi_rank).casefold()
+    if not rank or rank in ("no rank", "clade"):
+        return False
+    return rank != clean_str(layer_rank).casefold()
 
 
 def coarser_than_genus(ncbi_rank) -> bool:

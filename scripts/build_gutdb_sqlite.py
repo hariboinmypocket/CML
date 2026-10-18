@@ -34,8 +34,6 @@ SCHEMA = os.environ.get("GUTDB_SCHEMA", os.path.join(PROJECT, "gutdb", "schema_s
 TAXA_BASE = os.path.join(PROJECT, "gut_microbiome_new_full.csv")
 ASSOC_FILES = [
     os.path.join(PROJECT, "data/gmrepo_all_disease_associations.csv"),
-    os.path.join(PROJECT, "data/gmrepo_ibs_additional_projects.csv"),
-    os.path.join(PROJECT, "data/gmrepo_PRJNA705217_ibs_markers.csv"),
 ] + sorted(glob.glob(os.path.join(PROJECT, "data/literature_*_markers.csv")))
 SAMPLES_FILE = os.path.join(PROJECT, "data/gmrepo_project_samples.csv")
 

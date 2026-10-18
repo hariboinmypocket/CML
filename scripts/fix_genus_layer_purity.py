@@ -1,16 +1,38 @@
 #!/usr/bin/env python3
 """Move stray species-rank rows out of the genus abundance layer.
 
-Every abundance currently stored was loaded as a genus-level layer (GMrepo,
-MGnify and BioMapAI alike). A handful still point at species-rank taxa because
-GMrepo's genus array contains binomials such as "[Clostridium] methylpentosum",
-which parse to genus+epithet. The value is correct; only the taxon it hangs off
-is at the wrong rank, which breaks the per-(sample, rank) sum-to-1 invariant.
+DO NOT RUN THIS WITHOUT READING THE NEXT PARAGRAPH. Its premise expired.
 
-Each such row is repointed to its genus, summing where the sample already holds
-that genus. The species taxon itself is left in place — it is legitimate as a
-taxonomic entity and may carry disease associations; only the abundance rows
-move. Dry run by default.
+It was written when every abundance in the database was a genus-level layer, so
+"taxonomic_rank <> 'genus'" identified a stray exactly. The species layer was
+loaded afterwards (data/gmrepo_species_abundances.csv, August 2026) and now holds
+1,277,809 legitimate rows, every one of which that selector matches. A dry run
+today reports "rows moved to genus: 1277809" -- it would collapse the entire
+species layer into the genus layer and add species mass to genus values. The
+script is kept for its history and for the narrower job below, and it now
+REFUSES to run when the species layer is present rather than relying on whoever
+reads the output to notice.
+
+The original defect: GMrepo's genus array contains binomials such as
+"[Clostridium] methylpentosum", which parse to genus+epithet and were stored at
+species rank while their abundance belonged to the genus layer.
+
+THE REPOINT IT PERFORMED IS ALSO QUESTIONABLE, which the brackets should have
+warned about. NCBI's square brackets mean the name is MISAPPLIED, and for all
+three of these organisms NCBI assigns no genus at all -- they are incertae sedis,
+and all three are Bacillota:
+
+    [Clostridium] methylpentosum  84026   family Oscillospiraceae, no genus
+    [Bacteroides] pectinophilus  384638   no family, no genus
+    [Eubacterium] saphenum        51123   family Anaerovoracaceae, no genus
+
+So repointing to the leading name token put a Firmicute's mass under the
+Bacteroidetes genus Bacteroides. Measured in the SQLite mirror, which still holds
+the un-repointed rows: 142 rows averaging 1.5% of a sample's genus composition
+and reaching 11.6%. That is not a rounding error, and Bacteroides is the
+most-measured genus here. Do not extend this behaviour to another store; see
+scripts/fix_mirror_bracket_names.py, which cleans the names and leaves the mass
+where it is.
 """
 from __future__ import annotations
 
@@ -29,6 +51,23 @@ DRY_RUN = "--apply" not in sys.argv
 def main() -> int:
     conn = connect(Settings.from_env(".env"))
     cur = conn.cursor()
+
+    # The selector below matches every species-layer row. Refuse rather than
+    # trust the operator to read the count.
+    cur.execute("""SELECT COUNT(*) FROM sample_taxon_abundances a
+                   JOIN taxa t ON t.id = a.taxon_id
+                   WHERE t.taxonomic_rank = 'species'""")
+    species_rows = cur.fetchone()[0]
+    if species_rows > 1000:
+        print(f"REFUSING TO RUN: the species layer holds {species_rows:,} rows.")
+        print("This script's selector (taxonomic_rank <> 'genus') matches all of")
+        print("them, so it would collapse the species layer into the genus layer.")
+        print("Its premise -- that every abundance is a genus-level layer -- has")
+        print("not held since the species layer was loaded. See the module")
+        print("docstring.")
+        cur.close()
+        conn.close()
+        return 1
 
     cur.execute(
         """SELECT a.sample_id, a.taxon_id, a.relative_abundance, t.genus, t.scientific_name

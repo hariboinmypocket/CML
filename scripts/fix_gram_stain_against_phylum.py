@@ -30,6 +30,8 @@ Dry run by default; pass --apply to write.
 """
 from __future__ import annotations
 
+import os
+import sqlite3
 import sys
 from pathlib import Path
 
@@ -111,11 +113,85 @@ def main() -> int:
 
     print(f"\n  corrected : {written}")
     print(f"  skipped   : {skipped}")
-    if DRY_RUN:
-        print("\n*** DRY RUN - nothing written. Re-run with --apply ***")
     cur.close()
     conn.close()
+
+    m_written, m_skipped = repair_mirror()
+    written += m_written
+    skipped += m_skipped
+
+    if DRY_RUN:
+        print("\n*** DRY RUN - nothing written. Re-run with --apply ***")
     return 1 if skipped else 0
+
+
+def repair_mirror() -> tuple[int, int]:
+    """Apply the same corrections to the SQLite mirror, keyed on NAME not id.
+
+    The mirror held six of these seven when the check was finally able to run
+    against it -- Parabacteroides distasonis among them, with 9,291 abundance
+    rows there -- because this repair reached MySQL only. That is the defect
+    shape this project keeps producing, and the reason validate now runs its
+    portable checks against both stores.
+
+    KEYED ON scientific_name, NOT ON THE IDS ABOVE. The mirror has its own
+    taxa.id space: Vibrio fischeri is 1907 in MySQL and 1904 here, so reusing
+    those ids would silently correct whatever organism happens to hold them. The
+    name is what identifies the row whose gram character the list settles, and
+    the phylum and wrong-value guards still have to pass.
+    """
+    path = os.environ.get("GUTDB_SQLITE", "gut_microbiome.sqlite")
+    if not Path(path).exists():
+        print(f"\n  sqlite mirror {path} not present; skipped")
+        return 0, 0
+
+    print("\nsqlite mirror:")
+    connection = sqlite3.connect(path)
+    cursor = connection.cursor()
+    written = skipped = 0
+    for _mysql_id, name, phylum, wrong, correct, why in REPAIRS:
+        cursor.execute(
+            "SELECT id, phylum, gram_stain FROM taxa WHERE scientific_name = ?",
+            (name,))
+        rows = cursor.fetchall()
+        if not rows:
+            print(f"  {name}: not in the mirror")
+            continue
+        if len(rows) > 1:
+            print(f"  {name}: SKIPPED, {len(rows)} rows share this name here")
+            skipped += 1
+            continue
+        row_id, stored_phylum, stored_gram = rows[0]
+        current = (stored_gram or "").strip().lower()
+        if current == correct:
+            print(f"  {name}: already {correct!r}")
+            continue
+        if (stored_phylum or "").strip() != phylum:
+            print(f"  {name}: SKIPPED, expected phylum {phylum!r}, "
+                  f"found {stored_phylum!r}")
+            skipped += 1
+            continue
+        if not current:
+            # The mirror never carried this trait for this row. Nothing to
+            # correct and nothing wrong, so it is not counted as a skip -- the
+            # exit code is reserved for a row that needs a human.
+            print(f"  {name}: no gram stain recorded here, nothing to correct")
+            continue
+        if current != wrong:
+            print(f"  {name}: SKIPPED, expected {wrong!r}, found {current!r}")
+            skipped += 1
+            continue
+        print(f"  {name} ({phylum}) id {row_id}: {current!r} -> {correct!r}")
+        if not DRY_RUN:
+            cursor.execute("UPDATE taxa SET gram_stain = ? WHERE id = ?",
+                           (correct, row_id))
+        written += 1
+    if not DRY_RUN:
+        connection.commit()
+    connection.close()
+    print(f"  corrected : {written}")
+    print(f"  skipped   : {skipped}")
+    return written, skipped
 
 
 if __name__ == "__main__":

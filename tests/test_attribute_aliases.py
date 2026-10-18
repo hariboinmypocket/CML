@@ -120,6 +120,21 @@ class ConceptSeparationTests(unittest.TestCase):
         self.assertEqual(BY_ATTR["SmokingStatus"][0], "smoking_status")
         self.assertEqual(BY_ATTR["Brinkman Index"][1], "quantity")
 
+    def test_a_concept_may_legitimately_mix_value_kinds(self):
+        """Which is why the coverage view reports every kind, not one.
+
+        `infant_feeding` has a category key beside two booleans and
+        `alcohol_amount` has a quantity beside an interval. A view taking MIN()
+        over the kinds reported just 'boolean' for the first -- a column
+        answering a different question than its name.
+        """
+        kinds = {}
+        for attr, concept, kind, _ in ALIASES:
+            kinds.setdefault(concept, set()).add(kind)
+        self.assertEqual(kinds["infant_feeding"], {"boolean", "category"})
+        self.assertEqual(kinds["alcohol_amount"], {"quantity", "interval"})
+        self.assertEqual(kinds["antibiotic_exposure"], {"boolean"})
+
     def test_an_interval_key_is_not_called_a_quantity(self):
         """'Alcohol.drink.week.' holds ranges; its numeric subset is biased."""
         self.assertEqual(BY_ATTR["Alcohol.drink.week."][1], "interval")

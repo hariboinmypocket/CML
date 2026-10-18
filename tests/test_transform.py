@@ -14,6 +14,7 @@ from gutdb.transform import (
     SUPERKINGDOM,
     canon_trait,
     coarser_than_genus,
+    ncbi_rank_differs,
     split_sporulation,
     quantize_effect_size,
     association_direction,
@@ -135,10 +136,12 @@ class TransformTests(unittest.TestCase):
             association_direction(3.2, "IBS", "IBS", "Health"), "enriched"
         )
 
-    def test_seed_marker_file_has_both_directions(self):
-        path = Path(__file__).parents[1] / "data" / "gmrepo_PRJNA705217_ibs_markers.csv"
+    def test_consolidated_ibs_project_has_both_directions(self):
+        path = Path(__file__).parents[1] / "data" / "gmrepo_all_disease_associations.csv"
         with path.open(encoding="utf-8", newline="") as handle:
-            rows = list(csv.DictReader(handle))
+            rows = [row for row in csv.DictReader(handle)
+                    if row["project_id"] == "PRJNA705217"
+                    and row["disease_name"] == "Irritable Bowel Syndrome"]
         directions = {
             association_direction(
                 float(row["lda_score"]),
@@ -148,7 +151,8 @@ class TransformTests(unittest.TestCase):
             )
             for row in rows
         }
-        self.assertEqual(len(rows), 34)
+        self.assertEqual(len(rows), 55)
+        self.assertEqual(len({(r["scientific_name"], r["taxonomic_rank"]) for r in rows}), 55)
         self.assertEqual(directions, {"enriched", "depleted"})
 
 
@@ -664,3 +668,46 @@ class LineageSynonymTests(unittest.TestCase):
         keys = set(LINEAGE_SYNONYMS)
         for target in LINEAGE_SYNONYMS.values():
             self.assertNotIn(target.casefold(), keys, target)
+
+
+class NcbiRankDiffersTests(unittest.TestCase):
+    """Both directions of "this feature is not what its layer says".
+
+    coarser_than_genus covered only one of them. 4 genus-layer features are
+    species and 181 species-layer features are strains -- the second group
+    189,390 abundance rows, 14.8% of that layer -- and nothing flagged either.
+    """
+
+    def test_a_coarser_rank_in_the_genus_layer_differs(self):
+        for rank in ("family", "order", "class", "phylum"):
+            self.assertTrue(ncbi_rank_differs(rank, "genus"), rank)
+
+    def test_a_finer_rank_in_the_genus_layer_also_differs(self):
+        """The direction coarser_than_genus misses."""
+        for rank in ("species", "subspecies", "strain", "subgenus"):
+            self.assertTrue(ncbi_rank_differs(rank, "genus"), rank)
+            self.assertFalse(coarser_than_genus(rank), rank)
+
+    def test_a_strain_in_the_species_layer_differs(self):
+        self.assertTrue(ncbi_rank_differs("strain", "species"))
+        self.assertTrue(ncbi_rank_differs("subspecies", "species"))
+        self.assertTrue(ncbi_rank_differs("isolate", "species"))
+
+    def test_matching_the_layer_is_not_a_difference(self):
+        self.assertFalse(ncbi_rank_differs("genus", "genus"))
+        self.assertFalse(ncbi_rank_differs("species", "species"))
+
+    def test_an_uninformative_rank_is_not_a_difference(self):
+        """'no rank' and 'clade' assert nothing either way."""
+        for rank in ("no rank", "clade"):
+            self.assertFalse(ncbi_rank_differs(rank, "genus"), rank)
+            self.assertFalse(ncbi_rank_differs(rank, "species"), rank)
+
+    def test_an_absent_rank_is_not_a_difference(self):
+        """39 taxa carry a tax ID the local dump does not list."""
+        for rank in (None, "", "   "):
+            self.assertFalse(ncbi_rank_differs(rank, "genus"), repr(rank))
+
+    def test_case_and_whitespace_do_not_change_the_answer(self):
+        self.assertFalse(ncbi_rank_differs(" GENUS ", "genus"))
+        self.assertTrue(ncbi_rank_differs(" Family ", "genus"))

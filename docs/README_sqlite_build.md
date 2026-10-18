@@ -1,5 +1,13 @@
 # Gut-microbiome–disease database: queryable SQLite build
 
+**2026-10-16 input consolidation:** The builder now loads only
+`data/gmrepo_all_disease_associations.csv` for GMrepo association evidence.
+It includes all four IBS projects (255 IBS records). The two older IBS CSVs
+are preserved in `data/archive/gmrepo_ibs_consolidation_2026-10-16/` and are
+no longer separate inputs. Two unmatched transcribed taxon labels are retained
+pending review. Counts and references to the three-file workflow below describe
+earlier builds; the live SQLite file was not rebuilt during this consolidation.
+
 This repo's pipeline targets MySQL 8 (`gutdb/config.py`, `gutdb/db.py`). This build
 is a server-free alternative: it loads the same source CSVs into the same
 normalized schema as a single-file SQLite database, so the data can be queried

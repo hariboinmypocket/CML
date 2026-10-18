@@ -213,6 +213,13 @@ CREATE TABLE IF NOT EXISTS taxon_disease_associations (
     -- exactly one effect_type, so nothing is currently duplicated beneath it.
     effect_type VARCHAR(50) NOT NULL DEFAULT 'LDA',
     effect_size DOUBLE NULL,
+    -- Fixed softsign scale; no population statistics or fitting required.
+    -- The sign retains the comparison order, not an intrinsic disease effect.
+    lda_score_normalized DECIMAL(4,3) GENERATED ALWAYS AS (
+        CASE WHEN effect_type = 'LDA' THEN
+            ROUND(effect_size / (1.0 + ABS(effect_size)), 3)
+        ELSE NULL END
+    ) VIRTUAL,
     -- Significance, where the source reports it. These are independent of
     -- effect_size, not derived from it: GMrepo's LEfSe export carries an LDA
     -- score and no p/q value, while MicrobiomeHD's standardized re-analysis
@@ -465,6 +472,71 @@ LEFT JOIN sample_attribute_value_aliases va
        ON va.attribute = a.attribute AND va.raw_value = a.value;
 
 
+-- Per-concept coverage, which is what decides whether a concept can be used.
+--
+-- The alias tables make a question reachable. This view says whether reaching it
+-- is worth anything, and for every concept currently seeded the answer is "only
+-- within a few studies":
+--
+--   antibiotic_exposure, the best covered, reaches 709 of the 13,328
+--   ml_ready_deduplicated samples -- 5.3% -- and all five of its studies are
+--   MullerMM cohorts, so NO GMrepo sample carries it. A model trained on the
+--   pooled cohort cannot adjust for antibiotic use at all, however well the
+--   concept now decodes.
+--
+--   antibiotic_start_date reaches 34 samples and 0 of the cohort.
+--
+-- `n_studies_with_both_values` is the column that separates sparse-but-usable
+-- from useless. A covariate that is single-valued inside every study it appears
+-- in cannot be adjusted for there either -- it would be collinear with the study
+-- itself, the same trap as a disease arm drawn from one cohort. All five
+-- antibiotic studies carry both values, so within those five it is a real
+-- covariate; it is the pooling that it cannot survive.
+CREATE OR REPLACE VIEW v_attribute_concept_coverage AS
+SELECT
+    al.concept,
+    -- Every kind the concept's keys use, not one of them. `infant_feeding`
+    -- mixes a category key with two booleans, and MIN() over the ENUM reported
+    -- just 'boolean' -- a column answering a different question than its name,
+    -- which is the defect this schema keeps finding elsewhere.
+    GROUP_CONCAT(DISTINCT al.value_kind ORDER BY al.value_kind) AS value_kinds,
+    COUNT(DISTINCT al.attribute)                    AS n_source_keys,
+    COUNT(DISTINCT a.sample_id)                     AS n_samples,
+    COUNT(DISTINCT CASE WHEN v.ml_ready_deduplicated = 1
+                        THEN a.sample_id END)       AS n_samples_in_ml_cohort,
+    COUNT(DISTINCT s.study_id)                      AS n_studies,
+    -- Studies in which the DECODED value actually varies. Where this is 0 the
+    -- concept is collinear with study and cannot be adjusted for there either.
+    --
+    -- NULL, not 0, for a concept whose kinds are not decoded at all -- a
+    -- quantity, an agent name, free text. Returning 0 there read as a verdict
+    -- ("never varies") when it only meant "no value map applies", and
+    -- smoking_exposure_index is a Brinkman score that plainly does vary.
+    CASE WHEN SUM(al.value_kind IN ('boolean', 'category')) = 0 THEN NULL
+         ELSE COUNT(DISTINCT CASE WHEN vary.study_id IS NOT NULL
+                                  THEN vary.study_id END)
+    END                                             AS n_studies_with_both_values,
+    SUM(va.canonical_value IS NULL
+        AND al.value_kind = 'boolean')              AS n_boolean_undecoded
+FROM sample_attribute_aliases al
+JOIN sample_attributes a ON a.attribute = al.attribute
+JOIN samples s ON s.id = a.sample_id
+LEFT JOIN v_ml_ready_samples v ON v.sample_id = a.sample_id
+LEFT JOIN sample_attribute_value_aliases va
+       ON va.attribute = a.attribute AND va.raw_value = a.value
+LEFT JOIN (
+    SELECT al2.concept, s2.study_id
+    FROM sample_attribute_aliases al2
+    JOIN sample_attributes a2 ON a2.attribute = al2.attribute
+    JOIN samples s2 ON s2.id = a2.sample_id
+    JOIN sample_attribute_value_aliases va2
+      ON va2.attribute = a2.attribute AND va2.raw_value = a2.value
+    GROUP BY al2.concept, s2.study_id
+    HAVING COUNT(DISTINCT va2.canonical_value) > 1
+) vary ON vary.concept = al.concept AND vary.study_id = s.study_id
+GROUP BY al.concept;
+
+
 -- Per-key coverage for sample_attributes, so a mean always has its denominator.
 --
 -- 362 keys, and 13 of them mix numbers with words. Without this view
@@ -571,7 +643,8 @@ SELECT
     a.direction,
     a.effect_type,
     a.effect_size,
-    s.project_accession
+    s.project_accession,
+    a.lda_score_normalized
 FROM taxon_disease_associations a
 JOIN taxa t ON t.id = a.taxon_id
 JOIN diseases d ON d.id = a.disease_id
@@ -1079,6 +1152,19 @@ SELECT
     (t.ncbi_rank IS NOT NULL
      AND t.ncbi_rank NOT IN ('genus', 'subgenus', 'species', 'subspecies',
                              'strain', 'no rank', 'clade')) AS coarser_than_genus,
+    -- The other direction, which coarser_than_genus alone did not cover: 4
+    -- features here are species -- the three bracket organisms NCBI leaves
+    -- without a genus, plus Phenoliferia psychrophila -- carrying 1,233
+    -- abundance rows. Three of them exist because
+    -- unwind_bracket_genus_repoint.py created them, so this gap was opened by
+    -- the fix for a different one.
+    (t.ncbi_rank IS NOT NULL
+     AND t.ncbi_rank IN ('subgenus', 'species', 'subspecies',
+                         'strain')) AS finer_than_genus,
+    -- Filter on this when a model needs features that are genuinely genera.
+    -- 'no rank' and 'clade' assert nothing and are not a difference.
+    (t.ncbi_rank IS NOT NULL
+     AND t.ncbi_rank NOT IN ('genus', 'no rank', 'clade')) AS not_a_genus,
     a.relative_abundance
 FROM sample_taxon_abundances a
 JOIN taxa t ON t.id = a.taxon_id
@@ -1098,6 +1184,19 @@ SELECT
     t.genus,
     t.phylum,
     t.superkingdom,
+    t.ncbi_rank,
+    -- 181 features here carry a tax ID NCBI ranks as a STRAIN, across 189,390
+    -- abundance rows -- 14.8% of this layer -- and nothing exposed it, not even
+    -- the rank.
+    --
+    -- READ IT AS A MIS-ASSIGNED TAX ID, NOT AS A STRAIN-LEVEL FEATURE. The name
+    -- is a species and the stored tax ID points below it: Bifidobacterium
+    -- longum carries 1322347, a strain, where the species is 216816. That is
+    -- the `retaxid` class in merge_duplicate_taxa.py's OVERRIDES, which other
+    -- sessions are working through; the feature is a species whose identifier
+    -- needs moving up, not a strain.
+    (t.ncbi_rank IS NOT NULL
+     AND t.ncbi_rank NOT IN ('species', 'no rank', 'clade')) AS ncbi_rank_differs,
     a.relative_abundance
 FROM sample_taxon_abundances a
 JOIN taxa t ON t.id = a.taxon_id

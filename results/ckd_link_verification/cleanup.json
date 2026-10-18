@@ -1,0 +1,62 @@
+{
+  "snapshot_utc": "20261016T164854514525Z",
+  "apply": true,
+  "project": "PRJNA562327",
+  "audit_rows_before": 489,
+  "audit_rows_kept": 57,
+  "audit_rows_removed": 432,
+  "census_before": {
+    "mysql": {
+      "samples": 36693,
+      "sample_taxon_abundances": 3074882,
+      "taxa": 5838,
+      "taxon_disease_associations": 16889
+    },
+    "sqlite": {
+      "samples": 23494,
+      "sample_taxon_abundances": 2050969,
+      "taxa": 5209,
+      "taxon_disease_associations": 16390
+    }
+  },
+  "changes": {
+    "mysql": {
+      "cleared_sex": 432,
+      "cleared_age_years": 432,
+      "cleared_bmi": 432
+    },
+    "sqlite": {
+      "filled_sex": 57,
+      "filled_age_years": 57,
+      "filled_bmi": 41
+    },
+    "csv": {
+      "cleared_sex": 432,
+      "cleared_age_years": 432,
+      "cleared_bmi": 432
+    }
+  },
+  "preserved_conflicts": {
+    "mysql": {},
+    "sqlite": {},
+    "csv": {}
+  },
+  "backup_directory": "/Users/lucyshaa/Desktop/CML/data/archive/ckd_verified_cleanup_20261016T164854514525Z",
+  "commit_state": "complete",
+  "census_after": {
+    "mysql": {
+      "samples": 36693,
+      "sample_taxon_abundances": 3074882,
+      "taxa": 5838,
+      "taxon_disease_associations": 16889
+    },
+    "sqlite": {
+      "samples": 23494,
+      "sample_taxon_abundances": 2050969,
+      "taxa": 5209,
+      "taxon_disease_associations": 16390
+    }
+  },
+  "active_audit_sha256": "b0034613cd5c70c97bca959dd302fe7201e9ba73326f43f22c56f9c558d61253",
+  "active_samples_sha256": "c62fc166a25adaedacc1d3ce1248479bd6aa069a66d624524635cce649c4e9ff"
+}

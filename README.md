@@ -33,11 +33,12 @@ Edit `.env` with the MySQL credentials you use in MySQL Workbench. The MySQL use
 
 ## 2. Populate the database
 
-Load the two local data sources and the IBS marker set recovered from the supplied workflow:
+Load the two local taxon sources and the consolidated GMrepo association export
+(including all four IBS projects):
 
 ```bash
 python populate_database.py all \
-  --associations data/gmrepo_PRJNA705217_ibs_markers.csv
+  --associations data/gmrepo_all_disease_associations.csv
 ```
 
 This command:
@@ -46,7 +47,8 @@ This command:
 2. Loads `gut_microbiome_new_full.csv`.
 3. Collapses MiMeDB strain rows to species and derives `energy_mode` and `primary_food_source`.
 4. Fills missing taxon attributes without overwriting curated values.
-5. Loads the PRJNA705217 Health-vs-IBS LDA associations.
+5. Loads the consolidated GMrepo disease associations, including PRJNA705217
+   and the other IBS projects.
 
 To intentionally replace existing taxon attributes/statistics, add `--overwrite`.
 
@@ -76,6 +78,69 @@ significance, while a hand-curated marker file often carries the reverse.
 The parser accepts CSV or TSV and recognizes common alternate headers such as
 `marker_taxon`, `effect_size`, `experiment_type`, and `direction`.
 
+### One GMrepo association input
+
+Use `data/gmrepo_all_disease_associations.csv` for GMrepo association imports.
+`project_description` is omitted from this file and future GMrepo association
+exports; project-level descriptions can still be held once in `studies`.
+The PRJNA705217 transcription and the additional IBS-project export were
+consolidated on 2026-10-16. The main file now contains 255 IBS association
+records across four projects: PRJEB37924 (153), PRJNA682378 (34), PRJNA637763
+(13), and PRJNA705217 (55). Genus and species evidence remain separate.
+
+The older CSVs are preserved under `data/archive/gmrepo_ibs_consolidation_2026-10-16/`
+and are no longer loaded separately. Its README records the overlap, score
+disagreements, and two unmatched transcribed taxon labels retained pending
+taxonomy review. MySQL already held all of these records in
+`taxon_disease_associations`; this file consolidation does not reload or alter
+the database. `q5_ibs_markers.csv` is a derived query report, not another input.
+
+### Normalized LDA scores
+
+`taxon_disease_associations.lda_score_normalized` is a generated column using
+the fixed **softsign** transformation:
+
+```text
+lda_score_normalized = ROUND(effect_size / (1 + ABS(effect_size)), 3)
+```
+
+It is populated only for `effect_type = 'LDA'`; missing scores and other effect
+types return NULL. Existing `effect_size` values are retained as stored. New
+inserts and score corrections automatically refresh the generated value. The
+summary view also exposes `lda_score_normalized`.
+
+Three decimal places retain more resolution on the smaller scale: -4 maps to
+-0.800, 0 to 0.000, and +4 to +0.800. The unrounded transformation is strictly
+increasing and bounded between -1 and +1; rounding may create ties and, for
+extreme future scores, endpoints. SQLite and some clients may omit trailing
+zeros when displaying numbers; this does not change their numeric value.
+
+This is a nonlinear rescaling, not min-max or z-score standardization. It needs
+no fitted dataset parameters, so adding studies does not change previous values
+and the transform does not use held-out data. It compresses magnitude differences;
+retain `effect_size` for original thresholds and analyses requiring that scale.
+It is not a probability or a correction for study/method differences. Its sign
+follows the source comparison order; use `direction` and the comparison groups
+to interpret disease enrichment/depletion. Disease-labelled association scores
+must not be treated as independently measured patient features for predicting
+those same disease labels.
+
+Apply to an existing MySQL database and, separately, its SQLite mirror:
+
+```bash
+python3 scripts/normalize_lda_scores.py --apply
+python3 scripts/normalize_lda_scores.py --sqlite gut_microbiome.sqlite --apply
+```
+
+Omit `--apply` for a preview. The migration verifies every derived value and
+checks that all original association fields are unchanged. New databases get
+the generated column from their schema. This does not change the legacy
+`microbiome_dataset` tables, which do not store project-level LDA scores.
+
+For a model needing a learned scaler instead, fit it inside each training fold
+and apply that fitted scaler to validation/test data, as described in
+[scikit-learn's preprocessing guidance](https://scikit-learn.org/stable/modules/preprocessing.html).
+
 ### Clinical sample metadata
 
 Normalize GMrepo project/run metadata to these columns:
@@ -89,6 +154,32 @@ Required: `project_id`, `run_id`. Optional: `sample_id`, `disease_name`, `mesh_i
 aliases — `project_accession` for `project_id`, `run_accession` for `run_id`,
 `gender` for `sex`, `age` for `age_years`, `disease`/`phenotype` for
 `disease_name`.
+
+The GMrepo sample export uses the readable `disease_name` and `mesh_id` fields
+instead of raw `phenotypes` JSON. `nr_phenotypes`, `longitude`, `latitude`, and
+`data_quality` are also omitted. This affects the CSV, not the database schema.
+The sample loader preserves a study's existing quality classification when the
+input omits `data_quality`.
+
+To refresh the sample CSV from the demographics and curated disease labels
+already recovered in MySQL:
+
+```bash
+python3 scripts/clean_gmrepo_samples.py --apply
+```
+
+Omit `--apply` to preview. Exact run/project/sample identifiers are checked
+before merging. The script keeps an original backup (including raw phenotype
+JSON) and a field-level change audit in `data/archive/`. Missing measurements
+remain blank when no source value exists; BMI 0 and invalid age sentinels are
+removed. It does not modify MySQL. Existing disease labels are reconciled with
+the database's current curated disease/MeSH pair.
+
+Future `sync-gmrepo-samples` exports use this same reconciliation step, retain
+enriched demographics, and write an `_enrichment_audit.csv` alongside the
+export. This prevents a raw API refresh from losing the recovered metadata.
+New ambiguous phenotype lists stay unlabelled until an actual sample label
+is available; choosing a disease from a cohort's list is not sufficient.
 
 `age_years` and `bmi` are checked on the way in: a BMI of 0 or above 200 and an
 age below 0 or above 110 are stored as NULL, because GMrepo serves those as
@@ -154,6 +245,17 @@ run writes a full audit CSV (default `data/ncbi_biosample_demographics.csv`) rec
 resolved value and parsing note for every sample it touched, and logs to `ingestion_runs` like
 every other loader. Not every gap is fillable — many source projects simply never submitted this
 metadata to NCBI either, so `sex` and `age_years` will still have real gaps after running it.
+
+The CKD supplement audit, `data/ckd_study_demographics_audit.csv`, keeps
+`run_accession`, `supplement_id`, `library_name`, `join_basis`, `age_years`,
+`sex`, and `bmi`. Duplicate `filled_*` values are omitted; the cohort series
+is already encoded in `supplement_id`.
+`join_basis` must be retained to describe the source identifier match. Following
+source verification, only 57 HzCKD mappings remain active. The 273 HC and 159 CKD
+unverified mappings were archived and their imported demographics withdrawn from
+MySQL and the sample CSV. SQLite now contains only the verified demographics for
+these runs. Samples and abundance data were preserved. The importer no longer
+guesses numeric-prefix joins; see [CKD cleanup details](docs/ckd_demographic_cleanup.md).
 
 ## 4. Validate and query
 
@@ -550,6 +652,13 @@ score. `project_accession` is written into every matrix so cross-validation can
 be grouped on it.
 
 ### What the cohort can actually support: leave-one-study-out
+
+For a paired no-BMI baseline versus adding BMI **without requiring complete
+sex/age metadata**, use `python3 scripts/compare_bmi_models.py`. The new workflow
+fits prevalence filtering and demographic preprocessing inside each training
+fold, reads either store without changing it, and records snapshot-specific
+results. See [BMI comparison](docs/bmi_model_comparison.md). The older audit
+below uses the complete-demographics cohort and a different experiment design.
 
 ```bash
 python scripts/loso_audit.py      # writes data/loso_audit.csv
@@ -1094,6 +1203,416 @@ backlog: most are a single cohort's own question and need no alias. The view
 returns them with `concept` NULL rather than hiding them. `boolean_undecoded`
 flags any boolean value the map does not cover — currently **0** — so an
 unanticipated answer surfaces instead of being guessed at.
+
+### The flag only covered one direction, and my own fix exposed the other
+
+`coarser_than_genus` flags a genus-layer feature that NCBI ranks as a family,
+order, class or phylum — 123 taxa, 16,098 abundance rows. It says nothing about
+the opposite case, and **the previous fix created four of those**: the three
+bracket organisms NCBI leaves without a genus, plus *Phenoliferia psychrophila*,
+carrying 1,233 rows. A modeller saw them as ordinary genera.
+
+Worse, the species layer had the same hole and no flag at all — not even
+`ncbi_rank`:
+
+| layer | features | abundance rows | share of layer |
+|---|---|---|---|
+| genus, coarser | 123 | 16,098 | 0.9% |
+| genus, finer | 5 | 1,237 | 0.07% |
+| **species, rank differs** | **183** | **189,397** | **14.8%** |
+
+Both views now expose the rank and the flags, with `not_a_genus` as the single
+predicate for "features that are genuinely genera".
+
+**The species-layer flag is carefully worded, because the obvious reading is
+wrong.** Those 181 are *not* strain-level features: the name is a species and the
+stored tax ID points below it — *Bifidobacterium longum* carries 1322347, a
+strain, where the species is 216816. That is the `retaxid` class other sessions
+are working through, so the flag means "this identifier needs moving up", not
+"this is a strain".
+
+A counter keeps the three genus flags consistent — they are three hand-written
+rank lists over one fact, so an edit to one that misses another would silently
+disagree. It immediately reported **`FAILED_TO_RUN` against the mirror**, which
+had no `ncbi_rank` column at all because that backfill was MySQL-only. That is
+the one-store gap again, this time in a column rather than a repair, and the
+"a check that cannot run is a failure, not a skip" rule is what surfaced it
+rather than letting the mirror pass quietly. The column, the backfill and the
+view flags now cover both stores: **51 counters, all zero, none failing to run.**
+
+**One thing I did badly:** my first attempt to extend the backfill cut `main()`
+in half, leaving a function referencing variables from the one it was split out
+of. `git checkout` and a surgical append instead of a clever refactor.
+
+### Unwinding the misattribution: 5.29 of mass taken back out of three genera
+
+The repoint left no audit, so the amount could not be looked up — it had to be
+**measured**, and that is what made the reversal safe. For every candidate
+sample the script requires MySQL's stored genus value to equal
+`source(parent) + source(bracket)` to within 1e-6 before touching it. **All 1,215
+reconcile; none was skipped.**
+
+The source files disagree for 682 of them — `gmrepo_reload.csv` holds *exactly
+twice* the value in `gmrepo_run_abundances.csv`, a post-duplication artifact — so
+rather than pick a file, the reconciliation tries every candidate and accepts the
+one that balances against what the database actually stores. **The database
+decides, not the CSV.**
+
+| parent genus | samples | what happened |
+|---|---|---|
+| *Clostridium* | 953 | 1,006 split, **209 whole-row moves** |
+| *Bacteroides* | 218 | |
+| *Eubacterium* | 44 | |
+
+**209 of those samples had no real *Bacteroides*/*Clostridium*/*Eubacterium* at
+all** — the genus row existed *only* because of the repoint. `SRR10377248` is the
+clearest: 11.6% of its genus composition was filed under *Bacteroides* and none
+of it was *Bacteroides*.
+
+**5.2950** of summed relative abundance moved out of the three genera and onto
+three new genus-rank features — `[Bacteroides] pectinophilus` and friends, with
+Firmicutes and the NCBI family, matching what the mirror now holds. Mass is
+conserved exactly, so sum-to-1 never moved off 0 and that was the end-to-end
+check.
+
+**Two of my own bugs surfaced doing it.**
+
+The `taxon_counted_twice_in_a_sample` counter I added last round grouped by
+`(sample, tax ID)` **across ranks**. The genus and species layers are separate
+compositions, so one organism in both is normal — that is how every organism
+works. It read 0 by luck and would have fired the moment a genus-layer feature
+took the tax ID its species-layer twin already had, which is precisely what this
+fix creates. It now groups per rank.
+
+And a clean re-run **overwrote the recovery record with 0 rows**. This audit
+records what was *done*, so it must persist — the opposite of
+`phylum_reclassification_audit.csv`, which records what is *outstanding* and is
+correctly truncated when a run comes back clean. I drew that distinction after
+wiping 1,215 rows, and rebuilt the file from the database: the bracket row holds
+the value that moved, the parent holds the remainder, and their sum is what was
+stored before. The reconstruction matched the apply exactly — 1,006/209,
+218/953/44, 5.2950 — which independently confirms the write did what it planned.
+
+### A repair script whose premise had expired, and would have destroyed 1.27M rows
+
+Extending `fix_genus_layer_purity.py` to the mirror meant reading it first, and
+it is **no longer safe to run at all**.
+
+It selects strays with `WHERE t.taxonomic_rank <> 'genus'`, which was exact when
+every abundance in the database was a genus-level layer. The **species layer was
+loaded afterwards** and now holds 1,277,809 rows — every one of which that
+selector matches. Its dry run today reports:
+
+```
+abundance rows at a non-genus rank: 1277809
+  rows moved to genus : 1277809
+```
+
+One `--apply` from collapsing the entire species layer into the genus layer and
+adding species mass to genus values. It now **refuses to run** when the species
+layer is present, rather than relying on whoever reads the output to notice the
+count.
+
+### And the repair it performed is itself questionable
+
+NCBI's square brackets mean the name is **misapplied**, which is exactly the
+warning against repointing to the leading token. For all three organisms NCBI
+assigns **no genus at all** — they are *incertae sedis*, and all three are
+Bacillota:
+
+| tax ID | name | NCBI family | NCBI genus |
+|---|---|---|---|
+| 84026 | `[Clostridium] methylpentosum` | Oscillospiraceae | **none** |
+| 384638 | `[Bacteroides] pectinophilus` | none | **none** |
+| 51123 | `[Eubacterium] saphenum` | Anaerovoracaceae | **none** |
+
+So repointing put a **Firmicute's mass under the Bacteroidetes genus
+*Bacteroides***. Measured in the mirror, which still holds the un-repointed rows:
+**142 rows averaging 1.5% of a sample's genus composition and reaching 11.6%** —
+in the most-measured genus in this database. Not a rounding error.
+
+**So I did not replicate it.** `fix_mirror_bracket_names.py` restores the lost
+opening bracket — `Clostridium] methylpentosum` → `[Clostridium] methylpentosum`
+— and **leaves the abundance exactly where it is**. Mass untouched, so no rank
+group changes and no renormalisation is needed; sum-to-1 stayed at 0 violations
+through the whole operation. The row remains a genus-layer feature that is now
+honestly named, and `taxa.ncbi_rank` already describes it as something NCBI ranks
+as a species with no genus — which `v_abundance_genus` surfaces as
+`coarser_than_genus`.
+
+Those three stay listed as `spans_two_ranks` in the merge audit, which is
+correct: one is genus-layer mass and the other a species-layer taxon, and merging
+across ranks is what broke 663 rank groups earlier.
+
+**Outstanding, and yours to call:** MySQL's genus layer still carries that
+misattributed mass, and the repoint left no audit — but the mirror holds the
+original un-repointed values, so it **is** recoverable by reading across. Undoing
+it means taking mass back out of *Bacteroides* in ~142 samples and renormalising,
+which is a real change to the most-measured genus here.
+
+### The mirror was double-counting an organism in 582 cells, invisibly
+
+`merge_duplicate_taxa.py` fixed this for MySQL and is MySQL-only, so the mirror
+held the pre-merge state: **104 tax IDs over 208 rows**. They are the
+species-level form of the Firmicutes/Bacillota split already repaired at four
+higher ranks — same tax ID, two names, one organism:
+
+| tax ID | the two names | abundances split |
+|---|---|---|
+| 33038 | *Ruminococcus gnavus* / *Mediterraneibacter gnavus* | 8,363 |
+| 40520 | *Blautia obeum* / *Ruminococcus obeum* | 8,029 |
+| 165179 | *Prevotella copri* / *Segatella copri* | 4,688 |
+
+And **582 `(sample, tax ID)` cells counted one organism twice**, across 12,392 of
+the mirror's 23,494 samples. The per-rank sums were still exactly 1.0, because
+renormalisation happened *after* the duplication — so the sum-to-1 counter could
+not see it and **none of validate's 47 counters did**. The duplicated organism
+held double share while every other taxon in those samples was squeezed.
+
+The decision logic is **imported** from the MySQL script, not reimplemented: a
+second canonicalisation rule would be a second answer to "which name is this
+organism", and the stores would disagree about it the way they disagreed about
+everything else here. NCBI's current names come from the local taxdump instead of
+the API, so it needs no network. 99 merges applied, every one keeping NCBI's
+current name — *Klebsiella aerogenes* over *Enterobacter aerogenes*,
+*Lancefieldella parvula* over *Atopobium parvulum*.
+
+**I got it wrong twice, and the backup is why that was cheap.**
+
+First run: **663 rank groups stopped summing to 1**, some down to 1e-04. Three
+duplicate groups span *two ranks* — the bracket-notation artifacts,
+`Eubacterium saphenum` beside `Eubacterium] saphenum` with the opening bracket
+lost — and the mangled row sits at genus rank carrying genus-layer abundance.
+Repointing it onto a species-rank canonical moved mass from one composition into
+another. The abundance layer is defined per rank, so a group spanning two ranks
+is never mergeable whatever the tax ID says. MySQL never hit this because
+`fix_genus_layer_purity.py` had already repointed its genus-layer binomials; the
+script that fixed MySQL never had to refuse them.
+
+Second run: **49 groups still off**, at about 0.99. That one is correct
+arithmetic rather than damage — removing a double-counted row *should* drop the
+group below 1.0, because the values were normalised while the duplicate was
+present. The MySQL script rescales the touched groups afterwards and I had
+omitted the step. 557 samples lost a copy; **891 rank groups rescaled**.
+
+Five duplicate groups remain and are listed in the audit: one whose `OVERRIDES`
+action names MySQL row ids, one where ***Vibrio fischeri* and *V. furnissii*
+share a tax ID** — a mis-assignment, not a duplicate, which the automatic rule
+correctly refused — and the three cross-rank artifacts. The new counter therefore
+gates on **the harm**, `taxon_counted_twice_in_a_sample`, which is 0 in both
+stores, rather than on duplicate tax IDs with five documented exceptions.
+
+### The LDA sign machinery had no invariant either, and two rows needed it
+
+An LDA score's sign is meaningless without its comparison order — this schema's
+central design point. Four counters now enforce it, and finding them took one
+wrong turn worth recording.
+
+**My first check asked the wrong question.** "Does the arm named by the score's
+sign equal the disease?" is `TRUE` for an *enriched* association and `FALSE` for
+a *depleted* one, so reading a 0 as failure made **9,183 perfectly correct rows
+look like disagreements**. The real invariant is an XOR — the signed arm equals
+the disease *iff* the direction is `enriched` — and it holds at **0 violations**
+across all 16,399 scored associations. The counter is written that way with the
+trap noted, since it is easy to make twice.
+
+**One scored association per store had no sign order at all**: *Bacteroides* /
+Vitiligo at LDA 4.31, so the 4.31 could not be read. 56 comparisons in MySQL and
+45 in the mirror carry no sign order and that is fine — the rest hold only
+unscored associations, where sign order has nothing to disambiguate.
+
+Deriving the arms back from `direction` looks circular, and checking that it
+isn't was the real work. `association_direction()` returns `'marker'` when it has
+no enriched group to work from — so a row with a score, no sign order, and a
+direction of `enriched` **cannot** have had that direction derived from the sign
+order. It came from an explicit source field, and for this row
+`literature_vitiligo_markers.csv` confirms it: a `direction` column reading
+`enriched`, both `enriched_in` columns empty, and a note saying *"Highest LDA
+score among vitiligo-group markers"*.
+
+**A second wrong turn:** my guard refused because 3 of the comparison's 8
+associations read `depleted`. But LEfSe always reports markers of *both* groups,
+so a mixed set is normal — only the *scored* rows constrain the sign order, and
+there is one. The guard fired on my own bad premise, which is what a guard is
+for; the repair is now a rule rather than a hardcoded row, so it covered the
+mirror's copy too under a different `comparison_key`.
+
+### The mirror kept a method name where the number's kind belongs
+
+Found in passing while fixing the above: that row's `effect_type` is `LDA` in
+MySQL and **`LEfSe`** in the mirror. `effect_type` records what the stored number
+*is*, not how it was produced — and `resolve_effect_type()` exists to convert.
+MySQL goes through it; the mirror's build never did, so **123 rows** kept the raw
+method.
+
+| | mirror before | after |
+|---|---|---|
+| `LDA` | 16,072 | **16,073** |
+| `reported` | 195 | **317** |
+| `LEfSe` | **123** | — |
+
+122 had no score → `reported`; one carried 4.31 → `LDA`. Those are the resolver's
+own answers, and the mirror's `LDA` count now matches MySQL's exactly. A counter
+rejects any `effect_type` that names a method, so neither store can drift back.
+
+### The view that was once catastrophically wrong had no invariant
+
+`v_taxon_disease_evidence` reported *Faecalibacterium prausnitzii* as **enriched**
+in ulcerative colitis — the reverse of one of the field's most replicated
+findings — and 32 others with it. It is the most consequential view here, the
+only one known to have been badly wrong, and until now **nothing checked it**.
+
+Nine invariants, all reading 0 in both stores:
+
+| counter | what it protects |
+|---|---|
+| `evidence_direction_on_disease_vs_disease` | the actual historical bug |
+| `evidence_study_votes_not_partitioning` | one study, one vote |
+| `evidence_votes_exceed_studies` | every study falls in exactly one bucket |
+| `evidence_direction_without_a_case_control_vote` | no direction from nothing |
+| `evidence_missing_direction_despite_votes` | and none lost |
+| `evidence_direction_contradicts_its_counts` | a reversed `CASE` arm |
+| `evidence_agreement_ratio_out_of_range` | a majority is in [0.5, 1] |
+| `evidence_row_drift` | one row per (taxon, disease) pair |
+| `specificity_depleted_fraction_out_of_range` | the same defect's other victim |
+
+**Only the first reproduces that bug, and saying otherwise would overstate
+them.** The old view pooled disease-vs-disease with case/control, so all **753**
+pure disease-vs-disease pairs carried a direction built from the wrong question —
+that counter fires on every one. The second rule it broke, two independent
+`COUNT(DISTINCT study_id)` letting one study vote on both sides, **cannot be
+caught on today's data**: no `(taxon, disease, study)` group has vs-Health
+associations that disagree with each other, so `n_studies_split` is 0 everywhere
+and the old form would double-count nothing. That counter is a guard against a
+future regression, which is worth keeping on exactly those terms.
+
+**One query, eight counters.** A tuple key returns a single row of counts, so the
+CTE-heavy view is materialised once per store while each invariant keeps its
+name — a combined total would say a direction was wrong without saying which rule
+broke.
+
+**And I had to correct my own justification for that.** I wrote that nine
+separate checks "took validate from 32s to 67s", then measured: eight queries
+cost **0.89s** against MySQL and the combined one **0.16s**. The collapse saves
+0.73s — real, worth having, and *not* why validate takes a minute. That is the
+mirror pass, at **36.8s of 65.2s**, mostly the sum-to-1 check over the mirror's
+2.05M abundance rows. Validate roughly doubled when the second store started
+being checked at all, which is the cost of checking it, not of any one counter.
+
+### Nothing validated the mirror, and it was holding a repaired defect
+
+`validate_database` is typed to MySQL, so the mirror's 8 views and 8 tables had
+**no invariants at all** while MySQL's had twelve. That is this project's
+signature defect — a guard that reached one store only — showing up in the
+*checking* rather than in the data, after the `(SeqCode)` annotations,
+`body_site`, the trait vocabularies and `studies.data_type` had each been it in
+the data.
+
+`validate_sqlite_mirror()` runs the **same query objects**, not rewritten copies,
+so the two stores cannot be checked against different definitions. 17 of the 20
+checks are portable; three depend on `sample_attributes`, which the mirror has
+no table for. Labels are prefixed `sqlite_`, which means the inverted gate from
+the previous round picks them up with **no change on the hook's side** — the
+fail-safe default paying for itself one round later.
+
+It found two things immediately.
+
+**`gram_stain_against_phylum` could not run at all**, because it used
+`SUBSTRING_INDEX` and `GROUP_CONCAT` to pick a per-phylum majority. Rewritten
+with CTEs it runs on both — and the mirror reported **6**. A concurrent session
+had corrected those seven gram stains in MySQL; the mirror still carried six of
+them, including *Parabacteroides distasonis* with **9,291 abundance rows there**.
+The check reports a query that cannot run as a failure rather than skipping it,
+because a silently absent counter is how the mirror went unchecked in the first
+place.
+
+**The repair script keyed on MySQL `id`.** Extending it to the mirror keyed on
+`scientific_name` instead, because the mirror has its own id space: *Vibrio
+fischeri* is 1907 in MySQL and **1904** there, so reusing those ids would have
+corrected whatever organisms happened to hold them. The phylum and
+wrong-value guards still have to pass, and a row with no gram stain recorded is
+reported as nothing-to-do rather than counted as a skip, so the exit code stays
+reserved for a row that needs a human.
+
+**And the gate needed one fix of mine.** The mirror repeats every label with the
+prefix, census figures included, so `sqlite_taxa: 5,308` read as a defect and
+would have aborted every push — which I caught by running the gate against real
+`validate` output before installing it. It strips the prefix before the census
+comparison rather than listing all eight twice, since a new census figure added
+in one place and forgotten in the other would block every push.
+
+Both stores now read 0 on all 21 defect counters.
+
+### Seven counters that gated nothing, and a hook list that had drifted twice
+
+Nothing in the test suite reaches a SQL view. The 133 tests are pure functions so
+they need no credentials — which is the right trade — but the views carry some of
+the most load-bearing logic here: `v_taxon_disease_evidence` reversed 33
+directions when it was wrong, `v_ml_ready_samples` overclaimed what its flag
+guaranteed, and the two defects in `v_attribute_concept_coverage` above were
+caught by reading its output, not by any check.
+
+`validate` now carries seven **view-cardinality** counters, because fan-out is
+the failure a view hides best: a `LEFT JOIN` on a non-unique key turns one base
+row into several, and every count, mean and fraction built on it is silently
+wrong while each individual row still looks right.
+`v_sample_attributes_canonical` joins two alias tables and would be first to go.
+All seven read 0, and `validate` takes 32s.
+
+**Then the counters turned out to gate nothing.** The pre-push hook checked a
+hand-written list of four, and that list had drifted **twice**:
+`gram_stain_against_phylum` (added by a concurrent session) and all seven new
+ones were printed and ignored, so a defect they caught would have been pushed
+anyway. A counter nothing gates on is decorative — the same lesson as the
+`homonym_discarded` guard that was silent until it was printed.
+
+So the list is **inverted**: every counter must read zero *except* the census
+figures (`taxa`, `samples`, `abundance_rows`, …) named explicitly. That makes the
+default fail-safe — a new defect counter is enforced the moment it exists, and
+adding a census figure takes a deliberate entry. Getting *that* wrong fails
+loudly, since a census figure treated as a defect blocks every push.
+
+Checked against six synthetic cases before installing, including the one that
+matters: **a counter nobody added to any list, non-zero, aborts the push.** The
+hook also refuses to pass when `validate` prints no defect counters at all,
+rather than reading an empty result as clean.
+
+### Reaching the concepts showed they are too sparse to pool
+
+The alias tables make a question reachable. `v_attribute_concept_coverage` says
+whether reaching it is worth anything, and for every concept seeded the answer is
+**only within a few studies**:
+
+| concept | kinds | ml cohort | studies | studies where it varies |
+|---|---|---|---|---|
+| `antibiotic_exposure` | boolean | **709** (5.3%) | 5 | **5** |
+| `alcohol_amount` | quantity, interval | 455 | 2 | n/a |
+| `probiotic_exposure` | boolean | 344 | 1 | 1 |
+| `smoking_status` | category | 259 | 3 | 2 |
+| `immunosuppressant_use` | boolean | 162 | 2 | **1** |
+| `antibiotic_start_date` | date | **0** | 1 | n/a |
+
+**The best-covered concept reaches 5.3% of the modelling cohort**, and all five
+of its studies are MullerMM — so **no GMrepo sample carries antibiotic exposure
+at all**. A model trained on the pooled cohort cannot adjust for antibiotic use,
+however cleanly the concept now decodes. `antibiotic_start_date` reaches 34
+samples and none of the cohort.
+
+`n_studies_with_both_values` is what separates sparse-but-usable from useless: a
+covariate that is single-valued inside every study it appears in is collinear
+with the study itself, the same trap as a disease arm drawn from one cohort. All
+five antibiotic studies carry both values, so *within* those five it is a real
+covariate — it is the pooling it cannot survive. `immunosuppressant_use` has two
+studies and only one that varies, because `Immunosuppressive_medication` records
+only "No".
+
+**Two defects in that view were mine, and they are the pattern this sweep keeps
+finding.** `MIN(value_kind)` over the ENUM reported `infant_feeding` as
+`boolean` when it mixes a category key with two booleans — a column answering a
+different question than its name — so it now reports every kind. And
+`n_studies_with_both_values` returned **0** for a quantity, which read as "never
+varies" when it only meant "no value map applies"; `smoking_exposure_index` is a
+Brinkman score that plainly does vary. It is NULL there now.
 
 ### `value_numeric` held numbers that were not quantities
 
