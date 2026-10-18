@@ -31,6 +31,86 @@ cp .env.example .env
 
 Edit `.env` with the MySQL credentials you use in MySQL Workbench. The MySQL user needs permission to create the configured database and tables.
 
+### The two schemas: working and frozen
+
+Two MySQL schemas exist in parallel on this server.
+
+| schema | role |
+|---|---|
+| `gut_microbiome` | the **working** database. Everything points here: `.env`, the pre-push hook, the SQLite mirror build, every script. |
+| `gut_microbiome_snapshot_20261018` | a **frozen** byte-for-byte copy taken 2026-10-18. Nothing in this repository references it. |
+
+**It is a snapshot "as of" a date, not an uncurated baseline.** It contains every
+repair made up to that point, so it is the fixed *before* for curation done
+**after** 2026-10-18 and nothing earlier. A genuinely raw baseline is no longer
+reconstructible by re-running the loaders, because several repairs now live
+inside them -- `normalize_phylum` in the Muller loader,
+`numeric_value_is_trustworthy` in `attribute_rows`, `resolve_effect_type`, the
+derived `studies.data_type`, the protocol DOI in `metabolomics_method`. A fresh
+load would produce something partly curated, which is worse than either end.
+
+**For curation done before that date, the evidence is the audit CSVs, not a
+schema diff.** They record per-row before and after values and name the organism
+and the number: `data/bracket_repoint_unwind_audit.csv` carries 1,215 rows with
+`stored_before`, and `taxa_merge_mirror_audit.csv`, `ncbi_rank_audit.csv`,
+`trait_vocabulary_audit.csv`, `body_site_audit.csv` and `richness_audit.csv`
+cover the rest.
+
+**Why work continues in `gut_microbiome` rather than in the copy.** Repointing
+`.env` and twenty-odd scripts at a new name is twenty chances to miss one, and it
+would leave the frozen schema as the one every tool resolves to by default -- so
+a single forgotten `--apply` would write to the reference. Freezing the copy
+instead means no code path can reach it.
+
+**That protection is naming, not enforcement.** The usual connection is `root`
+with full grants, and MySQL has no per-schema read-only mode for a superuser, so
+the snapshot is safe because nothing addresses it, not because the server refuses
+writes. Treat `USE gut_microbiome_snapshot_20261018` as a read-only context by
+convention.
+
+Query it directly, or compare the two:
+
+```sql
+SELECT COUNT(*) FROM gut_microbiome_snapshot_20261018.sample_taxon_abundances;
+
+SELECT 'working' AS schema_name, COUNT(*) AS taxa FROM gut_microbiome.taxa
+UNION ALL
+SELECT 'snapshot', COUNT(*) FROM gut_microbiome_snapshot_20261018.taxa;
+```
+
+`validate` runs against whatever `.env` names. To check the snapshot, point a
+connection at it and call `validate_database` directly; 27 of the counters apply
+there (the three that need `sample_attributes` aliases and the mirror-prefixed
+ones do not), and all 27 read zero as of the copy.
+
+To take another snapshot, dump and restore with the server's own `mysqldump` --
+match its version to the server, since a newer client can emit syntax an older
+server rejects. Put the credentials in a `0600` defaults file rather than on the
+command line, where they would be visible in the process list:
+
+```bash
+install -m 600 /dev/null /tmp/snap.cnf
+printf '[client]\nhost=127.0.0.1\nuser=root\npassword=%s\n' "$GUTDB_PASSWORD" > /tmp/snap.cnf
+SNAP=gut_microbiome_snapshot_$(date +%Y%m%d)
+/usr/local/mysql/bin/mysql --defaults-extra-file=/tmp/snap.cnf \
+  -e "CREATE DATABASE \`$SNAP\` CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;"
+/usr/local/mysql/bin/mysqldump --defaults-extra-file=/tmp/snap.cnf \
+  --single-transaction --routines --triggers --events --set-gtid-purged=OFF \
+  gut_microbiome | /usr/local/mysql/bin/mysql --defaults-extra-file=/tmp/snap.cnf "$SNAP"
+rm -f /tmp/snap.cnf
+```
+
+`--single-transaction` takes a consistent read without locking the working
+database, which matters because more than one agent session writes to it. Verify
+a new snapshot by object count, per-table row counts and the generated columns
+before trusting it -- a copy with intact tables and broken views passes a row
+count and fails everything else.
+
+The SQLite mirror is **not** forked. It is a build artifact rebuilt from the CSVs
+in `data/`, and the most frequent defect in this project's history is a repair
+that reached only one store; two schemas plus two mirrors would double that
+surface for no gain.
+
 ## 2. Populate the database
 
 Load the two local taxon sources and the consolidated GMrepo association export
