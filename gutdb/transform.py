@@ -116,6 +116,99 @@ def parse_scientific_name(value: Any) -> tuple[str, str]:
     return genus, " ".join(parts[1:]).lower()
 
 
+# A source field holding "Genus epithet" names its own genus, so the `genus`
+# column is not needed to read it. These guards keep that reading to fields that
+# really are binomials: a rank name above genus is not a genus (NCBI calls an
+# unnamed member of a family "Lachnospiraceae bacterium", which must not become
+# genus Lachnospiraceae), and neither is the first word of a virus name.
+RANK_NAME_SUFFIXES = (
+    "aceae", "ales", "ineae", "idae", "aria", "eae",
+    "mycetes", "mycota", "bacteria", "bacteriota",
+)
+NON_EPITHETS = {
+    "bacterium", "archaeon", "symbiont", "endosymbiont", "oral", "group",
+    "complex", "sp", "spp", "subsp", "str", "var", "cf", "aff",
+}
+# "Parabacteroides sp. 20_3" names its genus as surely as a binomial does; the
+# unnamed species is still that genus's. Only these stand in for an epithet --
+# "subsp."/"var." qualify an epithet rather than replace one, so a field that
+# opens with them is not naming a species at all.
+EPITHET_PLACEHOLDERS = {"sp.", "sp", "spp.", "spp"}
+
+
+def names_a_genus(token: Any) -> bool:
+    """True when a token can be read as a genus name on its own."""
+    text = clean_str(token).strip("[]")
+    if not re.fullmatch(r"[A-Za-z]{4,}", text):
+        return False
+    return not text.casefold().endswith(RANK_NAME_SUFFIXES)
+
+
+def is_species_epithet(token: Any) -> bool:
+    """True when a token can be read as a species epithet."""
+    text = clean_str(token).strip("[]").casefold()
+    if not re.fullmatch(r"[a-z]{3,}", text):
+        return False
+    return text not in NON_EPITHETS and "virus" not in text and "phage" not in text
+
+
+def resolve_source_binomial(genus_field: Any, species_field: Any) -> tuple[str, str]:
+    """Read (genus, epithet) from a source row's `genus` and `species` fields.
+
+    MiMeDB stores a full binomial in `species` while `genus` can hold a
+    different genus for the same organism -- the two fields disagree because one
+    of them was updated for a reclassification and the other was not. Keeping
+    both, which is what `extract_species_epithet` alone does (it only strips the
+    leading token when it equals the `genus` column), concatenates two genera
+    into a name no organism bears: "Lactobacillus limosilactobacillus reuteri",
+    "Clavispora candida auris".
+
+    Which field is current cannot be told from the fields themselves: MiMeDB has
+    the new name in `species` for Limosilactobacillus reuteri and the old one
+    there for Bacteroides vulgatus (where `genus` says Phocaeicola), and
+    MMDBm0000292 is the reverse again. So this does not try to pick the current
+    name -- it picks the field that names one organism. Taking the binomial as
+    written always yields a real name, at worst a synonym, which
+    `merge_duplicate_taxa.py` folds onto the current name by tax ID. Keeping the
+    `genus` column and dropping the foreign token instead would invent names:
+    "Clavispora auris", "Alfipia birgiae", "Brochotrix thermosphacta".
+
+    An empty `genus` column is left empty rather than filled from the species
+    field: `_collapse_mimedb` skips those rows, and inventing a genus for them
+    would ingest ~40 organisms the loader has never loaded.
+    """
+    genus = normalize_genus(genus_field)
+    field = clean_str(species_field)
+    if not genus:
+        return genus, extract_species_epithet(genus, field)
+
+    parts = field.replace("[", "").replace("]", "").split()
+    def follows_a_genus(token: str) -> bool:
+        return is_species_epithet(token) or token.casefold() in EPITHET_PLACEHOLDERS
+
+    if len(parts) >= 3 and parts[0].casefold() == "candidatus":
+        # "Candidatus" is a status prefix, so the genus is the next word too.
+        takes_field = (
+            " ".join(parts[:2]).casefold() != genus.casefold()
+            and names_a_genus(parts[1])
+            and follows_a_genus(parts[2])
+        )
+    elif len(parts) >= 2:
+        takes_field = (
+            parts[0].casefold() != genus.casefold()
+            and names_a_genus(parts[0])
+            and follows_a_genus(parts[1])
+        )
+    else:
+        takes_field = False
+
+    if takes_field:
+        field_genus, field_species = parse_scientific_name(field)
+        if field_genus and field_species:
+            return field_genus, field_species
+    return genus, extract_species_epithet(genus, field)
+
+
 def taxon_key(genus: Any, species: Any) -> tuple[str, str]:
     return normalize_genus(genus).casefold(), extract_species_epithet(genus, species).casefold()
 
