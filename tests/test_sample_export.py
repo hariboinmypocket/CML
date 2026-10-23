@@ -5,17 +5,23 @@ from gutdb.pipeline import GMREPO_SAMPLE_FIELDS, prepare_gmrepo_sample_export
 
 
 class Connection:
-    def __init__(self, rows=()):
+    """Two queries now run here, so the mock has to tell them apart."""
+
+    def __init__(self, rows=(), withdrawals=()):
         self.rows = list(rows)
+        self.withdrawals = [{"run_accession": run, "field": field}
+                            for run, field in withdrawals]
+        self.pending = None
 
     def cursor(self, **kwargs):
         return self
 
-    def execute(self, *args):
-        pass
+    def execute(self, sql, *args):
+        self.pending = (self.withdrawals if "demographic_withdrawals" in sql
+                        else self.rows)
 
     def fetchall(self):
-        return self.rows
+        return self.pending
 
     def close(self):
         pass
@@ -44,6 +50,38 @@ class SampleExportTests(unittest.TestCase):
         self.assertEqual(rows[0]["qc_status"], "0")
         self.assertEqual({a["field"] for a in audit}, {"sex", "age_years", "bmi"})
         self.assertEqual(prepare_gmrepo_sample_export(connection, rows)[1], [])
+
+    def test_withdrawn_cells_are_not_refilled_from_the_source(self):
+        """A cleared cell and a never-measured cell look identical here.
+
+        Without the ledger the fallback to the raw source value re-imports
+        exactly what a withdrawal removed, and the audit cannot tell: the value
+        matches the source, so nothing reads as a change.
+        """
+        connection = Connection(
+            [stored()], withdrawals=[("RUN", "sex"), ("RUN", "age_years"),
+                                     ("RUN", "bmi")])
+        rows, audit = prepare_gmrepo_sample_export(
+            connection, [raw(sex="female", age_years="54", bmi="23.4")])
+        self.assertEqual([rows[0][f] for f in ("sex", "age_years", "bmi")], ["", "", ""])
+        self.assertEqual({a["source"] for a in audit},
+                         {"withheld_by_demographic_withdrawals"})
+
+    def test_withdrawal_is_per_field_and_per_run(self):
+        connection = Connection([stored(), stored(run_accession="OTHER")],
+                                withdrawals=[("RUN", "bmi")])
+        rows, _ = prepare_gmrepo_sample_export(
+            connection, [raw(sex="female", age_years="54", bmi="23.4"),
+                         raw(run_id="OTHER", sample_id="SAMPLE", bmi="31.0")])
+        self.assertEqual([rows[0][f] for f in ("sex", "age_years", "bmi")],
+                         ["female", "54.0", ""])
+        self.assertEqual(rows[1]["bmi"], "31.0")
+
+    def test_a_withdrawn_cell_still_stored_in_the_database_is_not_recovered(self):
+        connection = Connection([stored(sex="female", age_years=54.0)],
+                                withdrawals=[("RUN", "sex"), ("RUN", "age_years")])
+        rows, _ = prepare_gmrepo_sample_export(connection, [raw()])
+        self.assertEqual([rows[0][f] for f in ("sex", "age_years")], ["", ""])
 
     def test_identity_conflicts_abort(self):
         for change in ({"project_accession": "OTHER"}, {"gmrepo_sample_id": "OTHER"}):

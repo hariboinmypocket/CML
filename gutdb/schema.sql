@@ -304,6 +304,25 @@ CREATE TABLE IF NOT EXISTS samples (
         ON UPDATE CASCADE ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+
+-- A curation decision that must outlive the data it applies to. The CKD
+-- withdrawal (PRJNA562327) cleared sex, age_years and bmi for every run whose
+-- clinical-to-run link could not be verified against public ENA aliases: the
+-- published values matched, but the bridge to the run did not, so the cells
+-- were inference presented as measurement. Clearing them is not durable on its
+-- own, because sync_gmrepo_samples re-fetches those same values from the GMrepo
+-- API and COALESCE fills an empty cell. This table is what makes the decision
+-- stick: the export blanks any (run_accession, field) listed here regardless of
+-- what the API serves, and validate_database counts a stored value for a
+-- withdrawn cell as a defect. Seeded from data/ckd_demographic_withdrawals.csv
+-- so both stores read one source; see scripts/seed_demographic_withdrawals.py.
+CREATE TABLE IF NOT EXISTS demographic_withdrawals (
+    run_accession VARCHAR(64) NOT NULL,
+    field VARCHAR(32) NOT NULL,
+    reason VARCHAR(128) NOT NULL,
+    PRIMARY KEY (run_accession, field)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 CREATE TABLE IF NOT EXISTS sample_taxon_abundances (
     sample_id BIGINT UNSIGNED NOT NULL,
     taxon_id BIGINT UNSIGNED NOT NULL,

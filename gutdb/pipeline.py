@@ -1016,9 +1016,18 @@ def prepare_gmrepo_sample_export(
     curation that the raw GMrepo API does not carry. Preserve that work in the
     CSV as well. Missing measurements stay blank; no statistical imputation.
     Raw phenotype JSON is parsed transiently, never retained as an export field.
+
+    Cells listed in demographic_withdrawals stay blank whatever the source
+    serves. Falling back to the raw API value when the database is empty is
+    right for a cell that was never filled and wrong for one that was emptied
+    on purpose, and the two look identical here; without the ledger the CKD
+    withdrawal would be undone by the next sync. A blocked refill is recorded
+    in the audit so the ledger never acts silently.
     """
     cursor = connection.cursor(dictionary=True)
     try:
+        cursor.execute("SELECT run_accession, field FROM demographic_withdrawals")
+        withdrawn = {(r["run_accession"], r["field"]) for r in cursor.fetchall()}
         cursor.execute("""SELECT s.run_accession, s.gmrepo_sample_id,
             st.project_accession, s.sex, s.age_years, s.bmi,
             d.name AS disease_name, d.mesh_id
@@ -1044,6 +1053,12 @@ def prepare_gmrepo_sample_export(
                               ("bmi", lambda x: _plausible_bmi(nullable_float(x)))):
             original = parser(raw.get(field))
             recovered = parser(current.get(field))
+            if (run, field) in withdrawn:
+                row[field] = ""
+                # The change loop below records the blocked refill; appending
+                # here too would double-log it.
+                sources[field] = "withheld_by_demographic_withdrawals"
+                continue
             value = recovered if recovered is not None else original
             row[field] = "" if value is None else str(value)
             sources[field] = ("mysql.samples" if recovered is not None
@@ -2304,6 +2319,17 @@ def _validate_checks() -> dict[str, str]:
         "associations": "SELECT COUNT(*) FROM taxon_disease_associations",
         "samples": "SELECT COUNT(*) FROM samples",
         "abundance_rows": "SELECT COUNT(*) FROM sample_taxon_abundances",
+        # A withdrawn demographic cell holding a value again. The withdrawal
+        # is durable only if something notices it being undone, and the export
+        # audit cannot: a refill from the API reads as "unchanged from source".
+        # Counted here so either store reverting is a failure, not a surprise.
+        "withdrawn_demographic_cell_refilled": """
+            SELECT COUNT(*) FROM samples s
+            JOIN demographic_withdrawals w ON w.run_accession = s.run_accession
+            WHERE (w.field = 'sex' AND s.sex IS NOT NULL)
+               OR (w.field = 'age_years' AND s.age_years IS NOT NULL)
+               OR (w.field = 'bmi' AND s.bmi IS NOT NULL)
+        """,
         "taxa_missing_genus": "SELECT COUNT(*) FROM taxa WHERE genus = '' OR genus IS NULL",
         # Gram stain is a property of the cell envelope, so it is near-constant
         # within a phylum, and a lone dissenter is almost always a bad source

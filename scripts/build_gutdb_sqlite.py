@@ -36,6 +36,11 @@ ASSOC_FILES = [
     os.path.join(PROJECT, "data/gmrepo_all_disease_associations.csv"),
 ] + sorted(glob.glob(os.path.join(PROJECT, "data/literature_*_markers.csv")))
 SAMPLES_FILE = os.path.join(PROJECT, "data/gmrepo_project_samples.csv")
+# Curation decisions that must survive a rebuild. Without this the mirror
+# would be rebuilt from a CSV whose blank cells carry no record of having been
+# emptied on purpose, so nothing in this store could tell a withdrawn cell from
+# one that was never measured. See gutdb/schema_sqlite.sql.
+WITHDRAWALS_FILE = os.path.join(PROJECT, "data/ckd_demographic_withdrawals.csv")
 
 # Control arm of a literature marker comparison, dropped from those CSVs as
 # constant columns; see Loader.comparison.
@@ -449,6 +454,20 @@ class Loader:
         self.finish_run(run, read, ins, 0, skip)
         return read, ins, skip
 
+    def load_demographic_withdrawals(self) -> int:
+        """Carry the withdrawal ledger across, so this store can be checked too."""
+        if not os.path.exists(WITHDRAWALS_FILE):
+            return 0
+        rows = [(T.clean_str(r.get("run_accession")), T.clean_str(r.get("field")),
+                 T.clean_str(r.get("reason")))
+                for r in read_rows(WITHDRAWALS_FILE)]
+        rows = [r for r in rows if r[0] and r[1]]
+        self.con.executemany(
+            "INSERT OR REPLACE INTO demographic_withdrawals "
+            "(run_accession, field, reason) VALUES (?, ?, ?)", rows)
+        self.con.commit()
+        return len(rows)
+
     def load_abundances(self, path: str) -> tuple[int, int, int]:
         run = self.start_run(os.path.basename(path), path)
         read = ins = skip = 0
@@ -514,6 +533,7 @@ def main() -> None:
 
     read, ins, skip = loader.load_samples()
     print(f"samples: read={read} inserted={ins} skipped={skip}")
+    print("demographic withdrawals:", loader.load_demographic_withdrawals())
 
     for abundance_file in ABUNDANCE_FILES:
         if not os.path.exists(abundance_file):

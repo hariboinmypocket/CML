@@ -337,6 +337,32 @@ MySQL and the sample CSV. SQLite now contains only the verified demographics for
 these runs. Samples and abundance data were preserved. The importer no longer
 guesses numeric-prefix joins; see [CKD cleanup details](docs/ckd_demographic_cleanup.md).
 
+Clearing those cells did not make the withdrawal durable. `sync_gmrepo_samples`
+re-fetches the same demographics from the GMrepo API, and
+`prepare_gmrepo_sample_export` fell back to the fetched value whenever the
+database held nothing -- which is right for a cell that was never measured and
+exactly wrong for one emptied on purpose. The two are indistinguishable in the
+data, so the next sync of PRJNA562327 would have refilled all 432 withdrawn
+sets, and `load_samples` would have written them back under
+`COALESCE(VALUES(sex), sex)`. The export audit could not have caught it either:
+the refilled value matches the source, so nothing reads as a change. Verified by
+simulation before the fix -- a withdrawn run fed a fetched `female/54/23.4` came
+back carrying it, with only the `54` to `54.0` reformat logged.
+
+`demographic_withdrawals` is what makes the decision stick. It lists
+(`run_accession`, `field`) pairs whose cells stay blank whatever a source
+serves, is seeded by `scripts/seed_demographic_withdrawals.py` by re-deriving
+the verified set from `results/ckd_link_verification/verification.json` rather
+than transcribing a list, and lives in both stores from
+`data/ckd_demographic_withdrawals.csv`. It covers 1,920 cells across 640 runs:
+the 432 audited-but-unverified mappings plus the 208 project samples that had no
+clinical mapping at all, which the original repair left open. The 57 verified
+runs are untouched, and a blocked refill is written to the export audit so the
+ledger never acts silently. `withdrawn_demographic_cell_refilled` counts a
+stored value for a withdrawn cell in both stores, so a revert by any path is a
+validate failure rather than a discovery; it was confirmed to report 1 against a
+simulated refill, not merely 0 against clean data.
+
 ## 4. Validate and query
 
 ```bash
