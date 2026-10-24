@@ -652,6 +652,121 @@ CREATE TABLE IF NOT EXISTS sample_metabolite_levels (
         ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+-- Taxon abundance against a measured metabolite level, one row per
+-- (taxon, metabolite, study). Succinate (C00042) is what this was built for:
+-- the README has described this dataset as carrying "succinate production"
+-- since the beginning while no column ever did, and only 1 of 5,838 taxa
+-- mentions succinate in its MiMeDB `metabolism` text. There is no source here
+-- for whether an organism PRODUCES succinate, so this does not claim to say.
+-- It reports a measured correlation and nothing more.
+--
+-- WHY CLR. Relative abundances in one sample sum to 1, so when a few dominant
+-- genera rise with a metabolite every other part must fall, and correlating the
+-- raw proportions manufactures negative associations. Measured on succinate:
+-- raw proportions gave 463 negative against 126 positive below FDR 0.05, 79%
+-- negative; CLR values gave 269 negative against 319 positive, 46%. The skew
+-- was the simplex, not biology. The values here are therefore Spearman on CLR
+-- abundances from gutdb/compositional.py, which also applies that module's
+-- prevalence floor and multiplicative replacement.
+--
+-- WHY PER STUDY, AND WHY RANKS. The levels are not comparable between
+-- cohorts: for succinate the per-study means run from 0.06 to 3.0e+08, and two
+-- cohorts are stored centred so they carry negative values. A pooled statistic
+-- over that is a confident number about nothing -- the same trap as the NMO
+-- case, where pooled CLR scored AUC 0.995 and the within-study answer was
+-- 0.497. Spearman inside one study is invariant to any monotone rescaling, so
+-- the scale difference stops mattering the moment nothing crosses a study
+-- boundary. q_value is Benjamini-Hochberg within the study, over the taxa
+-- actually tested there.
+--
+-- The combination across studies is v_taxon_metabolite_evidence, a view rather
+-- than a stored number, so one cohort driving a result stays visible instead of
+-- being averaged into agreement.
+--
+-- MYSQL ONLY, AND NOT A PARITY GAP. The mirror carries no metabolite tables at
+-- all, so there is nothing here for it to drift from -- unlike the defects this
+-- schema keeps producing, where both stores held the data and one was repaired.
+-- Do not half-add it: a copy of this table over a mirror with no `metabolites`
+-- would leave metabolite_id dangling.
+--
+-- high_confidence_annotation is false when the upstream authors flagged that
+-- study's annotation for this metabolite. For succinate that is the whole of
+-- FRANZOSA_IBD_2019, all 220 samples -- the IBD cohort, which is where
+-- succinate is most discussed. Kept and flagged rather than dropped, because
+-- which confidence floor is acceptable is the caller's decision.
+CREATE TABLE IF NOT EXISTS taxon_metabolite_associations (
+    taxon_id BIGINT UNSIGNED NOT NULL,
+    metabolite_id BIGINT UNSIGNED NOT NULL,
+    study_id BIGINT UNSIGNED NOT NULL,
+    -- Spearman rho within the study. DECIMAL(5,4) holds -1.0000 to 1.0000.
+    rho DECIMAL(5,4) NOT NULL,
+    p_value DOUBLE NOT NULL,
+    q_value DOUBLE NOT NULL,
+    n_samples INT UNSIGNED NOT NULL,
+    -- Samples where the taxon was actually present, counted on the raw
+    -- abundances BEFORE multiplicative replacement. After replacement nothing
+    -- is zero any more, so n_samples alone would hide a correlation resting on
+    -- a handful of real observations.
+    n_nonzero INT UNSIGNED NOT NULL,
+    high_confidence_annotation BOOLEAN NOT NULL DEFAULT TRUE,
+    PRIMARY KEY (taxon_id, metabolite_id, study_id),
+    KEY ix_tma_metabolite (metabolite_id),
+    KEY ix_tma_study (study_id),
+    CONSTRAINT fk_tma_taxon FOREIGN KEY (taxon_id) REFERENCES taxa(id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT fk_tma_metabolite FOREIGN KEY (metabolite_id) REFERENCES metabolites(id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT fk_tma_study FOREIGN KEY (study_id) REFERENCES studies(id)
+        ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Across-study evidence. n_studies_positive and n_studies_negative count
+-- cohorts that cleared FDR 0.05 in each direction, so a taxon that is positive
+-- in three studies and negative in two reads as contested rather than as a
+-- mean near zero. min_rho/max_rho keep that spread visible beside mean_rho.
+-- For succinate 8 genera are significant in both directions.
+--
+-- COUNTING AGREEING GENERA IS NOT COUNTING EVIDENCE. Closely related genera
+-- co-vary, so they do not contribute independently. Of the succinate genera
+-- agreeing in at least two studies with none opposing, the positives are 22
+-- Lachnospiraceae, 13 Enterobacteriaceae and 6 Peptostreptococcaceae, and the
+-- negatives are 25 Oscillospiraceae. The coherent reading -- Enterobacterales
+-- up, Oscillospiraceae butyrate producers down, which is the usual dysbiosis
+-- axis and matches succinate being a dysbiosis marker -- is closer to a few
+-- family-level observations than to the ~115 genus-level ones it looks like.
+--
+-- n_studies_tested is also not 11 for most taxa: the prevalence floor means a
+-- significant genus was tested in 5.1 cohorts on average. A result is over the
+-- cohorts where the genus was prevalent, not over the whole collection.
+--
+-- And none of this is production. A correlation with a measured level cannot
+-- separate producing a metabolite from consuming it or from merely rising in
+-- the same conditions; Enterobacteriaceae do both with succinate. There is no
+-- source in this database for whether an organism produces it.
+CREATE OR REPLACE VIEW v_taxon_metabolite_evidence AS
+SELECT
+    tma.taxon_id,
+    t.scientific_name,
+    t.taxonomic_rank,
+    tma.metabolite_id,
+    m.name                                   AS metabolite_name,
+    m.kegg_id,
+    COUNT(*)                                 AS n_studies_tested,
+    SUM(tma.q_value < 0.05 AND tma.rho > 0)  AS n_studies_positive,
+    SUM(tma.q_value < 0.05 AND tma.rho < 0)  AS n_studies_negative,
+    ROUND(AVG(tma.rho), 4)                   AS mean_rho,
+    ROUND(MIN(tma.rho), 4)                   AS min_rho,
+    ROUND(MAX(tma.rho), 4)                   AS max_rho,
+    MIN(tma.q_value)                         AS min_q_value,
+    SUM(tma.n_samples)                       AS n_samples_total,
+    MIN(tma.n_nonzero)                       AS min_n_nonzero,
+    MIN(tma.high_confidence_annotation)      AS all_studies_high_confidence
+FROM taxon_metabolite_associations tma
+JOIN taxa t ON t.id = tma.taxon_id
+JOIN metabolites m ON m.id = tma.metabolite_id
+GROUP BY tma.taxon_id, t.scientific_name, t.taxonomic_rank,
+         tma.metabolite_id, m.name, m.kegg_id;
+
 CREATE OR REPLACE VIEW v_taxon_disease_summary AS
 SELECT
     t.id AS taxon_id,

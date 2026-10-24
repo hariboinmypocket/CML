@@ -1,6 +1,6 @@
 # Gut microbiome database population pipeline
 
-A curated and normalized gut microbiome dataset integrating microbial taxonomy, metabolic traits, oxygen requirements, succinate production, and disease associations, with a focus on IBS-related microbiome analysis.
+A curated and normalized gut microbiome dataset integrating microbial taxonomy, metabolic traits, oxygen requirements, measured metabolite levels with their taxon associations, and disease associations, with a focus on IBS-related microbiome analysis.
 
 This project turns the earlier notebook/Workbench workflow into a repeatable MySQL 8 pipeline. It loads the existing gut microbiome CSV, enriches taxa from MiMeDB, and stores GMrepo diseases, studies, comparisons, marker associations, clinical samples, and sample-level relative abundances in normalized tables.
 
@@ -362,6 +362,74 @@ ledger never acts silently. `withdrawn_demographic_cell_refilled` counts a
 stored value for a withdrawn cell in both stores, so a revert by any path is a
 validate failure rather than a discovery; it was confirmed to report 1 against a
 simulated refill, not merely 0 against clean data.
+
+### "Succinate production" was in the description and in no column
+
+This line has described the dataset as carrying **succinate production** since
+the first commit. No column ever did: `git log -S succinate -- gutdb/schema.sql`
+returns nothing, and succinate appeared in exactly one tracked file, that
+sentence. Only 1 of 5,838 taxa mentions succinate in its MiMeDB `metabolism`
+text, so there was nothing to read it from either.
+
+There is **no source in this database for whether an organism produces
+succinate**. MiMeDB carries organism-to-metabolite upstream, but the loaded
+`gut_microbiome_new_full.csv` is twelve columns and does not. Asserting a
+`produces_succinate` boolean would have been the same inference-as-measurement
+that the CKD demographics were cleared for.
+
+What the data does support is a measured association, and succinate is well
+covered: `C00042_Succinate` has levels in 2,083 samples, every one of which also
+carries an abundance profile, 440 of them the MARS IBS cohort.
+`taxon_metabolite_associations` holds one Spearman correlation per (taxon,
+metabolite, study), and `v_taxon_metabolite_evidence` combines them.
+
+Three things decided the method, each measured rather than assumed:
+
+- **Per study, never pooled.** Succinate levels are not comparable between
+  cohorts -- the per-study means run from 0.06 to 3.0e+08, and two cohorts are
+  stored centred so they carry negative values. Spearman inside one study is
+  invariant to monotone rescaling, so the scale difference stops mattering once
+  nothing crosses a study boundary.
+- **CLR, not raw proportions.** This was the correction that mattered. Relative
+  abundances sum to 1, so when a few genera rise with succinate the rest must
+  fall. Raw proportions gave **463 negative against 126 positive** below FDR
+  0.05 -- 79% negative, which is not a finding about succinate but about the
+  simplex. The same test on CLR values gives **269 negative against 319
+  positive**, 46%. The first implementation here used raw proportions and the
+  skew is what exposed it.
+- **FDR within each study**, over the taxa actually tested there, so the 1,992
+  pairs across 11 cohorts do not hand back a page of discoveries that are the
+  multiplicity.
+
+The result is coherent: Enterobacterales up with succinate, Oscillospiraceae
+butyrate producers down, which is the usual dysbiosis axis and matches succinate
+being a dysbiosis marker. **Reading it as ~115 independent genus results would
+be wrong.** Closely related genera co-vary, and of the genera agreeing in at
+least two studies with none opposing, the positives are 22 Lachnospiraceae, 13
+Enterobacteriaceae and 6 Peptostreptococcaceae while the negatives are 25
+Oscillospiraceae -- a few family-level observations wearing genus-level counts.
+A significant genus was tested in 5.1 of the 11 cohorts on average, because of
+the prevalence floor, and 8 genera are significant in **both** directions; the
+view reports those as contested rather than averaging them to nothing.
+
+The whole of `FRANZOSA_IBD_2019` -- all 220 samples, the IBD cohort, where
+succinate is most discussed -- is flagged low-confidence for this annotation
+upstream. It is kept and flagged through
+`all_studies_high_confidence`, not dropped, because which confidence floor is
+acceptable is the caller's decision.
+
+```bash
+python3 scripts/derive_taxon_metabolite_associations.py            # preview
+python3 scripts/derive_taxon_metabolite_associations.py --apply
+python3 scripts/derive_taxon_metabolite_associations.py --kegg-id C00246 --apply
+```
+
+This layer is **MySQL only, and that is not a parity gap**: the mirror carries
+no metabolite tables at all, so there is nothing for it to drift from -- unlike
+the defects this schema keeps producing, where both stores held the data and one
+was repaired. Its four counters are in `_MYSQL_ONLY_CHECKS` for that reason.
+Half-adding it would leave `metabolite_id` dangling against a mirror with no
+`metabolites`.
 
 ## 4. Validate and query
 

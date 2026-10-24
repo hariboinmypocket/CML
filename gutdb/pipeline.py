@@ -2330,6 +2330,32 @@ def _validate_checks() -> dict[str, str]:
                OR (w.field = 'age_years' AND s.age_years IS NOT NULL)
                OR (w.field = 'bmi' AND s.bmi IS NOT NULL)
         """,
+        # A correlation outside [-1, 1] is not a correlation.
+        "taxon_metabolite_rho_out_of_range": """
+            SELECT COUNT(*) FROM taxon_metabolite_associations
+            WHERE rho < -1 OR rho > 1
+        """,
+        # Benjamini-Hochberg can only raise a p-value, so an adjusted value
+        # below the raw one means the correction was applied to the wrong set
+        # -- the mistake that turns multiplicity into discoveries. The
+        # tolerance is float noise, not slack: BH leaves the largest p exactly
+        # equal to its q.
+        "taxon_metabolite_q_below_p": """
+            SELECT COUNT(*) FROM taxon_metabolite_associations
+            WHERE q_value < p_value - 0.000000001
+        """,
+        # The support floors the derivation enforces. Multiplicative
+        # replacement leaves nothing at zero, so without n_nonzero a rho
+        # resting on three present samples looks like one resting on three
+        # hundred.
+        "taxon_metabolite_support_below_floor": """
+            SELECT COUNT(*) FROM taxon_metabolite_associations
+            WHERE n_samples < 20 OR n_nonzero < 10
+        """,
+        "taxon_metabolite_nonzero_exceeds_samples": """
+            SELECT COUNT(*) FROM taxon_metabolite_associations
+            WHERE n_nonzero > n_samples
+        """,
         "taxa_missing_genus": "SELECT COUNT(*) FROM taxa WHERE genus = '' OR genus IS NULL",
         # Gram stain is a property of the cell envelope, so it is near-constant
         # within a phylum, and a lone dissenter is almost always a bad source
@@ -2654,6 +2680,13 @@ _MYSQL_ONLY_CHECKS = frozenset({
     "v_sample_attributes_canonical_row_drift",
     "v_sample_attribute_keys_row_drift",
     "attribute_booleans_undecoded",
+    # The mirror carries no metabolite tables at all, so these have nothing to
+    # drift from. That is why they are listed here and not a parity gap; see
+    # taxon_metabolite_associations in gutdb/schema.sql.
+    "taxon_metabolite_rho_out_of_range",
+    "taxon_metabolite_q_below_p",
+    "taxon_metabolite_support_below_floor",
+    "taxon_metabolite_nonzero_exceeds_samples",
 })
 
 
