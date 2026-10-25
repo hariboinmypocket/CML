@@ -39,6 +39,7 @@ from .ncbi import (
     parse_host_age_years,
     parse_host_sex,
 )
+from . import taxdump
 from .transform import (
     association_direction,
     clean_str,
@@ -59,6 +60,7 @@ from .transform import (
     quantize_effect_size,
     resolve_effect_type,
     resolve_source_binomial,
+    same_epithet,
 )
 
 
@@ -175,6 +177,101 @@ def _taxon_exists(connection: MySQLConnection, genus_key: str, species_key: str)
     return exists
 
 
+# Lineage and traits only. A redirect must never touch what identifies the row:
+# the point is to keep the canonical name the database already holds, not to
+# rename it to the source's older one.
+REDIRECT_COLUMNS = (
+    "superkingdom", "phylum", "class_name", "order_name", "family",
+    "gram_stain", "oxygen_requirement", "ph_preference", "sporulation",
+    "shape", "cell_arrangement", "mobility", "flagella_presence",
+    "number_of_membranes", "biotic_relationship", "habitat",
+    "temperature_range", "optimal_temperature", "metabolism",
+    "energy_source", "human_pathogen", "energy_mode", "primary_food_source",
+)
+
+
+def _taxid_holder(
+    connection: MySQLConnection, taxid: Any, rank: str, species: str
+) -> int | None:
+    """The one existing row that already IS this organism, or None.
+
+    `ncbi_tax_id` is this database's canonical key, so a source row whose
+    (genus_key, species_key) is new while its tax ID is already held names an
+    organism the table has under a different, usually older name -- MiMeDB
+    offers `Bacteroides vulgatus` for tax 821, which row 1569 holds as
+    `Phocaeicola vulgatus`. Inserting beside it splits one organism across two
+    rows and two ML features, which is the defect merge_duplicate_taxa.py was
+    written to clean up after.
+
+    Three guards, each earning its place:
+
+    * Exactly one holder. More than one means the table itself disagrees about
+      that tax ID, which is merge_duplicate_taxa.py's job, not a loader's.
+    * Same rank. Merging across ranks broke 663 rank groups once, because three
+      groups span genus and species as bracket-name artifacts.
+    * `same_epithet`. This is what keeps a WRONG tax ID in a source row from
+      becoming a silent merge into an unrelated organism: it tolerates Latin
+      gender agreement (`glabrata`/`glabratus`, `spiroforme`/`spiroformis`) and
+      refuses a genuinely different epithet, so tax 411483 -- "F. prausnitzii
+      A2-165", renamed F. duncaniae -- cannot relabel F. prausnitzii. A source
+      row that fails it still inserts, visibly, as it does today.
+    """
+    taxid = nullable_int(taxid)
+    if not taxid or not species:
+        return None
+    cursor = connection.cursor()
+    cursor.execute(
+        "SELECT id, species, taxonomic_rank FROM taxa WHERE ncbi_tax_id = %s",
+        (taxid,),
+    )
+    holders = cursor.fetchall()
+    cursor.close()
+    if len(holders) != 1:
+        return None
+    holder_id, holder_species, holder_rank = holders[0]
+    if holder_rank != rank:
+        return None
+    if not same_epithet(species.split()[-1], clean_str(holder_species).split()[-1]
+                        if clean_str(holder_species) else ""):
+        return None
+    return int(holder_id)
+
+
+def _redirect_to_holder(
+    connection: MySQLConnection, holder_id: int, values: Mapping[str, Any],
+    overwrite: bool,
+) -> None:
+    """Fill the holder's empty lineage and traits from this source row.
+
+    Deliberately not the `overwrite` branch of upsert_taxon, which replaces
+    `genus`, `species` and `scientific_name` too: here that would rename the
+    canonical row to the source's older name. Even with overwrite=True only the
+    columns in REDIRECT_COLUMNS move.
+    """
+    assignments, parameters = [], []
+    for column in REDIRECT_COLUMNS:
+        value = values.get(column)
+        if value is None or (isinstance(value, str) and value.strip() in ("", "N/A")):
+            continue
+        if overwrite:
+            assignments.append(f"{column} = %s")
+        elif column in NUMERIC_FILL_COLUMNS:
+            assignments.append(f"{column} = COALESCE({column}, %s)")
+        else:
+            assignments.append(
+                f"{column} = CASE WHEN {column} IS NULL "
+                f"OR TRIM(CAST({column} AS CHAR)) = '' OR {column} = 'N/A' "
+                f"THEN %s ELSE {column} END")
+        parameters.append(value)
+    if not assignments:
+        return
+    cursor = connection.cursor()
+    cursor.execute(
+        f"UPDATE taxa SET {', '.join(assignments)} WHERE id = %s",
+        tuple(parameters) + (holder_id,))
+    cursor.close()
+
+
 NUMERIC_FILL_COLUMNS = frozenset({
     "ncbi_tax_id", "number_of_membranes", "optimal_temperature", "human_pathogen",
 })
@@ -279,6 +376,15 @@ def upsert_taxon(
                     f"OR {column} = 'N/A' THEN VALUES({column}) ELSE {column} END"
                 )
         updates = ", ".join(update_parts)
+    # A row the table already holds under another name is updated rather than
+    # duplicated. Only when the key is new -- an existing key is the unique-key
+    # path below, which is unchanged.
+    if not existed:
+        holder = _taxid_holder(connection, taxon.get("ncbi_tax_id"), rank, species)
+        if holder is not None:
+            _redirect_to_holder(connection, holder, dict(zip(columns, values)), overwrite)
+            return holder, True
+
     cursor = connection.cursor()
     cursor.execute(
         f"INSERT INTO taxa ({', '.join(columns)}) VALUES ({', '.join(['%s'] * len(columns))}) "
@@ -356,6 +462,26 @@ def load_baseline_taxa(
         raise
 
 
+def _species_taxid(taxid: Any, dump: "taxdump.SpeciesNodes | None") -> Any:
+    """A strain or subspecies tax ID replaced by its species node.
+
+    MiMeDB is a strain-level source, so a record collapsed to a species row
+    routinely carries a strain ID: 435590 is "Phocaeicola vulgatus ATCC 8482",
+    whose species is 821. Storing the strain ID is what makes a row look like a
+    rename candidate forever and what every repair script here has had to undo
+    by hand. Left untouched when there is no dump, or when the dump does not
+    know the ID -- NCBI deletes nodes, and guessing is worse than keeping what
+    the source said.
+    """
+    if dump is None:
+        return taxid
+    numeric = nullable_int(taxid)
+    if not numeric:
+        return taxid
+    node = dump.species_node(numeric)
+    return node if node else taxid
+
+
 def _collapse_mimedb(path: str | Path) -> list[dict[str, Any]]:
     # resolve_source_binomial rather than extract_species_epithet: MiMeDB's
     # `genus` column and the genus named inside `species` disagree for 157 of
@@ -369,6 +495,9 @@ def _collapse_mimedb(path: str | Path) -> list[dict[str, Any]]:
     # The resolved pair is carried with the group instead of re-derived from
     # rows[0]: rows that disagree about `genus` now collapse together, so one
     # member no longer stands for the group's name.
+    dump = taxdump.load()
+    if dump is None:
+        print("    (no taxdump at GUTDB_TAXDUMP - strain tax IDs kept as given)")
     groups: dict[tuple[str, str], tuple[str, str, list[dict[str, Any]]]] = {}
     for row in open_dict_rows(path):
         genus, species = resolve_source_binomial(
@@ -409,7 +538,8 @@ def _collapse_mimedb(path: str | Path) -> list[dict[str, Any]]:
                 "family": most_common(first_value(r, "family") for r in rows),
                 "genus": genus,
                 "species": species,
-                "ncbi_tax_id": most_common(first_value(r, "ncbi_tax_id") for r in rows),
+                "ncbi_tax_id": _species_taxid(
+                    most_common(first_value(r, "ncbi_tax_id") for r in rows), dump),
                 "gram_stain": most_common(first_value(r, "gram") for r in rows),
                 "oxygen_requirement": most_common(first_value(r, "oxygen_requirement") for r in rows),
                 "sporulation": most_common(first_value(r, "sporulation") for r in rows),
