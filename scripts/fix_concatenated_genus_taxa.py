@@ -106,6 +106,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from gutdb.config import Settings
 from gutdb.db import connect
 from gutdb.pipeline import open_dict_rows
+from gutdb.traits import dissents_from_genus, load_genus_consensus
+
+# Trait moves refused because the survivor's genus contradicts them. Reported
+# at the end; the merge still stands, one cell just does not travel with it.
+REFUSED_TRAITS: list[str] = []
 from gutdb.transform import (
     clean_str,
     extract_species_epithet,
@@ -527,6 +532,19 @@ def plan(rows: list[dict], scope: set[int], dump: Taxdump, cursor, placeholder: 
 
 
 def backfill_traits(cursor, placeholder: str, survivor_id: int, loser_id: int) -> list[str]:
+    """Move the loser's traits onto empty survivor fields, minus implausible ones.
+
+    A value the survivor's genus contradicts is refused. This is the path that
+    carried MiMeDB's gram-positive call for Bacteroides vulgatus onto
+    Phocaeicola vulgatus and its 10,263 abundance rows: the rule is right, but
+    it moves a trait off a row nobody queries onto the row everybody does, so a
+    wrong cell stops being harmless exactly when it starts to matter. An empty
+    field is honest; a wrong one is not.
+    """
+    consensus = load_genus_consensus(cursor, placeholder)
+    cursor.execute(f"SELECT genus_key FROM taxa WHERE id={placeholder}", (survivor_id,))
+    survivor_genus = (cursor.fetchone() or ("",))[0]
+
     cursor.execute(
         f"SELECT {', '.join(TRAIT_COLUMNS + NA_COLUMNS)} FROM taxa "
         f"WHERE id IN ({placeholder}, {placeholder}) ORDER BY id={placeholder} DESC",
@@ -537,6 +555,14 @@ def backfill_traits(cursor, placeholder: str, survivor_id: int, loser_id: int) -
         empty = survivor[index] is None or (
             column in NA_COLUMNS and str(survivor[index]) in ("", "N/A"))
         if empty and loser[index] is not None and str(loser[index]) not in ("", "N/A"):
+            agreed = dissents_from_genus(
+                consensus, survivor_genus, column, loser[index])
+            if agreed is not None:
+                REFUSED_TRAITS.append(
+                    f"taxon {survivor_id}: refused {column}="
+                    f"{str(loser[index]).strip()!r} -- genus {survivor_genus!r} "
+                    f"agrees on {agreed!r}")
+                continue
             cursor.execute(
                 f"UPDATE taxa SET {column}={placeholder} WHERE id={placeholder}",
                 (loser[index], survivor_id))

@@ -55,7 +55,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from gutdb.config import Settings
 from gutdb.db import connect
 from gutdb.ncbi import TaxonomyClient
+from gutdb.traits import dissents_from_genus, load_genus_consensus
 from gutdb.transform import parse_scientific_name, same_epithet, taxon_key
+
+# Trait moves this run refused because they would have contradicted the
+# survivor's genus. Reported at the end rather than raised: the merge itself is
+# still right, it is one cell that does not travel with it.
+REFUSED_TRAITS: list[str] = []
 
 DRY_RUN = "--apply" not in sys.argv
 AUDIT = Path("data/taxa_merge_audit.csv")
@@ -211,7 +217,20 @@ def plan(groups: dict[int, list[dict]], ncbi: dict) -> tuple[list[dict], list[di
 
 
 def backfill_traits(cur, canonical_id: int, loser_ids: list[int]) -> int:
-    """Move lineage/trait values from losing rows onto an empty canonical field."""
+    """Move lineage/trait values from losing rows onto an empty canonical field.
+
+    A value is refused when the survivor's genus contradicts it. This is the
+    path that put MiMeDB's gram-positive call for Bacteroides vulgatus onto
+    Phocaeicola vulgatus and its 10,263 abundance rows: the rule is right, but
+    it moves a trait from a row nobody queries onto the row everybody does, so
+    a wrong cell stops being harmless at exactly the moment it starts mattering.
+    Refusing leaves the survivor's field empty, which is honest -- unknown
+    rather than wrong.
+    """
+    consensus = load_genus_consensus(cur)
+    cur.execute("SELECT genus_key FROM taxa WHERE id = %s", (canonical_id,))
+    canonical_genus = (cur.fetchone() or ("",))[0]
+
     columns = TRAIT_COLUMNS + NA_COLUMNS
     cols = ", ".join(f"`{c}`" for c in columns)
     cur.execute(f"SELECT {cols} FROM taxa WHERE id = %s", (canonical_id,))
@@ -236,6 +255,13 @@ def backfill_traits(cur, canonical_id: int, loser_ids: list[int]) -> int:
             if value is None:
                 continue
             if column in NA_COLUMNS and str(value).strip() in ("", "N/A"):
+                continue
+            agreed = dissents_from_genus(consensus, canonical_genus, column, value)
+            if agreed is not None:
+                REFUSED_TRAITS.append(
+                    f"taxon {canonical_id}: refused {column}={str(value).strip()!r} "
+                    f"from a merged row -- genus {canonical_genus!r} agrees on "
+                    f"{agreed!r}")
                 continue
             updates[column] = value
             break
@@ -468,6 +494,14 @@ def main() -> int:
     print()
     for key, value in stats.items():
         print(f"  {key:30} {value}")
+
+    if REFUSED_TRAITS:
+        print(f"\n  {len(REFUSED_TRAITS)} trait value(s) refused rather than "
+              "moved onto a survivor whose genus contradicts them:")
+        for line in REFUSED_TRAITS:
+            print(f"    {line}")
+        print("    The survivor keeps an empty field. Check the source record "
+              "before filling it by hand.")
 
     cur.execute("SELECT COUNT(*) FROM taxa")
     taxa_after = cur.fetchone()[0]
