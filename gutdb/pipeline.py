@@ -2474,6 +2474,17 @@ def _validate_checks() -> dict[str, str]:
                OR (w.field = 'bmi' AND s.bmi IS NOT NULL)
         """,
         # A correlation outside [-1, 1] is not a correlation.
+        # Two metabolite rows sharing a kegg_id AND an identical name. A shared
+        # kegg_id alone is legitimate -- it can name a lipid class -- but the
+        # same name under the same id is one compound stored twice, which
+        # splits its levels across ids so a filter double-counts or misses
+        # half. v_metabolite_kegg_ambiguity carries the cases left undecided.
+        "metabolite_kegg_id_and_name_duplicated": """
+            SELECT COUNT(*) FROM (
+                SELECT kegg_id, name FROM metabolites WHERE kegg_id IS NOT NULL
+                GROUP BY kegg_id, name HAVING COUNT(*) > 1
+            ) duplicated
+        """,
         "taxon_metabolite_rho_out_of_range": """
             SELECT COUNT(*) FROM taxon_metabolite_associations
             WHERE rho < -1 OR rho > 1
@@ -2826,6 +2837,7 @@ _MYSQL_ONLY_CHECKS = frozenset({
     # The mirror carries no metabolite tables at all, so these have nothing to
     # drift from. That is why they are listed here and not a parity gap; see
     # taxon_metabolite_associations in gutdb/schema.sql.
+    "metabolite_kegg_id_and_name_duplicated",
     "taxon_metabolite_rho_out_of_range",
     "taxon_metabolite_q_below_p",
     "taxon_metabolite_support_below_floor",
