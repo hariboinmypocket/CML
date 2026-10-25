@@ -559,6 +559,57 @@ row, analyse a fraction of the data and report a result that looked entirely
 normal. It now fetches all matches and refuses, listing the rows and the
 `--metabolite-id` needed to pick one.
 
+### One biosample, several runs: counted twice here and dropped there
+
+`samples.gmrepo_sample_id` is held by more than one run in 681 cases -- 1,575
+runs, 894 of them a second, third or fourth sequencing run of a biosample
+already present, always within one study. That is normal upstream: one
+biological sample can be sequenced repeatedly. It is not normal in a model,
+where those runs are not independent observations.
+
+MySQL already guarded it, and the guard chose its representative badly. `rep`
+kept `MIN(id)` per biosample, which reads as a neutral tie-break and is not
+one: when the lowest-numbered run lacked features or covariates, the whole
+biosample was excluded even though a sibling run qualified. **112 biosamples
+were being dropped that way** -- real data lost to the choice of representative
+rather than to anything being absent. The pick now prefers a run that is
+actually usable and falls back to `MIN(id)` only when none is, which recovered
+all 112: `ml_ready_deduplicated` 12,896 to 13,008 and
+`ml_ready_one_per_subject` 11,925 to 12,037, with no replicate leaking in.
+
+The cost of the correlated lookup was measured rather than guessed: the new
+`rep` subquery runs in 0.12s against the old one's 0.04s, so it adds 0.08s to a
+view that takes 4.20s, of which 3.33s is the pre-existing abundance rollup over
+3M rows. The view is slow because of that rollup, not because of this.
+
+**The mirror had no replicate handling at all.** Its `v_ml_ready_samples`
+stopped at `ml_ready`, so filtering the mirror's cohort returned every run as an
+independent sample: 144 of its 4,529 `ml_ready` rows were a second run of a
+sample already counted, with nothing saying so. MySQL carried the guard and this
+store did not -- the defect shape this schema keeps producing, found for the
+tenth-odd time. The mirror now carries `runs_for_this_sample`,
+`is_replicate_run` and `ml_ready_deduplicated` with the identical
+usability-aware representative, and its deduplicated cohort is 4,385.
+
+**The two stores are now at parity on the biosample level and deliberately not
+on the subject level.** `ml_ready_one_per_subject` additionally collapses repeat
+visits by one person, and that needs `samples.subject_id`, which the mirror does
+not carry. The mirror's schema says so at the point where the flag would
+otherwise be expected, so its absence reads as a stated limit rather than an
+oversight.
+
+Two shared counters hold it, and both were confirmed to fire rather than only to
+read zero. `biosample_dropped_despite_a_usable_run` reports 112 when evaluated
+against the old `MIN(id)` pick and 0 now;
+`ml_ready_cohort_holds_a_replicate_run` could not even have run against the old
+mirror view, which had no `is_replicate_run` column, so it would have reported
+`_FAILED_TO_RUN` -- itself the signal that the store was not being checked.
+
+One limit neither counter can reach: 2,943 samples carry no `gmrepo_sample_id`,
+2,367 of which are in the deduplicated cohort. For those, replicate detection is
+impossible, because the identifier that would group them is the thing that is
+missing.
+
 ## 4. Validate and query
 
 ```bash
