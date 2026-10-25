@@ -62,6 +62,14 @@ would leave the frozen schema as the one every tool resolves to by default -- so
 a single forgotten `--apply` would write to the reference. Freezing the copy
 instead means no code path can reach it.
 
+This inverts the original instruction, which was to do the cleanups *in* the
+copy, so it is worth being explicit that the inversion is deliberate and was
+confirmed on 2026-10-25 rather than drifted into. **Settled; do not re-plumb the
+scripts at the snapshot.** The guarantee the instruction was after -- an
+untouched reference to compare against -- is what the frozen copy provides, and
+it provides it more safely this way round, because the reference is the schema
+nothing addresses rather than the schema everything defaults to.
+
 **That protection is naming, not enforcement.** The usual connection is `root`
 with full grants, and MySQL has no per-schema read-only mode for a superuser, so
 the snapshot is safe because nothing addresses it, not because the server refuses
