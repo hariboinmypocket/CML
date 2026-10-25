@@ -610,6 +610,53 @@ One limit neither counter can reach: 2,943 samples carry no `gmrepo_sample_id`,
 impossible, because the identifier that would group them is the thing that is
 missing.
 
+### The record had rotted, and nothing was checking it
+
+Every integrity counter in this repository checks the database. None of them
+checked this file, and it had been wrong for a while.
+
+`13,328` was stated as the modelling-ready cohort size in three places. The CKD
+withdrawal had already taken it to 12,896 and the replicate-representative fix
+then took it to 13,008, so the project's own record was stale through two
+changes and nothing noticed -- including the commit messages that correctly
+reported the new numbers while leaving the prose that contradicted them. The
+subject-collapse figures were stale the same way (`12,357`, now 12,037), and
+`10,961` was both stale and answering a slightly different question than its
+sentence asked.
+
+One figure never reconciled with its own sentence. The subject-visit sentence
+below claimed 389 subjects accounting for 1,340 rows of which 971 were repeats,
+and 1,340 minus 389 is 951, not 971. The subject count was a transposition: it
+is 369, which reconciles, since 369 + 971 = 1,340.
+
+`tests/test_documented_figures.py` closes it, and the design matters more than
+the fixes. **No expected value is written in the test.** Each figure is located
+in this file by its surrounding wording and compared against the database, so
+there is nothing to keep in step -- the README remains the single place the
+number is written down. If a rewording breaks an anchor the test fails rather
+than silently stopping, because a check that quietly stops checking is the
+failure mode this project has already had once, in the seven counters that gated
+nothing.
+
+It earned its keep immediately by failing on a correction made in the same
+sitting: `10,521` was the GMrepo share of the cohort, where the sentence asks
+for rows carrying no `subject_id` at all, which is 10,641 and reconciles as
+13,008 - 2,367. It was also confirmed to fail against the exact stale figure
+that had been live, not merely to pass against the corrected one.
+
+The before/after tables for specific operations are left alone, because those
+are history and were true when written. Where a later change moved them -- the
+Muller reload's metabolite totals, which the duplicate fold then reduced -- the
+table now says so rather than reading as current state. Only current-state
+claims are checked, which is the distinction worth keeping: a figure describing
+what a change did should not drift, and a figure describing what the database
+holds must not.
+
+Query time is the one cost. The checks run in four queries rather than one per
+figure, because `v_ml_ready_samples` takes about four seconds a scan and
+scanning it per figure made this the slowest thing in the suite by an order of
+magnitude: 34.3s down to 8.6s, which is two scans of that view.
+
 ## 4. Validate and query
 
 ```bash
@@ -1059,7 +1106,7 @@ but there are only two single-platform diseases to compare against, and the
 all-16S one still loses 0.115 -- the study is a confounder within a platform, not
 only between them.
 
-**The practical consequence:** the modelling-ready cohort is 13,328 samples, but
+**The practical consequence:** the modelling-ready cohort is 13,008 samples, but
 the number of *independent cohorts* is what bounds an honest estimate, and for
 most diseases that is three to five. Reporting a random-split AUC from this
 database overstates what the model would do on a new cohort by about 0.16 on
@@ -1210,6 +1257,10 @@ beforehand:
 | metabolite levels | 514,359 | **522,707** |
 | metabolites with no levels | 1 | **0** |
 | samples / abundance rows / attributes | — | **unchanged** |
+
+Those are this reload's before and after, not the current totals. Folding three
+duplicated compounds later took metabolites to **1,245** and levels to
+**521,825**; see the KEGG id section above.
 
 **50 rows now sit in a shared-KEGG group**, across 24 KEGG ids — molecules that
 could not all have existed under the old constraint. `C00157` holds all three of
@@ -1489,13 +1540,13 @@ samples*, and all seven survive the flag:
 | Fatigue Syndrome, Chronic | 319 | 147 | ×2.2 |
 | Health | 1,103 | 613 | ×1.8 |
 
-389 subjects contribute 1,340 of the cohort's rows, so **971 are repeat visits by
+369 subjects contribute 1,340 of the cohort's rows, so **971 are repeat visits by
 someone already in it** -- and a random split puts the same person on both sides.
 `ml_ready_one_per_subject` keeps one row per person where the source names the
-person, taking the cohort from 13,328 to 12,357.
+person, taking the cohort from 13,008 to 12,037.
 
 **Read that flag knowing what it cannot see.** `subject_id` is NULL for all
-33,630 GMrepo samples and all 120 from MGnify -- 10,961 of the 13,328
+33,630 GMrepo samples and all 120 from MGnify -- 10,641 of the 13,008
 deduplicated rows. A longitudinal *GMrepo* study is invisible to it, and it only
 genuinely constrains the 2,367 MullerMM and PubMed rows. It is an improvement on
 `ml_ready_deduplicated`, not a solution to pseudo-replication. (The SQLite mirror
