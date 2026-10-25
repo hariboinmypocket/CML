@@ -491,71 +491,6 @@ LEFT JOIN sample_attribute_value_aliases va
        ON va.attribute = a.attribute AND va.raw_value = a.value;
 
 
--- Per-concept coverage, which is what decides whether a concept can be used.
---
--- The alias tables make a question reachable. This view says whether reaching it
--- is worth anything, and for every concept currently seeded the answer is "only
--- within a few studies":
---
---   antibiotic_exposure, the best covered, reaches 709 of the 13,328
---   ml_ready_deduplicated samples -- 5.3% -- and all five of its studies are
---   MullerMM cohorts, so NO GMrepo sample carries it. A model trained on the
---   pooled cohort cannot adjust for antibiotic use at all, however well the
---   concept now decodes.
---
---   antibiotic_start_date reaches 34 samples and 0 of the cohort.
---
--- `n_studies_with_both_values` is the column that separates sparse-but-usable
--- from useless. A covariate that is single-valued inside every study it appears
--- in cannot be adjusted for there either -- it would be collinear with the study
--- itself, the same trap as a disease arm drawn from one cohort. All five
--- antibiotic studies carry both values, so within those five it is a real
--- covariate; it is the pooling that it cannot survive.
-CREATE OR REPLACE VIEW v_attribute_concept_coverage AS
-SELECT
-    al.concept,
-    -- Every kind the concept's keys use, not one of them. `infant_feeding`
-    -- mixes a category key with two booleans, and MIN() over the ENUM reported
-    -- just 'boolean' -- a column answering a different question than its name,
-    -- which is the defect this schema keeps finding elsewhere.
-    GROUP_CONCAT(DISTINCT al.value_kind ORDER BY al.value_kind) AS value_kinds,
-    COUNT(DISTINCT al.attribute)                    AS n_source_keys,
-    COUNT(DISTINCT a.sample_id)                     AS n_samples,
-    COUNT(DISTINCT CASE WHEN v.ml_ready_deduplicated = 1
-                        THEN a.sample_id END)       AS n_samples_in_ml_cohort,
-    COUNT(DISTINCT s.study_id)                      AS n_studies,
-    -- Studies in which the DECODED value actually varies. Where this is 0 the
-    -- concept is collinear with study and cannot be adjusted for there either.
-    --
-    -- NULL, not 0, for a concept whose kinds are not decoded at all -- a
-    -- quantity, an agent name, free text. Returning 0 there read as a verdict
-    -- ("never varies") when it only meant "no value map applies", and
-    -- smoking_exposure_index is a Brinkman score that plainly does vary.
-    CASE WHEN SUM(al.value_kind IN ('boolean', 'category')) = 0 THEN NULL
-         ELSE COUNT(DISTINCT CASE WHEN vary.study_id IS NOT NULL
-                                  THEN vary.study_id END)
-    END                                             AS n_studies_with_both_values,
-    SUM(va.canonical_value IS NULL
-        AND al.value_kind = 'boolean')              AS n_boolean_undecoded
-FROM sample_attribute_aliases al
-JOIN sample_attributes a ON a.attribute = al.attribute
-JOIN samples s ON s.id = a.sample_id
-LEFT JOIN v_ml_ready_samples v ON v.sample_id = a.sample_id
-LEFT JOIN sample_attribute_value_aliases va
-       ON va.attribute = a.attribute AND va.raw_value = a.value
-LEFT JOIN (
-    SELECT al2.concept, s2.study_id
-    FROM sample_attribute_aliases al2
-    JOIN sample_attributes a2 ON a2.attribute = al2.attribute
-    JOIN samples s2 ON s2.id = a2.sample_id
-    JOIN sample_attribute_value_aliases va2
-      ON va2.attribute = a2.attribute AND va2.raw_value = a2.value
-    GROUP BY al2.concept, s2.study_id
-    HAVING COUNT(DISTINCT va2.canonical_value) > 1
-) vary ON vary.concept = al.concept AND vary.study_id = s.study_id
-GROUP BY al.concept;
-
-
 -- Per-key coverage for sample_attributes, so a mean always has its denominator.
 --
 -- 362 keys, and 13 of them mix numbers with words. Without this view
@@ -929,6 +864,71 @@ LEFT JOIN (
     GROUP BY study_id, subject_id
 ) subj ON subj.study_id = s.study_id
       AND subj.subject_id = s.subject_id;
+
+
+-- Per-concept coverage, which is what decides whether a concept can be used.
+--
+-- The alias tables make a question reachable. This view says whether reaching it
+-- is worth anything, and for every concept currently seeded the answer is "only
+-- within a few studies":
+--
+--   antibiotic_exposure, the best covered, reaches 709 of the 13,328
+--   ml_ready_deduplicated samples -- 5.3% -- and all five of its studies are
+--   MullerMM cohorts, so NO GMrepo sample carries it. A model trained on the
+--   pooled cohort cannot adjust for antibiotic use at all, however well the
+--   concept now decodes.
+--
+--   antibiotic_start_date reaches 34 samples and 0 of the cohort.
+--
+-- `n_studies_with_both_values` is the column that separates sparse-but-usable
+-- from useless. A covariate that is single-valued inside every study it appears
+-- in cannot be adjusted for there either -- it would be collinear with the study
+-- itself, the same trap as a disease arm drawn from one cohort. All five
+-- antibiotic studies carry both values, so within those five it is a real
+-- covariate; it is the pooling that it cannot survive.
+CREATE OR REPLACE VIEW v_attribute_concept_coverage AS
+SELECT
+    al.concept,
+    -- Every kind the concept's keys use, not one of them. `infant_feeding`
+    -- mixes a category key with two booleans, and MIN() over the ENUM reported
+    -- just 'boolean' -- a column answering a different question than its name,
+    -- which is the defect this schema keeps finding elsewhere.
+    GROUP_CONCAT(DISTINCT al.value_kind ORDER BY al.value_kind) AS value_kinds,
+    COUNT(DISTINCT al.attribute)                    AS n_source_keys,
+    COUNT(DISTINCT a.sample_id)                     AS n_samples,
+    COUNT(DISTINCT CASE WHEN v.ml_ready_deduplicated = 1
+                        THEN a.sample_id END)       AS n_samples_in_ml_cohort,
+    COUNT(DISTINCT s.study_id)                      AS n_studies,
+    -- Studies in which the DECODED value actually varies. Where this is 0 the
+    -- concept is collinear with study and cannot be adjusted for there either.
+    --
+    -- NULL, not 0, for a concept whose kinds are not decoded at all -- a
+    -- quantity, an agent name, free text. Returning 0 there read as a verdict
+    -- ("never varies") when it only meant "no value map applies", and
+    -- smoking_exposure_index is a Brinkman score that plainly does vary.
+    CASE WHEN SUM(al.value_kind IN ('boolean', 'category')) = 0 THEN NULL
+         ELSE COUNT(DISTINCT CASE WHEN vary.study_id IS NOT NULL
+                                  THEN vary.study_id END)
+    END                                             AS n_studies_with_both_values,
+    SUM(va.canonical_value IS NULL
+        AND al.value_kind = 'boolean')              AS n_boolean_undecoded
+FROM sample_attribute_aliases al
+JOIN sample_attributes a ON a.attribute = al.attribute
+JOIN samples s ON s.id = a.sample_id
+LEFT JOIN v_ml_ready_samples v ON v.sample_id = a.sample_id
+LEFT JOIN sample_attribute_value_aliases va
+       ON va.attribute = a.attribute AND va.raw_value = a.value
+LEFT JOIN (
+    SELECT al2.concept, s2.study_id
+    FROM sample_attribute_aliases al2
+    JOIN sample_attributes a2 ON a2.attribute = al2.attribute
+    JOIN samples s2 ON s2.id = a2.sample_id
+    JOIN sample_attribute_value_aliases va2
+      ON va2.attribute = a2.attribute AND va2.raw_value = a2.value
+    GROUP BY al2.concept, s2.study_id
+    HAVING COUNT(DISTINCT va2.canonical_value) > 1
+) vary ON vary.concept = al.concept AND vary.study_id = s.study_id
+GROUP BY al.concept;
 
 
 -- Study-level rollup: where each cohort stands on covariates vs features.

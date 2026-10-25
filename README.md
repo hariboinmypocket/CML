@@ -431,6 +431,65 @@ was repaired. Its four counters are in `_MYSQL_ONLY_CHECKS` for that reason.
 Half-adding it would leave `metabolite_id` dangling against a mirror with no
 `metabolites`.
 
+### The schema could not be built on a clean machine
+
+`gutdb-cli init` failed on any database that did not already exist.
+`v_attribute_concept_coverage` was defined around line 514 and selects from
+`v_ml_ready_samples`, which was defined around line 821, so MySQL refused it
+with `Table '<db>.v_ml_ready_samples' doesn't exist` and the build stopped
+there. It reproduces on every earlier commit, so it had been true for a long
+time.
+
+**Nothing caught it because nothing could.** Every integrity counter in this
+repository runs against a database that is already built, where all twelve views
+exist; a view defined before the view it selects from passes all 57 of them. The
+defect only exists during construction, which is the one moment nothing was
+looking. Existing databases were unaffected, which is why it survived.
+
+The fix is pure reordering -- the view and its comment block moved below
+`v_ml_ready_samples`, verified by sorting both files and diffing, so the content
+is identical and only the order changed. A fresh database now builds 16 tables
+and 12 views, matching the live schema exactly, and a fresh SQLite mirror builds
+10 tables and 8 views with every view resolving when queried.
+
+`tests/test_schema_buildable.py` keeps it closed without needing a server: the
+MySQL schema is checked by parsing it for views that select from views defined
+later, and the SQLite schema is genuinely built in a temporary file and every
+view queried, because SQLite accepts a view over a missing table at creation
+time and only fails on use. The detector is itself pinned against a known-bad
+and known-good pair, so a regex that silently stopped matching would fail rather
+than pass, and it was confirmed to flag the pre-fix schema.
+
+### What is not droppable, measured rather than assumed
+
+A sweep for tables worth dropping found none. All 16 carry rows and all have at
+least two readers in tracked code. A column-level sweep for zero-information
+columns returned four, and three of them are deliberate:
+
+- `demographic_withdrawals.reason` and `taxon_metabolite_associations.metabolite_id`
+  hold one value only because there has been one withdrawal campaign and one
+  metabolite so far. Both are keys; a second of either makes them vary.
+- `taxa.human_pathogen` is `NULL` in 5,775 rows and `1` in 63, never `0`. That
+  is not a dead column, it is the correct encoding: MiMeDB flags known pathogens
+  -- *Clostridium perfringens*, *Staphylococcus aureus*, *Bacteroides fragilis* --
+  and does not assert that anything is harmless, so absence is unknown rather
+  than negative. Dropping it would discard 63 measured facts.
+- `taxon_disease_adjudication.assoc_split_studies` is `0` in all 2,284 rows, and
+  that zero is the finding. `scripts/adjudicate_conflicts.py` writes it and
+  `tests/test_adjudication.py` asserts it reaching 1, so it is live and tested;
+  no taxon-disease pair currently has a study that disagrees with itself.
+
+### How far the succinate associations actually reach
+
+394 of 5,838 taxa carry one, which is 6.7%, and the shortfall is data rather
+than filtering: **every taxon that appears in the eleven metabolomics cohorts at
+all is covered**, none were lost to the prevalence or support floors. The other
+5,444 taxa have no metabolomics sample whatsoever. The ceiling is lower still
+than it looks, because those cohorts carry only genus-level profiles, so of
+2,148 genus-layer taxa only the 394 present in them can ever be reached this
+way, and no species row can be. Extending coverage needs new metabolomics, not
+new code; `--kegg-id` runs any of the other 1,247 metabolites over the same 394.
+
 ## 4. Validate and query
 
 ```bash
