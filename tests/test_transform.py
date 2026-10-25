@@ -30,6 +30,7 @@ from gutdb.transform import (
     strip_nomenclatural_code,
     normalize_platform,
     parse_scientific_name,
+    resolve_source_binomial,
     same_epithet,
 )
 
@@ -50,6 +51,64 @@ class TransformTests(unittest.TestCase):
         self.assertEqual(
             parse_scientific_name("Candidatus Borkfalkia ceftriaxoniphila"),
             ("Candidatus Borkfalkia", "ceftriaxoniphila"),
+        )
+
+    def test_resolve_source_binomial(self):
+        # The defect: MiMeDB's `genus` column and the genus named inside
+        # `species` disagree, and keeping both names two organisms at once.
+        self.assertEqual(
+            resolve_source_binomial("Lactobacillus", "Limosilactobacillus reuteri"),
+            ("Limosilactobacillus", "reuteri"),
+        )
+        # Which field is current cannot be told from the fields, so the binomial
+        # as written wins either way: here `genus` holds the current name and
+        # `species` the old one, and a stale-but-real synonym is what
+        # merge_duplicate_taxa.py can fold by tax ID.
+        self.assertEqual(
+            resolve_source_binomial("Phocaeicola", "Bacteroides vulgatus"),
+            ("Bacteroides", "vulgatus"),
+        )
+        self.assertEqual(
+            resolve_source_binomial("Fannyhessea", "atopobium vaginae"),
+            ("Atopobium", "vaginae"),
+        )
+        # Agreeing fields and infraspecific names keep the old behaviour: the
+        # leading token is stripped, the rest is left intact.
+        self.assertEqual(
+            resolve_source_binomial("Bacteroides", "Bacteroides ovatus"),
+            ("Bacteroides", "ovatus"),
+        )
+        self.assertEqual(
+            resolve_source_binomial("Kocuria", "Kocuria marina subsp. indica"),
+            ("Kocuria", "marina subsp. indica"),
+        )
+        self.assertEqual(
+            resolve_source_binomial("Oribacterium", "sp. oral taxon 102"),
+            ("Oribacterium", "sp. oral taxon 102"),
+        )
+        # "Candidatus" is a status prefix, so the genus is the next word too --
+        # reading it as the genus is the bug fix_candidatus_taxa.py repaired.
+        self.assertEqual(
+            resolve_source_binomial(
+                "Methanomassiliicoccus", "Candidatus Methanomassiliicoccus intestinalis"),
+            ("Candidatus Methanomassiliicoccus", "intestinalis"),
+        )
+        # A rank name above genus is not a genus, and neither is the first word
+        # of a virus name: NCBI's "Lachnospiraceae bacterium" must not become
+        # genus Lachnospiraceae.
+        self.assertEqual(
+            resolve_source_binomial("unclassified Lachnospiraceae", "Lachnospiraceae bacterium"),
+            ("Unclassified lachnospiraceae", "lachnospiraceae bacterium"),
+        )
+        self.assertEqual(
+            resolve_source_binomial("Lymphocryptovirus", "Human gammaherpesvirus 4"),
+            ("Lymphocryptovirus", "human gammaherpesvirus 4"),
+        )
+        # An empty genus column stays empty: _collapse_mimedb skips those rows,
+        # and filling it from the species field would ingest organisms the
+        # loader has never loaded.
+        self.assertEqual(
+            resolve_source_binomial("", "Clostridium leptum"), ("", "clostridium leptum")
         )
 
     def test_energy_mode(self):

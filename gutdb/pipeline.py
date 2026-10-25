@@ -58,6 +58,7 @@ from .transform import (
     parse_scientific_name,
     quantize_effect_size,
     resolve_effect_type,
+    resolve_source_binomial,
 )
 
 
@@ -356,17 +357,29 @@ def load_baseline_taxa(
 
 
 def _collapse_mimedb(path: str | Path) -> list[dict[str, Any]]:
-    groups: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    # resolve_source_binomial rather than extract_species_epithet: MiMeDB's
+    # `genus` column and the genus named inside `species` disagree for 157 of
+    # these rows, and stripping only a leading token that matches `genus` keeps
+    # both, which is how `Lactobacillus limosilactobacillus reuteri` and
+    # `Clavispora candida auris` -- names for no organism -- reached the taxa
+    # table. See scripts/fix_concatenated_genus_taxa.py, which repaired the 76
+    # rows already stored, and the resolver's own docstring for why the binomial
+    # as written wins rather than the genus column.
+    #
+    # The resolved pair is carried with the group instead of re-derived from
+    # rows[0]: rows that disagree about `genus` now collapse together, so one
+    # member no longer stands for the group's name.
+    groups: dict[tuple[str, str], tuple[str, str, list[dict[str, Any]]]] = {}
     for row in open_dict_rows(path):
-        genus = normalize_genus(first_value(row, "genus"))
-        species = extract_species_epithet(genus, first_value(row, "species", "name"))
-        if genus:
-            groups[(genus.casefold(), species.casefold())].append(dict(row))
+        genus, species = resolve_source_binomial(
+            first_value(row, "genus"), first_value(row, "species", "name"))
+        if not genus:
+            continue
+        key = (genus.casefold(), species.casefold())
+        groups.setdefault(key, (genus, species, []))[2].append(dict(row))
 
     collapsed: list[dict[str, Any]] = []
-    for rows in groups.values():
-        genus = normalize_genus(first_value(rows[0], "genus"))
-        species = extract_species_epithet(genus, first_value(rows[0], "species", "name"))
+    for genus, species, rows in groups.values():
         modes = [
             derive_energy_mode(
                 first_value(r, "oxygen_requirement"),

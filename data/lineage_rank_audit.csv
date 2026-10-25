@@ -1,0 +1,3 @@
+store,taxon_id,scientific_name,ncbi_tax_id,changes,note
+mysql,1895,Veillonella sp. 3 1 44,457416,class_name: Clostridia -> Negativicutes; order_name: Eubacteriales -> Veillonellales,"Veillonella is Negativicutes: the dump for tax 457416, the other 12 Veillonella rows, and this row's own family cell all say so; family Veillonellaceae cannot sit inside Clostridia"
+mysql,1897,Veillonella sp. 6 1 27,450749,class_name: Clostridia -> Negativicutes; order_name: Eubacteriales -> Veillonellales,"same as Veillonella sp. 3 1 44, for tax 450749"
