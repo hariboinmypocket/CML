@@ -841,6 +841,9 @@ SELECT
     -- same material on both sides of a train/test split.
     s.gmrepo_sample_id                     AS biological_sample_id,
     COALESCE(rep.n_runs, 1)                AS runs_for_this_sample,
+    -- Not the chosen representative of its biosample. `first_id` prefers a
+    -- usable run, so this means "a second run of a sample already counted",
+    -- not "not the lowest id".
     (COALESCE(rep.n_runs, 1) > 1
      AND s.id <> rep.first_id)             AS is_replicate_run,
     (s.sex IS NOT NULL
@@ -892,10 +895,27 @@ LEFT JOIN (
     GROUP BY a.sample_id
 ) ab ON ab.sample_id = s.id
 LEFT JOIN (
-    SELECT study_id, gmrepo_sample_id, COUNT(*) AS n_runs, MIN(id) AS first_id
-    FROM samples
-    WHERE gmrepo_sample_id IS NOT NULL
-    GROUP BY study_id, gmrepo_sample_id
+    -- One run per biological sample, and WHICH run is not arbitrary. This was
+    -- MIN(id), which reads as a neutral tie-break and is not one: if the
+    -- lowest-numbered run of a biosample lacked features or covariates, the
+    -- whole biosample was excluded even though a sibling run qualified. 112
+    -- biosamples were being dropped that way -- real data lost to the choice of
+    -- representative rather than to anything missing.
+    --
+    -- So prefer a run that is actually usable, and fall back to MIN(id) when
+    -- none is, which keeps the pick deterministic and keeps n_runs honest for
+    -- biosamples that have no usable run at all.
+    SELECT r.study_id, r.gmrepo_sample_id, COUNT(*) AS n_runs,
+           COALESCE(
+               MIN(CASE WHEN r.sex IS NOT NULL AND r.age_years IS NOT NULL
+                         AND EXISTS (SELECT 1 FROM sample_taxon_abundances a2
+                                     WHERE a2.sample_id = r.id)
+                        THEN r.id END),
+               MIN(r.id)
+           ) AS first_id
+    FROM samples r
+    WHERE r.gmrepo_sample_id IS NOT NULL
+    GROUP BY r.study_id, r.gmrepo_sample_id
 ) rep ON rep.study_id = s.study_id
      AND rep.gmrepo_sample_id = s.gmrepo_sample_id
 LEFT JOIN (

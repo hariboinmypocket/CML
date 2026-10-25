@@ -244,7 +244,25 @@ SELECT
     CASE WHEN MAX(COALESCE(ab.n_genera, 0), COALESCE(ab.n_species, 0)) >= 2
               THEN 1 ELSE 0 END AS has_transformable_features,
     CASE WHEN s.sex IS NOT NULL AND s.age_years IS NOT NULL
-              AND COALESCE(ab.n_taxa, 0) > 0 THEN 1 ELSE 0 END AS ml_ready
+              AND COALESCE(ab.n_taxa, 0) > 0 THEN 1 ELSE 0 END AS ml_ready,
+    -- This store had NO replicate handling at all: the view stopped at
+    -- ml_ready, so filtering on it returned every sequencing run of a
+    -- biosample as if each were an independent sample. 144 of 4,529 ml_ready
+    -- rows were a second run of a sample already counted, with nothing saying
+    -- so -- MySQL carried the guard and this store did not, which is the defect
+    -- shape this schema keeps producing.
+    COALESCE(rep.n_runs, 1) AS runs_for_this_sample,
+    CASE WHEN COALESCE(rep.n_runs, 1) > 1 AND s.id <> rep.first_id
+              THEN 1 ELSE 0 END AS is_replicate_run,
+    CASE WHEN s.sex IS NOT NULL AND s.age_years IS NOT NULL
+              AND COALESCE(ab.n_taxa, 0) > 0
+              AND (COALESCE(rep.n_runs, 1) = 1 OR s.id = rep.first_id)
+              THEN 1 ELSE 0 END AS ml_ready_deduplicated
+    -- NO ml_ready_one_per_subject HERE, deliberately. That flag needs
+    -- samples.subject_id, which this store does not carry, so the subject-level
+    -- dedup cannot be reproduced. The two stores are at parity on the
+    -- biosample level and are NOT at parity on the subject level; see
+    -- gutdb/schema.sql, where repeat visits by one person are also collapsed.
 FROM samples s
 JOIN studies st ON st.id = s.study_id
 LEFT JOIN diseases d ON d.id = s.disease_id
@@ -256,7 +274,25 @@ LEFT JOIN (
     FROM sample_taxon_abundances a
     JOIN taxa t ON t.id = a.taxon_id
     GROUP BY a.sample_id
-) ab ON ab.sample_id = s.id;
+) ab ON ab.sample_id = s.id
+LEFT JOIN (
+    -- Same usability-aware representative as MySQL: prefer a run that is
+    -- actually usable, falling back to MIN(id) so the pick stays deterministic.
+    -- Keying on MIN(id) alone drops a biosample whose lowest-numbered run
+    -- happens to lack features even when a sibling run qualifies.
+    SELECT r.study_id, r.gmrepo_sample_id, COUNT(*) AS n_runs,
+           COALESCE(
+               MIN(CASE WHEN r.sex IS NOT NULL AND r.age_years IS NOT NULL
+                         AND EXISTS (SELECT 1 FROM sample_taxon_abundances a2
+                                     WHERE a2.sample_id = r.id)
+                        THEN r.id END),
+               MIN(r.id)
+           ) AS first_id
+    FROM samples r
+    WHERE r.gmrepo_sample_id IS NOT NULL
+    GROUP BY r.study_id, r.gmrepo_sample_id
+) rep ON rep.study_id = s.study_id
+     AND rep.gmrepo_sample_id = s.gmrepo_sample_id;
 
 -- Study-level rollup: demographic missingness here is study-level, not random.
 -- Taxonomic depth is study-level too: six studies holding 516 profiled samples

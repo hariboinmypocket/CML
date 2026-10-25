@@ -559,6 +559,163 @@ row, analyse a fraction of the data and report a result that looked entirely
 normal. It now fetches all matches and refuses, listing the rows and the
 `--metabolite-id` needed to pick one.
 
+### One biosample, several runs: counted twice here and dropped there
+
+`samples.gmrepo_sample_id` is held by more than one run in 681 cases -- 1,575
+runs, 894 of them a second, third or fourth sequencing run of a biosample
+already present, always within one study. That is normal upstream: one
+biological sample can be sequenced repeatedly. It is not normal in a model,
+where those runs are not independent observations.
+
+MySQL already guarded it, and the guard chose its representative badly. `rep`
+kept `MIN(id)` per biosample, which reads as a neutral tie-break and is not
+one: when the lowest-numbered run lacked features or covariates, the whole
+biosample was excluded even though a sibling run qualified. **112 biosamples
+were being dropped that way** -- real data lost to the choice of representative
+rather than to anything being absent. The pick now prefers a run that is
+actually usable and falls back to `MIN(id)` only when none is, which recovered
+all 112: `ml_ready_deduplicated` 12,896 to 13,008 and
+`ml_ready_one_per_subject` 11,925 to 12,037, with no replicate leaking in.
+
+The cost of the correlated lookup was measured rather than guessed: the new
+`rep` subquery runs in 0.12s against the old one's 0.04s, so it adds 0.08s to a
+view that takes 4.20s, of which 3.33s is the pre-existing abundance rollup over
+3M rows. The view is slow because of that rollup, not because of this.
+
+**The mirror had no replicate handling at all.** Its `v_ml_ready_samples`
+stopped at `ml_ready`, so filtering the mirror's cohort returned every run as an
+independent sample: 144 of its 4,529 `ml_ready` rows were a second run of a
+sample already counted, with nothing saying so. MySQL carried the guard and this
+store did not -- the defect shape this schema keeps producing, found for the
+tenth-odd time. The mirror now carries `runs_for_this_sample`,
+`is_replicate_run` and `ml_ready_deduplicated` with the identical
+usability-aware representative, and its deduplicated cohort is 4,385.
+
+**The two stores are now at parity on the biosample level and deliberately not
+on the subject level.** `ml_ready_one_per_subject` additionally collapses repeat
+visits by one person, and that needs `samples.subject_id`, which the mirror does
+not carry. The mirror's schema says so at the point where the flag would
+otherwise be expected, so its absence reads as a stated limit rather than an
+oversight.
+
+Two shared counters hold it, and both were confirmed to fire rather than only to
+read zero. `biosample_dropped_despite_a_usable_run` reports 112 when evaluated
+against the old `MIN(id)` pick and 0 now;
+`ml_ready_cohort_holds_a_replicate_run` could not even have run against the old
+mirror view, which had no `is_replicate_run` column, so it would have reported
+`_FAILED_TO_RUN` -- itself the signal that the store was not being checked.
+
+One limit neither counter can reach: 2,943 samples carry no `gmrepo_sample_id`,
+2,367 of which are in the deduplicated cohort. For those, replicate detection is
+impossible, because the identifier that would group them is the thing that is
+missing.
+
+### The record had rotted, and nothing was checking it
+
+Every integrity counter in this repository checks the database. None of them
+checked this file, and it had been wrong for a while.
+
+`13,328` was stated as the modelling-ready cohort size in three places. The CKD
+withdrawal had already taken it to 12,896 and the replicate-representative fix
+then took it to 13,008, so the project's own record was stale through two
+changes and nothing noticed -- including the commit messages that correctly
+reported the new numbers while leaving the prose that contradicted them. The
+subject-collapse figures were stale the same way (`12,357`, now 12,037), and
+`10,961` was both stale and answering a slightly different question than its
+sentence asked.
+
+One figure never reconciled with its own sentence. The subject-visit sentence
+below claimed 389 subjects accounting for 1,340 rows of which 971 were repeats,
+and 1,340 minus 389 is 951, not 971. The subject count was a transposition: it
+is 369, which reconciles, since 369 + 971 = 1,340.
+
+`tests/test_documented_figures.py` closes it, and the design matters more than
+the fixes. **No expected value is written in the test.** Each figure is located
+in this file by its surrounding wording and compared against the database, so
+there is nothing to keep in step -- the README remains the single place the
+number is written down. If a rewording breaks an anchor the test fails rather
+than silently stopping, because a check that quietly stops checking is the
+failure mode this project has already had once, in the seven counters that gated
+nothing.
+
+It earned its keep immediately by failing on a correction made in the same
+sitting: `10,521` was the GMrepo share of the cohort, where the sentence asks
+for rows carrying no `subject_id` at all, which is 10,641 and reconciles as
+13,008 - 2,367. It was also confirmed to fail against the exact stale figure
+that had been live, not merely to pass against the corrected one.
+
+The before/after tables for specific operations are left alone, because those
+are history and were true when written. Where a later change moved them -- the
+Muller reload's metabolite totals, which the duplicate fold then reduced -- the
+table now says so rather than reading as current state. Only current-state
+claims are checked, which is the distinction worth keeping: a figure describing
+what a change did should not drift, and a figure describing what the database
+holds must not.
+
+Query time is the one cost. The checks run in four queries rather than one per
+figure, because `v_ml_ready_samples` takes about four seconds a scan and
+scanning it per figure made this the slowest thing in the suite by an order of
+magnitude: 34.3s down to 8.6s, which is two scans of that view.
+
+### The duplicate tax IDs are correct, and now something says so
+
+Two tax IDs are each held by two `taxa` rows: 84026 as `Clostridium
+methylpentosum` in the species layer and `[Clostridium] methylpentosum` in the
+genus layer, and 384638 the same way for `[Bacteroides] pectinophilus`. That is
+**one organism measured by two pipelines**, not duplication -- a shotgun study
+resolves it to species and a 16S study to the genus-rank feature GMrepo files
+the bracketed binomial under. Merging them would break the per-(sample, rank)
+sum to 1, which this schema has already been broken by once.
+
+The existing flags were checked rather than assumed, and they hold: the
+genus-layer rows read `finer_than_genus = 1` and `not_a_genus = 1`, and the
+species-layer rows read `ncbi_rank_differs = 0`. So the odd one is labelled odd
+and the ordinary one is not.
+
+What nothing checked was the version of this that *is* a defect: one tax ID held
+by two rows **of the same rank**. `taxon_counted_twice_in_a_sample` is not that
+guard -- it only notices when some sample happens to hold both rows, so a
+same-rank duplicate whose rows never co-occur would sit undetected while still
+fanning out every join on `ncbi_tax_id`.
+`taxa_sharing_a_tax_id_within_one_rank` is the table-level invariant, shared by
+both stores, and it ignores the cross-rank pairs above because it groups by rank.
+
+**It found two the moment it ran**, 0 in MySQL and 2 in the mirror -- and the
+mirror was not the broken store, it was the only one whose data made the
+collision visible.
+
+*Tax ID 29494 was on the wrong organism in both stores.* `taxdump` settles it:
+29494 is `Vibrio furnissii` at rank species, 903510 is `Vibrio furnissii NCTC
+11218` at rank **strain**, and 668 is `Aliivibrio fischeri`, which lists `Vibrio
+fischeri` among its synonyms -- so by this project's own identity test, same ID
+means a rename and fischeri's ID is 668. `Vibrio fischeri` was therefore
+carrying furnissii's species ID in both stores, and MySQL's `Vibrio furnissii`
+was pointing at a strain. **MySQL avoided colliding only because its two rows
+were wrong in two different ways.** The mirror had furnissii right, so its
+fischeri row collided with it and the counter fired. Both are now 668 and 29494
+in both stores.
+
+*Tax ID 1624 was a rename left half-applied.* It is `Ligilactobacillus
+salivarius`, the 2021 ICNP name for `Lactobacillus salivarius`, and
+`gut_microbiome_new_full.csv` carries both spellings as separate rows
+(`Lactobacillus,Salivarius` and `Ligilactobacillus,salivarius`). MySQL folded
+them; the mirror kept a dead old-name row, with 0 abundance rows and 0
+associations, sharing the tax ID with the live row that holds 721 and 15. It is
+removed, guarded on being evidence-free rather than on being old.
+
+`scripts/fix_misassigned_tax_ids.py` does both, matching rows on `(genus_key,
+species_key)` and never on `id`, because the mirror maintains its own `taxa.id`
+space and an id-keyed repair silently hits a different organism there.
+
+**The first version of that script was itself incomplete**, in the way this
+schema keeps producing. It changed tax IDs without touching `ncbi_rank`, which
+describes whatever ID the row used to carry, so MySQL's `Vibrio furnissii` sat
+at tax ID 29494 still labelled `strain` while the mirror correctly read
+`species` -- a fresh one-store disagreement created by the fix for a one-store
+disagreement. It now reconciles `ncbi_rank` against `taxdump` whether or not the
+ID needed changing, so re-running converges rather than depending on the order
+things were done in, and a second run reports nothing to do.
+
 ## 4. Validate and query
 
 ```bash
@@ -1008,7 +1165,7 @@ but there are only two single-platform diseases to compare against, and the
 all-16S one still loses 0.115 -- the study is a confounder within a platform, not
 only between them.
 
-**The practical consequence:** the modelling-ready cohort is 13,328 samples, but
+**The practical consequence:** the modelling-ready cohort is 13,008 samples, but
 the number of *independent cohorts* is what bounds an honest estimate, and for
 most diseases that is three to five. Reporting a random-split AUC from this
 database overstates what the model would do on a new cohort by about 0.16 on
@@ -1159,6 +1316,10 @@ beforehand:
 | metabolite levels | 514,359 | **522,707** |
 | metabolites with no levels | 1 | **0** |
 | samples / abundance rows / attributes | — | **unchanged** |
+
+Those are this reload's before and after, not the current totals. Folding three
+duplicated compounds later took metabolites to **1,245** and levels to
+**521,825**; see the KEGG id section above.
 
 **50 rows now sit in a shared-KEGG group**, across 24 KEGG ids — molecules that
 could not all have existed under the old constraint. `C00157` holds all three of
@@ -1438,13 +1599,13 @@ samples*, and all seven survive the flag:
 | Fatigue Syndrome, Chronic | 319 | 147 | ×2.2 |
 | Health | 1,103 | 613 | ×1.8 |
 
-389 subjects contribute 1,340 of the cohort's rows, so **971 are repeat visits by
+369 subjects contribute 1,340 of the cohort's rows, so **971 are repeat visits by
 someone already in it** -- and a random split puts the same person on both sides.
 `ml_ready_one_per_subject` keeps one row per person where the source names the
-person, taking the cohort from 13,328 to 12,357.
+person, taking the cohort from 13,008 to 12,037.
 
 **Read that flag knowing what it cannot see.** `subject_id` is NULL for all
-33,630 GMrepo samples and all 120 from MGnify -- 10,961 of the 13,328
+33,630 GMrepo samples and all 120 from MGnify -- 10,641 of the 13,008
 deduplicated rows. A longitudinal *GMrepo* study is invisible to it, and it only
 genuinely constrains the 2,367 MullerMM and PubMed rows. It is an improvement on
 `ml_ready_deduplicated`, not a solution to pseudo-replication. (The SQLite mirror

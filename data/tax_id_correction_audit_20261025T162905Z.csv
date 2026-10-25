@@ -1,0 +1,5 @@
+store,action,taxon_id,scientific_name,tax_id_before,tax_id_after,reason
+mysql,retag,1907,Vibrio fischeri,29494,668,"29494 is Vibrio furnissii; 668 is Aliivibrio fischeri, which lists Vibrio fischeri as a synonym"
+mysql,retag,1911,Vibrio furnissii,903510,29494,903510 is the strain Vibrio furnissii NCTC 11218; the species is 29494
+sqlite,retag,1904,Vibrio fischeri,29494,668,"29494 is Vibrio furnissii; 668 is Aliivibrio fischeri, which lists Vibrio fischeri as a synonym"
+sqlite,drop,326,Lactobacillus salivarius,1624,,"dead pre-2021 name sharing tax ID 1624 with Ligilactobacillus salivarius, which carries the evidence"
