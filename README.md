@@ -652,10 +652,16 @@ claims are checked, which is the distinction worth keeping: a figure describing
 what a change did should not drift, and a figure describing what the database
 holds must not.
 
-Query time is the one cost. The checks run in four queries rather than one per
-figure, because `v_ml_ready_samples` takes about four seconds a scan and
-scanning it per figure made this the slowest thing in the suite by an order of
-magnitude: 34.3s down to 8.6s, which is two scans of that view.
+Query time is the one cost, and this file is now the whole of it. The cohort
+checks run in four queries rather than one per figure, because
+`v_ml_ready_samples` takes about four seconds a scan and scanning it per figure
+made this the slowest thing in the suite by an order of magnitude: 34.3s down to
+8.6s. Adding the mirror coverage table took it back to about 17s, which is the
+suite total -- the remaining cost is `COUNT(DISTINCT sample_id)` over three
+million abundance rows in each store, and folding both layers into one scan per
+store barely moved it, so that is inherent rather than fixable by rearranging
+the queries. The real target is the abundance rollup inside
+`v_ml_ready_samples`, which is a schema change and not attempted here.
 
 ### The duplicate tax IDs are correct, and now something says so
 
@@ -715,6 +721,55 @@ at tax ID 29494 still labelled `strain` while the mirror correctly read
 disagreement. It now reconciles `ncbi_rank` against `taxdump` whether or not the
 ID needed changing, so re-running converges rather than depending on the order
 things were done in, and a second run reports nothing to do.
+
+### How much of the database the mirror actually holds
+
+The mirror is described here as dropping samples that carry no abundance at
+all, which is true and is not the whole difference. Measured against MySQL:
+
+| | MySQL | mirror | mirror holds |
+|---|---|---|---|
+| samples | 36,693 | 23,494 | 64% |
+| abundance rows | 3,074,882 | 2,050,969 | 67% |
+| taxa | 5,838 | 5,208 | 89% |
+| samples with a genus layer | 32,327 | 18,644 | 58% |
+| samples with a species layer | 12,566 | 12,049 | 96% |
+
+The documented rule accounts for 4,366 of the gap -- those are the profile-less
+rows, and all 4,366 carry metadata, which is why MySQL keeps them: they are real
+sample records whose abundance was never exported, and they are the anchors if
+it ever is. **8,833 samples are missing beyond that rule**, which the rule as
+written does not predict.
+
+Three sources are absent entirely: **MullerMM (2,464 samples), PubMed (479) and
+MGnify (120)**, every one of which carries abundance in MySQL. The remaining
+5,770 are GMrepo samples the CSVs the mirror builds from do not cover. The
+mirror is built from `data/` exports rather than from MySQL, so its contents are
+whatever those exports hold, and three loaders write to MySQL without writing a
+CSV the build reads.
+
+**The genus layer is the real gap**, at 58%. The build script's own comment
+records this defect as fixed -- it once loaded only the species file, leaving
+`v_abundance_genus` empty -- and the fix was incomplete rather than wrong: 4,883
+of the 23,494 samples the mirror does hold have their species layer and not
+their genus layer. For `ERR11441888` MySQL has 33 species rows and 24 genus
+rows; the mirror has the 33 and none of the 24.
+
+**What is sound, checked rather than assumed.** The mirror is a strict subset:
+0 run accessions exist there that MySQL lacks. And every profile it holds is
+internally consistent -- all 30,693 of its (sample, rank) groups sum to 1.0
+within tolerance, which is why the missing genus layers do not show up as a
+broken invariant. A missing layer is missing wholesale, and what remains still
+sums correctly, so no counter could have caught it from inside the mirror alone.
+
+**This is a coverage limit, not a corruption, and it is not fixed here.**
+Completing it needs CSV exports that do not exist yet for three sources plus a
+fuller genus abundance export -- a pipeline change, not a repair. What is fixed
+is that the size of the gap is now written down and checked:
+`tests/test_documented_figures.py` verifies these figures against both stores,
+so the mirror quietly shrinking or quietly growing fails a test instead of
+going unnoticed. Until the exports exist, treat any mirror-only result as drawn
+from two thirds of the samples and well under two thirds of the genus layer.
 
 ## 4. Validate and query
 

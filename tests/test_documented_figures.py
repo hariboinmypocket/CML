@@ -48,6 +48,59 @@ FIGURES = [
     ("metabolite levels", r"levels to\s+\*\*([\d,]+)\*\*", "metabolite_levels"),
 ]
 
+# The mirror coverage table. Both columns are checked, because the point of the
+# table is the RATIO between them, and a figure that drifted on either side
+# would misstate it.
+MIRROR_TABLE = [
+    ("samples", r"\| samples \| ([\d,]+) \| [\d,]+ \|", "mysql_samples"),
+    ("samples, mirror", r"\| samples \| [\d,]+ \| ([\d,]+) \|", "mirror_samples"),
+    ("abundance rows", r"\| abundance rows \| ([\d,]+) \| [\d,]+ \|", "mysql_abundance"),
+    ("abundance rows, mirror", r"\| abundance rows \| [\d,]+ \| ([\d,]+) \|", "mirror_abundance"),
+    ("taxa", r"\| taxa \| ([\d,]+) \| [\d,]+ \|", "mysql_taxa"),
+    ("taxa, mirror", r"\| taxa \| [\d,]+ \| ([\d,]+) \|", "mirror_taxa"),
+    ("genus layer", r"genus layer \| ([\d,]+) \| [\d,]+ \|", "mysql_genus"),
+    ("genus layer, mirror", r"genus layer \| [\d,]+ \| ([\d,]+) \|", "mirror_genus"),
+    ("species layer", r"species layer \| ([\d,]+) \| [\d,]+ \|", "mysql_species"),
+    ("species layer, mirror", r"species layer \| [\d,]+ \| ([\d,]+) \|", "mirror_species"),
+]
+
+# Both layers in one scan. Counting them separately meant two passes over 3M
+# abundance rows per store, which doubled the cost of this file for nothing.
+LAYERS = """
+    SELECT COUNT(DISTINCT CASE WHEN t.taxonomic_rank = 'genus'
+                               THEN a.sample_id END),
+           COUNT(DISTINCT CASE WHEN t.taxonomic_rank = 'species'
+                               THEN a.sample_id END)
+    FROM sample_taxon_abundances a
+    JOIN taxa t ON t.id = a.taxon_id"""
+
+
+def coverage(mysql, mirror) -> dict[str, int]:
+    cursor = mysql.cursor()
+    try:
+        def one(sql):
+            cursor.execute(sql)
+            return int(cursor.fetchone()[0])
+        measured = dict(
+            mysql_samples=one("SELECT COUNT(*) FROM samples"),
+            mysql_abundance=one("SELECT COUNT(*) FROM sample_taxon_abundances"),
+            mysql_taxa=one("SELECT COUNT(*) FROM taxa"))
+        cursor.execute(LAYERS)
+        genus, species = cursor.fetchone()
+        measured.update(mysql_genus=int(genus), mysql_species=int(species))
+    finally:
+        cursor.close()
+
+    def o(sql):
+        return int(mirror.execute(sql).fetchone()[0])
+    measured.update(
+        mirror_samples=o("SELECT COUNT(*) FROM samples"),
+        mirror_abundance=o("SELECT COUNT(*) FROM sample_taxon_abundances"),
+        mirror_taxa=o("SELECT COUNT(*) FROM taxa"))
+    genus, species = mirror.execute(LAYERS).fetchone()
+    measured.update(mirror_genus=int(genus), mirror_species=int(species))
+    return measured
+
 
 def metrics(connection) -> dict[str, int]:
     cursor = connection.cursor()
@@ -80,6 +133,17 @@ def metrics(connection) -> dict[str, int]:
         metabolite_levels=metabolite_levels).items()}
 
 
+def mirror_connection():
+    import sqlite3
+    path = ROOT / "gut_microbiome.sqlite"
+    if not path.exists():
+        return None
+    try:
+        return sqlite3.connect(path, timeout=60)
+    except Exception:
+        return None
+
+
 def connection():
     try:
         from gutdb.config import Settings
@@ -96,15 +160,46 @@ class DocumentedFigureTests(unittest.TestCase):
         cls.connection = connection()
         if cls.connection is None:
             raise unittest.SkipTest("no database reachable")
+        cls.mirror = mirror_connection()
 
     @classmethod
     def tearDownClass(cls):
         if getattr(cls, "connection", None) is not None:
             cls.connection.close()
+        if getattr(cls, "mirror", None) is not None:
+            cls.mirror.close()
+
+    def test_the_mirror_coverage_table_matches_both_stores(self):
+        """The table's point is the ratio, so both columns are checked."""
+        if self.mirror is None:
+            self.skipTest("no mirror file")
+        measured = coverage(self.connection, self.mirror)
+        for label, pattern, key in MIRROR_TABLE:
+            with self.subTest(figure=label):
+                found = re.search(pattern, self.text)
+                self.assertIsNotNone(found, f"no anchor for {label!r}")
+                documented = int(found.group(1).replace(",", ""))
+                self.assertEqual(documented, measured[key],
+                                 f"README says {documented:,} for {label}, "
+                                 f"stores say {measured[key]:,}")
+
+    def test_the_mirror_is_a_strict_subset_of_mysql(self):
+        """It may hold less. It must never hold a run MySQL does not."""
+        if self.mirror is None:
+            self.skipTest("no mirror file")
+        cursor = self.connection.cursor()
+        try:
+            cursor.execute("SELECT run_accession FROM samples")
+            live = {r[0] for r in cursor.fetchall()}
+        finally:
+            cursor.close()
+        held = {r[0] for r in self.mirror.execute("SELECT run_accession FROM samples")}
+        self.assertEqual(sorted(held - live)[:10], [],
+                         "mirror holds run accessions absent from MySQL")
 
     def test_every_anchor_still_matches_exactly_once(self):
         """A reworded sentence must fail here, not quietly stop being checked."""
-        for label, pattern, _ in FIGURES:
+        for label, pattern, _ in FIGURES + MIRROR_TABLE:
             with self.subTest(figure=label):
                 self.assertEqual(len(re.findall(pattern, self.text)), 1,
                                  f"anchor for {label!r} no longer matches exactly once")
