@@ -498,6 +498,67 @@ than it looks, because those cohorts carry only genus-level profiles, so of
 way, and no species row can be. Extending coverage needs new metabolomics, not
 new code; `--kegg-id` runs any of the other 1,247 metabolites over the same 394.
 
+### A KEGG id does not identify one molecule
+
+`metabolites` was populated by two imports -- one naming compounds with a KEGG
+prefix (`C00042_Succinate`), a later one with plain names (`glycolic acid`) --
+and where the second re-added a compound already present, its KEGG id ended up
+held by several rows. 24 were. Because `sample_metabolite_levels` is keyed
+`(sample_id, metabolite_id)`, those compounds had their measurements **split
+across ids**: 25,775 level rows sat under a duplicated id, and in all 24 groups
+some sample carried a value under more than one of them. A query filtering on
+`kegg_id` therefore either double-counted one compound or pooled several, with
+nothing saying so. Succinate was not affected, so the association work stands.
+
+**Most but not all of them are one compound twice**, and the difference is not
+visible in the data. `p-Hydroxybenzoate` and `4-hydroxybenzoate` are the same
+molecule under two HMDB ids -- HMDB carries redundant entries, so `hmdb_id` does
+not separate the cases -- while C00157 is held by three genuinely distinct
+phosphatidylcholine species (16:0/18:2, 16:0/18:1, 18:0/18:1) and C04230 by two
+GPC species. Those must not be merged. This is the same shape as the C00422
+triacylglycerol finding: a KEGG id can name a lipid *class*.
+
+So only the indefensible case was folded: rows sharing a kegg_id **and** an
+identical name. Three groups qualified -- `C00024_Acetyl CoA`,
+`C00860_Histidinol`, `C01015_Hydroxyproline`, each entered twice under the same
+name -- and in each the duplicate's 294 level rows were a strict subset of the
+kept row's with byte-identical values, so removing them loses nothing provably
+rather than probably. 3 metabolite rows and 882 level rows went, audited per row
+to `data/metabolite_fold_audit_*.csv`; 1,248 metabolites became 1,245 and
+522,707 levels became 521,825, with zero orphans.
+
+**Value identity is not proof of sameness, and that was nearly the trap.**
+Applying the redundancy guard by hand to C04230's two distinct GPC species
+reports all 131 level rows byte-identical, and C02614's Citramalate against
+Methylsuccinate reports all 648 identical. A fold keyed on matching values alone
+would have merged distinct molecules without one refusal. What makes
+`scripts/fold_duplicate_metabolites.py` safe is the *name* match in its
+candidate filter; the value guard is a second line, not the first.
+
+The remaining 21 are left visible rather than guessed at, through
+`v_metabolite_kegg_ambiguity`, which reports per kegg_id how many rows and
+distinct names and HMDB ids it holds and how many level rows hang off it.
+`metabolite_kegg_id_and_name_duplicated` keeps the folded case from returning;
+it was confirmed to report 1 against a planted duplicate, not merely 0 against
+clean data.
+
+A second counter was written here and then removed, which is worth recording
+because the reason generalises. `metabolite_level_without_a_metabolite` counted
+level rows whose compound no longer exists -- and it **cannot fire**. The
+foreign key is `ON DELETE CASCADE` and nothing in this repository ever sets
+`FOREIGN_KEY_CHECKS = 0`, so deleting a metabolite takes its levels with it
+unconditionally; the planted test deleted one and the counter still read 0. It
+asserted what InnoDB already guarantees. Keeping it would have added a
+fifty-ninth counter that gates nothing, which this schema has been through
+once already.
+
+This also fixed a bug introduced with the association work itself.
+`derive_taxon_metabolite_associations.py` resolved `--kegg-id` with
+`cursor.fetchone()`, so for any of these 21 ids it would silently take the first
+row, analyse a fraction of the data and report a result that looked entirely
+normal. It now fetches all matches and refuses, listing the rows and the
+`--metabolite-id` needed to pick one.
+
 ## 4. Validate and query
 
 ```bash

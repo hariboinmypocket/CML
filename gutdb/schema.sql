@@ -629,6 +629,48 @@ CREATE TABLE IF NOT EXISTS sample_metabolite_levels (
 -- FRANZOSA_IBD_2019, all 220 samples -- the IBD cohort, which is where
 -- succinate is most discussed. Kept and flagged rather than dropped, because
 -- which confidence floor is acceptable is the caller's decision.
+-- A kegg_id here does NOT identify one molecule, and a query filtering on it
+-- will quietly say otherwise. 21 KEGG ids are each held by several metabolite
+-- rows, for two different reasons that look identical in the data:
+--
+--   A CLASS ID. C00157 is held by three phosphatidylcholine species
+--   (16:0/18:2, 16:0/18:1, 18:0/18:1) and C04230 by two GPC species. These are
+--   different molecules and must not be merged; filtering on the kegg_id pools
+--   them, and joining on it fans out.
+--
+--   ONE COMPOUND ENTERED TWICE. Two imports populated `metabolites` -- one
+--   naming compounds with a KEGG prefix (`C00042_Succinate`), a later one with
+--   plain names (`glycolic acid`) -- so `p-Hydroxybenzoate` and
+--   `4-hydroxybenzoate` are one compound under two HMDB ids. hmdb_id does not
+--   separate the two cases, because HMDB itself carries redundant entries.
+--
+-- Telling them apart needs chemistry per pair, so it is not guessed at. Three
+-- groups that shared a kegg_id AND an identical name were folded by
+-- scripts/fold_duplicate_metabolites.py, removing 3 rows and 882 level rows
+-- that duplicated a kept row exactly; the rest are left here to be seen.
+--
+-- VALUE IDENTITY IS NOT PROOF OF SAMENESS, which the fold script's docstring
+-- records with the measurement: C04230's two distinct GPC species carry 131
+-- byte-identical level rows, so a fold keyed on matching values alone would
+-- merge them without a single refusal.
+CREATE OR REPLACE VIEW v_metabolite_kegg_ambiguity AS
+SELECT
+    m.kegg_id,
+    COUNT(*)                                   AS n_rows,
+    COUNT(DISTINCT m.name)                     AS n_distinct_names,
+    COUNT(m.hmdb_id)                           AS n_with_hmdb_id,
+    COUNT(DISTINCT m.hmdb_id)                  AS n_distinct_hmdb_ids,
+    GROUP_CONCAT(m.id ORDER BY m.id)           AS metabolite_ids,
+    GROUP_CONCAT(m.name ORDER BY m.id SEPARATOR ' | ') AS names,
+    (SELECT COUNT(*) FROM sample_metabolite_levels l
+      WHERE l.metabolite_id IN (SELECT m2.id FROM metabolites m2
+                                WHERE m2.kegg_id = m.kegg_id)) AS level_rows_affected
+FROM metabolites m
+WHERE m.kegg_id IS NOT NULL
+GROUP BY m.kegg_id
+HAVING COUNT(*) > 1;
+
+
 CREATE TABLE IF NOT EXISTS taxon_metabolite_associations (
     taxon_id BIGINT UNSIGNED NOT NULL,
     metabolite_id BIGINT UNSIGNED NOT NULL,

@@ -124,6 +124,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--env-file", default=".env")
     parser.add_argument("--kegg-id", default="C00042", help="default C00042, succinate")
+    parser.add_argument("--metabolite-id", type=int,
+                        help="select a metabolite row directly, for a kegg_id held by several")
     parser.add_argument("--rank", default="genus",
                         help="the abundance layer; the metabolomics cohorts carry only genus")
     parser.add_argument("--apply", action="store_true")
@@ -132,12 +134,32 @@ def main() -> None:
     connection = connect(Settings.from_env(args.env_file))
     try:
         cursor = connection.cursor()
-        cursor.execute("SELECT id, name FROM metabolites WHERE kegg_id = %s", (args.kegg_id,))
-        found = cursor.fetchone()
-        cursor.close()
-        if not found:
-            raise SystemExit(f"No metabolite with kegg_id {args.kegg_id}")
-        metabolite_id, name = found
+        if args.metabolite_id:
+            cursor.execute("SELECT id, name FROM metabolites WHERE id = %s",
+                           (args.metabolite_id,))
+            found = cursor.fetchall()
+            cursor.close()
+            if not found:
+                raise SystemExit(f"No metabolite with id {args.metabolite_id}")
+            metabolite_id, name = found[0]
+        else:
+            # fetchall, not fetchone: a kegg_id can be held by several rows -- 21
+            # still are, because KEGG ids for lipid classes name a class rather
+            # than a molecule. Taking the first row would analyse a fraction of
+            # the data and report a result that looks entirely normal.
+            cursor.execute("SELECT id, name FROM metabolites WHERE kegg_id = %s ORDER BY id",
+                           (args.kegg_id,))
+            found = cursor.fetchall()
+            cursor.close()
+            if not found:
+                raise SystemExit(f"No metabolite with kegg_id {args.kegg_id}")
+            if len(found) > 1:
+                listing = "\n".join(f"  --metabolite-id {i}  {n}" for i, n in found)
+                raise SystemExit(
+                    f"kegg_id {args.kegg_id} is held by {len(found)} metabolite rows, "
+                    f"which may be distinct molecules sharing a class id.\n"
+                    f"Pick one explicitly:\n{listing}")
+            metabolite_id, name = found[0]
         print(f"{name} (metabolite_id {metabolite_id})")
 
         levels, confidence = metabolite_by_study(connection, metabolite_id)
