@@ -1,0 +1,2 @@
+store,action,taxon_id,scientific_name,tax_id_before,tax_id_after,reason
+mysql,rerank,1911,Vibrio furnissii,strain,species,taxdump rank of 29494

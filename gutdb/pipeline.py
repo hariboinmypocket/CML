@@ -2673,6 +2673,24 @@ def _validate_checks() -> dict[str, str]:
         # sample are the same measurement counted twice. Grouping across ranks
         # read 0 by luck and would have fired the moment a genus-layer feature
         # was given the tax ID its species-layer twin already had.
+        # One tax ID held by two taxa rows OF THE SAME RANK. Across ranks this
+        # is legitimate and expected: tax IDs 84026 and 384638 each sit in both
+        # abundance layers, as `Clostridium methylpentosum` in the species layer
+        # and `[Clostridium] methylpentosum` in the genus layer, which is one
+        # organism measured by two pipelines and must not be merged -- doing so
+        # breaks the per-(sample, rank) sum to 1. Within a rank it is
+        # duplication, and nothing was checking for it:
+        # taxon_counted_twice_in_a_sample only notices when some sample happens
+        # to hold both rows, so a duplicate whose rows never co-occur would sit
+        # here undetected while still fanning out any join on ncbi_tax_id.
+        "taxa_sharing_a_tax_id_within_one_rank": """
+            SELECT COUNT(*) FROM (
+                SELECT ncbi_tax_id, taxonomic_rank FROM taxa
+                WHERE ncbi_tax_id IS NOT NULL
+                GROUP BY ncbi_tax_id, taxonomic_rank
+                HAVING COUNT(*) > 1
+            ) duplicated
+        """,
         "taxon_counted_twice_in_a_sample": """
             SELECT COUNT(*) FROM (
                 SELECT a.sample_id, t.taxonomic_rank, t.ncbi_tax_id

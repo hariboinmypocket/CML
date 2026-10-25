@@ -657,6 +657,65 @@ figure, because `v_ml_ready_samples` takes about four seconds a scan and
 scanning it per figure made this the slowest thing in the suite by an order of
 magnitude: 34.3s down to 8.6s, which is two scans of that view.
 
+### The duplicate tax IDs are correct, and now something says so
+
+Two tax IDs are each held by two `taxa` rows: 84026 as `Clostridium
+methylpentosum` in the species layer and `[Clostridium] methylpentosum` in the
+genus layer, and 384638 the same way for `[Bacteroides] pectinophilus`. That is
+**one organism measured by two pipelines**, not duplication -- a shotgun study
+resolves it to species and a 16S study to the genus-rank feature GMrepo files
+the bracketed binomial under. Merging them would break the per-(sample, rank)
+sum to 1, which this schema has already been broken by once.
+
+The existing flags were checked rather than assumed, and they hold: the
+genus-layer rows read `finer_than_genus = 1` and `not_a_genus = 1`, and the
+species-layer rows read `ncbi_rank_differs = 0`. So the odd one is labelled odd
+and the ordinary one is not.
+
+What nothing checked was the version of this that *is* a defect: one tax ID held
+by two rows **of the same rank**. `taxon_counted_twice_in_a_sample` is not that
+guard -- it only notices when some sample happens to hold both rows, so a
+same-rank duplicate whose rows never co-occur would sit undetected while still
+fanning out every join on `ncbi_tax_id`.
+`taxa_sharing_a_tax_id_within_one_rank` is the table-level invariant, shared by
+both stores, and it ignores the cross-rank pairs above because it groups by rank.
+
+**It found two the moment it ran**, 0 in MySQL and 2 in the mirror -- and the
+mirror was not the broken store, it was the only one whose data made the
+collision visible.
+
+*Tax ID 29494 was on the wrong organism in both stores.* `taxdump` settles it:
+29494 is `Vibrio furnissii` at rank species, 903510 is `Vibrio furnissii NCTC
+11218` at rank **strain**, and 668 is `Aliivibrio fischeri`, which lists `Vibrio
+fischeri` among its synonyms -- so by this project's own identity test, same ID
+means a rename and fischeri's ID is 668. `Vibrio fischeri` was therefore
+carrying furnissii's species ID in both stores, and MySQL's `Vibrio furnissii`
+was pointing at a strain. **MySQL avoided colliding only because its two rows
+were wrong in two different ways.** The mirror had furnissii right, so its
+fischeri row collided with it and the counter fired. Both are now 668 and 29494
+in both stores.
+
+*Tax ID 1624 was a rename left half-applied.* It is `Ligilactobacillus
+salivarius`, the 2021 ICNP name for `Lactobacillus salivarius`, and
+`gut_microbiome_new_full.csv` carries both spellings as separate rows
+(`Lactobacillus,Salivarius` and `Ligilactobacillus,salivarius`). MySQL folded
+them; the mirror kept a dead old-name row, with 0 abundance rows and 0
+associations, sharing the tax ID with the live row that holds 721 and 15. It is
+removed, guarded on being evidence-free rather than on being old.
+
+`scripts/fix_misassigned_tax_ids.py` does both, matching rows on `(genus_key,
+species_key)` and never on `id`, because the mirror maintains its own `taxa.id`
+space and an id-keyed repair silently hits a different organism there.
+
+**The first version of that script was itself incomplete**, in the way this
+schema keeps producing. It changed tax IDs without touching `ncbi_rank`, which
+describes whatever ID the row used to carry, so MySQL's `Vibrio furnissii` sat
+at tax ID 29494 still labelled `strain` while the mirror correctly read
+`species` -- a fresh one-store disagreement created by the fix for a one-store
+disagreement. It now reconciles `ncbi_rank` against `taxdump` whether or not the
+ID needed changing, so re-running converges rather than depending on the order
+things were done in, and a second run reports nothing to do.
+
 ## 4. Validate and query
 
 ```bash
