@@ -771,6 +771,40 @@ so the mirror quietly shrinking or quietly growing fails a test instead of
 going unnoticed. Until the exports exist, treat any mirror-only result as drawn
 from two thirds of the samples and well under two thirds of the genus layer.
 
+### The abundance rollup is not fixable by indexing
+
+`v_ml_ready_samples` costs about 2.6s a scan and almost all of it is one
+subquery -- the rollup that counts taxa per sample, joining 3.48M
+`sample_taxon_abundances` rows to `taxa` for nothing but `taxonomic_rank`. It is
+named twice above as the real target. It was tried, and the obvious fix does not
+exist.
+
+`EXPLAIN` shows the abundance side already scanning its primary key with `Using
+index`, and the `taxa` side as `eq_ref` on `PRIMARY` with no `Using index` --
+reading a full row 3.48M times. That reads like a missing covering index, so
+`(id, taxonomic_rank)` was added. **The optimizer ignored it**, still reporting
+`key=PRIMARY`, and it was right to: in InnoDB the primary key *is* the clustered
+index and the clustered index *is* the row, so a primary-key lookup cannot be
+made more covering. A secondary index beginning with the primary key is never a
+cheaper path to the same row. You cannot index your way out of this.
+
+**The measurement is also a caution about measurement.** The first run reported
+a 14% improvement on the view and the threshold kept the index -- while the
+`EXPLAIN` in the same output said the index was not being used. Repeating it
+seven times each way gave a median difference of **-0.02s, about -1%**, against
+a spread of 0.46s *within* a single configuration. The 14% was noise, and the
+only reason it did not become a documented gain is that the plan contradicted
+it. A timing that disagrees with the query plan should be believed last.
+
+So the cost is inherent: 3.48M row iterations and a `GROUP BY` producing ~30,000
+groups. The two things that would actually help are both rejected for the same
+reason -- denormalising `taxonomic_rank` onto `sample_taxon_abundances`, or
+materialising the rollup into a summary table, each introduces a copy that can
+drift from its source, which is the defect this schema has produced nine or ten
+times and the one its counters exist to catch. Paying 2.6s on a
+cohort-selection view is the cheaper trade. No index was kept and no schema
+change was made.
+
 ## 4. Validate and query
 
 ```bash
