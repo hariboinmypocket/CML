@@ -69,26 +69,16 @@ NON_ANSWERS = ("", "variable", "uncharacterized", "unknown", "n/a")
 # disagrees with its genus" is usually "fix it", but not always, and a check
 # that cannot say "looked at, still correct" forces the wrong repair onto the
 # interesting rows.
-APPROVED_DISSENTERS: dict[tuple[str, str, str], str] = {
-    # Clostridium is a gram-positive genus and these two are gram-positive
-    # organisms, but both are documented as staining gram-negative, which is
-    # what a stain result records. MiMeDB's own vocabulary has the category --
-    # it maps "structurally positive but stains negative" onto 'variable' -- so
-    # the distinction is one this schema already recognises.
-    #
-    # Not rewritten to 'variable', though that is arguably the better value:
-    # these rows carry 4,143 and 4,336 abundance rows and 43 and 31
-    # associations, the stored 'negative' came from GMrepo rather than from the
-    # inconsistent MiMeDB import, and re-curating a trait on that much evidence
-    # is a decision for a curator, not a side effect of adding a check. Flagged
-    # here so the question is recorded rather than silently settled either way.
-    ("gram_stain", "clostridium", "symbiosum"):
-        "gram-positive organism that stains gram-negative; 'variable' may be "
-        "the better value -- curation decision, 4,143 abundances",
-    ("gram_stain", "clostridium", "innocuum"):
-        "gram-positive organism that stains gram-negative; 'variable' may be "
-        "the better value -- curation decision, 4,336 abundances",
-}
+# Empty on purpose, and the mechanism stays. Its first two entries were
+# Clostridium symbiosum and Clostridium innocuum, gram-positive organisms that
+# stain gram-negative; they were excused here while the question of what to
+# store was open. It was settled by curation instead: both now read 'variable',
+# the value MiMeDB's own vocabulary uses for "structurally positive but stains
+# negative". That is the better outcome -- a row holding an accurate value needs
+# no exception, because 'variable' answers the question and so neither votes nor
+# is judged. An exception is for a row whose accurate value genuinely disagrees
+# with its genus, which neither of those turned out to be.
+APPROVED_DISSENTERS: dict[tuple[str, str, str], str] = {}
 
 
 def approved_for(trait: str) -> tuple[tuple[str, str], ...]:
