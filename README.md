@@ -2152,7 +2152,7 @@ family of error as the LDA sign ambiguity this schema already guards against.
 Both cleared. 8,048 genuine quantities kept.
 
 **The third class is the interesting one, and it is not a deletion problem.**
-13 keys mix numbers with words, and there the number is *correct* for whichever
+12 keys mix numbers with words, and there the number is *correct* for whichever
 rows have one -- what is missing is the denominator:
 
 | key | numeric | rows | `AVG(value_numeric)` |
@@ -2174,6 +2174,22 @@ Deleting those zeros would not help -- they are right. This is the same defect a
 absence in the abundance matrix, where the number was never wrong and the
 denominator was missing, so the fix is the same: **expose it**.
 `v_sample_attribute_keys` carries `n_rows`, `n_numeric`, `numeric_fraction`,
+This said 13 until it was checked against `v_sample_attribute_keys`, which
+reports 12, as does counting the keys directly. **The same wrong count sat in
+`gutdb/schema.sql`**, in the comment above that view -- the figure and the view
+were written in one commit and nothing since has plausibly changed how
+`value_numeric` is parsed, so the prose was most likely never right rather than
+having gone stale.
+
+That is the useful part: a figure repeated in two files goes stale in two
+places, and checking only this one would have left the schema comment wrong.
+`tests/test_documented_figures.py` now reads both, with the attribute counts
+taken from the project's own `mixes_numbers_and_words` flag rather than a
+re-derivation of it, so the test cannot agree with a definition the view does
+not use. The rest of that section checked out unchanged: 362 keys, 331 unmapped,
+27 numeric values out of 150 under `Stage`, 4 of 49 under
+`PhysicalExercise_LastWeek.h.`.
+
 `mixes_numbers_and_words` and `looks_like_an_interval` for all 362 keys, so a
 mean can be read against what it was taken over.
 
