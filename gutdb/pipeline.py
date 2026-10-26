@@ -40,6 +40,7 @@ from .ncbi import (
     parse_host_sex,
 )
 from . import taxdump
+from .traits import genus_consensus_checks
 from .transform import (
     association_direction,
     clean_str,
@@ -2435,7 +2436,7 @@ def validate_database(connection: MySQLConnection) -> list[tuple[str, int]]:
 
 def _validate_checks() -> dict[str, str]:
     """The integrity checks, shared by both stores so neither drifts."""
-    return {
+    checks = {
         "taxa": "SELECT COUNT(*) FROM taxa",
         # A quarter of the taxa table is MiMeDB's trait reference: organisms
         # loaded for their gram stain, oxygen requirement and pathogenicity so
@@ -2868,6 +2869,13 @@ def _validate_checks() -> dict[str, str]:
               AND (depleted_fraction < 0 OR depleted_fraction > 1)
         """,
     }
+    # One check per trait a genus constrains, generated from the same list the
+    # merge backfills consult, so a trait cannot be guarded in one place and
+    # unguarded in the other. gram_stain_against_phylum above is the narrower
+    # ancestor of these and stays: a phylum catches a row whose whole genus was
+    # imported wrong, which a genus vote cannot see.
+    checks.update(genus_consensus_checks())
+    return checks
 
 
 # Checks that cannot run against the SQLite mirror, because it has no
