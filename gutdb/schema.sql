@@ -493,7 +493,7 @@ LEFT JOIN sample_attribute_value_aliases va
 
 -- Per-key coverage for sample_attributes, so a mean always has its denominator.
 --
--- 362 keys, and 13 of them mix numbers with words. Without this view
+-- 362 keys, and 12 of them mix numbers with words. Without this view
 -- `SELECT AVG(value_numeric) ... WHERE attribute = 'Stage'` returns 0 and looks
 -- like an answer: it is the mean of the 27 rows that happen to hold a numeric
 -- stage out of 150 whose values run I to IVB. numeric_fraction is what tells you
