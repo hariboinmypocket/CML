@@ -41,6 +41,28 @@ from gutdb.traits import (APPROVED_DISSENTERS, GENUS_CONSTRAINED_TRAITS,
 DRY_RUN = "--apply" not in sys.argv
 SQLITE_PATH = "gut_microbiome.sqlite"
 
+# (trait, genus_key, species_key) -> (value, why). A curated value, set because
+# neither the stored value nor the genus consensus is right.
+#
+# FOLD below moves a row onto what its genus agrees on. These two are the other
+# case: the genus says 'positive', the row said 'negative', and the true answer
+# is neither -- they are gram-positive organisms that stain gram-negative, which
+# is what MiMeDB's vocabulary already calls 'variable' when it maps
+# "structurally positive but stains negative" onto it. Recording that is
+# strictly more accurate than either pole, and it also means the rows stop being
+# dissenters at all rather than being excused by name: 'variable' answers the
+# question, so it neither votes nor is judged.
+CURATE: dict[tuple[str, str, str], tuple[str, str]] = {
+    ("gram_stain", "clostridium", "symbiosum"): (
+        "variable",
+        "gram-positive organism that stains gram-negative; 'negative' alone "
+        "loses the structure and 'positive' loses the stain result"),
+    ("gram_stain", "clostridium", "innocuum"): (
+        "variable",
+        "gram-positive organism that stains gram-negative; 'negative' alone "
+        "loses the structure and 'positive' loses the stain result"),
+}
+
 # (trait, genus_key, species_key) -> why this one is a source error.
 FOLD: dict[tuple[str, str, str], str] = {
     # MiMeDB is internally inconsistent here rather than describing an unusual
@@ -52,6 +74,39 @@ FOLD: dict[tuple[str, str, str], str] = {
     ("gram_stain", "aspergillus", "nidulans"):
         "MiMeDB inconsistency: 28 of 29 Aspergillus records say positive",
 }
+
+
+def curate(store: str, cursor) -> int:
+    """Apply the curated values in CURATE, where a row already holds something else.
+
+    Only rows that already carry a value are touched. An empty cell means the
+    store never had an opinion -- the mirror holds no gram stain for either
+    Clostridium row, because it carries none of the MiMeDB traits -- and filling
+    it here would be inventing data rather than correcting it.
+    """
+    ph = "%s" if store == "mysql" else "?"
+    changed = 0
+    for (trait, genus_key, species_key), (value, why) in CURATE.items():
+        cursor.execute(
+            f"SELECT id, scientific_name, {trait} FROM taxa "
+            f"WHERE genus_key = {ph} AND species_key = {ph}",
+            (genus_key, species_key))
+        for taxon_id, name, stored in cursor.fetchall():
+            current = "" if stored is None else str(stored).strip().lower()
+            if current == value:
+                print(f"  {trait}: {name} already {value!r}")
+                continue
+            if not current:
+                print(f"  {trait}: {name} holds no value here; left empty")
+                continue
+            print(f"  {trait}: {name} (id {taxon_id}) {current!r} -> {value!r}")
+            print(f"      {why}")
+            if not DRY_RUN:
+                cursor.execute(
+                    f"UPDATE taxa SET {trait} = {ph} WHERE id = {ph}",
+                    (value, taxon_id))
+            changed += 1
+    return changed
 
 
 def resolve(store: str, cursor) -> tuple[int, int]:
@@ -95,14 +150,16 @@ def resolve(store: str, cursor) -> tuple[int, int]:
 
 
 def main() -> int:
-    totals = [0, 0]
+    totals = [0, 0, 0]
 
     print("mysql")
     conn = connect(Settings.from_env(".env"))
     cursor = conn.cursor()
+    curated = curate("mysql", cursor)
     folded, reported = resolve("mysql", cursor)
     totals[0] += folded
     totals[1] += reported
+    totals[2] += curated
     if not DRY_RUN:
         conn.commit()
     cursor.close()
@@ -112,9 +169,11 @@ def main() -> int:
     if Path(SQLITE_PATH).exists():
         lite = sqlite3.connect(SQLITE_PATH)
         cursor = lite.cursor()
+        curated = curate("sqlite", cursor)
         folded, reported = resolve("sqlite", cursor)
         totals[0] += folded
         totals[1] += reported
+        totals[2] += curated
         if not DRY_RUN:
             lite.commit()
         cursor.close()
@@ -122,7 +181,8 @@ def main() -> int:
     else:
         print(f"  (no SQLite mirror at {SQLITE_PATH}; skipped)")
 
-    print(f"\n  corrected      : {totals[0]}")
+    print(f"\n  curated        : {totals[2]}")
+    print(f"  corrected      : {totals[0]}")
     print(f"  reported only  : {totals[1]}")
     if DRY_RUN:
         print("\n*** DRY RUN - nothing written. Re-run with --apply ***")
