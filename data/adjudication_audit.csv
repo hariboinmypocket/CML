@@ -875,7 +875,7 @@ taxon_id,scientific_name,taxonomic_rank,disease_id,disease_name,n_studies,assoc_
 7890,Veillonella,genus,46796,Diarrhea,3,vs_health,3,0,0,enriched,1.0,3,2,0,0,2,1.0,enriched,enriched,association_and_abundance_agree,3,0,enriched,1.000
 7890,Veillonella,genus,310607,Sjogren's Syndrome,3,vs_health,3,0,0,enriched,1.0,3,0,0,0,0,,,enriched,association_consensus,3,0,enriched,1.000
 7899,Candidatus Gastranaerophilales,genus,12713,Crohn Disease,3,vs_health,2,1,0,enriched,0.667,3,2,1,14,3,0.667,enriched,enriched,association_and_abundance_agree,2,1,enriched,0.667
-7901,Clostridium,genus,12711,"Colitis, Ulcerative",3,mixed,1,2,0,depleted,0.667,3,8,6,1,14,0.571,enriched,depleted,association_consensus_abundance_disagrees,1,2,depleted,0.667
+7901,Clostridium,genus,12711,"Colitis, Ulcerative",3,mixed,1,2,0,depleted,0.667,3,7,7,1,14,0.5,,depleted,association_consensus,1,2,depleted,0.667
 7951,Blautia stercoris,species,12713,Crohn Disease,3,vs_health,0,3,0,depleted,1.0,3,2,5,1,7,0.714,depleted,depleted,association_and_abundance_agree,0,3,depleted,1.000
 7953,Clostridiaceae bacterium marseille-q4143,species,20491,Colorectal Neoplasms,3,vs_health,0,3,0,depleted,1.0,3,2,7,1,9,0.778,depleted,depleted,association_and_abundance_agree,0,3,depleted,1.000
 7953,Clostridiaceae bacterium marseille-q4143,species,48916,"Fatigue Syndrome, Chronic",3,vs_health,0,3,0,depleted,1.0,3,0,3,1,3,1.0,depleted,depleted,association_and_abundance_agree,0,3,depleted,1.000
@@ -1634,8 +1634,8 @@ taxon_id,scientific_name,taxonomic_rank,disease_id,disease_name,n_studies,assoc_
 7729,Leyella stercorea,species,62116,"Kidney Failure, Chronic",2,vs_health,0,2,0,depleted,1.0,2,0,2,0,2,1.0,depleted,depleted,association_and_abundance_agree,0,2,depleted,1.000
 7730,Ruminococcus sp. af41-9,species,62116,"Kidney Failure, Chronic",2,vs_health,0,2,0,depleted,1.0,2,0,2,0,2,1.0,depleted,depleted,association_and_abundance_agree,0,2,depleted,1.000
 7734,Allofournierella,genus,6511,Breast Neoplasms,2,vs_health,2,0,0,enriched,1.0,2,2,0,0,2,1.0,enriched,enriched,association_and_abundance_agree,2,0,enriched,1.000
-7734,Allofournierella,genus,12711,"Colitis, Ulcerative",2,mixed,1,0,0,enriched,1.0,1,8,2,5,10,0.8,enriched,enriched,association_and_abundance_agree,1,0,enriched,1.000
-7734,Allofournierella,genus,12713,Crohn Disease,2,mixed,1,0,0,enriched,1.0,1,4,8,5,12,0.667,depleted,enriched,association_consensus_abundance_disagrees,1,0,enriched,1.000
+7734,Allofournierella,genus,12711,"Colitis, Ulcerative",2,mixed,1,0,0,enriched,1.0,1,9,3,3,12,0.75,enriched,enriched,association_and_abundance_agree,1,0,enriched,1.000
+7734,Allofournierella,genus,12713,Crohn Disease,2,mixed,1,0,0,enriched,1.0,1,5,9,3,14,0.643,depleted,enriched,association_consensus_abundance_disagrees,1,0,enriched,1.000
 7734,Allofournierella,genus,56231,HIV Infections,2,vs_health,0,2,0,depleted,1.0,2,3,3,1,6,0.5,,depleted,association_consensus,0,2,depleted,1.000
 7734,Allofournierella,genus,69716,Neuroblastoma,2,vs_health,2,0,0,enriched,1.0,2,2,0,0,2,1.0,enriched,enriched,association_and_abundance_agree,2,0,enriched,1.000
 7735,Clostridium fessum,species,20491,Colorectal Neoplasms,2,vs_health,0,2,0,depleted,1.0,2,4,6,0,10,0.6,depleted,depleted,association_and_abundance_agree,0,2,depleted,1.000
@@ -2194,7 +2194,6 @@ taxon_id,scientific_name,taxonomic_rank,disease_id,disease_name,n_studies,assoc_
 10009,Faecalibacillus faecis,species,62116,"Kidney Failure, Chronic",2,mixed,1,1,0,,0.5,2,1,1,0,2,0.5,,,unresolved_abundance_also_tied,1,1,tied,0.500
 10042,Lachnospiraceae bacterium om04-12bh,species,12713,Crohn Disease,2,vs_health,0,2,0,depleted,1.0,2,1,6,1,7,0.857,depleted,depleted,association_and_abundance_agree,0,2,depleted,1.000
 10042,Lachnospiraceae bacterium om04-12bh,species,20491,Colorectal Neoplasms,2,vs_health,0,2,0,depleted,1.0,2,5,4,1,9,0.556,enriched,depleted,association_consensus_abundance_disagrees,0,2,depleted,1.000
-10056,Massilimicrobiota,genus,62116,"Kidney Failure, Chronic",2,vs_health,2,0,0,enriched,1.0,2,2,0,2,2,1.0,enriched,enriched,association_and_abundance_agree,2,0,enriched,1.000
 10064,Merdimonas,genus,62116,"Kidney Failure, Chronic",2,vs_health,2,0,0,enriched,1.0,2,3,0,1,3,1.0,enriched,enriched,association_and_abundance_agree,2,0,enriched,1.000
 10065,Merdimonas faecis,species,62116,"Kidney Failure, Chronic",2,vs_health,2,0,0,enriched,1.0,2,2,0,0,2,1.0,enriched,enriched,association_and_abundance_agree,2,0,enriched,1.000
 10074,Oscillospiraceae bacterium,species,73716,Parkinson Disease,2,vs_health,2,0,0,enriched,1.0,2,4,2,0,6,0.667,enriched,enriched,association_and_abundance_agree,2,0,enriched,1.000
@@ -2220,8 +2219,8 @@ taxon_id,scientific_name,taxonomic_rank,disease_id,disease_name,n_studies,assoc_
 10377,Allofournierella massiliensis,species,12711,"Colitis, Ulcerative",2,mixed,1,0,0,enriched,1.0,1,4,2,1,6,0.667,enriched,enriched,association_and_abundance_agree,1,0,enriched,1.000
 10377,Allofournierella massiliensis,species,12713,Crohn Disease,2,mixed,1,0,0,enriched,1.0,1,2,5,1,7,0.714,depleted,enriched,association_consensus_abundance_disagrees,1,0,enriched,1.000
 10377,Allofournierella massiliensis,species,69716,Neuroblastoma,2,vs_health,2,0,0,enriched,1.0,2,2,0,0,2,1.0,enriched,enriched,association_and_abundance_agree,2,0,enriched,1.000
-10450,Candidatus Borkfalkia,genus,12711,"Colitis, Ulcerative",2,mixed,0,2,0,depleted,1.0,2,2,4,9,6,0.667,depleted,depleted,association_and_abundance_agree,0,2,depleted,1.000
-10450,Candidatus Borkfalkia,genus,20491,Colorectal Neoplasms,2,vs_health,0,2,0,depleted,1.0,2,4,4,15,8,0.5,,depleted,association_consensus,0,2,depleted,1.000
+10450,Candidatus Borkfalkia,genus,12711,"Colitis, Ulcerative",2,mixed,0,2,0,depleted,1.0,2,3,5,7,8,0.625,depleted,depleted,association_and_abundance_agree,0,2,depleted,1.000
+10450,Candidatus Borkfalkia,genus,20491,Colorectal Neoplasms,2,vs_health,0,2,0,depleted,1.0,2,5,5,13,10,0.5,,depleted,association_consensus,0,2,depleted,1.000
 10450,Candidatus Borkfalkia,genus,48916,"Fatigue Syndrome, Chronic",2,vs_health,0,2,0,depleted,1.0,2,1,2,1,3,0.667,depleted,depleted,association_and_abundance_agree,0,2,depleted,1.000
 10452,Candidatus Borkfalkia ceftriaxoniphila,species,12711,"Colitis, Ulcerative",2,mixed,0,2,0,depleted,1.0,2,2,4,1,6,0.667,depleted,depleted,association_and_abundance_agree,0,2,depleted,1.000
 10452,Candidatus Borkfalkia ceftriaxoniphila,species,20491,Colorectal Neoplasms,2,vs_health,0,2,0,depleted,1.0,2,4,4,2,8,0.5,,depleted,association_consensus,0,2,depleted,1.000
@@ -2284,3 +2283,4 @@ taxon_id,scientific_name,taxonomic_rank,disease_id,disease_name,n_studies,assoc_
 1422389,Lachnospiraceae bacterium 2_1_46faa,species,12713,Crohn Disease,2,disease_vs_disease,0,0,0,,,0,2,2,4,4,0.5,,,unresolved_abundance_also_tied,0,0,,
 2672460,Xylanibacter,genus,11446,Clostridium Infections,2,vs_health,0,2,0,depleted,1.0,2,0,0,1,0,,,depleted,association_consensus,0,2,depleted,1.000
 2673654,Prevotella copri,species,310742,Vitiligo,2,vs_health,1,1,0,,0.5,2,0,0,0,0,,,,unresolved_no_abundance_evidence,1,1,tied,0.500
+2673977,Massiliimicrobium,genus,62116,"Kidney Failure, Chronic",2,vs_health,2,0,0,enriched,1.0,2,3,0,1,3,1.0,enriched,enriched,association_and_abundance_agree,2,0,enriched,1.000

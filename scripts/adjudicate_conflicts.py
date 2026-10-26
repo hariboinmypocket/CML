@@ -76,6 +76,12 @@ from gutdb.db import connect
 
 DRY_RUN = "--apply" not in sys.argv
 AUDIT = Path("data/adjudication_audit.csv")
+# A dry run must not overwrite the applied run's audit. It used to: the audit
+# was written unconditionally, so merely LOOKING for drift replaced the record
+# of what was last written to the table, and the two could then no longer be
+# compared. A dry run writes beside it instead, which is also what makes the
+# comparison possible.
+DRY_RUN_AUDIT = AUDIT.with_name(AUDIT.stem + "_dry_run.csv")
 
 # A vote this lopsided is treated as settled; anything flatter is a conflict.
 CLEAR_MAJORITY = 0.6
@@ -368,12 +374,16 @@ def main() -> int:
     print(f"\nresolved: {resolved}   unresolved: {len(rows) - resolved}")
 
     if rows:
-        AUDIT.parent.mkdir(parents=True, exist_ok=True)
-        with AUDIT.open("w", newline="", encoding="utf-8") as fh:
+        destination = DRY_RUN_AUDIT if DRY_RUN else AUDIT
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        with destination.open("w", newline="", encoding="utf-8") as fh:
             writer = csv.DictWriter(fh, fieldnames=list(rows[0].keys()))
             writer.writeheader()
             writer.writerows(rows)
-        print(f"audit written to {AUDIT} ({len(rows)} rows)")
+        print(f"audit written to {destination} ({len(rows)} rows)")
+        if DRY_RUN and AUDIT.exists():
+            print(f"the applied run's audit at {AUDIT} is untouched; "
+                  "diff the two to see what has drifted")
 
     work.close()
     cur.close()

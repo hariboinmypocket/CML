@@ -805,6 +805,48 @@ times and the one its counters exist to catch. Paying 2.6s on a
 cohort-selection view is the cheaper trade. No index was kept and no schema
 change was made.
 
+### A verdict left the adjudication table and nothing noticed
+
+`taxon_disease_adjudication` is derived, and the way to test derived data is to
+re-derive it. Running `scripts/adjudicate_conflicts.py` in its default dry mode
+reproduced 2,285 pairs against the 2,284 the table held.
+
+**One pair was missing: `Massiliimicrobium` in chronic kidney failure, verdict
+`enriched`, basis `association_and_abundance_agree`.** Another session's merge
+renamed that genus from `Massilimicrobiota`, the foreign key cascade removed the
+verdict keyed on the old `taxon_id`, and nothing produced one for the new id. So
+a verdict where the curated associations and this database's own abundance
+measurements *agree* -- the strongest basis the adjudicator reports -- quietly
+left the table. Nothing in 74 counters looked at it, because every one of them
+asks whether the rows present are consistent, not whether a row that should
+exist does.
+
+Re-applying restored it, and the drift was otherwise benign, which is worth
+stating as plainly as the defect: of the 2,284 shared pairs, **5 differed and 0
+verdicts changed**. The five are abundance vote counts shifting because the
+sample cohort moved under them -- the replicate-representative fix added 112
+biosamples and the CKD withdrawal removed demographics -- and in no case did
+that flip a direction. The view cross-check the script performs agreed on all
+2,285 pairs throughout.
+
+`replicated_pair_with_no_adjudication` closes it, with
+`adjudication_without_replicated_evidence` for the opposite case, since the
+cascade covers a deleted taxon or disease but not associations disappearing
+under a verdict that stays. Both are MySQL-only because the mirror has no
+adjudication table. Confirmed by deleting the restored row again and watching
+the first report 1.
+
+**The dry run had a defect of its own, and it is the one this project keeps
+producing in a new place.** The audit was written unconditionally, so merely
+*looking* for drift overwrote `data/adjudication_audit.csv` -- the record of
+what was last applied -- and once overwritten the two could no longer be
+compared. That is how the drift above was nearly invisible: the check destroys
+its own baseline. A dry run now writes to `data/adjudication_audit_dry_run.csv`,
+gitignored, and says the applied audit is untouched. A concurrent session hit
+the same thing in a different script this week, which suggests the shape rather
+than the instance is the lesson: a tool that reports on state should not write
+to the file that records the state.
+
 ## 4. Validate and query
 
 ```bash

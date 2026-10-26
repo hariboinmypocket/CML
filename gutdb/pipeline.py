@@ -2499,6 +2499,38 @@ def _validate_checks() -> dict[str, str]:
                                 THEN 1 ELSE 0 END) = 0
             ) dropped
         """,
+        # A replicated (taxon, disease) pair with no adjudicated verdict.
+        # taxon_disease_adjudication is DERIVED, and nothing re-derived it when
+        # its inputs moved: a taxa merge renamed Massilimicrobiota to
+        # Massiliimicrobium, the foreign key cascade took the verdict keyed on
+        # the old taxon_id, and the new id got none -- so an 'enriched' verdict
+        # resting on association_and_abundance_agree simply left the table. The
+        # audit still listed it, which is how the two disagreed by one row.
+        "replicated_pair_with_no_adjudication": """
+            SELECT COUNT(*) FROM (
+                SELECT a.taxon_id, a.disease_id
+                FROM taxon_disease_associations a
+                JOIN phenotype_comparisons c ON c.id = a.comparison_id
+                GROUP BY a.taxon_id, a.disease_id
+                HAVING COUNT(DISTINCT c.study_id) > 1
+            ) replicated
+            WHERE NOT EXISTS (
+                SELECT 1 FROM taxon_disease_adjudication j
+                WHERE j.taxon_id = replicated.taxon_id
+                  AND j.disease_id = replicated.disease_id)
+        """,
+        # The other direction: a verdict whose evidence is no longer replicated.
+        # The cascade covers a deleted taxon or disease, not associations going
+        # away underneath a verdict that stays.
+        "adjudication_without_replicated_evidence": """
+            SELECT COUNT(*) FROM taxon_disease_adjudication j
+            WHERE NOT EXISTS (
+                SELECT 1 FROM taxon_disease_associations a
+                JOIN phenotype_comparisons c ON c.id = a.comparison_id
+                WHERE a.taxon_id = j.taxon_id AND a.disease_id = j.disease_id
+                GROUP BY a.taxon_id, a.disease_id
+                HAVING COUNT(DISTINCT c.study_id) > 1)
+        """,
         # Two metabolite rows sharing a kegg_id AND an identical name. A shared
         # kegg_id alone is legitimate -- it can name a lipid class -- but the
         # same name under the same id is one compound stored twice, which
@@ -2887,6 +2919,9 @@ _MYSQL_ONLY_CHECKS = frozenset({
     # The mirror carries no metabolite tables at all, so these have nothing to
     # drift from. That is why they are listed here and not a parity gap; see
     # taxon_metabolite_associations in gutdb/schema.sql.
+    # taxon_disease_adjudication does not exist in the mirror at all.
+    "replicated_pair_with_no_adjudication",
+    "adjudication_without_replicated_evidence",
     "metabolite_kegg_id_and_name_duplicated",
     "taxon_metabolite_rho_out_of_range",
     "taxon_metabolite_q_below_p",

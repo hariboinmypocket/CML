@@ -88,3 +88,7 @@ data/archive/
 # Spreadsheet working copies opened from a CSV. gmrepo_cmd_followup.numbers is
 # 4.1 MB, three times the CSV it came from.
 *.numbers
+
+# Transient: a dry run of scripts/adjudicate_conflicts.py writes here so it
+# cannot overwrite the applied run's audit beside it.
+data/adjudication_audit_dry_run.csv
