@@ -35,10 +35,16 @@ CREATE TABLE IF NOT EXISTS taxa (
     -- different questions: taxonomic_rank is the abundance LAYER the row was
     -- loaded into, and ncbi_rank is what the organism actually is.
     --
-    -- 408 rows disagree. 125 sit in the genus layer while NCBI calls them
+    -- 405 rows disagree. 123 sit in the genus layer while NCBI calls them
     -- coarser -- 90 families (Muribaculaceae 2005473, Tannerellaceae 2005525),
-    -- 19 orders, 7 classes, 5 phyla -- and 283 sit in the species layer while
-    -- NCBI calls them finer, almost all strains.
+    -- 19 orders, 7 classes, 5 phyla, 1 infraclass, 1 infraorder -- and 282 sit
+    -- in the species layer while NCBI calls them finer, almost all strains.
+    --
+    -- These three move whenever a tax ID is repointed, which several sessions
+    -- are doing, so they are anchored in tests/test_documented_figures.py: a
+    -- repointing that changes them fails a test instead of leaving this comment
+    -- quietly wrong. The previous figures said 408/125/283 and the breakdown
+    -- added to 121, naming four fewer rows than the total it claimed.
     --
     -- THE GENUS-LAYER ONES MUST NOT BE "FIXED" BY MOVING THEM. GMrepo's own
     -- export labels them taxonomic_rank = genus, and they are the unclassified
@@ -123,7 +129,7 @@ CREATE TABLE IF NOT EXISTS studies (
     metabolomics_method VARCHAR(120) NULL,
     -- 'centred' or 'non_negative', derived from the study's own level range by
     -- derive_metabolite_scale(). Two of the 13 cohorts arrive already log- or
-    -- z-transformed and hold 70,067 negative levels; the other 11 are
+    -- z-transformed and hold 71,703 negative levels; the other 11 are
     -- non-negative, with maxima spanning nine orders of magnitude (461 to
     -- 3.07e10).
     --
@@ -134,8 +140,9 @@ CREATE TABLE IF NOT EXISTS studies (
     -- of -0.04, so its 281 zeros mean "at this cohort's average" -- the opposite
     -- of absence. The same stored number meant opposite things with nothing
     -- recording which, and "normalize within study" does not cover it: a uniform
-    -- log1p over this table returns NaN on 70,067 rows and takes the log of a
-    -- log on 136,134 more.
+    -- log1p over this table returns NaN on the 71,703 negative rows and takes
+    -- the log of a log on the other 67,639 in those two cohorts, which hold
+    -- 139,342 levels between them.
     --
     -- 'non_negative' claims no unit, only non-negativity. The source records
     -- units nowhere; metabolomics_method above carries the protocol DOI.
@@ -258,7 +265,10 @@ CREATE TABLE IF NOT EXISTS samples (
     country VARCHAR(100) NULL,
     -- GMrepo's own QC verdict for the run, '1' passed and '0' failed, copied
     -- from its QCStatus field. The vocabulary belongs to that source: a sample
-    -- GMrepo never assessed has NULL here, which is why 3,342 rows are empty.
+    -- GMrepo never assessed has NULL here, and so is every sample from a
+    -- source that has no such verdict at all, which is why 5,806 rows are
+    -- empty: 2,743 GMrepo runs GMrepo did not assess, plus all 3,063 MullerMM,
+    -- PubMed and MGnify samples, which were loaded after this said 3,342.
     -- Do not use it to record provenance or curation tier -- studies.data_quality
     -- is for that, and a loader that wrote 'curated' here put a word from a
     -- different axis into a column others filter as a boolean.
