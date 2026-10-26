@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import sqlite3
 import unittest
+from unittest import mock
 
 from gutdb.traits import (APPROVED_DISSENTERS, CONSENSUS_THRESHOLD,
                           GENUS_CONSTRAINED_TRAITS, MIN_GENUS_VOTES,
@@ -128,18 +129,40 @@ class DissenterSqlTests(unittest.TestCase):
         con.close()
 
     def test_an_approved_dissenter_is_excused(self):
-        """The exception list is what lets a real dissenter stay without noise."""
-        trait, genus_key, species_key = next(
-            k for k in APPROVED_DISSENTERS if k[0] == "gram_stain")
-        rows = [(genus_key, f"sp{i}", "positive") for i in range(19)]
-        rows.append((genus_key, species_key, "negative"))
-        con = _db(rows, trait)
-        self.assertEqual(self._count(con, trait), 0)
-        # The same row without its approval would be counted, which is what
-        # makes the zero above mean "excused" rather than "query broken".
-        con.execute("UPDATE taxa SET species_key = 'notapproved' "
-                    "WHERE species_key = ?", (species_key,))
-        self.assertEqual(self._count(con, trait), 1)
+        """The exception list is what lets a real dissenter stay without noise.
+
+        Injected rather than taken from APPROVED_DISSENTERS, which is empty
+        today: the mechanism has to keep working for whenever the next genuine
+        exception turns up, and a test that skipped itself when the list emptied
+        would stop guarding it exactly then.
+        """
+        trait, genus_key, species_key = "gram_stain", "testgenus", "excused"
+        with mock.patch.dict(
+                APPROVED_DISSENTERS,
+                {(trait, genus_key, species_key): "injected for this test"},
+                clear=True):
+            rows = [(genus_key, f"sp{i}", "positive") for i in range(19)]
+            rows.append((genus_key, species_key, "negative"))
+            con = _db(rows, trait)
+            self.assertEqual(self._count(con, trait), 0)
+            # The same row without its approval is counted, which is what makes
+            # the zero above mean "excused" rather than "query broken".
+            con.execute("UPDATE taxa SET species_key = 'notapproved' "
+                        "WHERE species_key = ?", (species_key,))
+            self.assertEqual(self._count(con, trait), 1)
+            con.close()
+
+    def test_a_curated_variable_value_needs_no_exception(self):
+        """Why APPROVED_DISSENTERS is empty: the Clostridium rows read 'variable'.
+
+        An accurate value that happens to be an unknown-ish one takes itself out
+        of the vote, so it needs no entry in the exception list.
+        """
+        rows = [("clostridium", f"sp{i}", "positive") for i in range(19)]
+        rows += [("clostridium", "symbiosum", "variable"),
+                 ("clostridium", "innocuum", "variable")]
+        con = _db(rows)
+        self.assertEqual(self._count(con), 0)
         con.close()
 
     def test_unknown_answers_neither_vote_nor_count(self):
