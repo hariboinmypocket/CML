@@ -69,6 +69,21 @@ SCHEMA_FIGURES = [
     ("schema: keys mixing", r"-- [\d,]+ keys, and ([\d,]+) of them mix", "mixing"),
     ("schema: numeric Stage rows", r"mean of the ([\d,]+) rows that happen to hold", "stage_numeric"),
     ("schema: Stage total", r"stage out of ([\d,]+) whose values run", "stage_total"),
+    ("schema: rank disagreements", r"-- ([\d,]+) rows disagree\.", "rank_disagree"),
+    ("schema: genus layer coarser", r"rows disagree\. ([\d,]+) sit in the genus layer",
+     "genus_coarser"),
+    ("schema: families in the genus layer", r"coarser -- ([\d,]+) families", "genus_family"),
+    ("schema: species layer finer", r"and ([\d,]+) sit\n\s*-- in the species layer",
+     "species_finer"),
+    ("schema: qc_status empty", r"which is why ([\d,]+) rows are\n\s*-- empty", "qc_null"),
+    ("schema: negative metabolite levels",
+     r"z-transformed and hold ([\d,]+) negative levels", "levels_negative"),
+    ("schema: negative rows for log1p",
+     r"NaN on the ([\d,]+) negative rows", "levels_negative"),
+    ("schema: non-negative rows in centred cohorts",
+     r"log of a log on the other ([\d,]+) in those", "centred_nonnegative"),
+    ("schema: levels in the centred cohorts",
+     r"([\d,]+) levels between them", "centred_total"),
 ]
 
 
@@ -90,11 +105,41 @@ def attribute_metrics(connection) -> dict[str, int]:
             stage_total=one("SELECT COUNT(*) FROM sample_attributes WHERE attribute = 'Stage'"),
             stage_numeric=one("SELECT COUNT(*) FROM sample_attributes "
                               "WHERE attribute = 'Stage' AND value_numeric IS NOT NULL"),
+            rank_disagree=one("""SELECT COUNT(*) FROM taxa
+                WHERE ncbi_rank IS NOT NULL
+                  AND ((taxonomic_rank = 'genus'
+                        AND ncbi_rank NOT IN ('genus', 'subgenus', 'species',
+                                              'subspecies', 'strain', 'no rank', 'clade'))
+                    OR (taxonomic_rank = 'species'
+                        AND ncbi_rank NOT IN ('species', 'no rank', 'clade')))"""),
             exercise_numeric=one("SELECT COUNT(*) FROM sample_attributes "
                                  "WHERE attribute = 'PhysicalExercise_LastWeek.h.' "
                                  "AND value_numeric IS NOT NULL"),
             exercise_total=one("SELECT COUNT(*) FROM sample_attributes "
-                               "WHERE attribute = 'PhysicalExercise_LastWeek.h.'"))
+                               "WHERE attribute = 'PhysicalExercise_LastWeek.h.'"),
+            # The rank vocabularies are the ones v_abundance_genus and
+            # v_abundance_species use, so these cannot pass by agreeing with a
+            # definition the views do not apply.
+            genus_coarser=one("""SELECT COUNT(*) FROM taxa
+                WHERE taxonomic_rank = 'genus' AND ncbi_rank IS NOT NULL
+                  AND ncbi_rank NOT IN ('genus', 'subgenus', 'species',
+                                        'subspecies', 'strain', 'no rank', 'clade')"""),
+            genus_family=one("SELECT COUNT(*) FROM taxa WHERE taxonomic_rank = 'genus' "
+                             "AND ncbi_rank = 'family'"),
+            species_finer=one("""SELECT COUNT(*) FROM taxa
+                WHERE taxonomic_rank = 'species' AND ncbi_rank IS NOT NULL
+                  AND ncbi_rank NOT IN ('species', 'no rank', 'clade')"""),
+            qc_null=one("SELECT COUNT(*) FROM samples WHERE qc_status IS NULL"),
+            levels_negative=one("SELECT COUNT(*) FROM sample_metabolite_levels "
+                                "WHERE level < 0"),
+            centred_total=one("""SELECT COUNT(*) FROM sample_metabolite_levels m
+                JOIN samples s ON s.id = m.sample_id
+                JOIN studies st ON st.id = s.study_id
+                WHERE st.metabolite_scale = 'centred'"""),
+            centred_nonnegative=one("""SELECT COUNT(*) FROM sample_metabolite_levels m
+                JOIN samples s ON s.id = m.sample_id
+                JOIN studies st ON st.id = s.study_id
+                WHERE st.metabolite_scale = 'centred' AND m.level >= 0"""))
     finally:
         cursor.close()
 

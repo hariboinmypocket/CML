@@ -2183,6 +2183,24 @@ having gone stale.
 
 That is the useful part: a figure repeated in two files goes stale in two
 places, and checking only this one would have left the schema comment wrong.
+
+Sweeping the rest of `gutdb/schema.sql` found six more. Three were the rank
+disagreement counts -- 408/125/283 against an actual 405/123/282 -- and the
+breakdown beneath them named 90 families, 19 orders, 7 classes and 5 phyla,
+which is 121 for a total it called 125, omitting the one infraclass and one
+infraorder row that exist. One of those three is attributable to work in this
+session: repointing `Vibrio furnissii` off a strain node took the species-layer
+count down by one. These move whenever a tax ID is repointed and several
+sessions are doing that, so they are now anchored rather than restated.
+
+`qc_status` claimed 3,342 empty rows against 5,806, and the gap is explained
+rather than mysterious: 2,743 are GMrepo runs GMrepo did not assess and the
+other 3,063 are every MullerMM, PubMed and MGnify sample, sources that have no
+such verdict and were loaded after the figure was written. The metabolite
+figures were stale in the same direction, 70,067 negatives against 71,703, and
+the sentence about `log1p` paired that with a 136,134 whose derivation could not
+be reconstructed from the data; it is restated in terms that can be checked --
+the two centred cohorts hold 139,342 levels, 71,703 negative and 67,639 not.
 `tests/test_documented_figures.py` now reads both, with the attribute counts
 taken from the project's own `mixes_numbers_and_words` flag rather than a
 re-derivation of it, so the test cannot agree with a definition the view does
