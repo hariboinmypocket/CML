@@ -847,6 +847,42 @@ the same thing in a different script this week, which suggests the shape rather
 than the instance is the lesson: a tool that reports on state should not write
 to the file that records the state.
 
+### Checking the other derived table, after the adjudication lost a verdict
+
+`taxon_metabolite_associations` is the only other materialised derivation here
+and it carries the same `fk_tma_taxon ... ON DELETE CASCADE`, so it was checked
+the same way: by re-deriving and comparing, not by reading the code.
+
+**It has not drifted.** 1,992 stored rows against 1,992 fresh, identical keys in
+both directions, and zero pairs whose `rho`, sample counts or confidence flag
+differ from a fresh run.
+
+**It was unguarded all the same, and that was measured rather than reasoned
+about.** Deleting *Bacteroides*' 11 association rows -- exactly what merging
+that genus does through the cascade -- moved **none of the 76 counters**. And
+*Bacteroides* is the genus most central to succinate, so the most consequential
+rows were the ones nothing was watching.
+
+A counter cannot close this gap. Whether a taxon *should* have a row depends on
+the prevalence floor inside `clr_matrix` and on the support floors in the
+derivation, so any SQL approximation would flag legitimately-excluded taxa as
+missing and would have to be loosened until it caught nothing. Re-deriving is
+the only exact check, and it costs about 3s for all eleven studies -- cheaper
+than the figures checks -- so `tests/test_metabolite_association_drift.py`
+simply does it, comparing keys both ways and every stored value, computed once
+per class rather than once per test.
+
+Verified against the real scenario rather than a hypothetical one: the eleven
+*Bacteroides* rows were backed up, deleted and committed, the test failed and
+named the exact missing `(taxon_id, study_id)` pairs, `--apply` restored all
+eleven byte-identically, and the test passed again.
+
+Why this one is a test where the adjudication got counters is worth stating,
+because the two were decided on different grounds. There, "a replicated pair
+with no verdict" is expressible exactly in SQL, so the cheap check is also the
+correct one. Here it is not. The shape of the data decides which instrument is
+honest, not a preference for counters.
+
 ## 4. Validate and query
 
 ```bash
