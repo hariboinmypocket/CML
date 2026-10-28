@@ -1,0 +1,10 @@
+store,action,folded_id,folded_name,survivor_id,survivor_name,carried
+mysql,fold,2815,Unclassified burkholderiales burkholderiales bacterium,2089,Unclassified burkholderiales bacterium,ncbi_tax_id=469610;ncbi_rank=species;gram_stain=uncharacterized;metabolism=Uncharacterized
+mysql,fold,2816,Unclassified clostridiales clostridiales bacterium,2091,Unclassified clostridiales bacterium,ncbi_tax_id=457421;ncbi_rank=species;gram_stain=uncharacterized;metabolism=Uncharacterized
+mysql,fold,2818,Unclassified lachnospiraceae lachnospiraceae bacterium,1863,Unclassified lachnospiraceae bacterium,ncbi_tax_id=658089;ncbi_rank=species;gram_stain=uncharacterized;metabolism=Uncharacterized
+mysql,enrich,,,2089,Unclassified burkholderiales bacterium,ncbi_tax_id=469610;ncbi_rank=species;gram_stain=uncharacterized;metabolism=Uncharacterized
+mysql,enrich,,,2091,Unclassified clostridiales bacterium,ncbi_tax_id=457421;ncbi_rank=species;gram_stain=uncharacterized;metabolism=Uncharacterized
+mysql,enrich,,,1863,Unclassified lachnospiraceae bacterium,ncbi_tax_id=658089;ncbi_rank=species;gram_stain=uncharacterized;metabolism=Uncharacterized
+sqlite,enrich,,,2086,Unclassified burkholderiales bacterium,ncbi_tax_id=469610;ncbi_rank=species
+sqlite,enrich,,,2088,Unclassified clostridiales bacterium,ncbi_tax_id=457421;ncbi_rank=species;gram_stain=uncharacterized;metabolism=Uncharacterized
+sqlite,enrich,,,1860,Unclassified lachnospiraceae bacterium,ncbi_tax_id=658089;ncbi_rank=species;gram_stain=uncharacterized;metabolism=Uncharacterized

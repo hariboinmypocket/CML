@@ -2855,6 +2855,21 @@ def _validate_checks() -> dict[str, str]:
                 HAVING COUNT(*) > 1
             ) duplicated
         """,
+        # A name that says one word twice: genus "Unclassified Burkholderiales"
+        # joined to species "Burkholderiales bacterium" built "Unclassified
+        # burkholderiales burkholderiales bacterium", a name no organism bears.
+        # Neither field is wrong -- a rank name is not a genus, which
+        # tests/test_transform.py pins deliberately -- so the doubling lives in
+        # upsert_taxon's f"{genus} {species}", and the three rows it made each
+        # duplicated an already correct row. Phrased without SUBSTRING_INDEX so
+        # the mirror is held to it too.
+        "taxa_name_repeats_the_genus_tail": """
+            SELECT COUNT(*) FROM taxa
+            WHERE genus IS NOT NULL AND species IS NOT NULL AND species <> ''
+              AND INSTR(species, ' ') > 0
+              AND LOWER(genus) LIKE CONCAT(
+                      '% ', LOWER(SUBSTR(species, 1, INSTR(species, ' ') - 1)))
+        """,
         "taxon_counted_twice_in_a_sample": """
             SELECT COUNT(*) FROM (
                 SELECT a.sample_id, t.taxonomic_rank, t.ncbi_tax_id

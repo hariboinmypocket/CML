@@ -376,7 +376,7 @@ simulated refill, not merely 0 against clean data.
 This line has described the dataset as carrying **succinate production** since
 the first commit. No column ever did: `git log -S succinate -- gutdb/schema.sql`
 returns nothing, and succinate appeared in exactly one tracked file, that
-sentence. Only 1 of 5,838 taxa mentions succinate in its MiMeDB `metabolism`
+sentence. Only 1 of 5,835 taxa mentions succinate in its MiMeDB `metabolism`
 text, so there was nothing to read it from either.
 
 There is **no source in this database for whether an organism produces
@@ -489,7 +489,7 @@ columns returned four, and three of them are deliberate:
 
 ### How far the succinate associations actually reach
 
-394 of 5,838 taxa carry one, which is 6.7%, and the shortfall is data rather
+394 of 5,835 taxa carry one, which is 6.8%, and the shortfall is data rather
 than filtering: **every taxon that appears in the eleven metabolomics cohorts at
 all is covered**, none were lost to the prevalence or support floors. The other
 5,444 taxa have no metabolomics sample whatsoever. The ceiling is lower still
@@ -731,7 +731,7 @@ all, which is true and is not the whole difference. Measured against MySQL:
 |---|---|---|---|
 | samples | 36,693 | 23,494 | 64% |
 | abundance rows | 3,074,882 | 2,050,969 | 67% |
-| taxa | 5,838 | 5,208 | 89% |
+| taxa | 5,835 | 5,208 | 89% |
 | samples with a genus layer | 32,327 | 18,644 | 58% |
 | samples with a species layer | 12,566 | 12,049 | 96% |
 
@@ -1008,6 +1008,77 @@ than whole names removes renames and strain suffixes, which is what left
 *Oxalobacter* visible; the remaining ten need the name parsed, not the data
 repaired. 39 tax IDs are absent from the dump entirely, which is the already
 documented case of NCBI deleting nodes.
+
+### Three names that said one word twice, and the fix that was in the wrong place
+
+`Unclassified burkholderiales burkholderiales bacterium` is not a name any
+organism bears, and two more rows read the same way. Neither field was wrong:
+`genus` is `Unclassified Burkholderiales` and `species` is `Burkholderiales
+bacterium`, which is NCBI's name for an unnamed member of that order. The
+doubling comes from `upsert_taxon` joining them with `f"{genus} {species}"`.
+
+**The first fix attempted was in the wrong place, and an existing test said so.**
+Changing `extract_species_epithet` to strip a leading token that repeats the
+genus's last word looked right and altered exactly these three rows and nothing
+else -- measured against every row before touching anything. It still broke
+`test_resolve_source_binomial`, which pins
+`("unclassified Lachnospiraceae", "Lachnospiraceae bacterium")` on purpose: a
+rank name is not a genus, so that epithet is correct as written and must not be
+stripped. The change was reverted. Worth recording because the measurement said
+go and the test said stop, and the test was right.
+
+Fixing the join alone would have been worse. `_taxon_exists` keys on
+`species_key`, so renaming without converging the key leaves two rows wearing
+one name -- and the well-formed row already existed, with `species_key`
+`bacterium`, as ids 2089, 2091 and 1863. These were duplicate pairs from two
+source paths naming one organism differently, which is a fold, not a string
+repair.
+
+**It is a merge and not a delete, and that distinction was the whole risk.** The
+malformed row held what its twin lacked: the only `ncbi_tax_id` those three
+organisms have, plus `gram_stain` and `metabolism`. Deleting the duplicate
+outright -- the obvious move, since all three carry no abundance and no
+associations -- would have destroyed the only NCBI link those rows had.
+`merge_doubled_token_taxa.py` copies every column the survivor is missing
+first, into **both** stores, since the mirror carries the twins but never
+carried the malformed rows, and enriching only MySQL would have manufactured
+exactly the cross-store divergence the previous section was about. The carried
+traits are honestly thin -- both are the placeholder `uncharacterized`, moved
+only because the mirror's twins already held it and MySQL's did not. The tax IDs
+are the real recovery.
+
+A reload can recreate these, as it can for the 69 rows the other merge script
+handles, so the point is that recurrence is now visible rather than silent:
+`taxa_name_repeats_the_genus_tail` is phrased without `SUBSTRING_INDEX` so the
+mirror is held to it too, and it was proven by planting a doubled name in each
+store, watching the counter read 1, and rolling back to 0.
+
+### 38 rows point at tax IDs NCBI no longer has
+
+Found while checking names against the dump, and it is the largest unguarded
+thing still open: **38 taxa carry a tax ID absent from `nodes.dmp`, and 30,950
+abundance rows and 186 associations hang off them.** They are not obscure
+leftovers -- *Waltera* alone carries 7,944 abundance rows and 35 associations,
+*Gallintestinimicrobium propionicum* 6,601 and 36, *Allisonella* 4,629 and 31.
+Those rows join to nothing when the join is made through NCBI, which is exactly
+what *Klebsiella pneumoniae* was doing with the deleted 1328388 before it was
+repointed.
+
+`ncbi_rank IS NULL AND ncbi_tax_id IS NOT NULL` turns out to mark this class
+exactly -- 38 rows, zero escapes, zero false positives -- so a counter is
+available the moment the rows are fixed. It cannot be added before then, because
+a counter reading 38 would abort the pre-push hook, which is the correct
+behaviour and the reason this is written down rather than papered over.
+
+Every one of the 38 resolves to a single candidate by name, but **only 15 match a
+current scientific name; the other 23 resolve through a synonym or an
+`includes`,** which is precisely the reading that got the *Vibrio* direction
+wrong once already -- tax 668 lists `Vibrio fischeri` as a synonym of
+`Aliivibrio fischeri`, so a synonym match proves a relationship and not an
+identity. Repointing 23 rows on that basis would be guessing. The authoritative
+answer is `merged.dmp`, which maps a retired ID straight to its replacement and
+is not in `taxdump/` -- only `names.dmp` and `nodes.dmp` were ever fetched, and
+nothing in the repo reads the other two files.
 
 ## 4. Validate and query
 
