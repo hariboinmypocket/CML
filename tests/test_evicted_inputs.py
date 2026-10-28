@@ -24,6 +24,8 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
+import pandas as pd
+
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
@@ -38,6 +40,12 @@ _spec = importlib.util.spec_from_file_location(
 )
 build_mirror = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(build_mirror)
+
+_cleanup_spec = importlib.util.spec_from_file_location(
+    "cleanup_gutdb", ROOT / "scripts" / "cleanup_gutdb.py"
+)
+cleanup_gutdb = importlib.util.module_from_spec(_cleanup_spec)
+_cleanup_spec.loader.exec_module(cleanup_gutdb)
 
 
 def first_evicted_input():
@@ -113,6 +121,48 @@ class EveryInputReaderIsGuardedTests(unittest.TestCase):
     def test_the_mirror_builders_reader_is_guarded(self):
         with self.assertRaises(EvictedFileError):
             next(iter(build_mirror.read_rows(self.target)))
+
+    def test_the_mirror_only_cleanups_trait_sources_are_guarded(self):
+        """cleanup_gutdb.py reads three files the build does not.
+
+        Two of them -- mimedb_microbes_v2.csv and
+        gut_microbiome_925_oxygen_pH_spore.csv -- are evicted on this machine
+        right now, so running it would have hung rather than failed. It is the
+        script that back-fills the taxa traits, and it reaches only the mirror,
+        so it is the one most likely to be run to close that gap.
+
+        build_gutdb_sqlite.py's schema read is guarded the same way but has no
+        test here on purpose: it lives in main(), which deletes the mirror
+        before reading, so calling it from a test would destroy the database.
+        """
+        # Each of the three reads is checked on its own. Mocking every file
+        # dataless would not do it: the first guard to fire ends the function,
+        # so two of the three could lose their guard and the test would still
+        # pass -- which it did, until this was written this way. Nor can
+        # _file_flags be mocked per path, because mimedb_microbes_v2.csv really
+        # is evicted here, and reporting it local would hang the read it is
+        # meant to prevent. So the guard is spied on and the reads stubbed.
+        seen = []
+
+        def spy(path):
+            seen.append(str(path))
+            return path
+
+        empty = pd.DataFrame()
+        with mock.patch.object(cleanup_gutdb, "require_local", side_effect=spy), \
+                mock.patch.object(cleanup_gutdb.pd, "read_csv", return_value=empty):
+            try:
+                cleanup_gutdb.load_local_trait_sources()
+            except Exception:
+                # An empty frame will not satisfy the body; only the guard
+                # calls made before that point matter here.
+                pass
+        for source in ("final_taxa.tsv", "mimedb_microbes_v2.csv",
+                       "gut_microbiome_925_oxygen_pH_spore.csv"):
+            with self.subTest(source=source):
+                self.assertTrue(
+                    any(source in path for path in seen),
+                    "%s is read without going through require_local" % source)
 
 
 class RealEvictedFileTests(unittest.TestCase):

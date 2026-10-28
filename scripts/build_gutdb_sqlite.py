@@ -519,7 +519,7 @@ def main() -> None:
     if os.path.exists(DB_PATH):
         os.remove(DB_PATH)
     con = sqlite3.connect(DB_PATH)
-    con.executescript(open(SCHEMA, encoding="utf-8").read())
+    con.executescript(open(require_local(SCHEMA), encoding="utf-8").read())
     con.execute("PRAGMA foreign_keys = ON")
     loader = Loader(con)
 

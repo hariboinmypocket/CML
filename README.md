@@ -1208,6 +1208,63 @@ functions rather than restating their rules, and both were proven by planting
 the defect: blanking one tax ID and respelling one key made each test fail
 naming the row and the command that fixes it, and both passed again on restore.
 
+### The trait back-fill reaches only the mirror, and that is ~15,900 cells
+
+Sweeping every one of the 32 taxa columns the two stores share, across all 5,177
+shared keys, found far more than tax IDs. For sixteen trait columns MySQL is
+NULL where the mirror holds a value, between 639 and 1,563 rows each:
+
+| column | rows | column | rows |
+| --- | --- | --- | --- |
+| `sporulation` | 1,563 | `temperature_range` | 1,255 |
+| `shape` | 1,338 | `mobility` | 1,117 |
+| `biotic_relationship` | 1,328 | `ph_preference` | 1,111 |
+| `gram_stain` | 1,260 | `flagella_presence` | 1,067 |
+| `number_of_membranes` | 1,285 | `habitat` | 828 |
+| `oxygen_requirement` | 1,038 | `metabolism` | 707 |
+
+plus `optimal_temperature`, `energy_source`, `cell_arrangement` and the lineage
+columns -- about **15,900 cells in all**.
+
+The cause is the shape this repo keeps finding. The README already records that
+`cleanup_gutdb.py` normalized the trait *vocabularies* in the mirror only; the
+same script's **back-fill** half has the same reach and was never run against
+MySQL. Its sources are real -- `gutdb/final_taxa.tsv`, `mimedb_microbes_v2.csv`,
+`gut_microbiome_925_oxygen_pH_spore.csv`, the NCBI dump -- and for genus rows it
+fills only "where every source species in that genus agrees", so a genus never
+inherits a trait its members disagree about.
+
+**It is not filled here, and the reason is evidence rather than caution.** Only
+**73** of the ~15,900 gaps (all `sporulation`) can be traced from this machine to
+a source record for that exact taxon in the one source file that is tracked.
+The other two source files are **evicted to iCloud**, so their contents cannot
+be checked at all, and the remainder rests on the genus-consensus relationship,
+which is an inference rather than a measurement. Copying 15,854 cells into the
+store on the mirror's word is exactly what this repo refuses to do elsewhere.
+
+What bounds the damage meanwhile: **`export_ml_matrix.py` selects only `id` and
+`scientific_name` from `taxa`**, so the ML matrix carries no trait columns and
+no model built from it has ever seen the NULLs. That is worth knowing before
+anyone spends a day filling them.
+
+### The guard found the script that would have hung closing it
+
+`cleanup_gutdb.py` is the script anyone would run to close the gap above, and it
+reads two files that are evicted right now -- so running it would have hung
+rather than failed, exactly the failure mode guarded against earlier in this
+session. Its three source reads, and `build_gutdb_sqlite.py`'s schema read, now
+go through `require_local`; it fires in 0.09s on the real evicted
+`mimedb_microbes_v2.csv`. Those were the only unguarded reads of an evictable
+source left in `scripts/` and `gutdb/`.
+
+**The first version of that test passed with the guard removed.** Mocking every
+file dataless means the first guard to fire ends the function, so two of the
+three reads could lose their guard unnoticed -- and did, in the mutation check.
+Nor can the flag be mocked per path, because `mimedb_microbes_v2.csv` really is
+evicted here and reporting it local would hang the read the test exists to
+prevent. The guard is spied on and the reads stubbed instead, so all three are
+asserted independently, and each was removed in turn to confirm it fails.
+
 ## 4. Validate and query
 
 ```bash

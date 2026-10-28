@@ -39,6 +39,7 @@ REPO = os.environ.get(
 )
 sys.path.insert(0, REPO)
 from gutdb import transform as T  # noqa: E402  (needs REPO on the path)
+from gutdb.config import require_local  # noqa: E402
 
 DB = os.environ.get("GUTDB_SQLITE", "gut_microbiome.sqlite")
 # NCBI taxonomy dump (names.dmp + nodes.dmp), unzipped; see the README.
@@ -214,7 +215,8 @@ def load_local_trait_sources() -> tuple[dict, dict]:
             target[column] = value
 
     # (a) the project's own curated taxon table
-    final_taxa = pd.read_csv(os.path.join(REPO, "gutdb", "final_taxa.tsv"), sep="\t")
+    final_taxa = pd.read_csv(require_local(os.path.join(REPO, "gutdb", "final_taxa.tsv")),
+                            sep="\t")
     for row in final_taxa.itertuples():
         spor, arrangement = split_spore(getattr(row, "sporulation", ""))
         values = {
@@ -238,7 +240,7 @@ def load_local_trait_sources() -> tuple[dict, dict]:
                 put(genus_direct[gk], col, val)
 
     # (b) MiMeDB microbe attributes
-    mimedb = pd.read_csv(os.path.join(REPO, "mimedb_microbes_v2.csv"))
+    mimedb = pd.read_csv(require_local(os.path.join(REPO, "mimedb_microbes_v2.csv")))
     for row in mimedb.itertuples():
         gk, sk = T.taxon_key(row.genus, row.species)
         spor, arrangement = split_spore(row.sporulation)
@@ -272,7 +274,8 @@ def load_local_trait_sources() -> tuple[dict, dict]:
                 put(genus_direct[gk], col, val)
 
     # (c) the 925-taxon oxygen/pH/spore table
-    extra = pd.read_csv(os.path.join(REPO, "gut_microbiome_925_oxygen_pH_spore.csv"))
+    extra = pd.read_csv(require_local(
+        os.path.join(REPO, "gut_microbiome_925_oxygen_pH_spore.csv")))
     for row in extra.itertuples():
         gk, sk = T.taxon_key(row.Genus, row.Species)
         spor, arrangement = split_spore(row.Spore)
