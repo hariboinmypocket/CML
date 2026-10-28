@@ -883,6 +883,56 @@ with no verdict" is expressible exactly in SQL, so the cheap check is also the
 correct one. Here it is not. The shape of the data decides which instrument is
 honest, not a preference for counters.
 
+### An input that is not on this disk hangs instead of failing
+
+The Desktop is an iCloud-synced folder. When the disk reached 98% macOS
+reclaimed space by evicting this project's large inputs to iCloud -- **71 files
+and 1.6GB**: the SQLite mirror, the CKD archive copy, both NCBI taxdump files,
+every GMrepo abundance CSV and every `muller2022` abundance table.
+
+An evicted file keeps all of its metadata, so `exists()`, `st_size` and `mtime`
+all still answer correctly and `open()` still succeeds. Only the first `read()`
+blocks, waiting on a download, and with no room to land that download the read
+never returns and never raises. **There is no exception, no log line and no
+counter -- the process simply stops,** which makes this the least visible
+failure mode here. It read as failing hardware for a whole session: `sqlite3`
+reported `disk I/O error`, a plain `open()` then `read(100)` stalled, and `ls`
+kept reporting all 109,830,144 bytes, so the file looked present while the
+device looked broken. `du` reporting the file as 0B was the real signature and
+was dismissed as a filesystem glitch.
+
+Nothing was lost and nothing was corrupt. `brctl download` brought the mirror
+back in 40s, after which it read whole in 0.1s and returned `integrity_check:
+ok` over 5,208 taxa, 23,494 samples, 2,050,969 abundance rows and 312 studies.
+**The near-miss worth recording is the recovery that was nearly attempted:** the
+stated fallback was to rebuild the mirror from the `data/` CSVs, and those CSVs
+were evicted too, so the rebuild would have stalled identically after destroying
+a perfectly good 105MB file to do it.
+
+`config.require_local` now refuses an evicted file instead of reading it, and
+every place that opens a data file for reading goes through it:
+`pipeline.open_dict_rows`, `taxdump.SpeciesNodes`, `modeling`'s provenance
+report -- where the existing `exists()` check passes for an evicted file and so
+reached the hang -- and `build_gutdb_sqlite.read_rows`, which reads every one of
+the evicted CSVs. The error names the file and gives the `brctl download` line
+that fixes it.
+
+**It is checked by flag, never by `st_blocks`.** Zero allocated blocks looks
+like the obvious test and is wrong: APFS compression also reports zero blocks,
+and most of this repo's own source is stored compressed and perfectly local, so
+a blocks-based check would refuse to read `gutdb/pipeline.py`. That confound is
+what cost the session -- a first scan using it reported 71 evicted files, and
+only re-running against `SF_DATALESS` from `sys/stat.h` showed which of those
+were real. `tests/test_evicted_inputs.py` pins it both ways, and asserts by
+calling each reader rather than by reading its source, so moving a read into a
+new helper cannot quietly drop the guard. Each of the three guards was removed
+in turn to confirm the tests fail without it.
+
+One test runs against a genuinely dataless file if the machine still has one and
+skips when it does not, so the check stays tied to the real condition without
+depending on it. The durable fix is not in this repo: turning off iCloud Drive's
+"Optimize Mac Storage" stops macOS evicting these inputs at all.
+
 ## 4. Validate and query
 
 ```bash

@@ -12,6 +12,7 @@ from typing import Any, Iterable, Iterator, Mapping
 
 from mysql.connector import MySQLConnection
 
+from .config import require_local
 from .gmrepo import GMrepoClient
 from .cmd_curation import (
     CMD_RAW,
@@ -81,7 +82,7 @@ class LoadStats:
 
 
 def open_dict_rows(path: str | Path) -> Iterator[dict[str, str]]:
-    source = Path(path)
+    source = require_local(path)
     with source.open("r", encoding="utf-8-sig", newline="") as handle:
         sample = handle.read(8192)
         handle.seek(0)

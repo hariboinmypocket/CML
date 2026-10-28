@@ -23,6 +23,8 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
+from .config import require_local
+
 _MISSING = object()
 _cache: object = _MISSING
 
@@ -33,7 +35,7 @@ class SpeciesNodes:
     def __init__(self, nodes_path: str | Path) -> None:
         self.rank_of: dict[int, str] = {}
         self.parent: dict[int, int] = {}
-        with open(nodes_path, encoding="utf-8", errors="replace") as handle:
+        with open(require_local(nodes_path), encoding="utf-8", errors="replace") as handle:
             for line in handle:
                 parts = line.split("\t|")
                 taxid = int(parts[0])

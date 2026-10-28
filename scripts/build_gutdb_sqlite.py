@@ -27,6 +27,7 @@ sys.path.insert(0, PROJECT)
 csv.field_size_limit(10_000_000)
 
 from gutdb import transform as T  # noqa: E402
+from gutdb.config import require_local  # noqa: E402
 
 DB_PATH = os.environ.get("GUTDB_SQLITE", "gut_microbiome.sqlite")
 SCHEMA = os.environ.get("GUTDB_SCHEMA", os.path.join(PROJECT, "gutdb", "schema_sqlite.sql"))
@@ -93,7 +94,7 @@ def now() -> str:
 
 
 def read_rows(path):
-    with open(path, newline="", encoding="utf-8-sig") as handle:
+    with open(require_local(path), newline="", encoding="utf-8-sig") as handle:
         for row in csv.DictReader(handle):
             yield row
 

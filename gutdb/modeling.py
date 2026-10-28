@@ -26,6 +26,7 @@ from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, StandardSc
 from sklearn.utils.validation import check_is_fitted
 
 from .compositional import clr, multiplicative_replacement
+from .config import require_local
 
 
 class InsufficientStudiesError(ValueError):
@@ -191,7 +192,7 @@ def mask_uncertain_demographics(meta, provenance_path: str | Path):
     counts = Counter()
     if not path.exists():
         return meta, {"report_available": False, "masked_cells": {}}
-    report = pd.read_csv(path, dtype=str).fillna("")
+    report = pd.read_csv(require_local(path), dtype=str).fillna("")
     for row in report.itertuples(index=False):
         if not row.quality_flags or row.field not in {"sex", "age_years", "bmi"}:
             continue
