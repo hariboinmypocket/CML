@@ -1312,6 +1312,40 @@ of them reading `names.dmp` or `nodes.dmp` -- the two largest files here and the
 first macOS evicts. `Taxdump`, the reader this section depends on, is now
 guarded; the rest are a known, mechanical remainder rather than a closed matter.
 
+### `git push` could have hung forever, and exists() is why
+
+The pre-push hook runs `scripts/normalize_reclassified_phyla.py` on every push.
+It checked `os.path.exists` on `names.dmp` and `nodes.dmp`, found them, and read
+them -- and **`exists()` returns true for a file iCloud has evicted**, whose
+first read then blocks with no error and no timeout. Those two files are the
+largest in this repo, 548MB together, which makes them the first macOS evicts
+when the disk fills.
+
+**Both of them were evicted earlier in the same session that found this.** The
+pushes that followed only worked because iCloud had quietly materialised them
+again in the meantime. A push during that window would have hung with no output
+after `pre-push: running project checks`, and the obvious reading would have
+been that the database checks were slow.
+
+The three dump readers that are part of the maintained workflow now go through
+`require_local`: the hook's, `backfill_ncbi_rank.ranks_from_dump`, and
+`reconcile_lineage_ranks.load_taxdump`. The existence checks are left in place
+-- they still give the right message when the dump genuinely is not there -- and
+the guard sits after them, because the two failures are different and deserve
+different messages.
+
+**Asserting that the call raises is not enough for a loader that guards two
+files,** and the mutation check is what showed it: dropping the `names.dmp`
+guard in `reconcile_lineage_ranks` left the test passing, because the surviving
+`nodes.dmp` guard raised first. The tests now spy on `require_local` and stub
+the module's `open`, so each dump path is asserted separately and the real 548MB
+is never read. Each guard was then removed on its own to confirm it fails.
+
+That is the second time in this session the same test-shape mistake was made and
+caught the same way. The lesson is not about eviction: **a test that asserts
+"this function raises" tests the first guard only, and a function with several
+guards needs each one named.**
+
 ## 4. Validate and query
 
 ```bash

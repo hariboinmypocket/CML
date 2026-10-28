@@ -68,6 +68,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from gutdb.config import require_local
 from gutdb.config import Settings
 from gutdb.db import connect
 from gutdb.transform import clean_str
@@ -112,6 +113,11 @@ def load_taxdump() -> tuple[dict[str, int], dict[int, str], dict[int, dict[str, 
     if not (os.path.exists(names_path) and os.path.exists(nodes_path)):
         raise SystemExit(
             f"taxdump not found at {TAXDUMP}/. Unzip taxdmp.zip there or set GUTDB_TAXDUMP.")
+
+    # exists() passes for a file iCloud has evicted, whose first read then
+    # blocks instead of failing; these are the repo's two largest files.
+    names_path = str(require_local(names_path))
+    nodes_path = str(require_local(nodes_path))
 
     wanted = {rank for _, rank in RANKS}
     parent: dict[int, int] = {}

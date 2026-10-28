@@ -56,6 +56,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from gutdb.config import require_local
 from gutdb.config import Settings
 from gutdb.db import connect
 
@@ -83,7 +84,7 @@ def ranks_from_dump() -> dict[int, str]:
         print(f"   {nodes} not present; nothing to backfill")
         return {}
     out: dict[int, str] = {}
-    with nodes.open(encoding="utf-8") as fh:
+    with open(require_local(nodes), encoding="utf-8") as fh:
         for line in fh:
             parts = line.split("\t|\t")
             if len(parts) > 2:

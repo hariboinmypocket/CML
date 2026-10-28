@@ -48,6 +48,18 @@ cleanup_gutdb = importlib.util.module_from_spec(_cleanup_spec)
 _cleanup_spec.loader.exec_module(cleanup_gutdb)
 
 
+def _script(name):
+    spec = importlib.util.spec_from_file_location(name, ROOT / "scripts" / f"{name}.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+normalize_phyla = _script("normalize_reclassified_phyla")
+backfill_rank = _script("backfill_ncbi_rank")
+reconcile_ranks = _script("reconcile_lineage_ranks")
+
+
 def first_evicted_input():
     """A genuinely dataless file under data/, if this machine has one."""
     for path in (ROOT / "data").rglob("*"):
@@ -163,6 +175,53 @@ class EveryInputReaderIsGuardedTests(unittest.TestCase):
                 self.assertTrue(
                     any(source in path for path in seen),
                     "%s is read without going through require_local" % source)
+
+    def test_the_pre_push_hooks_dump_reader_is_guarded(self):
+        """The hook runs normalize_reclassified_phyla.py on every push.
+
+        It checked os.path.exists on names.dmp and nodes.dmp and then read
+        them, and exists() passes for an evicted file -- so an eviction would
+        have hung `git push` with no error rather than failing it. Those two are
+        the largest files in the repo and the first macOS evicts when the disk
+        fills, and both were evicted earlier in the session that found this.
+        """
+        self._assert_both_dumps_guarded(normalize_phyla, "load_taxdump")
+
+    def test_the_rank_backfills_dump_reader_is_guarded(self):
+        with self.assertRaises(EvictedFileError):
+            backfill_rank.ranks_from_dump()
+
+    def test_the_lineage_reconcilers_dump_reader_is_guarded(self):
+        self._assert_both_dumps_guarded(reconcile_ranks, "load_taxdump")
+
+    def _assert_both_dumps_guarded(self, module, function):
+        """Both dump paths, checked separately.
+
+        A loader that guards two files fails this only if BOTH guards are
+        present: asserting that the call raises would pass with one of them
+        dropped, since the surviving guard raises first. So require_local is
+        spied on instead, and the module's `open` stubbed so the real 548MB of
+        dump is never read.
+        """
+        seen = []
+
+        def spy(path):
+            seen.append(str(path))
+            return path
+
+        with mock.patch.object(module, "require_local", side_effect=spy), \
+                mock.patch.object(module, "open", create=True,
+                                  side_effect=OSError("stubbed")):
+            try:
+                getattr(module, function)()
+            except Exception:
+                pass
+        for dump in ("names.dmp", "nodes.dmp"):
+            with self.subTest(dump=dump):
+                self.assertTrue(
+                    any(dump in path for path in seen),
+                    "%s.%s reads %s without require_local"
+                    % (module.__name__, function, dump))
 
 
 class RealEvictedFileTests(unittest.TestCase):

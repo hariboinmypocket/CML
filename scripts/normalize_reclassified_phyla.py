@@ -33,6 +33,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from gutdb.config import require_local
 from gutdb.config import Settings
 from gutdb.db import connect
 from gutdb.transform import clean_str, normalize_phylum
@@ -92,6 +93,13 @@ def load_taxdump() -> tuple[dict[str, int], dict[int, str], dict[int, str]]:
     if not (os.path.exists(names_path) and os.path.exists(nodes_path)):
         raise SystemExit(
             f"taxdump not found at {TAXDUMP}/. Unzip taxdmp.zip there or set GUTDB_TAXDUMP.")
+    # exists() is not enough, and this script is what makes that dangerous: the
+    # pre-push hook runs it on every push, and a file iCloud has evicted still
+    # passes exists() while its first read blocks forever. These two are the
+    # largest files in the repo and so the first macOS evicts when the disk
+    # fills -- both were evicted earlier today -- which would have hung `git
+    # push` with no error rather than failing it.
+    names_path, nodes_path = str(require_local(names_path)), str(require_local(nodes_path))
 
     name_to_taxid: dict[str, int] = {}
     synonyms: dict[str, int] = {}
