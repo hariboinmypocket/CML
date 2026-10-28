@@ -1,0 +1,115 @@
+filled_store,taxon_id,scientific_name,tax_id,ncbi_rank
+sqlite,273,Acidobacterium,33973,genus
+mysql,226,Actinomyces hyovaginalis,29316,species
+sqlite,650,Agarivorans,261825,genus
+mysql,206,Aggregatibacter pneumotropica,1867933,species
+mysql,167,Alicyclobacillus cycloheptanicus,1457,species
+mysql,161,Alicyclobacillus pomorum,204470,species
+sqlite,3026,Anaerotaenia,1843206,genus
+sqlite,888,Anaerovirgula,561442,genus
+sqlite,426,Aneurinibacillus,55079,genus
+mysql,267,Aquiluna rubra,529882,species
+mysql,529,Arthrobacter nitroguajacolicus,211146,species
+sqlite,574,Aurantimonas,182269,genus
+sqlite,542,Azovibrio,146935,genus
+sqlite,413,Beggiatoa,1021,genus
+sqlite,348,Bombiscardovia,1159909,genus
+mysql,152,Burkholderia andropogonis,28092,species
+sqlite,579,Caldanaerocella,265002,genus
+sqlite,119,Caloramator,44258,genus
+sqlite,234,Candidatus Azobacteroides,511434,genus
+sqlite,609,Candidatus Glomeribacter,224135,genus
+sqlite,182,Chelonobacter,658623,genus
+sqlite,12,Chloroherpeton,100715,genus
+sqlite,258,Clostridiisalibacter,516086,genus
+mysql,1,Clostridium aminophilum,1526,species
+mysql,214,Clostridium colinum,36835,species
+mysql,456,Clostridium fimetarium,99656,species
+mysql,328,Clostridium hungatei,48256,species
+mysql,357,Clostridium piliforme,1524,species
+sqlite,368,Collimonas,202907,genus
+sqlite,180,Congregibacter,393661,genus
+sqlite,195,Coriobacterium,33870,genus
+sqlite,406,Cryomorpha,246876,genus
+sqlite,521,Dehalobacter,56112,genus
+sqlite,71,Dehalobacterium,51514,genus
+sqlite,396,Dehalococcoides,61434,genus
+sqlite,130,Denitrobacter,59507,genus
+mysql,361,Desulfovibrio alaskensis,58180,species
+sqlite,890,Desulfovirgula,418453,genus
+sqlite,499,Dethiosulfatibacter,448125,genus
+sqlite,412,Dickeya,204037,genus
+mysql,422,Enterobacter arachidis,551989,species
+mysql,418,Enterobacter pyrinus,81476,species
+mysql,880,Enterobacter radicincitans,283686,species
+mysql,186,Erwinia chrysanthemi,556,species
+sqlite,624,Euzebya,908623,genus
+sqlite,380,Ferrimonas,44011,genus
+sqlite,284,Flexispira,2353,genus
+sqlite,584,Flexistipes,2351,genus
+sqlite,457,Friedmanniella,53387,genus
+sqlite,62,Frigoribacterium,96492,genus
+sqlite,1143,Geodermatophilus,1860,genus
+sqlite,585,Geosporobacter,390805,genus
+sqlite,265,Giesbergeria,352449,genus
+sqlite,150,Gracilibacter,342658,genus
+mysql,356,Haemophilus parasuis,738,species
+sqlite,306,Halanaerobacter,42418,genus
+sqlite,607,Halorhodospira,85108,genus
+sqlite,116,Hylemonella,232523,genus
+sqlite,450,Kordia,221065,genus
+mysql,69,Krokinobacter genikus,308113,species
+sqlite,427,Lawsonia,41707,genus
+sqlite,515,Leptolyngbya,47251,genus
+mysql,573,Marichromatium fluminis,560361,species
+sqlite,486,Marinimicrobium,359337,genus
+sqlite,433,Mariprofundus,377315,genus
+sqlite,42,Methanocorpusculum,2192,genus
+mysql,539,Methylomicrobium buryatense,95641,species
+sqlite,3035,Natronomonas,63743,genus
+mysql,559,Nautella italica,481446,species
+sqlite,471,Oceanimonas,129577,genus
+sqlite,398,Octadecabacter,53945,genus
+sqlite,1474,Oerskovia,162491,genus
+sqlite,454,Oxobacter,44261,genus
+mysql,324,Pasteurella mairii,757,species
+mysql,156,Pasteurella skyensis,97481,species
+sqlite,3042,Pectobacterium,122277,genus
+mysql,41,Pedobacter saltans,151895,species
+sqlite,571,Pelobacter,18,genus
+sqlite,215,Pelosinus,365348,genus
+sqlite,1554,Pestalotiopsis,37840,genus
+sqlite,500,Pilimelia,53370,genus
+sqlite,301,Pontibacillus,289201,genus
+sqlite,383,Prochlorococcus,1218,genus
+sqlite,370,Propionigenium,2332,genus
+sqlite,141,Propionivibrio,83766,genus
+sqlite,648,Pseudidiomarina,2800384,genus
+sqlite,3036,Pseudozyma,63298,genus
+sqlite,628,Psychroflexus,83612,genus
+sqlite,582,Rathayibacter,33886,genus
+sqlite,630,Rhodothermus,29548,genus
+sqlite,551,Rhodovulum,34008,genus
+sqlite,504,Roseiflexus,120961,genus
+sqlite,547,Roseivivax,93682,genus
+sqlite,640,Sanguibacter,60919,genus
+sqlite,3041,Shigella,620,genus
+sqlite,432,Sodalis,84565,genus
+sqlite,1673,Sphaerisporangium,321315,genus
+sqlite,1683,Spirillospora,58122,genus
+sqlite,128,Sporotomaculum,68034,genus
+sqlite,1693,Stackebrandtia,283810,genus
+sqlite,479,Swaminathania,209260,genus
+sqlite,601,Synechococcus,1129,genus
+sqlite,892,Syntrophobotulus,51196,genus
+sqlite,314,Tepidibacter,214904,genus
+sqlite,528,Thermosinus,261684,genus
+sqlite,894,Thermotalea,648799,genus
+sqlite,587,Thermotoga,2335,genus
+sqlite,525,Thiomicrospira,933,genus
+mysql,131,Thiomonas cuprina,364030,species
+sqlite,84,Tindallia,69894,genus
+sqlite,159,Tolumonas,43947,genus
+sqlite,527,Uliginosibacterium,392735,genus
+sqlite,883,Verminephrobacter,364316,genus
+mysql,237,Weissella beninensis,504936,species

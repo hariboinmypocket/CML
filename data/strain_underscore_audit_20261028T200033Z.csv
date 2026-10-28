@@ -1,0 +1,4 @@
+taxon_id,was,now,genus,species,basis
+68,Desulfovibrio c21 c20,Desulfovibrio c21_c20,Desulfovibrio,c21_c20,mirror spelling; no NCBI node to confirm
+795,Bacteroides sp. 20 3,Bacteroides sp. 20_3,Bacteroides,sp. 20_3,mirror spelling; no NCBI node to confirm
+798,Bacteroides sp. 2 1 7,Bacteroides sp. 2_1_7,Bacteroides,sp. 2_1_7,mirror spelling; no NCBI node to confirm

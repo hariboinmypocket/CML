@@ -162,5 +162,112 @@ class CrossStoreTaxIdTests(unittest.TestCase):
                     "KNOWN_DIVERGENT. Recorded reason: %s" % (key, why))
 
 
+class OneSidedTaxIdTests(unittest.TestCase):
+    """A row joinable to NCBI in one store and not the other.
+
+    The blind spot in the class above, and in the first version of this file:
+    its query selects `WHERE ncbi_tax_id IS NOT NULL`, so a key whose ID is
+    missing on one side never enters both maps and is never compared. 120 rows
+    were in that state -- 89 with the ID only in MySQL, 31 only in the mirror.
+    114 are filled now; the rest are refused for reasons this asserts exist.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        root = ROOT / "taxdump"
+        for required in ("names.dmp", "nodes.dmp"):
+            if not (root / required).exists():
+                raise unittest.SkipTest(f"{required} not present (gitignored)")
+        cls.connection = mysql_connection()
+        if cls.connection is None:
+            raise unittest.SkipTest("no database reachable")
+        cls.mirror = mirror_connection()
+        if cls.mirror is None:
+            raise unittest.SkipTest("no readable SQLite mirror")
+        import importlib.util
+        path = ROOT / "scripts" / "backfill_one_sided_taxids.py"
+        spec = importlib.util.spec_from_file_location("backfill_one_sided_taxids", path)
+        cls.mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.mod)
+        # Decided by the script's own function, so the test cannot drift from it.
+        cls.fills, cls.refusals, cls.total = cls.mod.analyse(
+            cls.connection, cls.mirror, root)
+
+    @classmethod
+    def tearDownClass(cls):
+        for handle in ("connection", "mirror"):
+            if getattr(cls, handle, None) is not None:
+                getattr(cls, handle).close()
+
+    def test_nothing_is_merely_waiting_to_be_filled(self):
+        pending = ["%s: %s <- %s" % (target, row["name"], tax)
+                   for target, _key, row, tax, _rank in self.fills]
+        self.assertEqual(
+            [], pending,
+            "%d row(s) could take a tax ID from the other store. Run "
+            "scripts/backfill_one_sided_taxids.py --apply:\n  %s"
+            % (len(pending), "\n  ".join(pending)))
+
+    def test_every_remaining_gap_has_a_stated_reason(self):
+        self.assertEqual(
+            self.total, len(self.fills) + len(self.refusals),
+            "a one-sided tax ID was neither filled nor refused")
+        for key, message in self.refusals:
+            with self.subTest(taxon="/".join(key)):
+                self.assertTrue(message.strip(), "refused with an empty reason")
+
+
+class KeySpellingTests(unittest.TestCase):
+    """The two stores must not key one organism two different ways.
+
+    MySQL held `Bacteroides sp. 1 1 14` where the mirror held `sp. 1_1_14`,
+    which is NCBI's spelling. 24 keys differed that way, and because every
+    two-store repair here matches on (genus_key, species_key), those rows were
+    invisible to all of them -- including to the class above, which compares
+    only keys present in both stores.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.connection = mysql_connection()
+        if cls.connection is None:
+            raise unittest.SkipTest("no database reachable")
+        cls.mirror = mirror_connection()
+        if cls.mirror is None:
+            raise unittest.SkipTest("no readable SQLite mirror")
+        cursor = cls.connection.cursor()
+        try:
+            cursor.execute("SELECT genus_key, species_key FROM taxa")
+            cls.mysql_keys = {(a, b) for a, b in cursor.fetchall()}
+        finally:
+            cursor.close()
+        cls.mirror_keys = {(a, b) for a, b in cls.mirror.execute(
+            "SELECT genus_key, species_key FROM taxa").fetchall()}
+
+    @classmethod
+    def tearDownClass(cls):
+        for handle in ("connection", "mirror"):
+            if getattr(cls, handle, None) is not None:
+                getattr(cls, handle).close()
+
+    @staticmethod
+    def _squash(key):
+        import re
+        return (key[0], re.sub(r"[ _]+", " ", key[1]))
+
+    def test_no_key_is_a_punctuation_variant_of_the_other_stores(self):
+        mysql_squashed = {self._squash(k) for k in self.mysql_keys}
+        mirror_squashed = {self._squash(k) for k in self.mirror_keys}
+        variants = [("mirror", k) for k in self.mirror_keys - self.mysql_keys
+                    if self._squash(k) in mysql_squashed]
+        variants += [("mysql", k) for k in self.mysql_keys - self.mirror_keys
+                     if self._squash(k) in mirror_squashed]
+        self.assertEqual(
+            [], variants,
+            "%d key(s) differ between the stores only by spaces or underscores, "
+            "so the same organism is keyed two ways:\n  %s"
+            % (len(variants), "\n  ".join(repr(v) for v in variants[:20])))
+
+
 if __name__ == "__main__":
     unittest.main()

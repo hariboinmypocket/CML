@@ -1147,6 +1147,67 @@ retired ID 12, whose replacement 74109 is unused here: the test failed naming
 the row, and passed again once it was restored. It skips when `taxdump/` is
 absent, which it is on a fresh clone.
 
+### The two stores were keying the same organism two different ways
+
+MySQL held `Bacteroides sp. 1 1 14` where the mirror held `Bacteroides sp.
+1_1_14`, which is what NCBI calls tax ID 469585 -- so the mirror and NCBI agreed
+and MySQL was the outlier, on 24 rows.
+
+**The cost was not cosmetic.** `(genus_key, species_key)` is how every two-store
+repair in this repo matches a row, because the mirror keeps its own `taxa.id`
+space. A row keyed differently in each store is therefore invisible to all of
+them, and to `tests/test_cross_store_tax_ids.py`, which compares only keys
+present in both: 24 of the 54 keys the mirror held and MySQL did not were these
+variants, so those rows had never been compared across the stores at all.
+
+No transform is to blame -- `clean_str` collapses whitespace and touches no
+underscore, so the spelling arrived that way from the source, and a reload can
+bring it back. That is why the invariant is a test rather than an assumption.
+
+Each row was checked individually against `names.dmp` and changed only where the
+stored name differed from NCBI's name for its own tax ID by nothing but spaces,
+underscores and case -- never by a blanket substitution, which would corrupt the
+legitimate spaces in names like `sp. oral taxon 102`. **NCBI's punctuation was
+adopted and its capitalisation was not**, deliberately: NCBI writes `3_1_33FAA`,
+`parse_scientific_name` lowercases the epithet, and `scientific_name` is
+`genus + species` for all but 4 of 5,829 rows. Taking the uppercase would have
+broken that relationship on 38 rows for a cosmetic gain, so the 14 rows that
+differed from NCBI by case alone were left exactly as they were.
+
+Three rows had no tax ID at all, so the dump had nothing to check them against.
+They were respelled from the mirror instead, and the audit records that weaker
+basis per row rather than blurring it into the NCBI-confirmed ones. One of them
+then turned out to be a stale duplicate: MySQL already holds `Parabacteroides
+sp. 2_1_7` on 457388, the organism's current name after it left *Bacteroides*,
+so the respelled row is a pre-reclassification twin with no evidence. Noted, not
+folded.
+
+### 120 rows could be joined to NCBI in one store and not the other
+
+Found immediately after, and **the gap was in the guard as much as the data.**
+`tests/test_cross_store_tax_ids.py` selects `WHERE ncbi_tax_id IS NOT NULL`, so
+a key whose ID is missing on one side never enters both maps and is never
+compared. 120 shared keys were in that state: 89 with the ID only in MySQL, 31
+only in the mirror. The same organism, differently reachable.
+
+The donor store's ID was not copied on trust. For each row the stored name had
+to appear among NCBI's names for that ID, and the ID had to be a live node. 119
+of 120 passed; **114 were filled** and the rest refused, five because the fill
+would have put two rows of one abundance layer on a single tax ID -- which is
+what `taxa_sharing_a_tax_id_within_one_rank` exists to catch -- and one because
+NCBI does not list `Bulleidia massiliensis` for 2161814 at all. That last is the
+gender-inflection rename recorded further up: 2161814 is *Lactimicrobium
+massiliense*.
+
+`ncbi_rank` is written in the same statement, because filling the ID alone would
+leave the rank NULL -- the marker this repo uses for "points at an ID NCBI does
+not have" -- so a half-filled row would masquerade as a retired one.
+
+Both new invariants are asserted by importing the scripts' own planning
+functions rather than restating their rules, and both were proven by planting
+the defect: blanking one tax ID and respelling one key made each test fail
+naming the row and the command that fixes it, and both passed again on restore.
+
 ## 4. Validate and query
 
 ```bash
