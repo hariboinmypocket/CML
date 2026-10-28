@@ -35,16 +35,22 @@ CREATE TABLE IF NOT EXISTS taxa (
     -- different questions: taxonomic_rank is the abundance LAYER the row was
     -- loaded into, and ncbi_rank is what the organism actually is.
     --
-    -- 405 rows disagree. 123 sit in the genus layer while NCBI calls them
+    -- 147 rows disagree. 123 sit in the genus layer while NCBI calls them
     -- coarser -- 90 families (Muribaculaceae 2005473, Tannerellaceae 2005525),
-    -- 19 orders, 7 classes, 5 phyla, 1 infraclass, 1 infraorder -- and 282 sit
-    -- in the species layer while NCBI calls them finer, almost all strains.
+    -- 19 orders, 7 classes, 5 phyla, 1 infraclass, 1 infraorder -- and 24 sit
+    -- in the species layer while NCBI calls them finer: 22 strains, one
+    -- subspecies, one species subgroup.
     --
     -- These three move whenever a tax ID is repointed, which several sessions
     -- are doing, so they are anchored in tests/test_documented_figures.py: a
     -- repointing that changes them fails a test instead of leaving this comment
     -- quietly wrong. The previous figures said 408/125/283 and the breakdown
-    -- added to 121, naming four fewer rows than the total it claimed.
+    -- added to 121, naming four fewer rows than the total it claimed. 405/282
+    -- came next and was measuring a stale column rather than the data: MySQL
+    -- held ncbi_rank a taxdump generation behind the mirror for 257 rows, every
+    -- one of them 'strain' where the dump says 'species', so the species-layer
+    -- population read as ten times its real size until backfill_ncbi_rank.py
+    -- was run against MySQL again. The test is what caught it.
     --
     -- THE GENUS-LAYER ONES MUST NOT BE "FIXED" BY MOVING THEM. GMrepo's own
     -- export labels them taxonomic_rank = genus, and they are the unclassified

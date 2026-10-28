@@ -235,7 +235,12 @@ def mirror_connection():
     if not path.exists():
         return None
     try:
-        return sqlite3.connect(path, timeout=60)
+        # exists() is true for a file iCloud has evicted, and connect()
+        # succeeds lazily on one, so the hang lands on the first query -- which
+        # is how this suite once stalled past ten minutes. require_local turns
+        # that into the skip below.
+        from gutdb.config import require_local
+        return sqlite3.connect(require_local(path), timeout=60)
     except Exception:
         return None
 

@@ -1,0 +1,2 @@
+store,action,taxon_id,scientific_name,tax_id_before,tax_id_after,reason
+mysql,retag,112,Oxalobacter formigenes,556268,847,"556268 is Oxalobacter paraformigenes (Chmiel et al. 2022), a species split out of formigenes that lists only the strain Oxalobacter formigenes HOxBLS under `includes`; the species is 847"

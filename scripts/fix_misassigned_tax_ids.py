@@ -66,6 +66,17 @@ RETAG = [
      "Vibrio fischeri as a synonym"),
     ("vibrio", "furnissii", 903510, 29494,
      "903510 is the strain Vibrio furnissii NCTC 11218; the species is 29494"),
+    ("oxalobacter", "formigenes", 556268, 847,
+     "556268 is Oxalobacter paraformigenes (Chmiel et al. 2022), a species "
+     "split out of formigenes that lists only the strain Oxalobacter "
+     "formigenes HOxBLS under `includes`; the species is 847"),
+    ("klebsiella", "pneumoniae", 1328388, 573,
+     "1328388 is absent from nodes.dmp -- NCBI deleted it -- so 2,681 "
+     "abundance rows joined to nothing; 573 is Klebsiella pneumoniae"),
+    ("eubacterium", "saphenum", 592031, 51123,
+     "592031 is the strain Eubacterium saphenum ATCC 49989; the species is "
+     "51123. The genus-layer row that already carries 51123 is a different "
+     "layer, so the within-rank collision counter is unaffected"),
 ]
 # (genus_key, species_key, tax_id, why) -- removed only when evidence-free.
 DROP_STALE_SYNONYM = [

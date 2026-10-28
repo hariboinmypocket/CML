@@ -1,0 +1,5 @@
+store,action,taxon_id,scientific_name,tax_id_before,tax_id_after,reason
+mysql,retag,1370,Klebsiella pneumoniae,1328388,573,"1328388 is absent from nodes.dmp -- NCBI deleted it -- so 2,681 abundance rows joined to nothing; 573 is Klebsiella pneumoniae"
+mysql,retag,1093,Eubacterium saphenum,592031,51123,"592031 is the strain Eubacterium saphenum ATCC 49989; the species is 51123. The genus-layer row that already carries 51123 is a different layer, so the within-rank collision counter is unaffected"
+mysql,rerank,1370,Klebsiella pneumoniae,,species,taxdump rank of 573
+mysql,rerank,1093,Eubacterium saphenum,strain,species,taxdump rank of 51123

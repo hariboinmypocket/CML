@@ -4,18 +4,24 @@
 taxonomic_rank in this database is the abundance LAYER a row was loaded into --
 GMrepo publishes a genus array and a species array, and the loaders keep that
 split because the per-(sample, rank) sum to 1 is defined over it. It is not a
-claim about what the organism is, and for 408 rows the two differ:
+claim about what the organism is, and for 152 rows the two differ:
 
     stored genus    -> NCBI family        90    Muribaculaceae, Tannerellaceae
     stored genus    -> NCBI order         19    Candidatus Gastranaerophilales
     stored genus    -> NCBI class          7    Candidatus Sericytochromatia, Mammalia
     stored genus    -> NCBI phylum         5    Candidatus Latescibacterota
-    stored genus    -> other               4    subgenus, infraclass, infraorder, species
-    stored species  -> NCBI strain       277    Bifidobacterium longum (1322347)
-    stored species  -> NCBI subspecies      4    Streptomyces lavendulae (58340)
-    stored species  -> other                2    isolate, species subgroup
+    stored genus    -> other               7    species 4, subgenus, infraclass, infraorder
+    stored species  -> NCBI strain        22    Bifidobacterium longum (1322347)
+    stored species  -> NCBI subspecies      1    Streptomyces lavendulae (58340)
+    stored species  -> other                1    species subgroup
 
-THE 125 COARSE GENUS-LAYER ROWS ARE NOT AN ERROR TO MOVE. GMrepo's own export
+The strain row said 277 when this was written and says 22 now, and the drop is
+NCBI's, not a repair: this table compares the layer against the CURRENT dump, so
+it moves when a dump lands. The stale thing was ncbi_rank in MySQL, which still
+held the older answer for 257 rows long after the mirror had been refreshed --
+see tests/test_cross_store_tax_ids.py, which is what noticed.
+
+THE 123 COARSE GENUS-LAYER ROWS ARE NOT AN ERROR TO MOVE. GMrepo's own export
 labels them taxonomic_rank = genus, so the database is faithful, and they are the
 unclassified residual within a family rather than a duplicate of it: mean shares
 run 0.17% (Erysipelotrichaceae) to 0.6% (Tannerellaceae) while the real genera
@@ -56,6 +62,12 @@ from gutdb.db import connect
 DRY_RUN = "--apply" not in sys.argv
 TAXDUMP = Path(os.environ.get("GUTDB_TAXDUMP", "taxdump"))
 AUDIT = Path("data/ncbi_rank_audit.csv")
+# A dry run must not overwrite the record of what was last applied. Writing it
+# unconditionally destroys the baseline the dry run exists to be compared
+# against, which is the third place in this repo that has done it --
+# adjudicate_conflicts.py and one concurrent session's script were the others.
+# A tool that reports on state does not write the file that records the state.
+DRY_RUN_AUDIT = AUDIT.with_name(AUDIT.stem + "_dry_run.csv")
 AUDIT_FIELDS = ("taxon_id", "scientific_name", "ncbi_tax_id", "stored_rank",
                 "ncbi_rank", "abundance_rows", "associations", "note")
 # Ranks that are at or below genus, so a genus-layer row carrying one is not
@@ -143,12 +155,13 @@ def main() -> int:
         conn.commit()
         print(f"\nncbi_rank written for {len(updates)} rows")
 
-    AUDIT.parent.mkdir(parents=True, exist_ok=True)
-    with AUDIT.open("w", newline="", encoding="utf-8") as fh:
+    destination = DRY_RUN_AUDIT if DRY_RUN else AUDIT
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    with destination.open("w", newline="", encoding="utf-8") as fh:
         writer = csv.DictWriter(fh, fieldnames=AUDIT_FIELDS)
         writer.writeheader()
         writer.writerows(sorted(disagree, key=lambda d: -d["abundance_rows"]))
-    print(f"wrote {AUDIT} ({len(disagree)} rows)")
+    print(f"wrote {destination} ({len(disagree)} rows)")
     conn.close()
 
     backfill_mirror(ranks)

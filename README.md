@@ -933,6 +933,82 @@ skips when it does not, so the check stays tied to the real condition without
 depending on it. The durable fix is not in this repo: turning off iCloud Drive's
 "Optimize Mac Storage" stops macOS evicting these inputs at all.
 
+### The stores disagreed about which organism four rows were
+
+The recurring defect here is a repair that reached only one store. Tax IDs are
+where it does the most harm, because the ID is what joins a row to NCBI: a row
+can carry the right name, the right lineage and the right abundances while
+pointing at a different organism.
+
+Four rows did. **In all four the mirror was the store that had it right.**
+
+| row | MySQL held | the mirror held |
+| --- | --- | --- |
+| *Oxalobacter formigenes* | 556268 -- *O. paraformigenes* | 847, the species |
+| *Klebsiella pneumoniae* | 1328388 -- deleted from the dump | 573, the species |
+| *Eubacterium saphenum* | 592031 -- strain `ATCC 49989` | 51123, the species |
+| *Phocaeicola coprocola* | 470145 -- strain `DSM 17136` | 310298, the species |
+
+*Oxalobacter formigenes* is the one that matters most. It is the gut's oxalate
+degrader, so it is directly relevant to the CKD cohorts here, and 556268 is
+`Oxalobacter paraformigenes` -- a species split out of *formigenes* in 2022
+which lists only the strain `Oxalobacter formigenes HOxBLS` under `includes`.
+686 abundance rows and 5 disease associations hung off a row naming one species
+and pointing at another that still exists separately. *Klebsiella pneumoniae*
+was worse in a quieter way: 1328388 is absent from `nodes.dmp` because NCBI
+deleted it, so 2,681 abundance rows joined to nothing at all.
+
+Three were corrected through `fix_misassigned_tax_ids.py`, which matches on
+`(genus_key, species_key)` and reconciles `ncbi_rank` afterwards whether or not
+the ID moved. **The fourth was refused rather than guessed at.** Retagging
+*Phocaeicola coprocola* onto 310298 would collide in the same species layer with
+`Bacteroides coprocola`, the pre-rename row for the same organism, which holds
+one association and so is not the evidence-free synonym that script is willing
+to drop. No sample holds both rows, so folding them is additive-safe, but moving
+an association between taxa is a data decision. It is recorded as a documented
+exemption in `tests/test_cross_store_tax_ids.py`, and that exemption is itself
+asserted to still be divergent, so fixing it forces the exemption to be deleted
+instead of lingering as a stale excuse.
+
+**Then the same comparison found the defect at scale.** 179 taxa disagreed about
+`ncbi_rank`; 176 of those carried the *same* tax ID in both stores, and for all
+176 the dump backed the mirror and MySQL was wrong -- `strain` where NCBI says
+`species`. `backfill_ncbi_rank.py` writes both stores, so this was not an
+unreachable store but an unrepeated run: the mirror had been refreshed against a
+newer dump and MySQL never was. Re-running it corrected 257 rows in MySQL and
+filled 81 in the mirror, and `ncbi_rank` now matches the dump for every row whose
+tax ID the dump still resolves.
+
+That shifted two figures this repo had anchored, which is how it was confirmed
+rather than assumed: the species-layer-finer population fell from 282 to 24 and
+total rank disagreements from 405 to 147. **Those older numbers were measuring
+the stale column, not the data** -- the species layer looked ten times more
+misaligned than it is. The anchoring test caught the change on the same run,
+which is what that comment in `schema.sql` predicted it would do.
+
+No counter could see any of this. `validate_sqlite_mirror` runs the same check
+SQL against each store separately and prefixes the results `sqlite_`, so a value
+that is individually legal in both stores but different between them passes
+every check. Comparing the stores needs both connections at once, so it is a
+test, on the same grounds as the association drift check.
+
+### A dump scan that mostly found its own artifacts
+
+Checking every row's name against NCBI's names for its tax ID -- the gap a
+strain-repointing script cannot see, because a row holding the wrong species'
+ID outright looks perfectly well-formed -- produced 11 candidates, and **ten
+were artifacts of the check rather than defects in the data.** Recorded so the
+scan is not repeated: NCBI stores genus authority text inside the scientific
+name (`"Candidatus Ovatusbacter" Dirren and Posch 2016`), several rows carry
+concatenated names from a known loader defect, Latin gender agreement changes
+the epithet with the genus (`massiliensis` becomes `massiliense`), and a
+provisional `sp.` designation becomes a real epithet when the organism is
+described (`Kocuria sp. 257` is now *K. uropygioeca*). Comparing epithets rather
+than whole names removes renames and strain suffixes, which is what left
+*Oxalobacter* visible; the remaining ten need the name parsed, not the data
+repaired. 39 tax IDs are absent from the dump entirely, which is the already
+documented case of NCBI deleting nodes.
+
 ## 4. Validate and query
 
 ```bash
