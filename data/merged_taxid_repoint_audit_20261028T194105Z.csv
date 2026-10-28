@@ -1,0 +1,3 @@
+store,taxon_id,scientific_name,retired_tax_id,replacement_tax_id,ncbi_rank
+sqlite,4980,Anaeroarcus,151038,81463,genus
+sqlite,5213,Defluviimonas,1097466,205889,genus

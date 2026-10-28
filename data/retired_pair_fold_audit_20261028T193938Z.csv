@@ -1,0 +1,11 @@
+store,case,dropped_id,dropped_name,survivor_id,survivor_name,numbers
+mysql,the occupant holds no evidence,298,Anaeromusa,1153932,Anaeroarcus,co-occur=0 retired=1/0 occupant=0/0
+mysql,"both hold evidence, never co-occur",68960,Defluviimonas,391425,Albidovulum,co-occur=0 retired=3/0 occupant=1/0
+mysql,"both hold evidence, never co-occur",826368,Massilibacillus,435275,Anaerosinus,co-occur=0 retired=1/0 occupant=3/0
+mysql,the occupant holds no evidence,1220,Hominicola intestinalis,8431,Merdimmobilis hominis,co-occur=0 retired=3195/7 occupant=0/0
+mysql,retired row holds no evidence,1682,Sphingobium japonicum,2659340,Sphingobium indicum,co-occur=0 retired=0/0 occupant=2/0
+mysql,retired row holds no evidence,1815,Streptococcus sp. i-p16,1813,Streptococcus sp. i-g2,co-occur=0 retired=0/0 occupant=0/0
+sqlite,"both hold evidence, never co-occur",4658,Massilibacillus,4720,Anaerosinus,co-occur=0 retired=1/0 occupant=2/0
+sqlite,the occupant holds no evidence,1218,Hominicola intestinalis,2346,Merdimmobilis hominis,co-occur=0 retired=3187/7 occupant=0/0
+sqlite,retired row holds no evidence,1679,Sphingobium japonicum,4369,Sphingobium indicum,co-occur=0 retired=0/0 occupant=2/0
+sqlite,retired row holds no evidence,1812,Streptococcus sp. i-p16,1810,Streptococcus sp. i-g2,co-occur=0 retired=0/0 occupant=0/0

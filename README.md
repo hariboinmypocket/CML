@@ -376,7 +376,7 @@ simulated refill, not merely 0 against clean data.
 This line has described the dataset as carrying **succinate production** since
 the first commit. No column ever did: `git log -S succinate -- gutdb/schema.sql`
 returns nothing, and succinate appeared in exactly one tracked file, that
-sentence. Only 1 of 5,835 taxa mentions succinate in its MiMeDB `metabolism`
+sentence. Only 1 of 5,829 taxa mentions succinate in its MiMeDB `metabolism`
 text, so there was nothing to read it from either.
 
 There is **no source in this database for whether an organism produces
@@ -489,7 +489,7 @@ columns returned four, and three of them are deliberate:
 
 ### How far the succinate associations actually reach
 
-394 of 5,835 taxa carry one, which is 6.8%, and the shortfall is data rather
+394 of 5,829 taxa carry one, which is 6.8%, and the shortfall is data rather
 than filtering: **every taxon that appears in the eleven metabolomics cohorts at
 all is covered**, none were lost to the prevalence or support floors. The other
 5,444 taxa have no metabolomics sample whatsoever. The ceiling is lower still
@@ -731,7 +731,7 @@ all, which is true and is not the whole difference. Measured against MySQL:
 |---|---|---|---|
 | samples | 36,693 | 23,494 | 64% |
 | abundance rows | 3,074,882 | 2,050,969 | 67% |
-| taxa | 5,835 | 5,208 | 89% |
+| taxa | 5,829 | 5,204 | 89% |
 | samples with a genus layer | 32,327 | 18,644 | 58% |
 | samples with a species layer | 12,566 | 12,049 | 96% |
 
@@ -1082,15 +1082,54 @@ wrong once already. `merged.dmp` states each replacement outright, so nothing
 was inferred from a name. It and `delnodes.dmp` now sit beside the other two in
 `taxdump/`, which is gitignored.
 
-**The 13 that remain are organism merges, not ID corrections, and that is why
+**6 of those 13 turned out to need no arithmetic at all, and are now folded.**
+Measured per pair -- samples holding both rows, abundance and associations on
+each side -- they fall into four cases, not one:
+
+| case | n | taxa |
+| --- | --- | --- |
+| the retired row holds no evidence | 2 | *Sphingobium japonicum*, *Streptococcus* sp. i-p16 |
+| the occupant holds no evidence | 2 | *Merdimmobilis hominis* (3,195 rows), *Anaeroarcus* |
+| both hold evidence, never co-occur | 2 | *Defluviimonas*, *Massilibacillus* |
+| the two co-occur in samples | 7 | *Allisonella*, *Anaeroglobus*, *Raoultella*, and four small ones |
+
+Where only one side holds evidence the other is a dead name, and where both hold
+evidence but no sample holds both, each sample still ends with exactly one row
+for the organism -- so the layer's sum is untouched and only which `taxon_id`
+carries the mass changes. `fold_retired_taxid_pairs.py` carries the tax ID and
+every trait onto the survivor before deleting anything, which mattered:
+*Merdimmobilis hominis* took seven trait columns off the row being dropped, and
+*Sphingobium indicum* took ten. That left 7 rows and 6,639 abundance rows in the
+class, and both stores agree on all 7.
+
+**The cross-store gate earned itself immediately.** *Nubsella* is classified
+differently by the two stores -- MySQL sees it co-occurring with *Pedobacter* in
+3 samples, the mirror sees no overlap at all, because the mirror holds fewer
+samples. Folding on either store's own reading would have been a one-store
+repair. It is reported as disputed and left alone.
+
+It also exposed something about the mirror worth recording: **it is not a subset
+of MySQL by membership, only by count.** 54 `(genus_key, species_key)` keys
+exist in the mirror and not in MySQL, nearly all with no abundance -- stale name
+rows the mirror kept, including the underscore spellings (`bacteroides sp.
+1_1_14`) where MySQL holds spaces. So a fold can legitimately find the survivor
+missing from the other store. Refusing in that case would leave a broken join
+behind, so the script says so instead and a second pass of
+`repoint_merged_taxids.py` converges the other store -- which is how the mirror's
+*Anaeroarcus* reached 81463 and its *Defluviimonas* reached the live 205889.
+
+**The 7 that remain are organism merges, not ID corrections, and that is why
 they were refused.** Each merges onto an ID another row in the same abundance
 layer already holds, because the database carries both the old and the new name
 as separate rows: *Allisonella* (4,629 abundance rows) beside *Dialister*,
 *Anaeroglobus* (1,471) beside *Megasphaera*, *Raoultella* beside *Klebsiella*,
 and *Anaeroglobus* and *Colibacter* both merge onto *Megasphaera*. Folding them
 means summing the per-(sample, rank) shares wherever both rows appear in one
-sample, or the sum to 1 breaks -- the unwinding this repo has done once before by
-hand, and a data decision rather than a cleanup.
+sample, or the sum to 1 breaks -- and the overlap is not marginal: *Allisonella*
+and *Dialister* share **2,869 samples**, *Anaeroglobus* and *Megasphaera* 1,195,
+*Raoultella* and *Klebsiella* 310. It also collapses two ML features into one,
+which changes any model already trained on them. That is the unwinding this repo
+has done once before by hand, and a data decision rather than a cleanup.
 
 **The repointer nearly manufactured the defect it was fixing.** Run per store,
 it found 25 repointable in MySQL and 26 in the mirror, because the mirror holds

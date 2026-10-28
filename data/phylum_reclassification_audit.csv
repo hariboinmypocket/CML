@@ -1,1 +1,3 @@
 store,taxon_id,scientific_name,rank,ncbi_tax_id,stored_phylum,ncbi_phylum,action
+mysql,1574,Picrophilus torridus,species,46632,Euryarchaeota,Thermoplasmatota,normalized
+sqlite,1571,Picrophilus torridus,species,46632,Euryarchaeota,Thermoplasmatota,normalized
