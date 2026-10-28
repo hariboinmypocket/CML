@@ -1,0 +1,50 @@
+store,taxon_id,scientific_name,retired_tax_id,replacement_tax_id,ncbi_rank
+mysql,696,Anncaliia algerae,723287,67680,species
+mysql,969,Craterellus odoratus,57198,2170348,species
+mysql,1574,Picrophilus torridus,82076,46632,species
+mysql,1695,Robertmurraya yapensis,3133160,2492960,species
+mysql,1777,Schaedlerella arabinosiphila,97139,2044587,species
+mysql,1866,Streptomyces nashvillensis,67334,67367,species
+mysql,3475,Kutzneria albida,43357,47990,species
+mysql,7685,Waltera,2981631,2815781,genus
+mysql,7701,Faecalibacterium butyricigenerans,2881266,1851427,species
+mysql,7712,Gallintestinimicrobium propionicum,2885350,2981770,species
+mysql,7977,Pseudoruminococcus,2696673,2721119,genus
+mysql,9949,Claveliimonas bilis,2841037,3028070,species
+mysql,13363,Acidaminococcus provencensis,2058289,2897706,species
+mysql,455652,Candidatus Hydrothermota,1130266,1703755,phylum
+mysql,483511,Heyndrickxia,2817139,2837504,genus
+mysql,1442176,Amygdalobacter nucleatus,1497955,3029274,species
+mysql,1461310,Coriobacteriales bacterium dnf00809,1588753,3417040,species
+mysql,1691352,Kingella pumchi,2916757,2779506,species
+mysql,1759324,Brevibacterium sp. jcm 18882,1305649,1482676,species
+mysql,1762661,Guptibacillus hwajinpoensis,157733,208199,species
+mysql,1764550,Ottowia sp. gy511,2603274,2675430,species
+mysql,2287421,Veillonella intestinalis,2941339,2941341,species
+mysql,2301235,Deinococcus soli (ex cha et al. 2016),1765963,1309411,species
+mysql,2358129,Corynebacterium yonathiae,2916726,2913504,species
+mysql,2468055,Bradyrhizobium denitrificans,328552,2734912,species
+sqlite,695,Anncaliia algerae,723287,67680,species
+sqlite,967,Craterellus odoratus,57198,2170348,species
+sqlite,1571,Picrophilus torridus,82076,46632,species
+sqlite,1692,Robertmurraya yapensis,3133160,2492960,species
+sqlite,1774,Schaedlerella arabinosiphila,97139,2044587,species
+sqlite,1863,Streptomyces nashvillensis,67334,67367,species
+sqlite,2176,Gallintestinimicrobium propionicum,2885350,2981770,species
+sqlite,2183,Pseudoruminococcus,2696673,2721119,genus
+sqlite,2236,Waltera,2981631,2815781,genus
+sqlite,2510,Faecalibacterium butyricigenerans,2881266,1851427,species
+sqlite,2591,Claveliimonas bilis,2841037,3028070,species
+sqlite,2793,Acidaminococcus provencensis,2058289,2897706,species
+sqlite,3266,Amygdalobacter nucleatus,1497955,3029274,species
+sqlite,3333,Coriobacteriales bacterium dnf00809,1588753,3417040,species
+sqlite,3699,Kingella pumchi,2916757,2779506,species
+sqlite,3791,Brevibacterium sp. jcm 18882,1305649,1482676,species
+sqlite,3807,Guptibacillus hwajinpoensis,157733,208199,species
+sqlite,3813,Ottowia sp. gy511,2603274,2675430,species
+sqlite,4165,Veillonella intestinalis,2941339,2941341,species
+sqlite,4185,Deinococcus soli (ex cha et al. 2016),1765963,1309411,species
+sqlite,4224,Corynebacterium yonathiae,2916726,2913504,species
+sqlite,4271,Bradyrhizobium denitrificans,328552,2734912,species
+sqlite,4559,Heyndrickxia,2817139,2837504,genus
+sqlite,5035,Candidatus Hydrothermota,1130266,1703755,phylum

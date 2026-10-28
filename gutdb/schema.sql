@@ -35,9 +35,9 @@ CREATE TABLE IF NOT EXISTS taxa (
     -- different questions: taxonomic_rank is the abundance LAYER the row was
     -- loaded into, and ncbi_rank is what the organism actually is.
     --
-    -- 147 rows disagree. 123 sit in the genus layer while NCBI calls them
+    -- 148 rows disagree. 124 sit in the genus layer while NCBI calls them
     -- coarser -- 90 families (Muribaculaceae 2005473, Tannerellaceae 2005525),
-    -- 19 orders, 7 classes, 5 phyla, 1 infraclass, 1 infraorder -- and 24 sit
+    -- 19 orders, 7 classes, 6 phyla, 1 infraclass, 1 infraorder -- and 24 sit
     -- in the species layer while NCBI calls them finer: 22 strains, one
     -- subspecies, one species subgroup.
     --
@@ -51,6 +51,11 @@ CREATE TABLE IF NOT EXISTS taxa (
     -- one of them 'strain' where the dump says 'species', so the species-layer
     -- population read as ten times its real size until backfill_ncbi_rank.py
     -- was run against MySQL again. The test is what caught it.
+    --
+    -- The sixth phylum arrived the same way: Candidatus Hydrothermota sits in
+    -- the genus layer and its retired tax ID merged onto a phylum node, so
+    -- repointing it off a dead ID moved this figure by one. Being coarser than
+    -- its layer is a fact about GMrepo's export, not a defect to repair.
     --
     -- THE GENUS-LAYER ONES MUST NOT BE "FIXED" BY MOVING THEM. GMrepo's own
     -- export labels them taxonomic_rank = genus, and they are the unclassified

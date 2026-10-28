@@ -4,12 +4,12 @@
 taxonomic_rank in this database is the abundance LAYER a row was loaded into --
 GMrepo publishes a genus array and a species array, and the loaders keep that
 split because the per-(sample, rank) sum to 1 is defined over it. It is not a
-claim about what the organism is, and for 152 rows the two differ:
+claim about what the organism is, and for 153 rows the two differ:
 
     stored genus    -> NCBI family        90    Muribaculaceae, Tannerellaceae
     stored genus    -> NCBI order         19    Candidatus Gastranaerophilales
     stored genus    -> NCBI class          7    Candidatus Sericytochromatia, Mammalia
-    stored genus    -> NCBI phylum         5    Candidatus Latescibacterota
+    stored genus    -> NCBI phylum         6    Candidatus Latescibacterota
     stored genus    -> other               7    species 4, subgenus, infraclass, infraorder
     stored species  -> NCBI strain        22    Bifidobacterium longum (1322347)
     stored species  -> NCBI subspecies      1    Streptomyces lavendulae (58340)
@@ -21,7 +21,7 @@ it moves when a dump lands. The stale thing was ncbi_rank in MySQL, which still
 held the older answer for 257 rows long after the mirror had been refreshed --
 see tests/test_cross_store_tax_ids.py, which is what noticed.
 
-THE 123 COARSE GENUS-LAYER ROWS ARE NOT AN ERROR TO MOVE. GMrepo's own export
+THE 124 COARSE GENUS-LAYER ROWS ARE NOT AN ERROR TO MOVE. GMrepo's own export
 labels them taxonomic_rank = genus, so the database is faithful, and they are the
 unclassified residual within a family rather than a duplicate of it: mean shares
 run 0.17% (Erysipelotrichaceae) to 0.6% (Tannerellaceae) while the real genera

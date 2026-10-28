@@ -1064,21 +1064,49 @@ Those rows join to nothing when the join is made through NCBI, which is exactly
 what *Klebsiella pneumoniae* was doing with the deleted 1328388 before it was
 repointed.
 
-`ncbi_rank IS NULL AND ncbi_tax_id IS NOT NULL` turns out to mark this class
-exactly -- 38 rows, zero escapes, zero false positives -- so a counter is
-available the moment the rows are fixed. It cannot be added before then, because
-a counter reading 38 would abort the pre-push hook, which is the correct
-behaviour and the reason this is written down rather than papered over.
+`ncbi_rank IS NULL AND ncbi_tax_id IS NOT NULL` marks this class exactly -- 38
+rows, zero escapes, zero false positives -- because the rank backfill cannot
+answer for an ID the dump has never heard of, so a NULL there read as missing
+data rather than a broken join.
 
-Every one of the 38 resolves to a single candidate by name, but **only 15 match a
-current scientific name; the other 23 resolve through a synonym or an
-`includes`,** which is precisely the reading that got the *Vibrio* direction
-wrong once already -- tax 668 lists `Vibrio fischeri` as a synonym of
-`Aliivibrio fischeri`, so a synonym match proves a relationship and not an
-identity. Repointing 23 rows on that basis would be guessing. The authoritative
-answer is `merged.dmp`, which maps a retired ID straight to its replacement and
-is not in `taxdump/` -- only `names.dmp` and `nodes.dmp` were ever fetched, and
-nothing in the repo reads the other two files.
+**25 of the 38 are now repointed, and the abundance rows joining to nothing fell
+from 30,950 to 9,839.** Both stores agree exactly on the 13 that remain.
+
+Resolved from `merged.dmp`, not from names. Every one of the 38 also resolved to
+a single candidate by name lookup, and the two methods agreed everywhere they
+could be compared -- but **only 15 matched a current scientific name; the other
+23 matched a synonym or an `includes`**, which proves a relationship and not an
+identity. Tax 668 lists `Vibrio fischeri` among the synonyms of *Aliivibrio
+fischeri*, and reading that as identity is how the *Vibrio* direction was got
+wrong once already. `merged.dmp` states each replacement outright, so nothing
+was inferred from a name. It and `delnodes.dmp` now sit beside the other two in
+`taxdump/`, which is gitignored.
+
+**The 13 that remain are organism merges, not ID corrections, and that is why
+they were refused.** Each merges onto an ID another row in the same abundance
+layer already holds, because the database carries both the old and the new name
+as separate rows: *Allisonella* (4,629 abundance rows) beside *Dialister*,
+*Anaeroglobus* (1,471) beside *Megasphaera*, *Raoultella* beside *Klebsiella*,
+and *Anaeroglobus* and *Colibacter* both merge onto *Megasphaera*. Folding them
+means summing the per-(sample, rank) shares wherever both rows appear in one
+sample, or the sum to 1 breaks -- the unwinding this repo has done once before by
+hand, and a data decision rather than a cleanup.
+
+**The repointer nearly manufactured the defect it was fixing.** Run per store,
+it found 25 repointable in MySQL and 26 in the mirror, because the mirror holds
+fewer rows so two colliding targets looked free there. Repointing on each
+store's own verdict would have left the two disagreeing about which organism a
+row is. `blocked_keys` makes a key refused by any store refused for all, and the
+test imports that same function rather than restating the rule.
+
+A counter cannot close this: deciding it needs `merged.dmp`, and no SQL reaches
+a file. `tests/test_retired_taxids.py` keeps no count and no list of exceptions
+to go stale -- it asserts the shape, that every row still pointing at a retired
+ID is one the repointer refused for a stated reason, so a newly retired ID with
+a free target fails and names the command that fixes it. Proven by planting
+retired ID 12, whose replacement 74109 is unused here: the test failed naming
+the row, and passed again once it was restored. It skips when `taxdump/` is
+absent, which it is on a fresh clone.
 
 ## 4. Validate and query
 
