@@ -111,6 +111,7 @@ from gutdb.traits import dissents_from_genus, load_genus_consensus
 # Trait moves refused because the survivor's genus contradicts them. Reported
 # at the end; the merge still stands, one cell just does not travel with it.
 REFUSED_TRAITS: list[str] = []
+from gutdb.config import require_local
 from gutdb.transform import (
     clean_str,
     extract_species_epithet,
@@ -230,7 +231,14 @@ class Taxdump:
                 "set GUTDB_TAXDUMP.")
         self.rank_of: dict[int, str] = {}
         self.parent: dict[int, int] = {}
-        with open(nodes_path, encoding="utf-8", errors="replace") as handle:
+        # Guarded because these are the two largest files the repo reads, so
+        # they are the first macOS evicts to iCloud when the disk fills -- and
+        # an evicted read hangs instead of failing. An earlier commit claimed
+        # cleanup_gutdb.py held the last unguarded reads of an evictable source;
+        # that was wrong, because the grep behind it matched literal filenames
+        # and these paths are variables.
+        with open(require_local(nodes_path), encoding="utf-8",
+                  errors="replace") as handle:
             for line in handle:
                 parts = line.split("\t|")
                 taxid = int(parts[0])
@@ -238,7 +246,8 @@ class Taxdump:
                 self.rank_of[taxid] = sys.intern(parts[2].strip())
         self.scientific: dict[int, str] = {}
         self.any_name: dict[str, list[int]] = {}
-        with open(names_path, encoding="utf-8", errors="replace") as handle:
+        with open(require_local(names_path), encoding="utf-8",
+                  errors="replace") as handle:
             for line in handle:
                 parts = line.split("\t|")
                 if len(parts) < 4:

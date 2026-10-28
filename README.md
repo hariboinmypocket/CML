@@ -1265,6 +1265,53 @@ evicted here and reporting it local would hang the read the test exists to
 prevent. The guard is spied on and the reads stubbed instead, so all three are
 asserted independently, and each was removed in turn to confirm it fails.
 
+### 100 empty lineage cells, and the reconciliation that was already decided
+
+Checking every row's stored lineage against its own `ncbi_tax_id` found 786
+cells in MySQL that disagree with the dump -- 335 class, 309 order, 140 family
+-- and 913 in the mirror. `phylum` shows **one**, which is the proof that this
+works: `normalize_reclassified_phyla.py` reconciles the phylum in both stores
+and the pre-push hook enforces it, while the three ranks between phylum and
+genus never got the same treatment.
+
+**None of those 1,700 cells were touched, because the question is already
+settled and my first pass was shallower than the answer already in the repo.**
+`reconcile_lineage_ranks.py` measured this before and separates two things a
+name comparison cannot tell apart: a **rename**, where the stored name is an
+older spelling of the *same* node (`Actinobacteria` and `Actinomycetes` are both
+class 1760, 255 rows; `Bacillales` and `Caryophanales` both order 1385, 108
+rows), from a **reclassification**, where the name resolves to a *different*
+node of that rank. It writes only the second kind, per row, from an explicit
+approved list, and says of the first: adopting them "rewrites hundreds of rows
+to adopt a name the rest of the table does not use, which is a vocabulary
+decision rather than a repair". Comparing names alone, as the sweep here did,
+would have folded all 255 of those renames without noticing the distinction.
+
+What *is* unambiguous is an empty cell: it has no competing name, so filling it
+decides nothing. **100 were empty where the dump has an answer -- 49 in MySQL
+and 51 in the mirror** -- and they are now filled in both.
+`cleanup_gutdb.py` already fills empty cells from the dump and, like the rest of
+that script, reaches only the mirror.
+
+Some of those cells became fillable only because of the tax ID work earlier:
+a row with no tax ID has no lineage to look up, so `Faecalibacterium
+butyricigenerans` could not be given an order or family until it was repointed
+off a retired ID.
+
+One trap is guarded rather than discovered later. `Taxdump.lineage` resolves
+superkingdom through `("superkingdom", "domain", "kingdom")`, so for a virus it
+can return a kingdom -- the dump offers `Heunggongvirae` for a row whose correct
+superkingdom is `Viruses`. No empty cell hits that today; the filler refuses any
+superkingdom outside the four top-level names, and the test asserts it.
+
+**A correction to the previous section.** It claimed `cleanup_gutdb.py` held the
+last unguarded reads of an evictable source in `scripts/` and `gutdb/`. That was
+wrong: the grep behind it matched literal filenames, and most dump readers build
+their path in a variable. 61 unguarded read-mode calls remain, around nineteen
+of them reading `names.dmp` or `nodes.dmp` -- the two largest files here and the
+first macOS evicts. `Taxdump`, the reader this section depends on, is now
+guarded; the rest are a known, mechanical remainder rather than a closed matter.
+
 ## 4. Validate and query
 
 ```bash

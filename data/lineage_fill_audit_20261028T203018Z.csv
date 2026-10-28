@@ -1,0 +1,101 @@
+store,taxon_id,scientific_name,column,filled_with
+mysql,69,Krokinobacter genikus,superkingdom,Bacteria
+mysql,539,Methylomicrobium buryatense,superkingdom,Bacteria
+mysql,559,Nautella italica,superkingdom,Bacteria
+mysql,573,Marichromatium fluminis,superkingdom,Bacteria
+mysql,7701,Faecalibacterium butyricigenerans,order_name,Eubacteriales
+mysql,7701,Faecalibacterium butyricigenerans,family,Oscillospiraceae
+mysql,7712,Gallintestinimicrobium propionicum,superkingdom,Bacteria
+mysql,7712,Gallintestinimicrobium propionicum,phylum,Firmicutes
+mysql,7712,Gallintestinimicrobium propionicum,class_name,Clostridia
+mysql,7712,Gallintestinimicrobium propionicum,order_name,Lachnospirales
+mysql,7712,Gallintestinimicrobium propionicum,family,Lachnospiraceae
+mysql,9949,Claveliimonas bilis,superkingdom,Bacteria
+mysql,9949,Claveliimonas bilis,phylum,Firmicutes
+mysql,9949,Claveliimonas bilis,class_name,Clostridia
+mysql,9949,Claveliimonas bilis,order_name,Lachnospirales
+mysql,9949,Claveliimonas bilis,family,Lachnospiraceae
+mysql,13363,Acidaminococcus provencensis,order_name,Acidaminococcales
+mysql,455652,Candidatus Hydrothermota,superkingdom,Bacteria
+mysql,455652,Candidatus Hydrothermota,phylum,Caldifarciminota
+mysql,483511,Heyndrickxia,order_name,Caryophanales
+mysql,1442176,Amygdalobacter nucleatus,superkingdom,Bacteria
+mysql,1442176,Amygdalobacter nucleatus,phylum,Firmicutes
+mysql,1442176,Amygdalobacter nucleatus,class_name,Clostridia
+mysql,1442176,Amygdalobacter nucleatus,order_name,Eubacteriales
+mysql,1442176,Amygdalobacter nucleatus,family,Oscillospiraceae
+mysql,1461310,Coriobacteriales bacterium dnf00809,superkingdom,Bacteria
+mysql,1461310,Coriobacteriales bacterium dnf00809,phylum,Actinobacteria
+mysql,1461310,Coriobacteriales bacterium dnf00809,class_name,Coriobacteriia
+mysql,1461310,Coriobacteriales bacterium dnf00809,order_name,Eggerthellales
+mysql,1461310,Coriobacteriales bacterium dnf00809,family,Eggerthellaceae
+mysql,1759324,Brevibacterium sp. jcm 18882,class_name,Actinomycetes
+mysql,1762661,Guptibacillus hwajinpoensis,superkingdom,Bacteria
+mysql,1762661,Guptibacillus hwajinpoensis,phylum,Firmicutes
+mysql,1762661,Guptibacillus hwajinpoensis,class_name,Bacilli
+mysql,1762661,Guptibacillus hwajinpoensis,order_name,Caryophanales
+mysql,1762661,Guptibacillus hwajinpoensis,family,Guptibacillaceae
+mysql,2287421,Veillonella intestinalis,class_name,Negativicutes
+mysql,2287421,Veillonella intestinalis,order_name,Veillonellales
+mysql,2287421,Veillonella intestinalis,family,Veillonellaceae
+mysql,2358129,Corynebacterium yonathiae,class_name,Actinomycetes
+mysql,2358129,Corynebacterium yonathiae,order_name,Mycobacteriales
+mysql,2468055,Bradyrhizobium denitrificans,order_name,Hyphomicrobiales
+mysql,2468055,Bradyrhizobium denitrificans,family,Nitrobacteraceae
+mysql,2674028,[Bacteroides] pectinophilus,class_name,Clostridia
+mysql,2674028,[Bacteroides] pectinophilus,order_name,Eubacteriales
+mysql,2674029,[Clostridium] methylpentosum,class_name,Clostridia
+mysql,2674029,[Clostridium] methylpentosum,order_name,Eubacteriales
+mysql,2674030,[Eubacterium] saphenum,class_name,Clostridia
+mysql,2674030,[Eubacterium] saphenum,order_name,Peptostreptococcales
+sqlite,2247,[Clostridium] methylpentosum,superkingdom,Bacteria
+sqlite,2247,[Clostridium] methylpentosum,phylum,Firmicutes
+sqlite,2247,[Clostridium] methylpentosum,class_name,Clostridia
+sqlite,2247,[Clostridium] methylpentosum,order_name,Eubacteriales
+sqlite,2247,[Clostridium] methylpentosum,family,Oscillospiraceae
+sqlite,2729,[Bacteroides] pectinophilus,superkingdom,Bacteria
+sqlite,2729,[Bacteroides] pectinophilus,phylum,Firmicutes
+sqlite,2729,[Bacteroides] pectinophilus,class_name,Clostridia
+sqlite,2729,[Bacteroides] pectinophilus,order_name,Eubacteriales
+sqlite,2772,Eubacterium hominis,order_name,Erysipelotrichales
+sqlite,2772,Eubacterium hominis,family,Erysipelotrichaceae
+sqlite,2808,Baileyella,superkingdom,Bacteria
+sqlite,2808,Baileyella,phylum,Firmicutes
+sqlite,2808,Baileyella,class_name,Clostridia
+sqlite,2808,Baileyella,order_name,Peptostreptococcales
+sqlite,2808,Baileyella,family,Anaerovoracaceae
+sqlite,2809,Baileyella intestinalis,superkingdom,Bacteria
+sqlite,2809,Baileyella intestinalis,phylum,Firmicutes
+sqlite,2809,Baileyella intestinalis,class_name,Clostridia
+sqlite,2809,Baileyella intestinalis,order_name,Peptostreptococcales
+sqlite,2809,Baileyella intestinalis,family,Anaerovoracaceae
+sqlite,3779,Candidatus Galacturonibacter soehngenii,superkingdom,Bacteria
+sqlite,3779,Candidatus Galacturonibacter soehngenii,phylum,Firmicutes
+sqlite,3779,Candidatus Galacturonibacter soehngenii,class_name,Clostridia
+sqlite,3779,Candidatus Galacturonibacter soehngenii,order_name,Lachnospirales
+sqlite,3779,Candidatus Galacturonibacter soehngenii,family,Lachnospiraceae
+sqlite,4260,Candidatus Fonsibacter ubiquis,superkingdom,Bacteria
+sqlite,4260,Candidatus Fonsibacter ubiquis,phylum,Proteobacteria
+sqlite,4260,Candidatus Fonsibacter ubiquis,class_name,Alphaproteobacteria
+sqlite,4260,Candidatus Fonsibacter ubiquis,order_name,Candidatus Pelagibacterales
+sqlite,4260,Candidatus Fonsibacter ubiquis,family,Candidatus Pelagibacteraceae
+sqlite,4533,[Eubacterium] saphenum,superkingdom,Bacteria
+sqlite,4533,[Eubacterium] saphenum,phylum,Firmicutes
+sqlite,4533,[Eubacterium] saphenum,class_name,Clostridia
+sqlite,4533,[Eubacterium] saphenum,order_name,Peptostreptococcales
+sqlite,4533,[Eubacterium] saphenum,family,Anaerovoracaceae
+sqlite,4650,Brachymonas,superkingdom,Bacteria
+sqlite,4650,Brachymonas,phylum,Proteobacteria
+sqlite,4650,Brachymonas,class_name,Betaproteobacteria
+sqlite,4650,Brachymonas,order_name,Burkholderiales
+sqlite,4650,Brachymonas,family,Comamonadaceae
+sqlite,4670,Candidatus Galacturonibacter,superkingdom,Bacteria
+sqlite,4670,Candidatus Galacturonibacter,phylum,Firmicutes
+sqlite,4670,Candidatus Galacturonibacter,class_name,Clostridia
+sqlite,4670,Candidatus Galacturonibacter,order_name,Lachnospirales
+sqlite,4670,Candidatus Galacturonibacter,family,Lachnospiraceae
+sqlite,5222,Candidatus Fonsibacter,superkingdom,Bacteria
+sqlite,5222,Candidatus Fonsibacter,phylum,Proteobacteria
+sqlite,5222,Candidatus Fonsibacter,class_name,Alphaproteobacteria
+sqlite,5222,Candidatus Fonsibacter,order_name,Candidatus Pelagibacterales
+sqlite,5222,Candidatus Fonsibacter,family,Candidatus Pelagibacteraceae
