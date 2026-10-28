@@ -1,0 +1,7 @@
+store,taxon_id,scientific_name,taxonomic_rank,ncbi_tax_id,dump_calls_it
+mysql,2815,Unclassified burkholderiales burkholderiales bacterium,species,469610,Burkholderiales bacterium 1 1 47
+mysql,2816,Unclassified clostridiales clostridiales bacterium,species,457421,Clostridiales bacterium 1 7 47faa
+mysql,2818,Unclassified lachnospiraceae lachnospiraceae bacterium,species,658089,Lachnospiraceae bacterium 5 1 63faa
+mysql,3185,Lymphocryptovirus human gammaherpesvirus 4,species,10376,Epstein-barr virus ebv; Human gammaherpesvirus 4; Human herpesvirus 4
+mysql,1318437,Candidatus Fonsibacter,genus,2045213,Candidatus allofontibacter; Candidatus allofontibacter corrig. henson et al. 2018; Candidatus fontibacterium
+sqlite,5222,Candidatus Fonsibacter,genus,2045213,Candidatus allofontibacter; Candidatus allofontibacter corrig. henson et al. 2018; Candidatus fontibacterium
