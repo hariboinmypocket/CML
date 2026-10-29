@@ -1346,6 +1346,39 @@ caught the same way. The lesson is not about eviction: **a test that asserts
 "this function raises" tests the first guard only, and a function with several
 guards needs each one named.**
 
+### Finishing the guard, and the eviction that happened while finishing it
+
+The previous pass guarded three dump readers and said plainly that around
+sixteen more were left. They are done now: **no read of the taxdump or of a
+`data/` input is unguarded in `scripts/` or `gutdb/`.** Eleven dump reads across
+six files, and seven data-CSV reads, including the two in `load_muller2022`
+that matter most -- the muller2022 abundance tables are the largest inputs here
+and several are evicted at any given time.
+
+Where a reader takes a path, the guard goes on the parameter, so one line covers
+every file that function will ever be handed. Where a module resolves a fixed
+path, it goes immediately after the existence check, which is kept: an absent
+dump and an evicted one deserve different messages.
+
+**The taxdump was evicted again in the middle of this,** and that is the useful
+part. `names.dmp`, `nodes.dmp` and `merged.dmp` all went dataless while the work
+was in progress -- the disk had gone back to 97%, having been freed to 24GB
+earlier the same day, because iCloud was busy re-materialising 1.6GB of
+previously evicted files. The guard turned what would have been a silent hang
+into an immediate, named error. That is the whole intent, observed in
+production rather than argued for.
+
+**And three of this session's own tests failed that moment, in exactly the way
+they were written to document.** They checked `(taxdump / "names.dmp").exists()`
+and skipped when it was false -- so when the file was evicted, `exists()`
+returned true, the guard raised inside `setUpClass`, and the class ERRORED
+instead of skipping. `exists()` was never the question; the tests now call
+`require_local` and skip with the reason, which is what they do when the dump is
+simply absent.
+
+So the lesson lands twice: `exists()` is not a usability check, and the code that
+knows this still has to be written as though it does.
+
 ## 4. Validate and query
 
 ```bash

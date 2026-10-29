@@ -58,6 +58,9 @@ def _script(name):
 normalize_phyla = _script("normalize_reclassified_phyla")
 backfill_rank = _script("backfill_ncbi_rank")
 reconcile_ranks = _script("reconcile_lineage_ranks")
+muller = _script("load_muller2022")
+ckd_repair = _script("repair_ckd_demographics")
+ckd_verify = _script("verify_ckd_links")
 
 
 def first_evicted_input():
@@ -193,6 +196,23 @@ class EveryInputReaderIsGuardedTests(unittest.TestCase):
 
     def test_the_lineage_reconcilers_dump_reader_is_guarded(self):
         self._assert_both_dumps_guarded(reconcile_ranks, "load_taxdump")
+
+    def test_the_data_csv_readers_are_guarded(self):
+        """The readers that take a path, so one guard covers every file.
+
+        load_muller2022's two are the ones that matter most: the muller2022
+        abundance tables are the largest inputs here, several are evicted right
+        now, and reading one blocks rather than fails.
+        """
+        for module, function, args in (
+                (muller, "read_rows", (self.target,)),
+                (muller, "load_abundances", (self.target, {})),
+                (ckd_repair, "read_csv", (self.target,)),
+                (ckd_verify, "read_csv", (self.target,)),
+        ):
+            with self.subTest(reader="%s.%s" % (module.__name__, function)):
+                with self.assertRaises(EvictedFileError):
+                    getattr(module, function)(*args)
 
     def _assert_both_dumps_guarded(self, module, function):
         """Both dump paths, checked separately.

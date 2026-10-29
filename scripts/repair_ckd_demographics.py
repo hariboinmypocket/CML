@@ -22,6 +22,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
+from gutdb.config import require_local
 from gutdb.config import Settings
 from gutdb.db import connect
 from gutdb.transform import clean_str, reconcile_demographic_cells, same_demographic_value, verified_demographic_link
@@ -40,6 +41,7 @@ def digest(path):
 
 
 def read_csv(path):
+    path = require_local(path)
     with path.open(newline="", encoding="utf-8-sig") as handle:
         reader = csv.DictReader(handle)
         return reader.fieldnames, list(reader)

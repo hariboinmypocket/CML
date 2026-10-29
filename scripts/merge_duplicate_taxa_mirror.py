@@ -42,6 +42,8 @@ import importlib.util
 import os
 import sqlite3
 import sys
+
+from gutdb.config import require_local
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -76,6 +78,7 @@ def ncbi_names_from_dump(taxids: set[int]) -> dict[str, dict[str, str]]:
     names_file = TAXDUMP / "names.dmp"
     if not names_file.exists():
         raise SystemExit(f"taxdump not found at {TAXDUMP}/; set GUTDB_TAXDUMP")
+    require_local(names_file)
     wanted = {str(t) for t in taxids}
     out: dict[str, dict[str, str]] = {}
     with names_file.open(encoding="utf-8", errors="replace") as fh:

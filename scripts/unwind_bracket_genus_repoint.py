@@ -54,6 +54,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from gutdb.config import require_local
 from gutdb.config import Settings
 from gutdb.db import connect
 
@@ -80,7 +81,7 @@ def load_source() -> dict[str, dict[str, set]]:
     out: dict[str, dict[str, set]] = defaultdict(lambda: defaultdict(set))
     for path in SOURCES:
         try:
-            fh = open(path, newline="")
+            fh = open(require_local(path), newline="")
         except FileNotFoundError:
             continue
         with fh:

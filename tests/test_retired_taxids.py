@@ -42,12 +42,30 @@ def load_repointer():
     return module
 
 
+def _require_usable_dump(directory, names=("names.dmp", "nodes.dmp")):
+    """Skip unless the dump is present AND its contents are on this disk.
+
+    exists() is not the question. A file iCloud has evicted passes exists()
+    while its first read blocks, so require_local is what decides whether the
+    dump can be used -- and these tests fell into that exact trap: they errored
+    in setUpClass the first time macOS evicted the taxdump out from under them,
+    instead of skipping the way they do when it is simply absent.
+    """
+    from gutdb.config import EvictedFileError, require_local
+    for name in names:
+        path = directory / name
+        if not path.exists():
+            raise unittest.SkipTest(f"{name} not present (gitignored)")
+        try:
+            require_local(path)
+        except EvictedFileError:
+            raise unittest.SkipTest(f"{name} is evicted to iCloud, not readable here")
+
+
 class RetiredTaxIdTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        for required in (MERGED, NODES):
-            if not required.exists():
-                raise unittest.SkipTest(f"{required.name} not present (gitignored)")
+        _require_usable_dump(TAXDUMP, ("merged.dmp", "nodes.dmp"))
         cls.mod = load_repointer()
         try:
             from gutdb.config import Settings

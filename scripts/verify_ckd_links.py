@@ -22,6 +22,12 @@ import xlrd
 from openpyxl import load_workbook
 from pypdf import PdfReader
 
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from gutdb.config import require_local  # noqa: E402
+
 
 ROOT = Path(__file__).resolve().parent.parent
 SUPPLEMENT_BASE = "https://rcastoragev2.blob.core.windows.net/5de81978ee2b164cb591ed3fede2bb56/"
@@ -33,6 +39,7 @@ ENA_URL = ("https://www.ebi.ac.uk/ena/portal/api/filereport?accession=PRJNA56232
 
 
 def read_csv(path, delimiter=","):
+    path = require_local(path)
     with path.open(newline="", encoding="utf-8-sig") as handle:
         return list(csv.DictReader(handle, delimiter=delimiter))
 

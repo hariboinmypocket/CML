@@ -37,6 +37,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from gutdb.config import require_local
 from gutdb.transform import clean_str, normalize_phylum
 
 DRY_RUN = "--apply" not in sys.argv
@@ -64,6 +65,10 @@ def load_taxdump() -> tuple[dict[str, int], dict[int, dict[str, str]]]:
     if not (os.path.exists(names_path) and os.path.exists(nodes_path)):
         raise SystemExit(
             f"taxdump not found at {TAXDUMP}/. Unzip taxdmp.zip there or set GUTDB_TAXDUMP.")
+    # exists() passes for a file iCloud has evicted; its first read then
+    # blocks with no error. These are the repo's two largest files.
+    names_path = str(require_local(names_path))
+    nodes_path = str(require_local(nodes_path))
 
     # Every candidate, not the first: "Bacillus" is both a bacterial genus and a
     # stick insect, and keeping whichever line names.dmp happened to list first

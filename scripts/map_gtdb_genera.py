@@ -48,6 +48,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from gutdb.config import require_local
 from gutdb.config import Settings
 from gutdb.db import connect
 
@@ -77,7 +78,7 @@ def read_labels() -> tuple[dict[str, float], dict[str, set[str]]]:
         if not path.exists():
             continue
         study = study_dir.name
-        with path.open(newline="", encoding="utf-8") as fh:
+        with open(require_local(path), newline="", encoding="utf-8") as fh:
             reader = csv.reader(fh, delimiter="\t")
             header = next(reader)[1:]
             for col in header:
@@ -99,6 +100,7 @@ def ncbi_genus_names() -> set[str]:
     if not TAXDUMP.exists():
         print(f"   ! {TAXDUMP} absent -- cannot verify rejections against NCBI")
         return set()
+    require_local(TAXDUMP)
     names: set[str] = set()
     with TAXDUMP.open(encoding="utf-8", errors="replace") as fh:
         for line in fh:

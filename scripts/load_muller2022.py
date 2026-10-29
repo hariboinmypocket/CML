@@ -68,6 +68,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from gutdb.config import require_local
 from gutdb.config import Settings
 from gutdb.db import connect
 from gutdb.transform import normalize_phylum, numeric_value_is_trustworthy
@@ -441,11 +442,15 @@ def ensure_genera(cur, needed: set[str], taxdump) -> dict[str, int]:
 
 
 def read_rows(path: Path) -> list[dict]:
+    # The muller2022 abundance tables are the largest inputs here, so they are
+    # among the first iCloud evicts; an evicted read blocks rather than fails.
+    path = require_local(path)
     with path.open(newline="", encoding="utf-8") as fh:
         return list(csv.DictReader(fh, delimiter="\t"))
 
 
 def load_abundances(path: Path, keep: dict[str, str]) -> tuple[dict[str, dict[str, float]], float]:
+    path = require_local(path)
     """sample -> {NCBI genus: relative abundance}, summed per target then renormalized.
 
     Returns the profiles and the mean share of each sample's mass that survived

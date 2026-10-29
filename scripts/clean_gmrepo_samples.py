@@ -18,6 +18,7 @@ import tempfile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from gutdb.config import require_local
 from gutdb.config import Settings
 from gutdb.db import connect
 from gutdb.pipeline import (GMREPO_SAMPLE_FIELDS, prepare_gmrepo_sample_export,
@@ -30,7 +31,7 @@ def main() -> None:
     parser.add_argument("--env-file", default=".env")
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
-    with args.path.open(newline="", encoding="utf-8-sig") as handle:
+    with open(require_local(args.path), newline="", encoding="utf-8-sig") as handle:
         rows = list(csv.DictReader(handle))
     runs = [r["run_id"] for r in rows]
     if len(set(runs)) != len(runs):

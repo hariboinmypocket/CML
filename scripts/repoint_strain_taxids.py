@@ -66,6 +66,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from gutdb.config import require_local
 from gutdb import taxdump
 from gutdb.config import Settings
 from gutdb.db import connect
@@ -91,7 +92,7 @@ def species_names(dump) -> dict[int, str]:
         raise SystemExit(
             f"taxdump not found at {TAXDUMP}/. Unzip taxdmp.zip there or set GUTDB_TAXDUMP.")
     names: dict[int, str] = {}
-    with open(path, encoding="utf-8", errors="replace") as handle:
+    with open(require_local(path), encoding="utf-8", errors="replace") as handle:
         for line in handle:
             parts = line.split("\t|")
             if len(parts) < 4 or parts[3].strip() != "scientific name":

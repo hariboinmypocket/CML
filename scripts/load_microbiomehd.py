@@ -43,6 +43,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from gutdb.config import require_local
 from gutdb.config import Settings
 from gutdb.db import connect
 from gutdb.pipeline import (
@@ -187,6 +188,7 @@ def taxdump_has_prokaryote_genus(name: str) -> bool:
             print(f"    (no taxdump at {TAXDUMP}/ - genus names not validated)")
             _prokaryote_genera = set()
             return True
+        names, nodes = require_local(names), require_local(nodes)
         parent: dict[int, int] = {}
         rank: dict[int, str] = {}
         with nodes.open(encoding="utf-8", errors="replace") as fh:

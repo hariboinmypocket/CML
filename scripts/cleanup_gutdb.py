@@ -96,7 +96,7 @@ def source_mesh_map() -> dict[str, str]:
     for path in files:
         if not os.path.exists(path):
             continue
-        with open(path, newline="", encoding="utf-8-sig") as handle:
+        with open(require_local(path), newline="", encoding="utf-8-sig") as handle:
             for row in csv.DictReader(handle):
                 for name_col, mesh_col in pairs:
                     name, mesh = canon(row.get(name_col)), canon(row.get(mesh_col))
@@ -357,6 +357,10 @@ def fill_from_ncbi_taxonomy(con: sqlite3.Connection) -> Counter:
     names_path, nodes_path = f"{TAXDUMP}/names.dmp", f"{TAXDUMP}/nodes.dmp"
     if not (os.path.exists(names_path) and os.path.exists(nodes_path)):
         return Counter()
+    # exists() passes for a file iCloud has evicted; its first read then
+    # blocks with no error. These are the repo's two largest files.
+    names_path = str(require_local(names_path))
+    nodes_path = str(require_local(nodes_path))
 
     taxa = con.execute(
         "SELECT id, scientific_name, taxonomic_rank, ncbi_tax_id, superkingdom, phylum,"
@@ -560,7 +564,7 @@ def fill_comparison_context(con: sqlite3.Connection) -> dict[str, int]:
     """
     per_project: dict[str, dict[str, str]] = {}
     for path in sorted(glob.glob(os.path.join(REPO, "data", "literature_*_markers.csv"))):
-        with open(path, newline="", encoding="utf-8-sig") as handle:
+        with open(require_local(path), newline="", encoding="utf-8-sig") as handle:
             for row in csv.DictReader(handle):
                 project = canon(row.get("project_id"))
                 if not project or project in per_project:
