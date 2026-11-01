@@ -1,0 +1,3013 @@
+store,taxon_id,scientific_name,column,derived
+mysql,1,Clostridium aminophilum,energy_mode,fermenter
+mysql,5,Comamonas,energy_mode,respirator
+mysql,6,Bacteroides acidifaciens,energy_mode,fermenter
+mysql,8,Bacteroides plebeius,energy_mode,fermenter
+mysql,11,Acholeplasma,energy_mode,mixed
+mysql,13,Phascolarctobacterium,energy_mode,fermenter
+mysql,14,Treponema,energy_mode,fermenter
+mysql,22,Victivallis vadensis,energy_mode,fermenter
+mysql,24,Ethanoligenens,energy_mode,fermenter
+mysql,25,Pseudoramibacter,energy_mode,fermenter
+mysql,26,Tepidimicrobium,energy_mode,fermenter
+mysql,27,Pseudobutyrivibrio,energy_mode,fermenter
+mysql,28,Anaerovibrio,energy_mode,fermenter
+mysql,29,Moryella indoligenes,energy_mode,fermenter
+mysql,32,Peribacillus muralis,energy_mode,respirator
+mysql,33,Butyrivibrio,energy_mode,fermenter
+mysql,34,Granulicatella,energy_mode,fermenter
+mysql,35,Odoribacter,energy_mode,fermenter
+mysql,36,Acidaminococcus,energy_mode,fermenter
+mysql,37,Mogibacterium,energy_mode,fermenter
+mysql,40,Megasphaera,energy_mode,fermenter
+mysql,41,Pedobacter saltans,energy_mode,respirator
+mysql,42,Methanocorpusculum,energy_mode,fermenter
+mysql,44,Dechloromonas,energy_mode,respirator
+mysql,45,Fusobacterium,energy_mode,fermenter
+mysql,46,Peptoniphilus,energy_mode,fermenter
+mysql,47,Paraprevotella,energy_mode,fermenter
+mysql,51,Slackia,energy_mode,fermenter
+mysql,52,Paludibacter,energy_mode,mixed
+mysql,57,Anaerostipes,energy_mode,fermenter
+mysql,60,Olivibacter sitiensis,energy_mode,respirator
+mysql,61,Bulleidia p-1630-c5,energy_mode,fermenter
+mysql,62,Frigoribacterium,energy_mode,respirator
+mysql,63,Nesterenkonia,energy_mode,respirator
+mysql,65,Anaeromyxobacter,energy_mode,fermenter
+mysql,67,Allobaculum,energy_mode,fermenter
+mysql,68,Desulfovibrio c21_c20,energy_mode,fermenter
+mysql,70,Adlercreutzia,energy_mode,fermenter
+mysql,72,Dietzia,energy_mode,respirator
+mysql,73,Anaerofilum,energy_mode,fermenter
+mysql,75,Pectinatus,energy_mode,fermenter
+mysql,76,Flavobacterium succinicans,energy_mode,respirator
+mysql,78,Hydrogenophaga,energy_mode,respirator
+mysql,80,Mannheimia,energy_mode,respirator
+mysql,81,Methanobrevibacter,energy_mode,fermenter
+mysql,82,Turicibacter,energy_mode,fermenter
+mysql,83,Sphaerochaeta,energy_mode,fermenter
+mysql,84,Tindallia,energy_mode,fermenter
+mysql,85,Succiniclasticum,energy_mode,fermenter
+mysql,86,Methylibium,energy_mode,fermenter
+mysql,89,Anaerofustis,energy_mode,fermenter
+mysql,93,Peptococcus,energy_mode,fermenter
+mysql,94,Butyricimonas,energy_mode,fermenter
+mysql,95,Clostridium ruminantium,energy_mode,fermenter
+mysql,96,Lachnobacterium,energy_mode,fermenter
+mysql,97,Lactobacillus agilis,energy_mode,fermenter
+mysql,98,Chryseobacterium,energy_mode,respirator
+mysql,100,Peribacillus asahii,energy_mode,respirator
+mysql,102,Prevotella tannerae,energy_mode,fermenter
+mysql,103,Arcanobacterium,energy_mode,fermenter
+mysql,104,Streptococcus luteciae,energy_mode,mixed
+mysql,105,Lachnospira pectinoschiza,energy_mode,fermenter
+mysql,106,Sutterella,energy_mode,fermenter
+mysql,108,Methanobacterium bryantii,energy_mode,fermenter
+mysql,110,Thiobacillus,energy_mode,fermenter
+mysql,111,Syntrophomonas,energy_mode,fermenter
+mysql,113,Herminiimonas,energy_mode,respirator
+mysql,114,Klebsiella oxytoca,energy_mode,respirator
+mysql,115,Helcococcus,energy_mode,fermenter
+mysql,116,Hylemonella,energy_mode,respirator
+mysql,117,Prauserella rugosa,energy_mode,respirator
+mysql,118,Oribacterium,energy_mode,fermenter
+mysql,119,Caloramator,energy_mode,fermenter
+mysql,120,Variovorax paradoxus,energy_mode,respirator
+mysql,122,Bacteroides coprosuis,energy_mode,fermenter
+mysql,123,Clostridium intestinale,energy_mode,fermenter
+mysql,124,Atopobium vaginae,energy_mode,fermenter
+mysql,125,Brevibacillus laterosporus,energy_mode,respirator
+mysql,126,Acidovorax wohlfahrtii,energy_mode,respirator
+mysql,127,Actinobacillus parahaemolyticus,energy_mode,mixed
+mysql,128,Sporotomaculum,energy_mode,fermenter
+mysql,129,Papillibacter cinnamivorans,energy_mode,fermenter
+mysql,130,Denitrobacter,energy_mode,fermenter
+mysql,131,Thiomonas cuprina,energy_mode,respirator
+mysql,132,Limnohabitans curvus,energy_mode,respirator
+mysql,133,Salinispora tropica,energy_mode,respirator
+mysql,134,Thermomonas,energy_mode,respirator
+mysql,135,Janthinobacterium lividum,energy_mode,respirator
+mysql,136,Sarcina,energy_mode,fermenter
+mysql,137,Sphingomonas yabuuchiae,energy_mode,respirator
+mysql,139,Lautropia,energy_mode,respirator
+mysql,141,Propionivibrio,energy_mode,fermenter
+mysql,143,Clostridium gasigenes,energy_mode,fermenter
+mysql,145,Anaerotruncus,energy_mode,fermenter
+mysql,146,Pigmentiphaga,energy_mode,respirator
+mysql,149,Coprobacillus cateniformis,energy_mode,fermenter
+mysql,150,Gracilibacter,energy_mode,fermenter
+mysql,152,Burkholderia andropogonis,energy_mode,respirator
+mysql,153,Tepidimonas,energy_mode,respirator
+mysql,155,Parvimonas,energy_mode,fermenter
+mysql,156,Pasteurella skyensis,energy_mode,mixed
+mysql,158,Hespellia stercorisuis,energy_mode,fermenter
+mysql,159,Tolumonas,energy_mode,respirator
+mysql,160,Desulfotomaculum,energy_mode,fermenter
+mysql,161,Alicyclobacillus pomorum,energy_mode,respirator
+mysql,163,Roseateles depolymerans,energy_mode,respirator
+mysql,164,Rikenella,energy_mode,fermenter
+mysql,165,Acidovorax delafieldii,energy_mode,respirator
+mysql,166,Verrucomicrobium,energy_mode,respirator
+mysql,167,Alicyclobacillus cycloheptanicus,energy_mode,respirator
+mysql,169,Desulfosporosinus meridiei,energy_mode,fermenter
+mysql,170,Sedimentibacter,energy_mode,fermenter
+mysql,171,Robinsoniella peoriensis,energy_mode,fermenter
+mysql,172,Acidithiobacillus albertensis,energy_mode,mixed
+mysql,173,Holdemania,energy_mode,fermenter
+mysql,174,Actinobacillus delphinicola,energy_mode,mixed
+mysql,175,Vagococcus,energy_mode,respirator
+mysql,176,Gemella,energy_mode,fermenter
+mysql,178,Sharpea,energy_mode,fermenter
+mysql,179,Delftia,energy_mode,respirator
+mysql,180,Congregibacter,energy_mode,respirator
+mysql,181,Mycobacterium,energy_mode,respirator
+mysql,182,Chelonobacter,energy_mode,respirator
+mysql,183,Sulfurospirillum,energy_mode,fermenter
+mysql,184,Ralstonia,energy_mode,respirator
+mysql,186,Erwinia chrysanthemi,energy_mode,mixed
+mysql,187,Exiguobacterium,energy_mode,respirator
+mysql,189,Aquincola tertiaricarbonis,energy_mode,respirator
+mysql,191,Rubrivivax gelatinosus,energy_mode,respirator
+mysql,192,Brackiella oedipodis,energy_mode,respirator
+mysql,194,Paenibacillus stellifer,energy_mode,respirator
+mysql,195,Coriobacterium,energy_mode,fermenter
+mysql,196,Bulleidia moorei,energy_mode,fermenter
+mysql,197,Desulfobulbus,energy_mode,fermenter
+mysql,198,Pseudomonas alcaligenes,energy_mode,respirator
+mysql,200,Eubacterium cylindroides,energy_mode,fermenter
+mysql,201,Tannerella,energy_mode,fermenter
+mysql,205,Haemophilus felis,energy_mode,respirator
+mysql,206,Aggregatibacter pneumotropica,energy_mode,respirator
+mysql,208,Eubacterium biforme,energy_mode,fermenter
+mysql,210,Methylobacillus,energy_mode,respirator
+mysql,212,Roseburia faecis,energy_mode,fermenter
+mysql,213,Kingella,energy_mode,respirator
+mysql,214,Clostridium colinum,energy_mode,fermenter
+mysql,215,Pelosinus,energy_mode,fermenter
+mysql,217,Dialister,energy_mode,fermenter
+mysql,218,Leuconostoc,energy_mode,mixed
+mysql,220,Eubacterium dolichum,energy_mode,fermenter
+mysql,223,Nitrososphaera gargensis,energy_mode,respirator
+mysql,224,Streptococcus minor,energy_mode,mixed
+mysql,225,Microbacterium,energy_mode,respirator
+mysql,226,Actinomyces hyovaginalis,energy_mode,fermenter
+mysql,227,Rummeliibacillus,energy_mode,respirator
+mysql,230,Parabacteroides gordonii,energy_mode,fermenter
+mysql,232,Succinivibrio,energy_mode,fermenter
+mysql,235,Bilophila,energy_mode,fermenter
+mysql,236,Syntrophococcus sucromutans,energy_mode,fermenter
+mysql,237,Weissella beninensis,energy_mode,fermenter
+mysql,238,Stenotrophomonas acidaminiphila,energy_mode,respirator
+mysql,240,Lutispora,energy_mode,fermenter
+mysql,242,Micrococcus,energy_mode,respirator
+mysql,243,Bacteroides barnesiae,energy_mode,fermenter
+mysql,244,Alkaliphilus transvaalensis,energy_mode,fermenter
+mysql,245,Sulfuritalea,energy_mode,fermenter
+mysql,246,Sporomusa polytropa,energy_mode,fermenter
+mysql,247,Salinicoccus,energy_mode,respirator
+mysql,250,Methylobacterium adhaesivum,energy_mode,respirator
+mysql,253,Brochothrix,energy_mode,respirator
+mysql,254,Caldicoprobacter,energy_mode,fermenter
+mysql,255,Clostridium bifermentans,energy_mode,fermenter
+mysql,256,Proteiniclasticum,energy_mode,fermenter
+mysql,257,Ramlibacter,energy_mode,respirator
+mysql,258,Clostridiisalibacter,energy_mode,fermenter
+mysql,259,Methylotenera mobilis,energy_mode,fermenter
+mysql,260,Leptotrichia,energy_mode,fermenter
+mysql,261,Bacillus ginsengihumi,energy_mode,respirator
+mysql,262,Clostridium metallolevans,energy_mode,fermenter
+mysql,264,Clostridium hiranonis,energy_mode,fermenter
+mysql,265,Giesbergeria,energy_mode,respirator
+mysql,266,Facklamia,energy_mode,mixed
+mysql,270,Lactobacillus pontis,energy_mode,fermenter
+mysql,271,Trichococcus,energy_mode,respirator
+mysql,272,Acaricomes phytoseiuli,energy_mode,respirator
+mysql,273,Acidobacterium,energy_mode,respirator
+mysql,277,Anaerovorax,energy_mode,fermenter
+mysql,279,Brevibacterium,energy_mode,respirator
+mysql,280,Chthoniobacter,energy_mode,respirator
+mysql,282,Clostridium maritimum,energy_mode,fermenter
+mysql,283,Rhodanobacter,energy_mode,respirator
+mysql,285,Clostridium sordellii,energy_mode,fermenter
+mysql,286,Lysinibacillus boronitolerans,energy_mode,respirator
+mysql,289,Mobiluncus,energy_mode,fermenter
+mysql,291,Staphylococcus succinus,energy_mode,respirator
+mysql,292,Actinobaculum,energy_mode,fermenter
+mysql,293,Hydrogenophilus,energy_mode,respirator
+mysql,295,Saccharopolyspora,energy_mode,respirator
+mysql,296,Carnobacterium,energy_mode,mixed
+mysql,297,Succinispira mobilis,energy_mode,fermenter
+mysql,299,Polynucleobacter,energy_mode,respirator
+mysql,300,Weissella thailandensis,energy_mode,fermenter
+mysql,301,Pontibacillus,energy_mode,respirator
+mysql,302,Clostridium neonatale,energy_mode,fermenter
+mysql,303,Phenylobacterium,energy_mode,respirator
+mysql,304,Dermacoccus,energy_mode,respirator
+mysql,306,Halanaerobacter,energy_mode,fermenter
+mysql,308,Intrasporangium calvum,energy_mode,respirator
+mysql,309,Dyadobacter,energy_mode,respirator
+mysql,310,Alloiococcus,energy_mode,respirator
+mysql,311,Magnetospirillum,energy_mode,respirator
+mysql,312,Acinetobacter guillouiae,energy_mode,respirator
+mysql,313,Zoogloea,energy_mode,respirator
+mysql,314,Tepidibacter,energy_mode,fermenter
+mysql,320,Aggregatibacter segnis,energy_mode,respirator
+mysql,322,Gallibacterium genomosp.,energy_mode,mixed
+mysql,323,Cupriavidus gilardii,energy_mode,respirator
+mysql,324,Pasteurella mairii,energy_mode,mixed
+mysql,327,Mesobacillus foraminis,energy_mode,respirator
+mysql,328,Clostridium hungatei,energy_mode,fermenter
+mysql,329,Actinobacillus porcinus,energy_mode,mixed
+mysql,330,Actinobacillus seminis,energy_mode,mixed
+mysql,331,Nitrincola,energy_mode,respirator
+mysql,332,Thermobacillus composti,energy_mode,respirator
+mysql,333,Glaciecola punicea,energy_mode,respirator
+mysql,334,Shimazuella,energy_mode,respirator
+mysql,335,Haemophilus paracuniculus,energy_mode,respirator
+mysql,336,Shewanella algae,energy_mode,respirator
+mysql,337,Macrococcus caseolyticus,energy_mode,respirator
+mysql,339,Eikenella,energy_mode,fermenter
+mysql,342,Brevibacillus reuszeri,energy_mode,respirator
+mysql,343,Avibacterium gallinarum,energy_mode,respirator
+mysql,344,Thalassomonas sediminis,energy_mode,fermenter
+mysql,347,Hyphomonas oceanitis,energy_mode,respirator
+mysql,348,Bombiscardovia,energy_mode,fermenter
+mysql,349,Psychromonas,energy_mode,mixed
+mysql,350,Rickettsia,energy_mode,respirator
+mysql,351,Oceanisphaera,energy_mode,respirator
+mysql,352,Saccharomonospora,energy_mode,respirator
+mysql,353,Aeromonas popoffii,energy_mode,mixed
+mysql,354,Ureibacillus,energy_mode,respirator
+mysql,355,Erysipelothrix,energy_mode,fermenter
+mysql,356,Haemophilus parasuis,energy_mode,respirator
+mysql,357,Clostridium piliforme,energy_mode,fermenter
+mysql,359,Limnobacter,energy_mode,respirator
+mysql,360,Parapedobacter,energy_mode,respirator
+mysql,361,Desulfovibrio alaskensis,energy_mode,fermenter
+mysql,363,Crocinitomix,energy_mode,respirator
+mysql,364,Sphingobacterium multivorum,energy_mode,respirator
+mysql,366,Alcanivorax,energy_mode,respirator
+mysql,367,Pedobacter terricola,energy_mode,respirator
+mysql,368,Collimonas,energy_mode,respirator
+mysql,370,Propionigenium,energy_mode,fermenter
+mysql,371,Serratia symbiotica,energy_mode,respirator
+mysql,372,Filifactor,energy_mode,fermenter
+mysql,373,Desulfovibrio d168,energy_mode,fermenter
+mysql,374,Cellulosibacter alkalithermophilus,energy_mode,fermenter
+mysql,375,Alistipes massiliensis,energy_mode,fermenter
+mysql,376,Enhydrobacter,energy_mode,respirator
+mysql,378,Yersinia,energy_mode,respirator
+mysql,380,Ferrimonas,energy_mode,fermenter
+mysql,381,Moraxella,energy_mode,respirator
+mysql,384,Psychrobacter sanguinis,energy_mode,respirator
+mysql,386,Cronobacter turicensis,energy_mode,respirator
+mysql,388,Pseudomonas fragi,energy_mode,respirator
+mysql,389,Corynebacterium stationis,energy_mode,respirator
+mysql,392,Cronobacter dublinensis,energy_mode,respirator
+mysql,393,Providencia,energy_mode,respirator
+mysql,394,Pseudomonas veronii,energy_mode,respirator
+mysql,395,Arcobacter,energy_mode,respirator
+mysql,396,Dehalococcoides,energy_mode,fermenter
+mysql,397,Pelomonas,energy_mode,respirator
+mysql,398,Octadecabacter,energy_mode,respirator
+mysql,403,Enterobacter cowanii,energy_mode,respirator
+mysql,404,Sporolactobacillus,energy_mode,mixed
+mysql,405,Vibrio tapetis,energy_mode,mixed
+mysql,407,Cellulosimicrobium,energy_mode,respirator
+mysql,408,Proteus,energy_mode,mixed
+mysql,411,Pantoea ananatis,energy_mode,respirator
+mysql,412,Dickeya,energy_mode,respirator
+mysql,414,Enterobacter gergoviae,energy_mode,respirator
+mysql,416,Natronincola,energy_mode,fermenter
+mysql,417,Shewanella benthica,energy_mode,respirator
+mysql,418,Enterobacter pyrinus,energy_mode,respirator
+mysql,419,Marinomonas,energy_mode,respirator
+mysql,422,Enterobacter arachidis,energy_mode,respirator
+mysql,424,Halomonas,energy_mode,respirator
+mysql,425,Agrobacterium,energy_mode,respirator
+mysql,426,Aneurinibacillus,energy_mode,mixed
+mysql,428,Fructobacillus,energy_mode,respirator
+mysql,429,Clostridium hathewayi,energy_mode,fermenter
+mysql,430,Desulfovibrio litoralis,energy_mode,fermenter
+mysql,432,Sodalis,energy_mode,respirator
+mysql,433,Mariprofundus,energy_mode,mixed
+mysql,434,Escherichia blattae,energy_mode,mixed
+mysql,435,Xenorhabdus bovienii,energy_mode,mixed
+mysql,437,Acinetobacter rhizosphaerae,energy_mode,respirator
+mysql,439,Cardiobacterium,energy_mode,fermenter
+mysql,440,Anaerospora hongkongensis,energy_mode,fermenter
+mysql,445,Photorhabdus temperata,energy_mode,mixed
+mysql,446,Vibrio fortis,energy_mode,mixed
+mysql,448,Owenweeksia hongkongensis,energy_mode,respirator
+mysql,449,Rhodoluna,energy_mode,respirator
+mysql,450,Kordia,energy_mode,respirator
+mysql,451,Polaromonas,energy_mode,respirator
+mysql,453,Sporobacter termitidis,energy_mode,fermenter
+mysql,454,Oxobacter,energy_mode,fermenter
+mysql,455,Parvibaculum,energy_mode,respirator
+mysql,456,Clostridium fimetarium,energy_mode,fermenter
+mysql,457,Friedmanniella,energy_mode,respirator
+mysql,458,Fusibacter,energy_mode,fermenter
+mysql,459,Steroidobacter,energy_mode,respirator
+mysql,462,Ruminobacter,energy_mode,fermenter
+mysql,463,Gardnerella,energy_mode,fermenter
+mysql,464,Schwartzia,energy_mode,fermenter
+mysql,465,Lysobacter,energy_mode,respirator
+mysql,466,Erwinia oleae,energy_mode,mixed
+mysql,467,Psychrilyobacter,energy_mode,fermenter
+mysql,468,Clostridium cocleatum,energy_mode,fermenter
+mysql,469,Samsonia erythrinae,energy_mode,mixed
+mysql,470,Ferdinandcohnia humi,energy_mode,respirator
+mysql,471,Oceanimonas,energy_mode,respirator
+mysql,473,Thalassospira xiamenensis,energy_mode,respirator
+mysql,475,Aquabacterium,energy_mode,respirator
+mysql,477,Massilia aerolata,energy_mode,respirator
+mysql,478,Gordonia,energy_mode,respirator
+mysql,480,Anaerococcus,energy_mode,fermenter
+mysql,481,Finegoldia,energy_mode,fermenter
+mysql,482,Idiomarina,energy_mode,respirator
+mysql,483,Desulfitobacter,energy_mode,fermenter
+mysql,484,Anaerobiospirillum,energy_mode,fermenter
+mysql,485,Photobacterium rosenbergii,energy_mode,mixed
+mysql,486,Marinimicrobium,energy_mode,respirator
+mysql,487,Pseudomonas viridiflava,energy_mode,respirator
+mysql,489,Janibacter,energy_mode,respirator
+mysql,490,Scardovia,energy_mode,fermenter
+mysql,491,Achromobacter,energy_mode,respirator
+mysql,492,Oceanobacillus oncorhynchi,energy_mode,respirator
+mysql,493,Sphingobium,energy_mode,respirator
+mysql,494,Novosphingobium,energy_mode,respirator
+mysql,495,Aerococcus,energy_mode,mixed
+mysql,496,Oenococcus kitaharae,energy_mode,respirator
+mysql,497,Clostridium saccharogumia,energy_mode,fermenter
+mysql,499,Dethiosulfatibacter,energy_mode,fermenter
+mysql,501,Imtechella halotolerans,energy_mode,respirator
+mysql,504,Roseiflexus,energy_mode,fermenter
+mysql,507,Dethiosulfovibrio peptidovorans,energy_mode,fermenter
+mysql,509,Solibacillus,energy_mode,respirator
+mysql,510,Neptuniibacter caesariensis,energy_mode,respirator
+mysql,511,Diaphorobacter,energy_mode,respirator
+mysql,513,Bradyrhizobium,energy_mode,respirator
+mysql,514,Leeia oryzae,energy_mode,respirator
+mysql,519,Thermoanaerobacterium,energy_mode,fermenter
+mysql,521,Dehalobacter,energy_mode,fermenter
+mysql,523,Caldalkalibacillus horti,energy_mode,respirator
+mysql,524,Marinobacter,energy_mode,respirator
+mysql,525,Thiomicrospira,energy_mode,respirator
+mysql,526,Acidaminobacter,energy_mode,fermenter
+mysql,527,Uliginosibacterium,energy_mode,respirator
+mysql,528,Thermosinus,energy_mode,fermenter
+mysql,529,Arthrobacter nitroguajacolicus,energy_mode,respirator
+mysql,531,Perlucidibaca,energy_mode,respirator
+mysql,532,Haemophilus influenzae-murium,energy_mode,respirator
+mysql,533,Thauera,energy_mode,respirator
+mysql,534,Gluconacetobacter liquefaciens,energy_mode,respirator
+mysql,536,Lampropedia,energy_mode,respirator
+mysql,537,Nitrosomonas marina,energy_mode,respirator
+mysql,538,Lutaonella thermophilus,energy_mode,respirator
+mysql,539,Methylomicrobium buryatense,energy_mode,respirator
+mysql,540,Desulfovibrio aminophilus,energy_mode,fermenter
+mysql,541,Proteiniborus ethanoligenes,energy_mode,fermenter
+mysql,544,Mesobacillus selenatarsenatis,energy_mode,respirator
+mysql,545,Paracoccus marcusii,energy_mode,respirator
+mysql,547,Roseivivax,energy_mode,respirator
+mysql,548,Myroides odoratimimus,energy_mode,respirator
+mysql,549,Rhodobacter,energy_mode,respirator
+mysql,550,Haloferula rosea,energy_mode,respirator
+mysql,551,Rhodovulum,energy_mode,fermenter
+mysql,552,Cellvibrio,energy_mode,respirator
+mysql,553,Roseisalinus antarcticus,energy_mode,respirator
+mysql,554,Maritimibacter alkaliphilus,energy_mode,fermenter
+mysql,557,Amycolatopsis,energy_mode,respirator
+mysql,560,Calditerrivibrio nitroreducens,energy_mode,fermenter
+mysql,561,Rubrobacter,energy_mode,respirator
+mysql,562,Ornithinibacillus scapharcae,energy_mode,respirator
+mysql,563,Brenneria alni,energy_mode,mixed
+mysql,566,Alteribacter aurantiacus,energy_mode,respirator
+mysql,567,Syntrophus,energy_mode,fermenter
+mysql,568,Methyloversatilis,energy_mode,respirator
+mysql,569,Thermoflavimicrobium dichotomicum,energy_mode,respirator
+mysql,570,Nocardia,energy_mode,respirator
+mysql,571,Pelobacter,energy_mode,fermenter
+mysql,572,Erwinia dispersa,energy_mode,mixed
+mysql,573,Marichromatium fluminis,energy_mode,fermenter
+mysql,574,Aurantimonas,energy_mode,respirator
+mysql,575,Trabulsiella farmeri,energy_mode,respirator
+mysql,576,Desulfobacca,energy_mode,fermenter
+mysql,580,Christensenella,energy_mode,fermenter
+mysql,581,Edwardsiella,energy_mode,mixed
+mysql,582,Rathayibacter,energy_mode,respirator
+mysql,583,Barnesiella viscericola,energy_mode,fermenter
+mysql,584,Flexistipes,energy_mode,fermenter
+mysql,585,Geosporobacter,energy_mode,fermenter
+mysql,586,Oligella,energy_mode,respirator
+mysql,587,Thermotoga,energy_mode,fermenter
+mysql,588,Thermoanaerobacter,energy_mode,fermenter
+mysql,589,Desulfonispora thiosulfatigenes,energy_mode,fermenter
+mysql,592,Alloscardovia,energy_mode,fermenter
+mysql,593,Leadbetterella,energy_mode,respirator
+mysql,594,Pseudoxanthomonas mexicana,energy_mode,respirator
+mysql,595,Methylomonas,energy_mode,respirator
+mysql,596,Xenorhabdus poinarii,energy_mode,mixed
+mysql,597,Desulfotignum,energy_mode,fermenter
+mysql,598,Dethiobacter,energy_mode,fermenter
+mysql,599,Pseudoalteromonas porphyrae,energy_mode,respirator
+mysql,600,Brenneria salicis,energy_mode,mixed
+mysql,602,Wohlfahrtiimonas,energy_mode,respirator
+mysql,603,Rhodoferax,energy_mode,respirator
+mysql,606,Cellulomonas,energy_mode,respirator
+mysql,607,Halorhodospira,energy_mode,fermenter
+mysql,610,Hyphomicrobium zavarzinii,energy_mode,respirator
+mysql,611,Ammoniphilus,energy_mode,mixed
+mysql,612,Thioalkalimicrobium,energy_mode,respirator
+mysql,613,Pseudoalteromonas tunicata,energy_mode,respirator
+mysql,615,Erwinia soli,energy_mode,respirator
+mysql,616,Desulfovibrio cavernae,energy_mode,fermenter
+mysql,617,Rhodoplanes,energy_mode,fermenter
+mysql,618,Melissococcus plutonius,energy_mode,fermenter
+mysql,620,Xenorhabdus romanii,energy_mode,mixed
+mysql,623,Nocardioides,energy_mode,respirator
+mysql,624,Euzebya,energy_mode,respirator
+mysql,625,Clostridium venationis,energy_mode,fermenter
+mysql,626,Fluviicola,energy_mode,respirator
+mysql,627,Polaribacter,energy_mode,respirator
+mysql,628,Psychroflexus,energy_mode,respirator
+mysql,630,Streptococcus sobrinus,energy_mode,mixed
+mysql,631,Rhodothermus,energy_mode,respirator
+mysql,632,Desulfomicrobium,energy_mode,fermenter
+mysql,633,Cloacibacterium,energy_mode,respirator
+mysql,635,Oceanicaulis,energy_mode,respirator
+mysql,636,Curtobacterium,energy_mode,respirator
+mysql,639,Bacillus coahuilensis,energy_mode,respirator
+mysql,641,Sanguibacter,energy_mode,respirator
+mysql,643,Sporosarcina,energy_mode,respirator
+mysql,645,Methanosaeta,energy_mode,fermenter
+mysql,647,Azospira,energy_mode,respirator
+mysql,648,Alfipia birgiae,energy_mode,respirator
+mysql,649,Pseudidiomarina,energy_mode,respirator
+mysql,651,Agarivorans,energy_mode,respirator
+mysql,654,Thiothrix,energy_mode,respirator
+mysql,656,Serratia ureilytica,energy_mode,respirator
+mysql,764,Bacillus megaterium,energy_mode,respirator
+mysql,844,Blastococcus massiliensis,energy_mode,respirator
+mysql,854,Bonordeniella apollinis,energy_mode,respirator
+mysql,867,Sediminibacterium,energy_mode,respirator
+mysql,872,Jeotgalicoccus psychrophilus,energy_mode,respirator
+mysql,878,Ewingella americana,energy_mode,respirator
+mysql,879,Kurthia,energy_mode,respirator
+mysql,880,Enterobacter radicincitans,energy_mode,respirator
+mysql,881,Pelotomaculum,energy_mode,fermenter
+mysql,882,Enterobacter ludwigii,energy_mode,respirator
+mysql,883,Neisseria iguanae,energy_mode,respirator
+mysql,885,Lactobacillus zeae,energy_mode,fermenter
+mysql,886,Cloacibacillus,energy_mode,fermenter
+mysql,889,Anaerovirgula,energy_mode,fermenter
+mysql,891,Desulfovirgula,energy_mode,fermenter
+mysql,893,Syntrophobotulus,energy_mode,fermenter
+mysql,895,Thermotalea,energy_mode,fermenter
+mysql,1425,Nialla hominis,energy_mode,fermenter
+mysql,1546,Penicillium,energy_mode,respirator
+mysql,2054,Mycobacterium fortuitum,energy_mode,respirator
+mysql,2095,Unclassified enterobacteriaceae bacterium 9 2 54faa,energy_mode,respirator
+mysql,8431,Merdimmobilis hominis,energy_mode,fermenter
+mysql,8431,Merdimmobilis hominis,primary_food_source,carbohydrates
+mysql,1153932,Anaeroarcus,energy_mode,fermenter
+mysql,1536367,Heyndrickxia coagulans,energy_mode,respirator
+mysql,1585211,Rhodococcoides fascians,energy_mode,respirator
+mysql,1763234,Mesomycoplasma hyorhinis,energy_mode,respirator
+mysql,2659340,Sphingobium indicum,energy_mode,respirator
+sqlite,1,Clostridium aminophilum,energy_mode,fermenter
+sqlite,1,Clostridium aminophilum,primary_food_source,organic_unspecified
+sqlite,5,Comamonas,energy_mode,respirator
+sqlite,6,Bacteroides acidifaciens,energy_mode,fermenter
+sqlite,11,Acholeplasma,energy_mode,mixed
+sqlite,13,Phascolarctobacterium,energy_mode,fermenter
+sqlite,13,Phascolarctobacterium,primary_food_source,carbohydrates
+sqlite,14,Treponema,energy_mode,fermenter
+sqlite,22,Victivallis vadensis,energy_mode,fermenter
+sqlite,24,Ethanoligenens,energy_mode,fermenter
+sqlite,25,Pseudoramibacter,energy_mode,fermenter
+sqlite,25,Pseudoramibacter,primary_food_source,carbohydrates
+sqlite,26,Tepidimicrobium,energy_mode,fermenter
+sqlite,27,Pseudobutyrivibrio,energy_mode,fermenter
+sqlite,27,Pseudobutyrivibrio,primary_food_source,carbohydrates
+sqlite,28,Anaerovibrio,energy_mode,fermenter
+sqlite,29,Moryella indoligenes,energy_mode,fermenter
+sqlite,32,Bacillus muralis,energy_mode,respirator
+sqlite,33,Butyrivibrio,energy_mode,fermenter
+sqlite,34,Granulicatella,energy_mode,fermenter
+sqlite,34,Granulicatella,primary_food_source,carbohydrates
+sqlite,35,Odoribacter,energy_mode,fermenter
+sqlite,35,Odoribacter,primary_food_source,organic_unspecified
+sqlite,36,Acidaminococcus,energy_mode,fermenter
+sqlite,36,Acidaminococcus,primary_food_source,carbohydrates
+sqlite,37,Mogibacterium,energy_mode,fermenter
+sqlite,37,Mogibacterium,primary_food_source,carbohydrates
+sqlite,40,Megasphaera,energy_mode,fermenter
+sqlite,41,Pedobacter saltans,energy_mode,respirator
+sqlite,42,Methanocorpusculum,energy_mode,respirator
+sqlite,42,Methanocorpusculum,primary_food_source,inorganic
+sqlite,44,Dechloromonas,energy_mode,respirator
+sqlite,45,Fusobacterium,energy_mode,fermenter
+sqlite,46,Peptoniphilus,energy_mode,fermenter
+sqlite,47,Paraprevotella,energy_mode,fermenter
+sqlite,47,Paraprevotella,primary_food_source,carbohydrates
+sqlite,51,Slackia,energy_mode,mixed
+sqlite,51,Slackia,primary_food_source,carbohydrates
+sqlite,52,Paludibacter,energy_mode,mixed
+sqlite,57,Anaerostipes,energy_mode,fermenter
+sqlite,59,Fibrobacter succinogenes,energy_mode,fermenter
+sqlite,60,Olivibacter sitiensis,energy_mode,respirator
+sqlite,61,Bulleidia p-1630-c5,energy_mode,fermenter
+sqlite,61,Bulleidia p-1630-c5,primary_food_source,carbohydrates
+sqlite,62,Frigoribacterium,energy_mode,respirator
+sqlite,63,Nesterenkonia,energy_mode,respirator
+sqlite,65,Anaeromyxobacter,energy_mode,fermenter
+sqlite,67,Allobaculum,energy_mode,fermenter
+sqlite,68,Desulfovibrio c21_c20,energy_mode,fermenter
+sqlite,70,Adlercreutzia,energy_mode,fermenter
+sqlite,72,Dietzia,energy_mode,fermenter
+sqlite,72,Dietzia,primary_food_source,carbohydrates
+sqlite,73,Anaerofilum,energy_mode,fermenter
+sqlite,75,Pectinatus,energy_mode,fermenter
+sqlite,76,Flavobacterium succinicans,energy_mode,respirator
+sqlite,78,Hydrogenophaga,energy_mode,respirator
+sqlite,80,Mannheimia,energy_mode,respirator
+sqlite,81,Methanobrevibacter,energy_mode,respirator
+sqlite,81,Methanobrevibacter,primary_food_source,inorganic
+sqlite,82,Turicibacter,energy_mode,fermenter
+sqlite,83,Sphaerochaeta,energy_mode,fermenter
+sqlite,84,Tindallia,energy_mode,fermenter
+sqlite,85,Succiniclasticum,energy_mode,fermenter
+sqlite,86,Methylibium,energy_mode,respirator
+sqlite,86,Methylibium,primary_food_source,c1_compounds
+sqlite,89,Anaerofustis,energy_mode,fermenter
+sqlite,89,Anaerofustis,primary_food_source,carbohydrates
+sqlite,93,Peptococcus,energy_mode,fermenter
+sqlite,94,Butyricimonas,energy_mode,fermenter
+sqlite,94,Butyricimonas,primary_food_source,carbohydrates
+sqlite,95,Clostridium ruminantium,energy_mode,fermenter
+sqlite,95,Clostridium ruminantium,primary_food_source,organic_unspecified
+sqlite,96,Lachnobacterium,energy_mode,fermenter
+sqlite,98,Chryseobacterium,energy_mode,respirator
+sqlite,100,Bacillus asahii,energy_mode,respirator
+sqlite,103,Arcanobacterium,energy_mode,fermenter
+sqlite,103,Arcanobacterium,primary_food_source,carbohydrates
+sqlite,104,Streptococcus luteciae,energy_mode,mixed
+sqlite,105,Lachnospira pectinoschiza,energy_mode,fermenter
+sqlite,106,Sutterella,energy_mode,fermenter
+sqlite,108,Methanobacterium bryantii,energy_mode,fermenter
+sqlite,110,Thiobacillus,energy_mode,respirator
+sqlite,110,Thiobacillus,primary_food_source,inorganic
+sqlite,111,Syntrophomonas,energy_mode,fermenter
+sqlite,113,Herminiimonas,energy_mode,respirator
+sqlite,114,Klebsiella oxytoca,energy_mode,respirator
+sqlite,115,Helcococcus,energy_mode,fermenter
+sqlite,116,Hylemonella,energy_mode,respirator
+sqlite,117,Prauserella rugosa,energy_mode,respirator
+sqlite,118,Oribacterium,energy_mode,fermenter
+sqlite,118,Oribacterium,primary_food_source,carbohydrates
+sqlite,119,Caloramator,energy_mode,fermenter
+sqlite,120,Variovorax paradoxus,energy_mode,respirator
+sqlite,122,Bacteroides coprosuis,energy_mode,fermenter
+sqlite,123,Clostridium intestinale,energy_mode,fermenter
+sqlite,123,Clostridium intestinale,primary_food_source,organic_unspecified
+sqlite,125,Brevibacillus laterosporus,energy_mode,respirator
+sqlite,126,Acidovorax wohlfahrtii,energy_mode,respirator
+sqlite,127,Actinobacillus parahaemolyticus,energy_mode,mixed
+sqlite,128,Sporotomaculum,energy_mode,fermenter
+sqlite,129,Papillibacter cinnamivorans,energy_mode,fermenter
+sqlite,130,Denitrobacter,energy_mode,fermenter
+sqlite,131,Thiomonas cuprina,energy_mode,respirator
+sqlite,132,Limnohabitans curvus,energy_mode,respirator
+sqlite,133,Salinispora tropica,energy_mode,respirator
+sqlite,134,Thermomonas,energy_mode,respirator
+sqlite,135,Janthinobacterium lividum,energy_mode,respirator
+sqlite,136,Sarcina,energy_mode,fermenter
+sqlite,137,Sphingomonas yabuuchiae,energy_mode,fermenter
+sqlite,137,Sphingomonas yabuuchiae,primary_food_source,carbohydrates
+sqlite,138,Acetomicrobium hydrogeniformans,energy_mode,fermenter
+sqlite,139,Lautropia,energy_mode,mixed
+sqlite,139,Lautropia,primary_food_source,carbohydrates
+sqlite,141,Propionivibrio,energy_mode,fermenter
+sqlite,143,Clostridium gasigenes,energy_mode,fermenter
+sqlite,143,Clostridium gasigenes,primary_food_source,organic_unspecified
+sqlite,145,Anaerotruncus,energy_mode,fermenter
+sqlite,145,Anaerotruncus,primary_food_source,carbohydrates
+sqlite,146,Pigmentiphaga,energy_mode,respirator
+sqlite,149,Coprobacillus cateniformis,energy_mode,fermenter
+sqlite,149,Coprobacillus cateniformis,primary_food_source,carbohydrates
+sqlite,150,Gracilibacter,energy_mode,fermenter
+sqlite,152,Burkholderia andropogonis,energy_mode,respirator
+sqlite,153,Tepidimonas,energy_mode,respirator
+sqlite,155,Parvimonas,energy_mode,fermenter
+sqlite,155,Parvimonas,primary_food_source,carbohydrates
+sqlite,156,Pasteurella skyensis,energy_mode,mixed
+sqlite,158,Hespellia stercorisuis,energy_mode,fermenter
+sqlite,159,Tolumonas,energy_mode,respirator
+sqlite,160,Desulfotomaculum,energy_mode,fermenter
+sqlite,161,Alicyclobacillus pomorum,energy_mode,respirator
+sqlite,163,Roseateles depolymerans,energy_mode,respirator
+sqlite,164,Rikenella,energy_mode,fermenter
+sqlite,165,Acidovorax delafieldii,energy_mode,respirator
+sqlite,166,Verrucomicrobium,energy_mode,respirator
+sqlite,167,Alicyclobacillus cycloheptanicus,energy_mode,respirator
+sqlite,169,Desulfosporosinus meridiei,energy_mode,fermenter
+sqlite,170,Sedimentibacter,energy_mode,fermenter
+sqlite,171,Robinsoniella peoriensis,energy_mode,fermenter
+sqlite,172,Acidithiobacillus albertensis,energy_mode,mixed
+sqlite,172,Acidithiobacillus albertensis,primary_food_source,inorganic
+sqlite,173,Holdemania,energy_mode,fermenter
+sqlite,173,Holdemania,primary_food_source,carbohydrates
+sqlite,174,Actinobacillus delphinicola,energy_mode,mixed
+sqlite,175,Vagococcus,energy_mode,respirator
+sqlite,176,Gemella,energy_mode,fermenter
+sqlite,176,Gemella,primary_food_source,carbohydrates
+sqlite,177,Clostridium methylpentosum,energy_mode,fermenter
+sqlite,177,Clostridium methylpentosum,primary_food_source,organic_unspecified
+sqlite,178,Sharpea,energy_mode,fermenter
+sqlite,179,Delftia,energy_mode,respirator
+sqlite,180,Congregibacter,energy_mode,respirator
+sqlite,181,Mycobacterium,energy_mode,respirator
+sqlite,181,Mycobacterium,primary_food_source,organic_unspecified
+sqlite,182,Chelonobacter,energy_mode,respirator
+sqlite,183,Sulfurospirillum,energy_mode,fermenter
+sqlite,184,Ralstonia,energy_mode,respirator
+sqlite,184,Ralstonia,primary_food_source,organic_unspecified
+sqlite,186,Erwinia chrysanthemi,energy_mode,mixed
+sqlite,187,Exiguobacterium,energy_mode,mixed
+sqlite,187,Exiguobacterium,primary_food_source,carbohydrates
+sqlite,189,Aquincola tertiaricarbonis,energy_mode,respirator
+sqlite,191,Rubrivivax gelatinosus,energy_mode,respirator
+sqlite,192,Brackiella oedipodis,energy_mode,respirator
+sqlite,194,Paenibacillus stellifer,energy_mode,respirator
+sqlite,195,Coriobacterium,energy_mode,fermenter
+sqlite,196,Bulleidia moorei,energy_mode,fermenter
+sqlite,196,Bulleidia moorei,primary_food_source,carbohydrates
+sqlite,197,Desulfobulbus,energy_mode,fermenter
+sqlite,198,Pseudomonas alcaligenes,energy_mode,respirator
+sqlite,198,Pseudomonas alcaligenes,primary_food_source,organic_unspecified
+sqlite,199,Campylobacter ureolyticus,primary_food_source,organic_unspecified
+sqlite,200,Eubacterium cylindroides,energy_mode,fermenter
+sqlite,201,Tannerella,energy_mode,fermenter
+sqlite,201,Tannerella,primary_food_source,carbohydrates
+sqlite,205,Haemophilus felis,energy_mode,respirator
+sqlite,206,Aggregatibacter pneumotropica,energy_mode,respirator
+sqlite,208,Eubacterium biforme,energy_mode,fermenter
+sqlite,210,Methylobacillus,energy_mode,respirator
+sqlite,212,Roseburia faecis,energy_mode,fermenter
+sqlite,212,Roseburia faecis,primary_food_source,carbohydrates
+sqlite,213,Kingella,energy_mode,fermenter
+sqlite,213,Kingella,primary_food_source,carbohydrates
+sqlite,214,Clostridium colinum,energy_mode,fermenter
+sqlite,214,Clostridium colinum,primary_food_source,organic_unspecified
+sqlite,215,Pelosinus,energy_mode,fermenter
+sqlite,216,Parabacteroides distasonis,primary_food_source,carbohydrates
+sqlite,217,Dialister,energy_mode,fermenter
+sqlite,218,Leuconostoc,energy_mode,mixed
+sqlite,220,Eubacterium dolichum,energy_mode,fermenter
+sqlite,221,Rothia mucilaginosa,primary_food_source,carbohydrates
+sqlite,223,Nitrososphaera gargensis,energy_mode,respirator
+sqlite,223,Nitrososphaera gargensis,primary_food_source,inorganic
+sqlite,224,Streptococcus minor,energy_mode,mixed
+sqlite,225,Microbacterium,energy_mode,respirator
+sqlite,226,Actinomyces hyovaginalis,energy_mode,fermenter
+sqlite,226,Actinomyces hyovaginalis,primary_food_source,carbohydrates
+sqlite,227,Rummeliibacillus,energy_mode,respirator
+sqlite,230,Parabacteroides gordonii,energy_mode,fermenter
+sqlite,230,Parabacteroides gordonii,primary_food_source,carbohydrates
+sqlite,232,Succinivibrio,energy_mode,mixed
+sqlite,233,Acinetobacter lwoffii,primary_food_source,organic_unspecified
+sqlite,235,Bilophila,energy_mode,mixed
+sqlite,235,Bilophila,primary_food_source,carbohydrates
+sqlite,236,Syntrophococcus sucromutans,energy_mode,fermenter
+sqlite,237,Weissella beninensis,energy_mode,fermenter
+sqlite,238,Stenotrophomonas acidaminiphila,energy_mode,fermenter
+sqlite,238,Stenotrophomonas acidaminiphila,primary_food_source,carbohydrates
+sqlite,240,Lutispora,energy_mode,fermenter
+sqlite,242,Micrococcus,energy_mode,respirator
+sqlite,244,Alkaliphilus transvaalensis,energy_mode,fermenter
+sqlite,245,Sulfuritalea,energy_mode,fermenter
+sqlite,246,Sporomusa polytropa,energy_mode,fermenter
+sqlite,247,Salinicoccus,energy_mode,respirator
+sqlite,250,Methylobacterium adhaesivum,energy_mode,respirator
+sqlite,250,Methylobacterium adhaesivum,primary_food_source,c1_compounds
+sqlite,253,Brochothrix,energy_mode,fermenter
+sqlite,253,Brochothrix,primary_food_source,carbohydrates
+sqlite,254,Caldicoprobacter,energy_mode,fermenter
+sqlite,256,Proteiniclasticum,energy_mode,fermenter
+sqlite,257,Ramlibacter,energy_mode,respirator
+sqlite,258,Clostridiisalibacter,energy_mode,fermenter
+sqlite,259,Methylotenera mobilis,energy_mode,fermenter
+sqlite,260,Leptotrichia,energy_mode,fermenter
+sqlite,261,Bacillus ginsengihumi,energy_mode,respirator
+sqlite,262,Clostridium metallolevans,energy_mode,fermenter
+sqlite,262,Clostridium metallolevans,primary_food_source,organic_unspecified
+sqlite,265,Giesbergeria,energy_mode,respirator
+sqlite,266,Facklamia,energy_mode,mixed
+sqlite,268,Rothia dentocariosa,primary_food_source,carbohydrates
+sqlite,271,Trichococcus,energy_mode,respirator
+sqlite,272,Acaricomes phytoseiuli,energy_mode,respirator
+sqlite,273,Acidobacterium,energy_mode,respirator
+sqlite,277,Anaerovorax,energy_mode,fermenter
+sqlite,279,Brevibacterium,energy_mode,mixed
+sqlite,280,Chthoniobacter,energy_mode,respirator
+sqlite,281,Staphylococcus epidermidis,primary_food_source,carbohydrates
+sqlite,282,Clostridium maritimum,energy_mode,fermenter
+sqlite,282,Clostridium maritimum,primary_food_source,organic_unspecified
+sqlite,283,Rhodanobacter,energy_mode,respirator
+sqlite,285,Clostridium sordellii,energy_mode,fermenter
+sqlite,285,Clostridium sordellii,primary_food_source,organic_unspecified
+sqlite,286,Lysinibacillus boronitolerans,energy_mode,respirator
+sqlite,289,Mobiluncus,energy_mode,fermenter
+sqlite,291,Staphylococcus succinus,energy_mode,mixed
+sqlite,291,Staphylococcus succinus,primary_food_source,carbohydrates
+sqlite,292,Actinobaculum,energy_mode,fermenter
+sqlite,293,Hydrogenophilus,energy_mode,respirator
+sqlite,295,Saccharopolyspora,energy_mode,respirator
+sqlite,296,Carnobacterium,energy_mode,mixed
+sqlite,297,Succinispira mobilis,energy_mode,fermenter
+sqlite,298,Anaeromusa,energy_mode,fermenter
+sqlite,299,Polynucleobacter,energy_mode,respirator
+sqlite,300,Weissella thailandensis,energy_mode,fermenter
+sqlite,301,Pontibacillus,energy_mode,respirator
+sqlite,302,Clostridium neonatale,energy_mode,fermenter
+sqlite,302,Clostridium neonatale,primary_food_source,organic_unspecified
+sqlite,303,Phenylobacterium,energy_mode,respirator
+sqlite,304,Dermacoccus,energy_mode,mixed
+sqlite,304,Dermacoccus,primary_food_source,carbohydrates
+sqlite,305,Eggerthella lenta,primary_food_source,carbohydrates
+sqlite,306,Halanaerobacter,energy_mode,fermenter
+sqlite,308,Intrasporangium calvum,energy_mode,respirator
+sqlite,309,Dyadobacter,energy_mode,fermenter
+sqlite,309,Dyadobacter,primary_food_source,carbohydrates
+sqlite,310,Alloiococcus,energy_mode,respirator
+sqlite,311,Magnetospirillum,energy_mode,respirator
+sqlite,312,Acinetobacter guillouiae,energy_mode,respirator
+sqlite,312,Acinetobacter guillouiae,primary_food_source,organic_unspecified
+sqlite,313,Zoogloea,energy_mode,respirator
+sqlite,314,Tepidibacter,energy_mode,fermenter
+sqlite,320,Aggregatibacter segnis,energy_mode,respirator
+sqlite,322,Gallibacterium genomosp.,energy_mode,mixed
+sqlite,323,Cupriavidus gilardii,energy_mode,respirator
+sqlite,324,Pasteurella mairii,energy_mode,mixed
+sqlite,327,Bacillus foraminis,energy_mode,respirator
+sqlite,328,Clostridium hungatei,energy_mode,fermenter
+sqlite,328,Clostridium hungatei,primary_food_source,organic_unspecified
+sqlite,329,Actinobacillus porcinus,energy_mode,mixed
+sqlite,330,Actinobacillus seminis,energy_mode,mixed
+sqlite,331,Nitrincola,energy_mode,respirator
+sqlite,332,Thermobacillus composti,energy_mode,respirator
+sqlite,333,Glaciecola punicea,energy_mode,respirator
+sqlite,334,Shimazuella,energy_mode,respirator
+sqlite,335,Haemophilus paracuniculus,energy_mode,respirator
+sqlite,336,Shewanella algae,energy_mode,respirator
+sqlite,336,Shewanella algae,primary_food_source,organic_unspecified
+sqlite,339,Eikenella,energy_mode,mixed
+sqlite,342,Brevibacillus reuszeri,energy_mode,respirator
+sqlite,343,Avibacterium gallinarum,energy_mode,respirator
+sqlite,344,Thalassomonas sediminis,energy_mode,fermenter
+sqlite,345,Wolinella succinogenes,energy_mode,fermenter
+sqlite,347,Hyphomonas oceanitis,energy_mode,respirator
+sqlite,348,Bombiscardovia,energy_mode,fermenter
+sqlite,349,Psychromonas,energy_mode,mixed
+sqlite,350,Rickettsia,energy_mode,respirator
+sqlite,351,Oceanisphaera,energy_mode,respirator
+sqlite,352,Saccharomonospora,energy_mode,respirator
+sqlite,353,Aeromonas popoffii,energy_mode,mixed
+sqlite,353,Aeromonas popoffii,primary_food_source,carbohydrates
+sqlite,354,Ureibacillus,energy_mode,respirator
+sqlite,355,Erysipelothrix,energy_mode,fermenter
+sqlite,356,Haemophilus parasuis,energy_mode,respirator
+sqlite,357,Clostridium piliforme,energy_mode,fermenter
+sqlite,357,Clostridium piliforme,primary_food_source,organic_unspecified
+sqlite,359,Limnobacter,energy_mode,respirator
+sqlite,360,Parapedobacter,energy_mode,respirator
+sqlite,361,Desulfovibrio alaskensis,energy_mode,fermenter
+sqlite,363,Crocinitomix,energy_mode,respirator
+sqlite,364,Sphingobacterium multivorum,energy_mode,respirator
+sqlite,366,Alcanivorax,energy_mode,respirator
+sqlite,367,Pedobacter terricola,energy_mode,respirator
+sqlite,368,Collimonas,energy_mode,respirator
+sqlite,370,Propionigenium,energy_mode,fermenter
+sqlite,371,Serratia symbiotica,energy_mode,respirator
+sqlite,372,Filifactor,energy_mode,fermenter
+sqlite,373,Desulfovibrio d168,energy_mode,fermenter
+sqlite,374,Cellulosibacter alkalithermophilus,energy_mode,fermenter
+sqlite,375,Alistipes massiliensis,energy_mode,fermenter
+sqlite,376,Enhydrobacter,energy_mode,respirator
+sqlite,378,Yersinia,energy_mode,respirator
+sqlite,378,Yersinia,primary_food_source,organic_unspecified
+sqlite,380,Ferrimonas,energy_mode,fermenter
+sqlite,381,Moraxella,energy_mode,respirator
+sqlite,384,Psychrobacter sanguinis,energy_mode,respirator
+sqlite,386,Cronobacter turicensis,energy_mode,respirator
+sqlite,388,Pseudomonas fragi,energy_mode,respirator
+sqlite,388,Pseudomonas fragi,primary_food_source,organic_unspecified
+sqlite,389,Corynebacterium stationis,energy_mode,respirator
+sqlite,389,Corynebacterium stationis,primary_food_source,organic_unspecified
+sqlite,392,Cronobacter dublinensis,energy_mode,respirator
+sqlite,393,Providencia,energy_mode,mixed
+sqlite,393,Providencia,primary_food_source,carbohydrates
+sqlite,394,Pseudomonas veronii,energy_mode,respirator
+sqlite,394,Pseudomonas veronii,primary_food_source,organic_unspecified
+sqlite,395,Arcobacter,energy_mode,mixed
+sqlite,395,Arcobacter,primary_food_source,carbohydrates
+sqlite,396,Dehalococcoides,energy_mode,fermenter
+sqlite,397,Pelomonas,energy_mode,respirator
+sqlite,398,Octadecabacter,energy_mode,respirator
+sqlite,403,Enterobacter cowanii,energy_mode,respirator
+sqlite,404,Sporolactobacillus,energy_mode,mixed
+sqlite,405,Vibrio tapetis,energy_mode,mixed
+sqlite,405,Vibrio tapetis,primary_food_source,organic_unspecified
+sqlite,407,Cellulosimicrobium,energy_mode,fermenter
+sqlite,407,Cellulosimicrobium,primary_food_source,carbohydrates
+sqlite,408,Proteus,energy_mode,mixed
+sqlite,411,Pantoea ananatis,energy_mode,mixed
+sqlite,412,Dickeya,energy_mode,respirator
+sqlite,416,Natronincola,energy_mode,fermenter
+sqlite,417,Shewanella benthica,energy_mode,respirator
+sqlite,417,Shewanella benthica,primary_food_source,organic_unspecified
+sqlite,418,Enterobacter pyrinus,energy_mode,respirator
+sqlite,419,Marinomonas,energy_mode,respirator
+sqlite,422,Enterobacter arachidis,energy_mode,respirator
+sqlite,424,Halomonas,energy_mode,respirator
+sqlite,425,Agrobacterium,energy_mode,respirator
+sqlite,426,Aneurinibacillus,energy_mode,mixed
+sqlite,426,Aneurinibacillus,primary_food_source,carbohydrates
+sqlite,428,Fructobacillus,energy_mode,respirator
+sqlite,429,Clostridium hathewayi,energy_mode,fermenter
+sqlite,429,Clostridium hathewayi,primary_food_source,organic_unspecified
+sqlite,430,Desulfovibrio litoralis,energy_mode,fermenter
+sqlite,432,Sodalis,energy_mode,respirator
+sqlite,433,Mariprofundus,energy_mode,mixed
+sqlite,435,Xenorhabdus bovienii,energy_mode,mixed
+sqlite,437,Acinetobacter rhizosphaerae,energy_mode,respirator
+sqlite,437,Acinetobacter rhizosphaerae,primary_food_source,organic_unspecified
+sqlite,439,Cardiobacterium,energy_mode,fermenter
+sqlite,440,Anaerospora hongkongensis,energy_mode,fermenter
+sqlite,445,Photorhabdus temperata,energy_mode,mixed
+sqlite,446,Vibrio fortis,energy_mode,mixed
+sqlite,446,Vibrio fortis,primary_food_source,organic_unspecified
+sqlite,448,Owenweeksia hongkongensis,energy_mode,respirator
+sqlite,449,Rhodoluna,energy_mode,respirator
+sqlite,450,Kordia,energy_mode,respirator
+sqlite,451,Polaromonas,energy_mode,respirator
+sqlite,453,Sporobacter termitidis,energy_mode,fermenter
+sqlite,454,Oxobacter,energy_mode,fermenter
+sqlite,455,Parvibaculum,energy_mode,respirator
+sqlite,456,Clostridium fimetarium,energy_mode,fermenter
+sqlite,456,Clostridium fimetarium,primary_food_source,organic_unspecified
+sqlite,457,Friedmanniella,energy_mode,respirator
+sqlite,458,Fusibacter,energy_mode,fermenter
+sqlite,459,Steroidobacter,energy_mode,respirator
+sqlite,462,Ruminobacter,energy_mode,fermenter
+sqlite,463,Gardnerella,energy_mode,fermenter
+sqlite,464,Schwartzia,energy_mode,fermenter
+sqlite,465,Lysobacter,energy_mode,respirator
+sqlite,466,Erwinia oleae,energy_mode,mixed
+sqlite,467,Psychrilyobacter,energy_mode,fermenter
+sqlite,469,Samsonia erythrinae,energy_mode,mixed
+sqlite,470,Bacillus humi,energy_mode,respirator
+sqlite,471,Oceanimonas,energy_mode,respirator
+sqlite,473,Thalassospira xiamenensis,energy_mode,respirator
+sqlite,475,Aquabacterium,energy_mode,respirator
+sqlite,477,Massilia aerolata,energy_mode,respirator
+sqlite,478,Gordonia,energy_mode,fermenter
+sqlite,478,Gordonia,primary_food_source,carbohydrates
+sqlite,480,Anaerococcus,energy_mode,fermenter
+sqlite,481,Finegoldia,energy_mode,fermenter
+sqlite,482,Idiomarina,energy_mode,respirator
+sqlite,483,Desulfitobacter,energy_mode,fermenter
+sqlite,484,Anaerobiospirillum,energy_mode,fermenter
+sqlite,484,Anaerobiospirillum,primary_food_source,carbohydrates
+sqlite,485,Photobacterium rosenbergii,energy_mode,mixed
+sqlite,486,Marinimicrobium,energy_mode,respirator
+sqlite,487,Pseudomonas viridiflava,energy_mode,respirator
+sqlite,487,Pseudomonas viridiflava,primary_food_source,organic_unspecified
+sqlite,489,Janibacter,energy_mode,respirator
+sqlite,490,Scardovia,energy_mode,fermenter
+sqlite,490,Scardovia,primary_food_source,carbohydrates
+sqlite,491,Achromobacter,energy_mode,respirator
+sqlite,492,Oceanobacillus oncorhynchi,energy_mode,mixed
+sqlite,493,Sphingobium,energy_mode,respirator
+sqlite,494,Novosphingobium,energy_mode,respirator
+sqlite,495,Aerococcus,energy_mode,mixed
+sqlite,495,Aerococcus,primary_food_source,carbohydrates
+sqlite,496,Oenococcus kitaharae,energy_mode,respirator
+sqlite,499,Dethiosulfatibacter,energy_mode,fermenter
+sqlite,501,Imtechella halotolerans,energy_mode,respirator
+sqlite,504,Roseiflexus,energy_mode,fermenter
+sqlite,507,Dethiosulfovibrio peptidovorans,energy_mode,fermenter
+sqlite,509,Solibacillus,energy_mode,respirator
+sqlite,510,Neptuniibacter caesariensis,energy_mode,respirator
+sqlite,511,Diaphorobacter,energy_mode,respirator
+sqlite,512,Methanothermobacter thermautotrophicus,primary_food_source,inorganic
+sqlite,513,Bradyrhizobium,energy_mode,respirator
+sqlite,514,Leeia oryzae,energy_mode,respirator
+sqlite,519,Thermoanaerobacterium,energy_mode,fermenter
+sqlite,521,Dehalobacter,energy_mode,fermenter
+sqlite,523,Bacillus horti,energy_mode,respirator
+sqlite,524,Marinobacter,energy_mode,respirator
+sqlite,525,Thiomicrospira,energy_mode,respirator
+sqlite,526,Acidaminobacter,energy_mode,fermenter
+sqlite,527,Uliginosibacterium,energy_mode,respirator
+sqlite,528,Thermosinus,energy_mode,fermenter
+sqlite,529,Arthrobacter nitroguajacolicus,energy_mode,mixed
+sqlite,529,Arthrobacter nitroguajacolicus,primary_food_source,carbohydrates
+sqlite,531,Perlucidibaca,energy_mode,respirator
+sqlite,532,Haemophilus influenzae-murium,energy_mode,respirator
+sqlite,533,Thauera,energy_mode,respirator
+sqlite,534,Gluconacetobacter liquefaciens,energy_mode,respirator
+sqlite,536,Lampropedia,energy_mode,respirator
+sqlite,537,Nitrosomonas marina,energy_mode,respirator
+sqlite,537,Nitrosomonas marina,primary_food_source,inorganic
+sqlite,538,Lutaonella thermophilus,energy_mode,respirator
+sqlite,539,Methylomicrobium buryatense,energy_mode,respirator
+sqlite,540,Desulfovibrio aminophilus,energy_mode,fermenter
+sqlite,541,Proteiniborus ethanoligenes,energy_mode,fermenter
+sqlite,544,Bacillus selenatarsenatis,energy_mode,respirator
+sqlite,545,Paracoccus marcusii,energy_mode,respirator
+sqlite,547,Roseivivax,energy_mode,respirator
+sqlite,548,Myroides odoratimimus,energy_mode,respirator
+sqlite,549,Rhodobacter,energy_mode,respirator
+sqlite,550,Haloferula rosea,energy_mode,respirator
+sqlite,551,Rhodovulum,energy_mode,fermenter
+sqlite,552,Cellvibrio,energy_mode,respirator
+sqlite,553,Roseisalinus antarcticus,energy_mode,respirator
+sqlite,554,Maritimibacter alkaliphilus,energy_mode,fermenter
+sqlite,557,Amycolatopsis,energy_mode,respirator
+sqlite,560,Calditerrivibrio nitroreducens,energy_mode,fermenter
+sqlite,561,Rubrobacter,energy_mode,respirator
+sqlite,562,Ornithinibacillus scapharcae,energy_mode,respirator
+sqlite,563,Brenneria alni,energy_mode,mixed
+sqlite,566,Bacillus aurantiacus,energy_mode,respirator
+sqlite,567,Syntrophus,energy_mode,fermenter
+sqlite,568,Methyloversatilis,energy_mode,fermenter
+sqlite,569,Thermoflavimicrobium dichotomicum,energy_mode,respirator
+sqlite,570,Nocardia,energy_mode,respirator
+sqlite,571,Pelobacter,energy_mode,fermenter
+sqlite,572,Erwinia dispersa,energy_mode,mixed
+sqlite,573,Marichromatium fluminis,energy_mode,fermenter
+sqlite,574,Aurantimonas,energy_mode,respirator
+sqlite,575,Trabulsiella farmeri,energy_mode,mixed
+sqlite,576,Desulfobacca,energy_mode,fermenter
+sqlite,580,Christensenella,energy_mode,fermenter
+sqlite,581,Edwardsiella,energy_mode,mixed
+sqlite,581,Edwardsiella,primary_food_source,carbohydrates
+sqlite,582,Rathayibacter,energy_mode,respirator
+sqlite,583,Barnesiella viscericola,energy_mode,fermenter
+sqlite,583,Barnesiella viscericola,primary_food_source,carbohydrates
+sqlite,584,Flexistipes,energy_mode,fermenter
+sqlite,585,Geosporobacter,energy_mode,fermenter
+sqlite,586,Oligella,energy_mode,respirator
+sqlite,587,Thermotoga,energy_mode,fermenter
+sqlite,587,Thermotoga,primary_food_source,organic_unspecified
+sqlite,588,Thermoanaerobacter,energy_mode,fermenter
+sqlite,589,Desulfonispora thiosulfatigenes,energy_mode,fermenter
+sqlite,592,Alloscardovia,energy_mode,fermenter
+sqlite,593,Leadbetterella,energy_mode,respirator
+sqlite,594,Pseudoxanthomonas mexicana,energy_mode,respirator
+sqlite,595,Methylomonas,energy_mode,respirator
+sqlite,596,Xenorhabdus poinarii,energy_mode,mixed
+sqlite,597,Desulfotignum,energy_mode,fermenter
+sqlite,598,Dethiobacter,energy_mode,fermenter
+sqlite,599,Pseudoalteromonas porphyrae,energy_mode,respirator
+sqlite,600,Brenneria salicis,energy_mode,mixed
+sqlite,602,Wohlfahrtiimonas,energy_mode,respirator
+sqlite,603,Rhodoferax,energy_mode,respirator
+sqlite,606,Cellulomonas,energy_mode,respirator
+sqlite,606,Cellulomonas,primary_food_source,complex_carbs_fiber
+sqlite,607,Halorhodospira,energy_mode,fermenter
+sqlite,610,Hyphomicrobium zavarzinii,energy_mode,respirator
+sqlite,611,Ammoniphilus,energy_mode,mixed
+sqlite,612,Thioalkalimicrobium,energy_mode,respirator
+sqlite,613,Pseudoalteromonas tunicata,energy_mode,respirator
+sqlite,614,Raoultella terrigena,energy_mode,mixed
+sqlite,615,Erwinia soli,energy_mode,respirator
+sqlite,616,Desulfovibrio cavernae,energy_mode,fermenter
+sqlite,617,Rhodoplanes,energy_mode,fermenter
+sqlite,618,Melissococcus plutonius,energy_mode,fermenter
+sqlite,620,Xenorhabdus romanii,energy_mode,mixed
+sqlite,623,Nocardioides,energy_mode,respirator
+sqlite,624,Euzebya,energy_mode,respirator
+sqlite,625,Clostridium venationis,energy_mode,fermenter
+sqlite,625,Clostridium venationis,primary_food_source,organic_unspecified
+sqlite,626,Fluviicola,energy_mode,respirator
+sqlite,627,Polaribacter,energy_mode,respirator
+sqlite,628,Psychroflexus,energy_mode,respirator
+sqlite,629,Streptococcus sobrinus,energy_mode,mixed
+sqlite,630,Rhodothermus,energy_mode,respirator
+sqlite,630,Rhodothermus,primary_food_source,organic_unspecified
+sqlite,631,Desulfomicrobium,energy_mode,fermenter
+sqlite,632,Cloacibacterium,energy_mode,respirator
+sqlite,633,Helicobacter pylori,primary_food_source,carbohydrates
+sqlite,634,Oceanicaulis,energy_mode,respirator
+sqlite,635,Curtobacterium,energy_mode,fermenter
+sqlite,635,Curtobacterium,primary_food_source,carbohydrates
+sqlite,638,Bacillus coahuilensis,energy_mode,respirator
+sqlite,640,Sanguibacter,energy_mode,respirator
+sqlite,641,Aggregatibacter actinomycetemcomitans,energy_mode,respirator
+sqlite,642,Sporosarcina,energy_mode,respirator
+sqlite,644,Methanosaeta,energy_mode,fermenter
+sqlite,646,Azospira,energy_mode,respirator
+sqlite,648,Pseudidiomarina,energy_mode,respirator
+sqlite,650,Agarivorans,energy_mode,respirator
+sqlite,652,Alistipes bacterium ph8,energy_mode,fermenter
+sqlite,653,Thiothrix,energy_mode,respirator
+sqlite,655,Serratia ureilytica,energy_mode,respirator
+sqlite,656,Alistipes intestinihominis,energy_mode,fermenter
+sqlite,659,Alistipes senegalensis,energy_mode,fermenter
+sqlite,665,Alloprevotella rava,energy_mode,fermenter
+sqlite,665,Alloprevotella rava,primary_food_source,carbohydrates
+sqlite,667,Alternaria alternata,energy_mode,respirator
+sqlite,668,Alternaria carthami,energy_mode,respirator
+sqlite,669,Alternaria cucumerina,energy_mode,respirator
+sqlite,670,Alternaria dauci,energy_mode,respirator
+sqlite,671,Alternaria porri,energy_mode,respirator
+sqlite,673,Alternaria solani,energy_mode,respirator
+sqlite,674,Alternaria tagetica,energy_mode,respirator
+sqlite,677,Amycolatopsis balhimycina,energy_mode,respirator
+sqlite,678,Amycolatopsis sp. aa4,energy_mode,respirator
+sqlite,679,Amylomyces rouxii,energy_mode,respirator
+sqlite,685,Anaerococcus lactolyticus,energy_mode,fermenter
+sqlite,687,Anaerococcus tetradius,energy_mode,fermenter
+sqlite,706,Arthrobacter globiformis,energy_mode,mixed
+sqlite,706,Arthrobacter globiformis,primary_food_source,carbohydrates
+sqlite,707,Arthrobacter,energy_mode,mixed
+sqlite,707,Arthrobacter,primary_food_source,carbohydrates
+sqlite,712,Aspergillus amoenus,energy_mode,respirator
+sqlite,713,Aspergillus brevipes,energy_mode,respirator
+sqlite,714,Aspergillus calidoustus,energy_mode,respirator
+sqlite,716,Aspergillus carneus,energy_mode,respirator
+sqlite,717,Aspergillus chevalieri,energy_mode,respirator
+sqlite,719,Aspergillus fischeri,energy_mode,respirator
+sqlite,720,Aspergillus flavipes,energy_mode,respirator
+sqlite,722,Aspergillus foveolatus,energy_mode,respirator
+sqlite,723,Aspergillus fumigatus,energy_mode,respirator
+sqlite,726,Aspergillus niveus,energy_mode,respirator
+sqlite,728,Aspergillus ochraceus,energy_mode,respirator
+sqlite,729,Aspergillus oryzae,energy_mode,respirator
+sqlite,730,Aspergillus parasiticus,energy_mode,respirator
+sqlite,731,Aspergillus rugulosus,energy_mode,respirator
+sqlite,732,Aspergillus stellatus,energy_mode,respirator
+sqlite,733,Aspergillus striatus,energy_mode,respirator
+sqlite,734,Aspergillus sydowii,energy_mode,respirator
+sqlite,735,Aspergillus taichungensis,energy_mode,respirator
+sqlite,737,Aspergillus unguis,energy_mode,respirator
+sqlite,738,Aspergillus ustus,energy_mode,respirator
+sqlite,739,Aspergillus versicolor,energy_mode,respirator
+sqlite,786,Bacteroides helcogenes,energy_mode,fermenter
+sqlite,788,Bacteroides maternus,energy_mode,fermenter
+sqlite,829,Bifidobacterium hominis,energy_mode,fermenter
+sqlite,837,Bipolaris oryzae,energy_mode,respirator
+sqlite,838,Bipolaris sorokiniana,energy_mode,respirator
+sqlite,839,Bipolaris victoriae,energy_mode,respirator
+sqlite,845,Blautia aquisgranensis,energy_mode,fermenter
+sqlite,846,Blautia caccae,energy_mode,fermenter
+sqlite,850,Blautia intestinihominis,energy_mode,fermenter
+sqlite,866,Sediminibacterium,energy_mode,respirator
+sqlite,871,Jeotgalicoccus psychrophilus,energy_mode,respirator
+sqlite,877,Ewingella americana,energy_mode,respirator
+sqlite,878,Kurthia,energy_mode,mixed
+sqlite,878,Kurthia,primary_food_source,carbohydrates
+sqlite,879,Enterobacter radicincitans,energy_mode,respirator
+sqlite,880,Pelotomaculum,energy_mode,fermenter
+sqlite,881,Enterobacter ludwigii,energy_mode,respirator
+sqlite,882,Neisseria iguanae,energy_mode,respirator
+sqlite,884,Lactobacillus zeae,energy_mode,fermenter
+sqlite,885,Cloacibacillus,energy_mode,fermenter
+sqlite,885,Cloacibacillus,primary_food_source,carbohydrates
+sqlite,886,Clostridium carboxidivorans,energy_mode,fermenter
+sqlite,886,Clostridium carboxidivorans,primary_food_source,organic_unspecified
+sqlite,887,Clostridium cellulovorans,energy_mode,fermenter
+sqlite,887,Clostridium cellulovorans,primary_food_source,organic_unspecified
+sqlite,888,Anaerovirgula,energy_mode,fermenter
+sqlite,890,Desulfovirgula,energy_mode,fermenter
+sqlite,891,Clostridium ljungdahlii,energy_mode,fermenter
+sqlite,891,Clostridium ljungdahlii,primary_food_source,organic_unspecified
+sqlite,892,Syntrophobotulus,energy_mode,fermenter
+sqlite,894,Thermotalea,energy_mode,fermenter
+sqlite,901,Clostridium sp. 7_2_43faa,primary_food_source,organic_unspecified
+sqlite,902,Clostridium sp. l2-50,energy_mode,fermenter
+sqlite,902,Clostridium sp. l2-50,primary_food_source,organic_unspecified
+sqlite,904,Clostridium sp. m62/1,primary_food_source,organic_unspecified
+sqlite,906,Clostridium sp. md294,energy_mode,fermenter
+sqlite,906,Clostridium sp. md294,primary_food_source,organic_unspecified
+sqlite,907,Achromobacter piechaudii,energy_mode,respirator
+sqlite,910,Clostridium sp. sy8519,primary_food_source,organic_unspecified
+sqlite,912,Clostridium subterminale,energy_mode,fermenter
+sqlite,912,Clostridium subterminale,primary_food_source,organic_unspecified
+sqlite,913,Acidaminococcus fermentans,primary_food_source,carbohydrates
+sqlite,925,Acidithiobacillus caldus,energy_mode,respirator
+sqlite,925,Acidithiobacillus caldus,primary_food_source,inorganic
+sqlite,929,Acidovorax avenae,energy_mode,respirator
+sqlite,935,Acinetobacter calcoaceticus,primary_food_source,organic_unspecified
+sqlite,936,Coprococcus intestinihominis,energy_mode,fermenter
+sqlite,937,Acinetobacter haemolyticus,primary_food_source,organic_unspecified
+sqlite,939,Coprococcus sp. art55_1,energy_mode,fermenter
+sqlite,949,Corynebacterium diphtheriae,primary_food_source,organic_unspecified
+sqlite,956,Actinomyces israelii,energy_mode,fermenter
+sqlite,956,Actinomyces israelii,primary_food_source,carbohydrates
+sqlite,957,Corynebacterium matruchotii,primary_food_source,organic_unspecified
+sqlite,971,Actinosynnema mirum,energy_mode,respirator
+sqlite,980,Cutaneotrichosporon oleaginosum,energy_mode,respirator
+sqlite,987,Aeromonas veronii,primary_food_source,carbohydrates
+sqlite,996,Ehrlichia chaffeensis,energy_mode,respirator
+sqlite,1010,Enterobacter intestinihominis,energy_mode,fermenter
+sqlite,1012,Enterocloster asparagiformis,energy_mode,fermenter
+sqlite,1012,Enterocloster asparagiformis,primary_food_source,carbohydrates
+sqlite,1014,Enterocloster bolteae,energy_mode,fermenter
+sqlite,1014,Enterocloster bolteae,primary_food_source,carbohydrates
+sqlite,1016,Enterocloster citroniae,energy_mode,fermenter
+sqlite,1016,Enterocloster citroniae,primary_food_source,carbohydrates
+sqlite,1018,Enterocloster clostridioformis,primary_food_source,carbohydrates
+sqlite,1034,Desulfobulbus propionicus,energy_mode,fermenter
+sqlite,1037,Enterococcus italicus,primary_food_source,organic_unspecified
+sqlite,1038,Desulfomicrobium baculatum,energy_mode,fermenter
+sqlite,1039,Enterococcus malodoratus,primary_food_source,organic_unspecified
+sqlite,1041,Enterococcus pallens,primary_food_source,organic_unspecified
+sqlite,1044,Desulfotomaculum nigrificans,energy_mode,fermenter
+sqlite,1062,Dialister pneumosintes,energy_mode,fermenter
+sqlite,1063,Erysipelothrix rhusiopathiae,energy_mode,fermenter
+sqlite,1074,Ethanoligenens harbinense,energy_mode,fermenter
+sqlite,1077,Dietzia maris,energy_mode,fermenter
+sqlite,1077,Dietzia maris,primary_food_source,carbohydrates
+sqlite,1096,Eggerthella sp. yy7918,primary_food_source,carbohydrates
+sqlite,1099,Eggerthella,primary_food_source,carbohydrates
+sqlite,1100,Exophiala dermatitidis,energy_mode,respirator
+sqlite,1105,Exophiala pisciphila,energy_mode,respirator
+sqlite,1108,Faecalibacterium faecis,energy_mode,fermenter
+sqlite,1110,Faecalibacterium intestinale,energy_mode,fermenter
+sqlite,1112,Faecalibacterium tardum,energy_mode,fermenter
+sqlite,1118,Faecousia intestinalis,energy_mode,fermenter
+sqlite,1123,Gardnerella vaginalis,energy_mode,fermenter
+sqlite,1125,Gemella bergeri,energy_mode,mixed
+sqlite,1125,Gemella bergeri,primary_food_source,carbohydrates
+sqlite,1134,Flavonifractor hominis,energy_mode,fermenter
+sqlite,1141,Geobacter sulfurreducens,primary_food_source,inorganic
+sqlite,1144,Fusarium acuminatum,energy_mode,respirator
+sqlite,1148,Fusarium chlamydosporum,energy_mode,respirator
+sqlite,1150,Fusarium compactum,energy_mode,respirator
+sqlite,1160,Fusarium haematococcum,energy_mode,respirator
+sqlite,1161,Fusarium incarnatum,energy_mode,respirator
+sqlite,1163,Fusarium lateritium,energy_mode,respirator
+sqlite,1168,Fusarium solani,energy_mode,respirator
+sqlite,1169,Fusarium sp. f31,energy_mode,respirator
+sqlite,1170,Fusarium sporotrichioides,energy_mode,respirator
+sqlite,1172,Fusarium tricinctum,energy_mode,respirator
+sqlite,1182,Lachnobacterium bovis,energy_mode,fermenter
+sqlite,1184,Lachnoclostridium asparagiformis,primary_food_source,organic_unspecified
+sqlite,1202,Lachnospira hominis,energy_mode,fermenter
+sqlite,1203,Lachnospira intestinalis,energy_mode,fermenter
+sqlite,1204,Helicobacter fennelliae,energy_mode,mixed
+sqlite,1204,Helicobacter fennelliae,primary_food_source,carbohydrates
+sqlite,1207,Lachnospira rogosae,energy_mode,fermenter
+sqlite,1211,Lacrimispora indolis,energy_mode,fermenter
+sqlite,1211,Lacrimispora indolis,primary_food_source,organic_unspecified
+sqlite,1213,Lacrimispora saccharolytica,energy_mode,fermenter
+sqlite,1220,Hominiventricola aquisgranensis,energy_mode,fermenter
+sqlite,1231,Hyphomicrobium denitrificans,energy_mode,respirator
+sqlite,1237,Hypomyces chrysospermus,energy_mode,fermenter
+sqlite,1237,Hypomyces chrysospermus,primary_food_source,complex_carbs_fiber
+sqlite,1258,Lactococcus lactis,primary_food_source,carbohydrates
+sqlite,1260,Laedolimicola intestinihominis,energy_mode,fermenter
+sqlite,1261,Lancefieldella parvula,primary_food_source,carbohydrates
+sqlite,1265,Legionella pneumophila,energy_mode,respirator
+sqlite,1270,Leptospira noguchii,energy_mode,respirator
+sqlite,1271,Leptospira weilii,energy_mode,respirator
+sqlite,1273,Leptotrichia hofstadii,energy_mode,fermenter
+sqlite,1274,Leptotrichia shahii,energy_mode,fermenter
+sqlite,1275,Leptotrichia wadei,energy_mode,fermenter
+sqlite,1290,Listeria ivanovii,energy_mode,mixed
+sqlite,1290,Listeria ivanovii,primary_food_source,carbohydrates
+sqlite,1294,Lysinibacillus fusiformis,energy_mode,respirator
+sqlite,1296,Macalpinomyces mackinlayi,energy_mode,respirator
+sqlite,1297,Maccoya intestinihominis,energy_mode,fermenter
+sqlite,1311,Megasphaera intestinihominis,energy_mode,fermenter
+sqlite,1312,Megasphaera micronuciformis,energy_mode,fermenter
+sqlite,1316,Mesorhizobium ciceri,energy_mode,respirator
+sqlite,1319,Mesorhizobium opportunistum,energy_mode,respirator
+sqlite,1321,Metarhizium anisopliae,energy_mode,fermenter
+sqlite,1321,Metarhizium anisopliae,primary_food_source,complex_carbs_fiber
+sqlite,1348,Ilyobacter polytropus,energy_mode,fermenter
+sqlite,1353,Kalmanozyma brasiliensis,energy_mode,respirator
+sqlite,1359,Kingella denitrificans,energy_mode,mixed
+sqlite,1359,Kingella denitrificans,primary_food_source,carbohydrates
+sqlite,1360,Kingella kingae,energy_mode,mixed
+sqlite,1360,Kingella kingae,primary_food_source,carbohydrates
+sqlite,1374,Kocuria rhizophila,primary_food_source,carbohydrates
+sqlite,1375,Kocuria rosea,energy_mode,mixed
+sqlite,1375,Kocuria rosea,primary_food_source,carbohydrates
+sqlite,1386,Myroides odoratus,energy_mode,respirator
+sqlite,1423,Nialla hominis,energy_mode,fermenter
+sqlite,1427,Butyrivibrio proteoclasticus,energy_mode,fermenter
+sqlite,1430,Nigrospora sphaerica,energy_mode,fermenter
+sqlite,1430,Nigrospora sphaerica,primary_food_source,complex_carbs_fiber
+sqlite,1432,Nitrobacter hamburgensis,energy_mode,respirator
+sqlite,1432,Nitrobacter hamburgensis,primary_food_source,inorganic
+sqlite,1435,Campylobacter concisus,energy_mode,respirator
+sqlite,1435,Campylobacter concisus,primary_food_source,organic_unspecified
+sqlite,1437,Campylobacter curvus,energy_mode,respirator
+sqlite,1437,Campylobacter curvus,primary_food_source,organic_unspecified
+sqlite,1438,Nitrosococcus halophilus,energy_mode,respirator
+sqlite,1438,Nitrosococcus halophilus,primary_food_source,inorganic
+sqlite,1441,Campylobacter gracilis,primary_food_source,organic_unspecified
+sqlite,1442,Nitrosomonas europaea,primary_food_source,inorganic
+sqlite,1443,Campylobacter hominis,primary_food_source,organic_unspecified
+sqlite,1448,Campylobacter lari,energy_mode,respirator
+sqlite,1448,Campylobacter lari,primary_food_source,organic_unspecified
+sqlite,1449,Nocardia asteroides,energy_mode,respirator
+sqlite,1451,Nocardia brasiliensis,energy_mode,respirator
+sqlite,1452,Campylobacter showae,primary_food_source,organic_unspecified
+sqlite,1457,Campylobacter sputorum,primary_food_source,organic_unspecified
+sqlite,1459,Oceanobacillus picturae,energy_mode,mixed
+sqlite,1477,Capnocytophaga canimorsus,energy_mode,fermenter
+sqlite,1477,Capnocytophaga canimorsus,primary_food_source,carbohydrates
+sqlite,1528,Claviceps purpurea,energy_mode,respirator
+sqlite,1535,Clostridium aminobutyricum,energy_mode,fermenter
+sqlite,1535,Clostridium aminobutyricum,primary_food_source,organic_unspecified
+sqlite,1539,Penicillium sclerotiorum,energy_mode,respirator
+sqlite,1540,Penicillium solitum,energy_mode,respirator
+sqlite,1541,Penicillium soppii,energy_mode,respirator
+sqlite,1543,Penicillium,energy_mode,respirator
+sqlite,1547,Peptoniphilus hominis,energy_mode,fermenter
+sqlite,1550,Peptoniphilus timonensis,energy_mode,fermenter
+sqlite,1551,Peptostreptococcus sp.,energy_mode,fermenter
+sqlite,1551,Peptostreptococcus sp.,primary_food_source,carbohydrates
+sqlite,1554,Pestalotiopsis,energy_mode,fermenter
+sqlite,1554,Pestalotiopsis,primary_food_source,complex_carbs_fiber
+sqlite,1556,Phaffia rhodozyma,energy_mode,respirator
+sqlite,1560,Phocaeicola coprocola,primary_food_source,carbohydrates
+sqlite,1561,Phocaeicola coprophilus,primary_food_source,carbohydrates
+sqlite,1562,Phocaeicola dorei,primary_food_source,carbohydrates
+sqlite,1565,Phocaeicola salanitronis,energy_mode,fermenter
+sqlite,1566,Phocaeicola vulgatus,primary_food_source,carbohydrates
+sqlite,1574,Podospora anserina,energy_mode,respirator
+sqlite,1575,Porphyromonas asaccharolytica,primary_food_source,carbohydrates
+sqlite,1576,Porphyromonas gingivalis,primary_food_source,carbohydrates
+sqlite,1578,Porphyromonas uenonis,primary_food_source,carbohydrates
+sqlite,1579,Prauserella,energy_mode,respirator
+sqlite,1581,Prevotella amnii,energy_mode,fermenter
+sqlite,1605,Propionibacterium freudenreichii,primary_food_source,carbohydrates
+sqlite,1606,Propionibacterium gingivalis,primary_food_source,carbohydrates
+sqlite,1618,Pseudoalteromonas haloplanktis,energy_mode,respirator
+sqlite,1621,Pseudoflavonifractor intestinihominis,energy_mode,fermenter
+sqlite,1624,Pseudomonas alcaliphila,primary_food_source,organic_unspecified
+sqlite,1628,Pseudomonas monteilii,primary_food_source,organic_unspecified
+sqlite,1629,Pseudomonas nitroreducens,primary_food_source,organic_unspecified
+sqlite,1630,Pseudomonas oleovorans,primary_food_source,organic_unspecified
+sqlite,1632,Pseudomonas savastanoi,primary_food_source,organic_unspecified
+sqlite,1636,Pyrobaculum aerophilum,primary_food_source,organic_unspecified
+sqlite,1637,Pseudomonas taetrolens,primary_food_source,organic_unspecified
+sqlite,1639,Pseudomonas tolaasii,primary_food_source,organic_unspecified
+sqlite,1641,Pseudomonas,primary_food_source,organic_unspecified
+sqlite,1645,Pseudozyma hubeiensis,energy_mode,respirator
+sqlite,1648,Ralstonia solanacearum,energy_mode,respirator
+sqlite,1648,Ralstonia solanacearum,primary_food_source,organic_unspecified
+sqlite,1652,Puccinia striiformis,energy_mode,respirator
+sqlite,1653,Remersonia thermophila,energy_mode,respirator
+sqlite,1666,Sodalis glossinidius,energy_mode,respirator
+sqlite,1668,Solibaculum intestinale,energy_mode,fermenter
+sqlite,1675,Sphaerobacter thermophilus,energy_mode,respirator
+sqlite,1680,Rhodothermus marinus,energy_mode,respirator
+sqlite,1682,Rhodotorula graminis,energy_mode,respirator
+sqlite,1685,Spirochaeta thermophila,energy_mode,fermenter
+sqlite,1686,Rhodotorula taiwanensis,energy_mode,respirator
+sqlite,1692,Robertmurraya yapensis,energy_mode,respirator
+sqlite,1699,Staphylococcus caprae,primary_food_source,carbohydrates
+sqlite,1702,Staphylococcus carnosus,primary_food_source,carbohydrates
+sqlite,1708,Staphylococcus haemolyticus,primary_food_source,carbohydrates
+sqlite,1716,Ruminococcoides bili,energy_mode,fermenter
+sqlite,1718,Ruminococcoides intestinale,energy_mode,fermenter
+sqlite,1719,Staphylococcus lugdunensis,primary_food_source,carbohydrates
+sqlite,1720,Ruminococcoides intestinihominis,energy_mode,fermenter
+sqlite,1725,Staphylococcus pseudintermedius,energy_mode,mixed
+sqlite,1725,Staphylococcus pseudintermedius,primary_food_source,carbohydrates
+sqlite,1727,Staphylococcus saprophyticus,primary_food_source,carbohydrates
+sqlite,1734,Ruthenibacterium intestinale,energy_mode,fermenter
+sqlite,1754,Sakamotonia hominis,energy_mode,fermenter
+sqlite,1756,Salinispora arenicola,energy_mode,respirator
+sqlite,1762,Scardovia wiggsiae,energy_mode,fermenter
+sqlite,1762,Scardovia wiggsiae,primary_food_source,carbohydrates
+sqlite,1792,Selenomonas artemidis,energy_mode,fermenter
+sqlite,1794,Selenomonas flueggei,energy_mode,fermenter
+sqlite,1796,Selenomonas noxia,energy_mode,fermenter
+sqlite,1798,Selenomonas sputigena,energy_mode,fermenter
+sqlite,1824,Streptomyces actuosus,energy_mode,respirator
+sqlite,1825,Streptomyces alboniger,energy_mode,respirator
+sqlite,1826,Streptomyces albosporeus,energy_mode,respirator
+sqlite,1827,Streptomyces albus,energy_mode,respirator
+sqlite,1828,Streptomyces antibioticus,energy_mode,respirator
+sqlite,1829,Streptomyces anulatus,energy_mode,respirator
+sqlite,1830,Streptomyces armeniacus,energy_mode,respirator
+sqlite,1831,Streptomyces aurantiogriseus,energy_mode,respirator
+sqlite,1833,Streptomyces azureus,energy_mode,respirator
+sqlite,1834,Streptomyces californicus,energy_mode,respirator
+sqlite,1835,Streptomyces calvus,energy_mode,respirator
+sqlite,1836,Streptomyces candidus,energy_mode,respirator
+sqlite,1837,Streptomyces cavourensis,energy_mode,respirator
+sqlite,1838,Streptomyces cellulosae,energy_mode,respirator
+sqlite,1839,Streptomyces coeruleorubidus,energy_mode,respirator
+sqlite,1840,Streptomyces collinus,energy_mode,respirator
+sqlite,1841,Streptomyces diastatochromogenes,energy_mode,respirator
+sqlite,1842,Streptomyces echinatus,energy_mode,respirator
+sqlite,1843,Streptomyces ehimensis,energy_mode,respirator
+sqlite,1844,Streptomyces eurythermus,energy_mode,respirator
+sqlite,1845,Streptomyces filamentosus,energy_mode,respirator
+sqlite,1846,Streptomyces filipinensis,energy_mode,respirator
+sqlite,1847,Streptomyces griseosporeus,energy_mode,respirator
+sqlite,1848,Streptomyces fradiae,energy_mode,respirator
+sqlite,1850,Streptomyces griseoruber,energy_mode,respirator
+sqlite,1851,Streptomyces kanamyceticus,energy_mode,respirator
+sqlite,1852,Streptomyces griseorubiginosus,energy_mode,respirator
+sqlite,1853,Streptomyces kitasatoensis,energy_mode,respirator
+sqlite,1854,Streptomyces lavendofoliae,energy_mode,respirator
+sqlite,1855,Streptomyces lavendulae,energy_mode,respirator
+sqlite,1856,Streptomyces lividans,energy_mode,respirator
+sqlite,1858,Streptomyces mediolani,energy_mode,respirator
+sqlite,1859,Streptomyces microflavus,energy_mode,respirator
+sqlite,1861,Streptomyces murinus,energy_mode,respirator
+sqlite,1863,Streptomyces nashvillensis,energy_mode,respirator
+sqlite,1865,Streptomyces nodosus,energy_mode,respirator
+sqlite,1867,Streptomyces noursei,energy_mode,respirator
+sqlite,1869,Streptomyces rimosus,energy_mode,respirator
+sqlite,1870,Streptomyces roseoverticillatus,energy_mode,respirator
+sqlite,1872,Streptomyces sclerotialus,energy_mode,respirator
+sqlite,1874,Streptomyces somaliensis,energy_mode,respirator
+sqlite,1876,Streptomyces tendae,energy_mode,respirator
+sqlite,1878,Streptomyces vinaceus,energy_mode,respirator
+sqlite,1879,Streptomyces violaceoruber,energy_mode,respirator
+sqlite,1881,Streptomyces violaceus,energy_mode,respirator
+sqlite,1883,Streptomyces viridochromogenes,energy_mode,respirator
+sqlite,1885,Streptomyces,energy_mode,respirator
+sqlite,1891,Subdoligranulum sp. 4_3_54a2faa,energy_mode,fermenter
+sqlite,1891,Subdoligranulum sp. 4_3_54a2faa,primary_food_source,carbohydrates
+sqlite,1896,Ventrimonas faecis,energy_mode,fermenter
+sqlite,1906,Vibrio fluvialis,primary_food_source,organic_unspecified
+sqlite,1909,Parastagonospora nodorum,energy_mode,respirator
+sqlite,1916,Syntrophobotulus glycolicus,energy_mode,fermenter
+sqlite,1926,Pediococcus pentosaceus,primary_food_source,carbohydrates
+sqlite,1928,Wallemia ichthyophaga,energy_mode,respirator
+sqlite,1931,Wallemia mellicola,energy_mode,respirator
+sqlite,1935,Wallemia sebi,energy_mode,respirator
+sqlite,1939,Waltera hominis,energy_mode,fermenter
+sqlite,1941,Penicillium aethiopicum,energy_mode,respirator
+sqlite,1945,Penicillium aurantiacobrunneum,energy_mode,respirator
+sqlite,1947,Talaromyces pinophilus,energy_mode,respirator
+sqlite,1947,Talaromyces pinophilus,primary_food_source,organic_unspecified
+sqlite,1949,Penicillium aurantiogriseum,energy_mode,respirator
+sqlite,1953,Penicillium brevicompactum,energy_mode,respirator
+sqlite,1955,Talaromyces verruculosus,energy_mode,respirator
+sqlite,1955,Talaromyces verruculosus,primary_food_source,organic_unspecified
+sqlite,1956,Methylobacterium mesophilicum,primary_food_source,c1_compounds
+sqlite,1961,Penicillium chrysogenum,energy_mode,respirator
+sqlite,1970,Methylococcus capsulatus,primary_food_source,c1_compounds
+sqlite,1979,Yersinia bercovieri,primary_food_source,organic_unspecified
+sqlite,1984,Yersinia frederiksenii,primary_food_source,organic_unspecified
+sqlite,1986,Yersinia kristensenii,primary_food_source,organic_unspecified
+sqlite,1993,Thauera aromatica,energy_mode,respirator
+sqlite,2007,Micromonospora chalcea,energy_mode,respirator
+sqlite,2008,Thermococcus barophilus,energy_mode,fermenter
+sqlite,2009,Micromonospora,energy_mode,respirator
+sqlite,2010,Thermococcus gammatolerans,primary_food_source,organic_unspecified
+sqlite,2014,Thermococcus sibiricus,energy_mode,fermenter
+sqlite,2014,Thermococcus sibiricus,primary_food_source,organic_unspecified
+sqlite,2018,Thermomonospora curvata,energy_mode,respirator
+sqlite,2028,Thermotoga maritima,primary_food_source,organic_unspecified
+sqlite,2029,Thermotoga neapolitana,energy_mode,respirator
+sqlite,2054,Treponema pallidum,energy_mode,fermenter
+sqlite,2055,Mycobacterium tuberculosis,energy_mode,respirator
+sqlite,2062,Trichoderma longibrachiatum,energy_mode,respirator
+sqlite,2068,Trichosporon asahii,energy_mode,respirator
+sqlite,2080,Turicibacter sanguinis,energy_mode,fermenter
+sqlite,2100,Penicillium citreonigrum,energy_mode,respirator
+sqlite,2101,Penicillium citrinum,energy_mode,respirator
+sqlite,2102,Penicillium concentricum,energy_mode,respirator
+sqlite,2103,Penicillium cyclopium,energy_mode,respirator
+sqlite,2106,Penicillium fellutanum,energy_mode,respirator
+sqlite,2107,Penicillium janczewskii,energy_mode,respirator
+sqlite,2108,Penicillium lanosum,energy_mode,respirator
+sqlite,2109,Penicillium miczynskii,energy_mode,respirator
+sqlite,2111,Penicillium restrictum,energy_mode,respirator
+sqlite,2112,Penicillium roqueforti,energy_mode,respirator
+sqlite,2115,Hungatella,energy_mode,fermenter
+sqlite,2115,Hungatella,primary_food_source,carbohydrates
+sqlite,2116,Ligilactobacillus,energy_mode,mixed
+sqlite,2117,Marvinbryantia,energy_mode,fermenter
+sqlite,2117,Marvinbryantia,primary_food_source,carbohydrates
+sqlite,2118,Akkermansia,energy_mode,fermenter
+sqlite,2118,Akkermansia,primary_food_source,carbohydrates
+sqlite,2119,Alistipes,energy_mode,fermenter
+sqlite,2121,Atopobium,energy_mode,fermenter
+sqlite,2121,Atopobium,primary_food_source,carbohydrates
+sqlite,2122,Blautia,energy_mode,fermenter
+sqlite,2123,Butyricicoccus,energy_mode,mixed
+sqlite,2123,Butyricicoccus,primary_food_source,carbohydrates
+sqlite,2124,Campylobacter,primary_food_source,organic_unspecified
+sqlite,2125,Coprococcus,energy_mode,fermenter
+sqlite,2127,Dorea,energy_mode,fermenter
+sqlite,2127,Dorea,primary_food_source,carbohydrates
+sqlite,2128,Enterococcus,primary_food_source,organic_unspecified
+sqlite,2129,Eubacterium,energy_mode,fermenter
+sqlite,2131,Holdemanella,energy_mode,fermenter
+sqlite,2131,Holdemanella,primary_food_source,carbohydrates
+sqlite,2134,Mediterraneibacter,energy_mode,fermenter
+sqlite,2134,Mediterraneibacter,primary_food_source,carbohydrates
+sqlite,2138,Rothia,energy_mode,mixed
+sqlite,2138,Rothia,primary_food_source,carbohydrates
+sqlite,2139,Subdoligranulum,energy_mode,fermenter
+sqlite,2139,Subdoligranulum,primary_food_source,carbohydrates
+sqlite,2144,Bacteroides,energy_mode,fermenter
+sqlite,2146,Clostridium,energy_mode,fermenter
+sqlite,2146,Clostridium,primary_food_source,organic_unspecified
+sqlite,2148,Faecalitalea,energy_mode,fermenter
+sqlite,2148,Faecalitalea,primary_food_source,carbohydrates
+sqlite,2149,Intestinibacter,energy_mode,fermenter
+sqlite,2149,Intestinibacter,primary_food_source,carbohydrates
+sqlite,2151,Parasutterella,energy_mode,mixed
+sqlite,2152,Ruminococcus,energy_mode,fermenter
+sqlite,2154,Terrisporobacter,energy_mode,fermenter
+sqlite,2154,Terrisporobacter,primary_food_source,carbohydrates
+sqlite,2156,Roseburia,energy_mode,fermenter
+sqlite,2156,Roseburia,primary_food_source,carbohydrates
+sqlite,2157,Prevotella,energy_mode,fermenter
+sqlite,2158,Clostridium innocuum,energy_mode,fermenter
+sqlite,2158,Clostridium innocuum,primary_food_source,organic_unspecified
+sqlite,2159,Alistipes communis,energy_mode,fermenter
+sqlite,2163,Blautia caecimuris,energy_mode,fermenter
+sqlite,2164,Blautia stercoris,energy_mode,fermenter
+sqlite,2169,Clostridium sp. af20-17lb,energy_mode,fermenter
+sqlite,2169,Clostridium sp. af20-17lb,primary_food_source,organic_unspecified
+sqlite,2170,Clostridium sp. am22-11ac,energy_mode,fermenter
+sqlite,2170,Clostridium sp. am22-11ac,primary_food_source,organic_unspecified
+sqlite,2171,Clostridium sp. am33-3,energy_mode,fermenter
+sqlite,2171,Clostridium sp. am33-3,primary_food_source,organic_unspecified
+sqlite,2172,Clostridium sp. am49-4bh,energy_mode,fermenter
+sqlite,2172,Clostridium sp. am49-4bh,primary_food_source,organic_unspecified
+sqlite,2173,Enterocloster,energy_mode,fermenter
+sqlite,2173,Enterocloster,primary_food_source,carbohydrates
+sqlite,2174,Enterocloster hominis (ex liu et al. 2021),energy_mode,fermenter
+sqlite,2174,Enterocloster hominis (ex liu et al. 2021),primary_food_source,carbohydrates
+sqlite,2181,Mediterraneibacter glycyrrhizinilyticus,energy_mode,fermenter
+sqlite,2181,Mediterraneibacter glycyrrhizinilyticus,primary_food_source,carbohydrates
+sqlite,2182,Mediterraneibacter gnavus,energy_mode,fermenter
+sqlite,2182,Mediterraneibacter gnavus,primary_food_source,carbohydrates
+sqlite,2185,Roseburia sp. am23-20,energy_mode,fermenter
+sqlite,2185,Roseburia sp. am23-20,primary_food_source,carbohydrates
+sqlite,2186,Sutterella faecalis,energy_mode,fermenter
+sqlite,2187,Tyzzerella,energy_mode,fermenter
+sqlite,2187,Tyzzerella,primary_food_source,carbohydrates
+sqlite,2190,Clostridium symbiosum,energy_mode,fermenter
+sqlite,2190,Clostridium symbiosum,primary_food_source,organic_unspecified
+sqlite,2194,Bacteroides propionicigenes,energy_mode,fermenter
+sqlite,2195,Blautia faecis,energy_mode,fermenter
+sqlite,2196,Blautia massiliensis (ex durand et al. 2017),energy_mode,fermenter
+sqlite,2197,Blautia sp. mcc283,energy_mode,fermenter
+sqlite,2200,Clostridium sp. 1001270j_160509_d11,energy_mode,fermenter
+sqlite,2200,Clostridium sp. 1001270j_160509_d11,primary_food_source,organic_unspecified
+sqlite,2201,Clostridium sp. af36-4,energy_mode,fermenter
+sqlite,2201,Clostridium sp. af36-4,primary_food_source,organic_unspecified
+sqlite,2202,Clostridium sp. am42-4,energy_mode,fermenter
+sqlite,2202,Clostridium sp. am42-4,primary_food_source,organic_unspecified
+sqlite,2203,Collinsella,energy_mode,fermenter
+sqlite,2203,Collinsella,primary_food_source,carbohydrates
+sqlite,2204,Enterocloster aldenensis,energy_mode,fermenter
+sqlite,2204,Enterocloster aldenensis,primary_food_source,carbohydrates
+sqlite,2206,Eubacterium sp. af34-35bh,energy_mode,fermenter
+sqlite,2218,Lachnoclostridium,primary_food_source,organic_unspecified
+sqlite,2220,Lacrimispora,energy_mode,fermenter
+sqlite,2220,Lacrimispora,primary_food_source,organic_unspecified
+sqlite,2221,Lacrimispora amygdalina,energy_mode,fermenter
+sqlite,2221,Lacrimispora amygdalina,primary_food_source,organic_unspecified
+sqlite,2222,Mediterraneibacter faecis,energy_mode,fermenter
+sqlite,2222,Mediterraneibacter faecis,primary_food_source,carbohydrates
+sqlite,2227,Roseburia sp. af02-12,energy_mode,fermenter
+sqlite,2227,Roseburia sp. af02-12,primary_food_source,carbohydrates
+sqlite,2228,Ruminococcus bicirculans (ex wegman et al. 2014),energy_mode,fermenter
+sqlite,2235,Turicibacter bilis,energy_mode,fermenter
+sqlite,2236,Waltera,energy_mode,fermenter
+sqlite,2236,Waltera,primary_food_source,carbohydrates
+sqlite,2237,Waltera acetigignens,energy_mode,fermenter
+sqlite,2237,Waltera acetigignens,primary_food_source,carbohydrates
+sqlite,2239,Alloprevotella,energy_mode,fermenter
+sqlite,2239,Alloprevotella,primary_food_source,carbohydrates
+sqlite,2242,Megamonas,energy_mode,fermenter
+sqlite,2242,Megamonas,primary_food_source,carbohydrates
+sqlite,2251,Coprobacillus,energy_mode,fermenter
+sqlite,2251,Coprobacillus,primary_food_source,carbohydrates
+sqlite,2253,Faecalibacterium,energy_mode,fermenter
+sqlite,2254,Lachnospira,energy_mode,fermenter
+sqlite,2255,Methanomassiliicoccus,energy_mode,fermenter
+sqlite,2256,Mitsuokella,energy_mode,fermenter
+sqlite,2256,Mitsuokella,primary_food_source,carbohydrates
+sqlite,2259,Actinomyces,energy_mode,fermenter
+sqlite,2259,Actinomyces,primary_food_source,carbohydrates
+sqlite,2260,Corynebacterium,primary_food_source,organic_unspecified
+sqlite,2263,Lactococcus,energy_mode,mixed
+sqlite,2263,Lactococcus,primary_food_source,carbohydrates
+sqlite,2266,Solobacterium,energy_mode,fermenter
+sqlite,2266,Solobacterium,primary_food_source,carbohydrates
+sqlite,2267,Acidaminococcus massiliensis,energy_mode,fermenter
+sqlite,2267,Acidaminococcus massiliensis,primary_food_source,carbohydrates
+sqlite,2270,Bacteroides sp. of04-15bh,energy_mode,fermenter
+sqlite,2271,Blautia luti,energy_mode,fermenter
+sqlite,2272,Butyricicoccus intestinisimiae,energy_mode,mixed
+sqlite,2272,Butyricicoccus intestinisimiae,primary_food_source,carbohydrates
+sqlite,2275,Dialister hominis,energy_mode,fermenter
+sqlite,2279,Limosilactobacillus,energy_mode,mixed
+sqlite,2279,Limosilactobacillus,primary_food_source,carbohydrates
+sqlite,2280,Limosilactobacillus mucosae,energy_mode,mixed
+sqlite,2280,Limosilactobacillus mucosae,primary_food_source,carbohydrates
+sqlite,2281,Phocaeicola sartorii,energy_mode,fermenter
+sqlite,2281,Phocaeicola sartorii,primary_food_source,carbohydrates
+sqlite,2282,Prevotella marseillensis,energy_mode,fermenter
+sqlite,2286,Acinetobacter,energy_mode,respirator
+sqlite,2286,Acinetobacter,primary_food_source,organic_unspecified
+sqlite,2295,Helicobacter,energy_mode,mixed
+sqlite,2295,Helicobacter,primary_food_source,carbohydrates
+sqlite,2296,Jeotgalicoccus,energy_mode,respirator
+sqlite,2303,Paracoccus,energy_mode,respirator
+sqlite,2304,Rhodococcus,energy_mode,respirator
+sqlite,2306,Staphylococcus,energy_mode,mixed
+sqlite,2306,Staphylococcus,primary_food_source,carbohydrates
+sqlite,2309,Parabacteroides,energy_mode,fermenter
+sqlite,2309,Parabacteroides,primary_food_source,carbohydrates
+sqlite,2310,Barnesiella,energy_mode,fermenter
+sqlite,2310,Barnesiella,primary_food_source,carbohydrates
+sqlite,2313,Stenotrophomonas,energy_mode,fermenter
+sqlite,2313,Stenotrophomonas,primary_food_source,carbohydrates
+sqlite,2314,Alistipes ihumii,energy_mode,fermenter
+sqlite,2315,Alistipes sp. af17-16,energy_mode,fermenter
+sqlite,2320,Bacteroides faecalis,energy_mode,fermenter
+sqlite,2321,Blautia faecicola,energy_mode,fermenter
+sqlite,2322,Blautia glucerasea,energy_mode,fermenter
+sqlite,2323,Blautia schinkii,energy_mode,fermenter
+sqlite,2327,Clostridium fessum,energy_mode,fermenter
+sqlite,2327,Clostridium fessum,primary_food_source,organic_unspecified
+sqlite,2328,Clostridium sp. af12-28,energy_mode,fermenter
+sqlite,2328,Clostridium sp. af12-28,primary_food_source,organic_unspecified
+sqlite,2329,Dorea sp. af36-15at,energy_mode,fermenter
+sqlite,2329,Dorea sp. af36-15at,primary_food_source,carbohydrates
+sqlite,2331,Eubacterium sp. af16-48,energy_mode,fermenter
+sqlite,2332,Holdemanella porci,energy_mode,fermenter
+sqlite,2332,Holdemanella porci,primary_food_source,carbohydrates
+sqlite,2335,Lachnospira hominis (ex liu et al. 2021),energy_mode,fermenter
+sqlite,2344,Mediterraneibacter butyricigenes,energy_mode,fermenter
+sqlite,2344,Mediterraneibacter butyricigenes,primary_food_source,carbohydrates
+sqlite,2345,Mediterraneibacter sp. nsj-151,energy_mode,fermenter
+sqlite,2345,Mediterraneibacter sp. nsj-151,primary_food_source,carbohydrates
+sqlite,2346,Merdimmobilis hominis,energy_mode,fermenter
+sqlite,2346,Merdimmobilis hominis,primary_food_source,carbohydrates
+sqlite,2349,Parasutterella secunda,energy_mode,mixed
+sqlite,2350,Roseburia lenta,energy_mode,fermenter
+sqlite,2350,Roseburia lenta,primary_food_source,carbohydrates
+sqlite,2351,Roseburia sp. am59-24xd,energy_mode,fermenter
+sqlite,2351,Roseburia sp. am59-24xd,primary_food_source,carbohydrates
+sqlite,2352,Roseburia zhanii,energy_mode,fermenter
+sqlite,2352,Roseburia zhanii,primary_food_source,carbohydrates
+sqlite,2353,Ruminococcus sp. af13-28,energy_mode,fermenter
+sqlite,2358,Clostridium leptum,energy_mode,fermenter
+sqlite,2358,Clostridium leptum,primary_food_source,organic_unspecified
+sqlite,2359,Clostridium scindens,energy_mode,fermenter
+sqlite,2359,Clostridium scindens,primary_food_source,organic_unspecified
+sqlite,2365,Clostridium sp. af27-2aa,energy_mode,fermenter
+sqlite,2365,Clostridium sp. af27-2aa,primary_food_source,organic_unspecified
+sqlite,2366,Clostridium sp. at4,energy_mode,fermenter
+sqlite,2366,Clostridium sp. at4,primary_food_source,organic_unspecified
+sqlite,2368,Eubacterium callanderi,energy_mode,fermenter
+sqlite,2378,Ruminococcus sp. af41-9,energy_mode,fermenter
+sqlite,2389,Eubacterium siraeum,energy_mode,fermenter
+sqlite,2390,Enterocloster alcoholdehydrogenati,energy_mode,fermenter
+sqlite,2390,Enterocloster alcoholdehydrogenati,primary_food_source,carbohydrates
+sqlite,2391,Oxalobacter,energy_mode,fermenter
+sqlite,2391,Oxalobacter,primary_food_source,carbohydrates
+sqlite,2392,Pedobacter,energy_mode,respirator
+sqlite,2393,Pedobacter nutrimenti,energy_mode,respirator
+sqlite,2394,Salmonella,energy_mode,mixed
+sqlite,2394,Salmonella,primary_food_source,organic_unspecified
+sqlite,2397,Catenibacterium,energy_mode,fermenter
+sqlite,2397,Catenibacterium,primary_food_source,carbohydrates
+sqlite,2401,Alkaliphilus,energy_mode,fermenter
+sqlite,2406,Blastococcus,energy_mode,respirator
+sqlite,2407,Brevundimonas,energy_mode,respirator
+sqlite,2425,Flavobacterium,energy_mode,respirator
+sqlite,2453,Proteiniborus,energy_mode,fermenter
+sqlite,2457,Pyramidobacter,energy_mode,fermenter
+sqlite,2457,Pyramidobacter,primary_food_source,carbohydrates
+sqlite,2461,Sphingobacterium,energy_mode,respirator
+sqlite,2462,Sphingomonas,energy_mode,fermenter
+sqlite,2462,Sphingomonas,primary_food_source,carbohydrates
+sqlite,2470,Enterocloster lavalensis,energy_mode,fermenter
+sqlite,2470,Enterocloster lavalensis,primary_food_source,carbohydrates
+sqlite,2472,Ruthenibacterium,energy_mode,fermenter
+sqlite,2472,Ruthenibacterium,primary_food_source,carbohydrates
+sqlite,2473,Ruthenibacterium lactatiformans,energy_mode,fermenter
+sqlite,2473,Ruthenibacterium lactatiformans,primary_food_source,carbohydrates
+sqlite,2475,Methanosphaera,energy_mode,respirator
+sqlite,2475,Methanosphaera,primary_food_source,inorganic
+sqlite,2479,Varibaculum,energy_mode,mixed
+sqlite,2479,Varibaculum,primary_food_source,carbohydrates
+sqlite,2482,Clostridioides,energy_mode,fermenter
+sqlite,2482,Clostridioides,primary_food_source,carbohydrates
+sqlite,2483,Victivallis,energy_mode,fermenter
+sqlite,2485,Cetobacterium,energy_mode,fermenter
+sqlite,2485,Cetobacterium,primary_food_source,carbohydrates
+sqlite,2487,Clostridium sp. d5,energy_mode,fermenter
+sqlite,2487,Clostridium sp. d5,primary_food_source,organic_unspecified
+sqlite,2490,Hafnia,energy_mode,mixed
+sqlite,2494,Megasphaera massiliensis,energy_mode,fermenter
+sqlite,2497,Phascolarctobacterium faecium,energy_mode,fermenter
+sqlite,2497,Phascolarctobacterium faecium,primary_food_source,carbohydrates
+sqlite,2498,Porphyromonas,energy_mode,fermenter
+sqlite,2498,Porphyromonas,primary_food_source,carbohydrates
+sqlite,2499,Pseudoflavonifractor,energy_mode,fermenter
+sqlite,2500,Pseudoflavonifractor phocaeensis,energy_mode,fermenter
+sqlite,2501,Aggregatibacter,energy_mode,respirator
+sqlite,2503,Faecalimonas nexilis,energy_mode,fermenter
+sqlite,2503,Faecalimonas nexilis,primary_food_source,organic_unspecified
+sqlite,2504,Butyricimonas paravirosa,energy_mode,fermenter
+sqlite,2504,Butyricimonas paravirosa,primary_food_source,carbohydrates
+sqlite,2506,Collinsella bouchesdurhonensis,energy_mode,fermenter
+sqlite,2506,Collinsella bouchesdurhonensis,primary_food_source,carbohydrates
+sqlite,2510,Faecalibacterium butyricigenerans,energy_mode,fermenter
+sqlite,2514,Kluyvera georgiana,energy_mode,mixed
+sqlite,2516,Limosilactobacillus portuensis,energy_mode,mixed
+sqlite,2516,Limosilactobacillus portuensis,primary_food_source,carbohydrates
+sqlite,2517,Megasphaera stantonii,energy_mode,fermenter
+sqlite,2518,Mogibacterium diversum,energy_mode,fermenter
+sqlite,2518,Mogibacterium diversum,primary_food_source,carbohydrates
+sqlite,2519,Mogibacterium kristiansenii,energy_mode,fermenter
+sqlite,2519,Mogibacterium kristiansenii,primary_food_source,carbohydrates
+sqlite,2523,Peptostreptococcus,energy_mode,fermenter
+sqlite,2523,Peptostreptococcus,primary_food_source,carbohydrates
+sqlite,2524,Prevotella dentalis,energy_mode,fermenter
+sqlite,2525,Pseudoflavonifractor gallinarum,energy_mode,fermenter
+sqlite,2531,Hyphomicrobium,energy_mode,respirator
+sqlite,2534,Mesorhizobium,energy_mode,respirator
+sqlite,2540,Olsenella,energy_mode,fermenter
+sqlite,2540,Olsenella,primary_food_source,carbohydrates
+sqlite,2541,Aeromonas,energy_mode,fermenter
+sqlite,2541,Aeromonas,primary_food_source,carbohydrates
+sqlite,2545,Sutterella seckii,energy_mode,fermenter
+sqlite,2546,Alloscardovia omnicolens,energy_mode,fermenter
+sqlite,2548,Anaerovibrio lipolyticus,energy_mode,fermenter
+sqlite,2549,Bacteroides sp. marseille-p3684,energy_mode,fermenter
+sqlite,2550,Butyricimonas faecihominis,energy_mode,fermenter
+sqlite,2550,Butyricimonas faecihominis,primary_food_source,carbohydrates
+sqlite,2551,Enterococcus canintestini,primary_food_source,organic_unspecified
+sqlite,2555,Holdemania massiliensis,energy_mode,fermenter
+sqlite,2555,Holdemania massiliensis,primary_food_source,carbohydrates
+sqlite,2559,Lancefieldella,energy_mode,fermenter
+sqlite,2559,Lancefieldella,primary_food_source,carbohydrates
+sqlite,2560,Ligilactobacillus agilis,energy_mode,mixed
+sqlite,2561,Ligilactobacillus saerimneri,energy_mode,mixed
+sqlite,2562,Peptostreptococcus russellii,energy_mode,fermenter
+sqlite,2562,Peptostreptococcus russellii,primary_food_source,carbohydrates
+sqlite,2563,Phocaeicola,energy_mode,fermenter
+sqlite,2563,Phocaeicola,primary_food_source,carbohydrates
+sqlite,2564,Prevotella pectinovora,energy_mode,fermenter
+sqlite,2568,Alistipes montrealensis,energy_mode,fermenter
+sqlite,2569,Phocaeicola faecicola,energy_mode,fermenter
+sqlite,2569,Phocaeicola faecicola,primary_food_source,carbohydrates
+sqlite,2573,Cupriavidus,energy_mode,respirator
+sqlite,2575,Morganella,energy_mode,mixed
+sqlite,2576,Robinsoniella,energy_mode,fermenter
+sqlite,2577,Selenomonas,energy_mode,fermenter
+sqlite,2578,Abiotrophia,energy_mode,mixed
+sqlite,2578,Abiotrophia,primary_food_source,carbohydrates
+sqlite,2579,Abiotrophia sp. hmsc24b09,energy_mode,mixed
+sqlite,2579,Abiotrophia sp. hmsc24b09,primary_food_source,carbohydrates
+sqlite,2580,Actinomyces sp. hmsc065f11,energy_mode,fermenter
+sqlite,2580,Actinomyces sp. hmsc065f11,primary_food_source,carbohydrates
+sqlite,2582,Alistipes dispar,energy_mode,fermenter
+sqlite,2585,Anaerostipes rhamnosivorans,energy_mode,fermenter
+sqlite,2586,Anaerotruncus massiliensis (ex togo et al. 2019),energy_mode,fermenter
+sqlite,2586,Anaerotruncus massiliensis (ex togo et al. 2019),primary_food_source,carbohydrates
+sqlite,2587,Anaerovorax odorimutans,energy_mode,fermenter
+sqlite,2588,Bacteroides gallinaceum,energy_mode,fermenter
+sqlite,2590,Blautia argi,energy_mode,fermenter
+sqlite,2593,Clostridium cuniculi,energy_mode,fermenter
+sqlite,2593,Clostridium cuniculi,primary_food_source,organic_unspecified
+sqlite,2594,Clostridium sp. am29-11ac,energy_mode,fermenter
+sqlite,2594,Clostridium sp. am29-11ac,primary_food_source,organic_unspecified
+sqlite,2598,Eggerthella sinensis,energy_mode,fermenter
+sqlite,2598,Eggerthella sinensis,primary_food_source,carbohydrates
+sqlite,2605,Enterococcus raffinosus,primary_food_source,organic_unspecified
+sqlite,2607,Gordonibacter urolithinfaciens,energy_mode,fermenter
+sqlite,2611,Lactiplantibacillus,energy_mode,mixed
+sqlite,2611,Lactiplantibacillus,primary_food_source,carbohydrates
+sqlite,2612,Limosilactobacillus vaginalis,energy_mode,mixed
+sqlite,2612,Limosilactobacillus vaginalis,primary_food_source,carbohydrates
+sqlite,2620,Paeniclostridium,energy_mode,fermenter
+sqlite,2620,Paeniclostridium,primary_food_source,carbohydrates
+sqlite,2621,Paraclostridium tenue,energy_mode,fermenter
+sqlite,2621,Paraclostridium tenue,primary_food_source,carbohydrates
+sqlite,2622,Peptoniphilus grossensis,energy_mode,fermenter
+sqlite,2629,Faecalibacterium wellingii,energy_mode,fermenter
+sqlite,2630,Holdemania sp. 1001095h_141210_f2,energy_mode,fermenter
+sqlite,2630,Holdemania sp. 1001095h_141210_f2,primary_food_source,carbohydrates
+sqlite,2638,Phascolarctobacterium sp. et69,energy_mode,fermenter
+sqlite,2638,Phascolarctobacterium sp. et69,primary_food_source,carbohydrates
+sqlite,2639,Anaerococcus obesiensis,energy_mode,fermenter
+sqlite,2642,Peptoniphilus senegalensis,energy_mode,fermenter
+sqlite,2644,Bacteroides pectinophilus,energy_mode,fermenter
+sqlite,2645,Akkermansia sp. kle1798,energy_mode,fermenter
+sqlite,2645,Akkermansia sp. kle1798,primary_food_source,carbohydrates
+sqlite,2646,Alistipes provencensis,energy_mode,fermenter
+sqlite,2647,Alistipes timonensis,energy_mode,fermenter
+sqlite,2650,Bacteroides caecigallinarum,energy_mode,fermenter
+sqlite,2651,Bacteroides congonensis,energy_mode,fermenter
+sqlite,2652,Bacteroides ndongoniae,energy_mode,fermenter
+sqlite,2657,Catenibacterium sp. am22-15,energy_mode,fermenter
+sqlite,2657,Catenibacterium sp. am22-15,primary_food_source,carbohydrates
+sqlite,2658,Clostridium sp. marseille-p299,energy_mode,fermenter
+sqlite,2658,Clostridium sp. marseille-p299,primary_food_source,organic_unspecified
+sqlite,2659,Collinsella phocaeensis,energy_mode,fermenter
+sqlite,2659,Collinsella phocaeensis,primary_food_source,carbohydrates
+sqlite,2661,Dysgonomonas,energy_mode,fermenter
+sqlite,2661,Dysgonomonas,primary_food_source,carbohydrates
+sqlite,2662,Dysgonomonas mossii,energy_mode,fermenter
+sqlite,2662,Dysgonomonas mossii,primary_food_source,carbohydrates
+sqlite,2663,Erysipelatoclostridium sp. an15,energy_mode,fermenter
+sqlite,2663,Erysipelatoclostridium sp. an15,primary_food_source,carbohydrates
+sqlite,2667,Kluyvera,energy_mode,mixed
+sqlite,2668,Lachnoclostridium sp. an181,primary_food_source,organic_unspecified
+sqlite,2673,Parabacteroides faecalis,energy_mode,fermenter
+sqlite,2673,Parabacteroides faecalis,primary_food_source,carbohydrates
+sqlite,2674,Prevotella sp. 885,energy_mode,fermenter
+sqlite,2677,Victivallis lenta,energy_mode,fermenter
+sqlite,2681,Fusobacterium hominis,energy_mode,fermenter
+sqlite,2683,Collinsella massiliensis,energy_mode,fermenter
+sqlite,2683,Collinsella massiliensis,primary_food_source,carbohydrates
+sqlite,2688,Clostridium saudiense,energy_mode,fermenter
+sqlite,2688,Clostridium saudiense,primary_food_source,organic_unspecified
+sqlite,2689,Collinsella sp. af08-23,energy_mode,fermenter
+sqlite,2689,Collinsella sp. af08-23,primary_food_source,carbohydrates
+sqlite,2691,Dorea phocaeensis,energy_mode,fermenter
+sqlite,2691,Dorea phocaeensis,primary_food_source,carbohydrates
+sqlite,2692,Lachnoclostridium phocaeense,primary_food_source,organic_unspecified
+sqlite,2693,Parvimonas parva,energy_mode,fermenter
+sqlite,2693,Parvimonas parva,primary_food_source,carbohydrates
+sqlite,2694,Slackia isoflavoniconvertens,energy_mode,mixed
+sqlite,2694,Slackia isoflavoniconvertens,primary_food_source,carbohydrates
+sqlite,2697,Gordonibacter,energy_mode,fermenter
+sqlite,2698,Butyricimonas faecalis,energy_mode,fermenter
+sqlite,2698,Butyricimonas faecalis,primary_food_source,carbohydrates
+sqlite,2699,Collinsella sp. ak_207a,energy_mode,fermenter
+sqlite,2699,Collinsella sp. ak_207a,primary_food_source,carbohydrates
+sqlite,2700,Parabacteroides massiliensis,energy_mode,fermenter
+sqlite,2700,Parabacteroides massiliensis,primary_food_source,carbohydrates
+sqlite,2704,Actinomyces sp. icm47,energy_mode,fermenter
+sqlite,2704,Actinomyces sp. icm47,primary_food_source,carbohydrates
+sqlite,2705,Actinomyces sp. ph3,energy_mode,fermenter
+sqlite,2705,Actinomyces sp. ph3,primary_food_source,carbohydrates
+sqlite,2707,Akkermansia sp. bioml-a66,energy_mode,fermenter
+sqlite,2707,Akkermansia sp. bioml-a66,primary_food_source,carbohydrates
+sqlite,2708,Bacteroides stercorirosoris,energy_mode,fermenter
+sqlite,2709,Barnesiella sp. an22,energy_mode,fermenter
+sqlite,2709,Barnesiella sp. an22,primary_food_source,carbohydrates
+sqlite,2710,Blautia marasmi,energy_mode,fermenter
+sqlite,2711,Blautia sp. of03-15bh,energy_mode,fermenter
+sqlite,2718,Ligilactobacillus ruminis,energy_mode,mixed
+sqlite,2719,Limosilactobacillus oris,energy_mode,mixed
+sqlite,2719,Limosilactobacillus oris,primary_food_source,carbohydrates
+sqlite,2720,Nakaseomyces,energy_mode,mixed
+sqlite,2721,Nakaseomyces glabratus,energy_mode,mixed
+sqlite,2723,Pediococcus,energy_mode,mixed
+sqlite,2723,Pediococcus,primary_food_source,carbohydrates
+sqlite,2724,Phocaeicola faecalis,energy_mode,fermenter
+sqlite,2724,Phocaeicola faecalis,primary_food_source,carbohydrates
+sqlite,2726,Sutterella sp. am11-39,energy_mode,fermenter
+sqlite,2727,Succinatimonas,energy_mode,fermenter
+sqlite,2727,Succinatimonas,primary_food_source,carbohydrates
+sqlite,2728,Moryella,energy_mode,fermenter
+sqlite,2731,Alistipes sp. an31a,energy_mode,fermenter
+sqlite,2732,Bacteroides mediterraneensis,energy_mode,fermenter
+sqlite,2736,Parabacteroides absconsus,energy_mode,fermenter
+sqlite,2736,Parabacteroides absconsus,primary_food_source,carbohydrates
+sqlite,2739,Alloprevotella sp. oral taxon 473,energy_mode,fermenter
+sqlite,2739,Alloprevotella sp. oral taxon 473,primary_food_source,carbohydrates
+sqlite,2743,Megasphaera sp. nm10,energy_mode,fermenter
+sqlite,2744,Phocaeicola oris,energy_mode,fermenter
+sqlite,2744,Phocaeicola oris,primary_food_source,carbohydrates
+sqlite,2745,Ruminococcus sp. 210702-sl.1.03,energy_mode,fermenter
+sqlite,2748,Coprococcus sp. om04-5bh,energy_mode,fermenter
+sqlite,2752,Acetomicrobium,energy_mode,fermenter
+sqlite,2755,Kocuria,energy_mode,mixed
+sqlite,2755,Kocuria,primary_food_source,carbohydrates
+sqlite,2757,Shewanella,primary_food_source,organic_unspecified
+sqlite,2760,Clostridium lentum,energy_mode,fermenter
+sqlite,2760,Clostridium lentum,primary_food_source,organic_unspecified
+sqlite,2761,Clostridium sp. af32-12bh,energy_mode,fermenter
+sqlite,2761,Clostridium sp. af32-12bh,primary_food_source,organic_unspecified
+sqlite,2762,Comamonas kerstersii,energy_mode,respirator
+sqlite,2765,Parabacteroides faecis,energy_mode,fermenter
+sqlite,2765,Parabacteroides faecis,primary_food_source,carbohydrates
+sqlite,2766,Prevotella merdae,energy_mode,fermenter
+sqlite,2767,Ruminococcus bovis,energy_mode,fermenter
+sqlite,2772,Eubacterium hominis,energy_mode,fermenter
+sqlite,2773,Mediterraneibacter massiliensis,energy_mode,fermenter
+sqlite,2773,Mediterraneibacter massiliensis,primary_food_source,carbohydrates
+sqlite,2774,Actinobaculum sp. oral taxon 183,energy_mode,fermenter
+sqlite,2776,Sphingomonas echinoides,energy_mode,fermenter
+sqlite,2776,Sphingomonas echinoides,primary_food_source,carbohydrates
+sqlite,2780,Parabacteroides sp. tm07-1ac,energy_mode,fermenter
+sqlite,2780,Parabacteroides sp. tm07-1ac,primary_food_source,carbohydrates
+sqlite,2781,Porphyromonas sp. hmsc065f10,energy_mode,fermenter
+sqlite,2781,Porphyromonas sp. hmsc065f10,primary_food_source,carbohydrates
+sqlite,2784,Vibrio,primary_food_source,organic_unspecified
+sqlite,2785,Actinomyces sp. oral taxon 448,energy_mode,fermenter
+sqlite,2785,Actinomyces sp. oral taxon 448,primary_food_source,carbohydrates
+sqlite,2786,Eubacterium maltosivorans,energy_mode,fermenter
+sqlite,2793,Acidaminococcus provencensis,energy_mode,fermenter
+sqlite,2793,Acidaminococcus provencensis,primary_food_source,carbohydrates
+sqlite,2794,Bacteroides sp. af16-49,energy_mode,fermenter
+sqlite,2798,Megasphaera hominis,energy_mode,fermenter
+sqlite,2810,Cloacibacillus porcorum,energy_mode,fermenter
+sqlite,2810,Cloacibacillus porcorum,primary_food_source,carbohydrates
+sqlite,2811,Megasphaera sp. am44-1bh,energy_mode,fermenter
+sqlite,2819,Actinobacillus,energy_mode,mixed
+sqlite,2822,Capnocytophaga,energy_mode,fermenter
+sqlite,2822,Capnocytophaga,primary_food_source,carbohydrates
+sqlite,2824,Methylobacterium,energy_mode,respirator
+sqlite,2824,Methylobacterium,primary_food_source,c1_compounds
+sqlite,2827,Paraclostridium,energy_mode,fermenter
+sqlite,2827,Paraclostridium,primary_food_source,carbohydrates
+sqlite,2830,Eubacterium sp. an11,energy_mode,fermenter
+sqlite,2831,Clostridium tertium,energy_mode,fermenter
+sqlite,2831,Clostridium tertium,primary_food_source,organic_unspecified
+sqlite,2832,Eubacterium sp. om08-24,energy_mode,fermenter
+sqlite,2833,Plesiomonas,energy_mode,respirator
+sqlite,2834,Proteus terrae,energy_mode,mixed
+sqlite,2835,Roseateles,energy_mode,respirator
+sqlite,2838,Lachnoclostridium sp. an138,primary_food_source,organic_unspecified
+sqlite,2840,Terrisporobacter mayombei,energy_mode,fermenter
+sqlite,2840,Terrisporobacter mayombei,primary_food_source,carbohydrates
+sqlite,2848,Christensenella hongkongensis,energy_mode,fermenter
+sqlite,2851,Brachyspira,energy_mode,fermenter
+sqlite,2851,Brachyspira,primary_food_source,carbohydrates
+sqlite,2852,Brachyspira aalborgi,energy_mode,fermenter
+sqlite,2852,Brachyspira aalborgi,primary_food_source,carbohydrates
+sqlite,2853,Syntrophococcus,energy_mode,fermenter
+sqlite,2855,Parabacteroides hominis,energy_mode,fermenter
+sqlite,2855,Parabacteroides hominis,primary_food_source,carbohydrates
+sqlite,2856,Selenomonas bovis,energy_mode,fermenter
+sqlite,2857,Anaerofilum hominis,energy_mode,fermenter
+sqlite,2858,Anaerotruncus rubiinfantis,energy_mode,fermenter
+sqlite,2858,Anaerotruncus rubiinfantis,primary_food_source,carbohydrates
+sqlite,2868,Clostridium pacaense,energy_mode,fermenter
+sqlite,2868,Clostridium pacaense,primary_food_source,carbohydrates
+sqlite,2872,Leptotrichia sp. oral taxon 215,energy_mode,fermenter
+sqlite,2873,Leptotrichia sp. oral taxon 221,energy_mode,fermenter
+sqlite,2875,Prevotella jejuni,energy_mode,fermenter
+sqlite,2885,Brevibacillus,energy_mode,respirator
+sqlite,2889,Pseudoxanthomonas,energy_mode,respirator
+sqlite,2893,Variovorax,energy_mode,respirator
+sqlite,2894,Xanthomonas,energy_mode,respirator
+sqlite,2917,Treponema succinifaciens,energy_mode,fermenter
+sqlite,2918,Bulleidia,energy_mode,fermenter
+sqlite,2918,Bulleidia,primary_food_source,carbohydrates
+sqlite,2924,Acidaminococcus timonensis,energy_mode,fermenter
+sqlite,2924,Acidaminococcus timonensis,primary_food_source,carbohydrates
+sqlite,2926,Anaerococcus degeneri,energy_mode,fermenter
+sqlite,2927,Olsenella urininfantis,energy_mode,fermenter
+sqlite,2927,Olsenella urininfantis,primary_food_source,carbohydrates
+sqlite,2928,Peptoniphilus asaccharolyticus,energy_mode,fermenter
+sqlite,2929,Peptoniphilus duerdenii,energy_mode,fermenter
+sqlite,2930,Peptoniphilus gorbachii,energy_mode,fermenter
+sqlite,2931,Peptostreptococcus sp. mv1,energy_mode,fermenter
+sqlite,2931,Peptostreptococcus sp. mv1,primary_food_source,carbohydrates
+sqlite,2932,Prevotella ihumii,energy_mode,fermenter
+sqlite,2937,Eubacterium coprostanoligenes,energy_mode,fermenter
+sqlite,2938,Eubacterium sp. msj-21,energy_mode,fermenter
+sqlite,2939,Eubacterium sp. msj-33,energy_mode,fermenter
+sqlite,2941,Sarcina ventriculi,energy_mode,fermenter
+sqlite,2945,Bacteroides cutis,energy_mode,fermenter
+sqlite,2946,Bacteroides sp. gm023,energy_mode,fermenter
+sqlite,2948,Clostridium transplantifaecale,energy_mode,fermenter
+sqlite,2948,Clostridium transplantifaecale,primary_food_source,organic_unspecified
+sqlite,2952,Raoultella ornithinolytica,energy_mode,mixed
+sqlite,2953,Bacteroides togonis,energy_mode,fermenter
+sqlite,2958,Alistipes megaguti,energy_mode,fermenter
+sqlite,2962,Cellulosilyticum,energy_mode,fermenter
+sqlite,2969,Massilia,energy_mode,respirator
+sqlite,2975,Cupriavidus cauae,energy_mode,respirator
+sqlite,2976,Sphingomonas sp. farsph,energy_mode,fermenter
+sqlite,2976,Sphingomonas sp. farsph,primary_food_source,carbohydrates
+sqlite,2987,Clostridium porci,energy_mode,fermenter
+sqlite,2987,Clostridium porci,primary_food_source,organic_unspecified
+sqlite,2988,Raoultella,energy_mode,mixed
+sqlite,2989,Megasphaera cerevisiae,energy_mode,fermenter
+sqlite,2990,Pectinatus cerevisiiphilus,energy_mode,fermenter
+sqlite,2998,Bacteroides sp. af39-11ac,energy_mode,fermenter
+sqlite,3004,Olsenella timonensis,energy_mode,fermenter
+sqlite,3004,Olsenella timonensis,primary_food_source,carbohydrates
+sqlite,3008,Alcaligenes,energy_mode,respirator
+sqlite,3009,Actinomyces dentalis,energy_mode,fermenter
+sqlite,3009,Actinomyces dentalis,primary_food_source,carbohydrates
+sqlite,3011,Actinomyces bouchesdurhonensis,energy_mode,fermenter
+sqlite,3011,Actinomyces bouchesdurhonensis,primary_food_source,carbohydrates
+sqlite,3012,Methanosphaera cuniculi,energy_mode,respirator
+sqlite,3012,Methanosphaera cuniculi,primary_food_source,inorganic
+sqlite,3014,Eggerthella guodeyinii,energy_mode,fermenter
+sqlite,3014,Eggerthella guodeyinii,primary_food_source,carbohydrates
+sqlite,3021,Roseburia zhanili,energy_mode,fermenter
+sqlite,3021,Roseburia zhanili,primary_food_source,carbohydrates
+sqlite,3022,Sporobacter,energy_mode,fermenter
+sqlite,3027,Erysipelatoclostridium,energy_mode,fermenter
+sqlite,3027,Erysipelatoclostridium,primary_food_source,carbohydrates
+sqlite,3028,Photobacterium,energy_mode,mixed
+sqlite,3030,Clostridium clostridioforme,energy_mode,fermenter
+sqlite,3030,Clostridium clostridioforme,primary_food_source,organic_unspecified
+sqlite,3032,Clostridium ramosum,energy_mode,fermenter
+sqlite,3032,Clostridium ramosum,primary_food_source,organic_unspecified
+sqlite,3036,Pseudozyma,energy_mode,respirator
+sqlite,3036,Pseudozyma,primary_food_source,organic_unspecified
+sqlite,3038,Rhizobium oryzihabitans,energy_mode,respirator
+sqlite,3039,Rhizobium hidalgonense,energy_mode,respirator
+sqlite,3040,Agrobacterium fabrum,energy_mode,respirator
+sqlite,3041,Shigella,energy_mode,mixed
+sqlite,3041,Shigella,primary_food_source,organic_unspecified
+sqlite,3044,Bulleidia massiliensis,energy_mode,fermenter
+sqlite,3044,Bulleidia massiliensis,primary_food_source,carbohydrates
+sqlite,3046,Bacteroides bouchesdurhonensis,energy_mode,fermenter
+sqlite,3047,Faecalibacterium duncaniae,energy_mode,fermenter
+sqlite,3048,Clostridium sp. marseille-p3244,energy_mode,fermenter
+sqlite,3048,Clostridium sp. marseille-p3244,primary_food_source,organic_unspecified
+sqlite,3052,Christensenella minuta,energy_mode,fermenter
+sqlite,3053,Pseudoflavonifractor sp. af19-9ac,energy_mode,fermenter
+sqlite,3056,Eubacterium nodatum,energy_mode,fermenter
+sqlite,3057,Oribacterium parvum,energy_mode,fermenter
+sqlite,3057,Oribacterium parvum,primary_food_source,carbohydrates
+sqlite,3059,Mogibacterium pumilum,energy_mode,fermenter
+sqlite,3059,Mogibacterium pumilum,primary_food_source,carbohydrates
+sqlite,3060,Olsenella sp. oral taxon 807,energy_mode,fermenter
+sqlite,3060,Olsenella sp. oral taxon 807,primary_food_source,carbohydrates
+sqlite,3063,Blautia sp. an46,energy_mode,fermenter
+sqlite,3066,Eubacterium infirmum,energy_mode,fermenter
+sqlite,3067,Cardiobacterium sp. marseille-q4385,energy_mode,fermenter
+sqlite,3069,Oribacterium asaccharolyticum,energy_mode,fermenter
+sqlite,3069,Oribacterium asaccharolyticum,primary_food_source,carbohydrates
+sqlite,3070,Clostridium hylemonae,energy_mode,fermenter
+sqlite,3070,Clostridium hylemonae,primary_food_source,organic_unspecified
+sqlite,3071,Lachnoclostridium sp. an118,primary_food_source,organic_unspecified
+sqlite,3075,Lactococcus cremoris,energy_mode,mixed
+sqlite,3075,Lactococcus cremoris,primary_food_source,carbohydrates
+sqlite,3077,Olsenella phocaeensis,energy_mode,fermenter
+sqlite,3077,Olsenella phocaeensis,primary_food_source,carbohydrates
+sqlite,3080,Propionibacterium acidifaciens,energy_mode,fermenter
+sqlite,3080,Propionibacterium acidifaciens,primary_food_source,carbohydrates
+sqlite,3082,Atopobium sp. oral taxon 416,energy_mode,fermenter
+sqlite,3082,Atopobium sp. oral taxon 416,primary_food_source,carbohydrates
+sqlite,3083,Anaerostipes butyraticus,energy_mode,fermenter
+sqlite,3085,Lachnoclostridium sp. an76,primary_food_source,organic_unspecified
+sqlite,3087,Lachnoclostridium sp. an131,primary_food_source,organic_unspecified
+sqlite,3090,Lactiplantibacillus pentosus,energy_mode,mixed
+sqlite,3090,Lactiplantibacillus pentosus,primary_food_source,carbohydrates
+sqlite,3092,Lactococcus carnosus,energy_mode,mixed
+sqlite,3092,Lactococcus carnosus,primary_food_source,carbohydrates
+sqlite,3093,Actinomyces sp. hmt897,energy_mode,fermenter
+sqlite,3093,Actinomyces sp. hmt897,primary_food_source,carbohydrates
+sqlite,3094,Christensenella intestinihominis,energy_mode,fermenter
+sqlite,3097,Actinomyces johnsonii,energy_mode,fermenter
+sqlite,3097,Actinomyces johnsonii,primary_food_source,carbohydrates
+sqlite,3101,Lachnoclostridium edouardi,primary_food_source,organic_unspecified
+sqlite,3102,Lachnoclostridium sp. an14,primary_food_source,organic_unspecified
+sqlite,3104,Blautia sp. an249,energy_mode,fermenter
+sqlite,3107,Christensenella timonensis,energy_mode,fermenter
+sqlite,3108,Clostridium sp. am58-1xd,energy_mode,fermenter
+sqlite,3108,Clostridium sp. am58-1xd,primary_food_source,organic_unspecified
+sqlite,3112,Coprobacillus sp. af33-1ac,energy_mode,fermenter
+sqlite,3112,Coprobacillus sp. af33-1ac,primary_food_source,carbohydrates
+sqlite,3113,Corynebacterium accolens,primary_food_source,organic_unspecified
+sqlite,3114,Anaerococcus senegalensis,energy_mode,fermenter
+sqlite,3115,Anaerococcus octavius,energy_mode,fermenter
+sqlite,3117,Anaerococcus sp. marseille-q5996,energy_mode,fermenter
+sqlite,3118,Porphyromonas bennonis,energy_mode,fermenter
+sqlite,3118,Porphyromonas bennonis,primary_food_source,carbohydrates
+sqlite,3119,Corynebacterium simulans,primary_food_source,organic_unspecified
+sqlite,3121,Anaerococcus urinomassiliensis,energy_mode,fermenter
+sqlite,3122,Peptoniphilus obesi,energy_mode,fermenter
+sqlite,3123,Anaerococcus nagyae,energy_mode,fermenter
+sqlite,3124,Anaerococcus provencensis,energy_mode,fermenter
+sqlite,3125,Peptoniphilus lacydonensis,energy_mode,fermenter
+sqlite,3128,Christensenella tenuis,energy_mode,fermenter
+sqlite,3133,Actinomyces timonensis,energy_mode,fermenter
+sqlite,3133,Actinomyces timonensis,primary_food_source,carbohydrates
+sqlite,3134,Clostridium niameyense,energy_mode,fermenter
+sqlite,3134,Clostridium niameyense,primary_food_source,organic_unspecified
+sqlite,3136,Clostridium sp. mcc353,energy_mode,fermenter
+sqlite,3136,Clostridium sp. mcc353,primary_food_source,organic_unspecified
+sqlite,3137,Lachnoclostridium sp. an169,primary_food_source,organic_unspecified
+sqlite,3138,Hafnia paralvei,energy_mode,mixed
+sqlite,3140,Leuconostoc pseudomesenteroides,energy_mode,mixed
+sqlite,3141,Pediococcus parvulus,energy_mode,mixed
+sqlite,3141,Pediococcus parvulus,primary_food_source,carbohydrates
+sqlite,3143,Leuconostoc holzapfelii,energy_mode,mixed
+sqlite,3144,Leuconostoc carnosum,energy_mode,mixed
+sqlite,3146,Slackia equolifaciens,energy_mode,mixed
+sqlite,3146,Slackia equolifaciens,primary_food_source,carbohydrates
+sqlite,3148,Clostridium disporicum,energy_mode,fermenter
+sqlite,3148,Clostridium disporicum,primary_food_source,organic_unspecified
+sqlite,3151,Faecalibacterium sp. an122,energy_mode,fermenter
+sqlite,3152,Bacteroides caecicola,energy_mode,fermenter
+sqlite,3153,Collinsella sp. an307,energy_mode,fermenter
+sqlite,3153,Collinsella sp. an307,primary_food_source,carbohydrates
+sqlite,3154,Olsenella porci,energy_mode,fermenter
+sqlite,3154,Olsenella porci,primary_food_source,carbohydrates
+sqlite,3155,Limosilactobacillus pontis,energy_mode,mixed
+sqlite,3155,Limosilactobacillus pontis,primary_food_source,carbohydrates
+sqlite,3156,Sutterella megalosphaeroides,energy_mode,fermenter
+sqlite,3157,Arcanobacterium urinimassiliense,energy_mode,mixed
+sqlite,3157,Arcanobacterium urinimassiliense,primary_food_source,carbohydrates
+sqlite,3160,Limosilactobacillus ingluviei,energy_mode,mixed
+sqlite,3160,Limosilactobacillus ingluviei,primary_food_source,carbohydrates
+sqlite,3161,Megasphaera sp. djf_b143,energy_mode,fermenter
+sqlite,3162,Aeromonas enteropelogenes,energy_mode,fermenter
+sqlite,3162,Aeromonas enteropelogenes,primary_food_source,carbohydrates
+sqlite,3163,Aeromonas dhakensis,energy_mode,fermenter
+sqlite,3163,Aeromonas dhakensis,primary_food_source,carbohydrates
+sqlite,3164,Enterococcus thailandicus,primary_food_source,organic_unspecified
+sqlite,3165,Corynebacterium variabile,primary_food_source,organic_unspecified
+sqlite,3166,Mediterraneibacter catenae,energy_mode,fermenter
+sqlite,3166,Mediterraneibacter catenae,primary_food_source,carbohydrates
+sqlite,3168,Peptococcus niger,energy_mode,fermenter
+sqlite,3169,Atopobium deltae,energy_mode,fermenter
+sqlite,3169,Atopobium deltae,primary_food_source,carbohydrates
+sqlite,3171,Actinobaculum massiliense,energy_mode,fermenter
+sqlite,3172,Varibaculum massiliense,energy_mode,mixed
+sqlite,3172,Varibaculum massiliense,primary_food_source,carbohydrates
+sqlite,3175,Peptoniphilus sp. bv3c26,energy_mode,fermenter
+sqlite,3177,Peptoniphilus pacaensis,energy_mode,fermenter
+sqlite,3179,Bacteroides ilei,energy_mode,fermenter
+sqlite,3182,Lactococcus taiwanensis,energy_mode,mixed
+sqlite,3182,Lactococcus taiwanensis,primary_food_source,carbohydrates
+sqlite,3183,Lactococcus petauri,energy_mode,mixed
+sqlite,3183,Lactococcus petauri,primary_food_source,carbohydrates
+sqlite,3184,Olsenella sp. an285,energy_mode,fermenter
+sqlite,3184,Olsenella sp. an285,primary_food_source,carbohydrates
+sqlite,3185,Phocaeicola barnesiae,energy_mode,fermenter
+sqlite,3185,Phocaeicola barnesiae,primary_food_source,carbohydrates
+sqlite,3187,Olsenella sp. an270,energy_mode,fermenter
+sqlite,3187,Olsenella sp. an270,primary_food_source,carbohydrates
+sqlite,3189,Bacteroides sp. et225,energy_mode,fermenter
+sqlite,3191,Carnobacterium divergens,energy_mode,mixed
+sqlite,3193,Kocuria salsicia,energy_mode,mixed
+sqlite,3193,Kocuria salsicia,primary_food_source,carbohydrates
+sqlite,3197,Butyricicoccus faecihominis,energy_mode,mixed
+sqlite,3197,Butyricicoccus faecihominis,primary_food_source,carbohydrates
+sqlite,3199,Anaerofilum sp. an201,energy_mode,fermenter
+sqlite,3201,Actinomyces gerencseriae,energy_mode,fermenter
+sqlite,3201,Actinomyces gerencseriae,primary_food_source,carbohydrates
+sqlite,3202,Sutterella massiliensis,energy_mode,fermenter
+sqlite,3204,Corynebacterium pseudokroppenstedtii,primary_food_source,organic_unspecified
+sqlite,3206,Actinomyces radicidentis,energy_mode,fermenter
+sqlite,3206,Actinomyces radicidentis,primary_food_source,carbohydrates
+sqlite,3207,Actinomyces massiliensis,energy_mode,fermenter
+sqlite,3207,Actinomyces massiliensis,primary_food_source,carbohydrates
+sqlite,3208,Corynebacterium argentoratense,primary_food_source,organic_unspecified
+sqlite,3210,Oceanobacillus indicireducens,energy_mode,mixed
+sqlite,3211,Oceanobacillus sojae,energy_mode,mixed
+sqlite,3213,Streptomyces rutgersensis,energy_mode,respirator
+sqlite,3217,Adlercreutzia mucosicola,energy_mode,fermenter
+sqlite,3218,Prevotella histicola,energy_mode,fermenter
+sqlite,3220,Kluyvera sichuanensis,energy_mode,mixed
+sqlite,3221,Carnobacterium maltaromaticum,energy_mode,mixed
+sqlite,3223,Clostridium baratii,energy_mode,fermenter
+sqlite,3223,Clostridium baratii,primary_food_source,organic_unspecified
+sqlite,3225,Tannerella serpentiformis,energy_mode,fermenter
+sqlite,3225,Tannerella serpentiformis,primary_food_source,carbohydrates
+sqlite,3227,Leptotrichia sp. oral taxon 218,energy_mode,fermenter
+sqlite,3228,Atopobium sp. oral taxon 199,energy_mode,fermenter
+sqlite,3228,Atopobium sp. oral taxon 199,primary_food_source,carbohydrates
+sqlite,3229,Dialister micraerophilus,energy_mode,fermenter
+sqlite,3230,Oribacterium sp. oral taxon 078,energy_mode,fermenter
+sqlite,3230,Oribacterium sp. oral taxon 078,primary_food_source,carbohydrates
+sqlite,3235,Allobaculum mucilyticum,energy_mode,fermenter
+sqlite,3237,Pseudoflavonifractor sp. msj-37,energy_mode,fermenter
+sqlite,3238,Pichia manshurica,energy_mode,mixed
+sqlite,3240,Enterococcus gilvus,primary_food_source,organic_unspecified
+sqlite,3241,Clostridium hominis,energy_mode,fermenter
+sqlite,3241,Clostridium hominis,primary_food_source,organic_unspecified
+sqlite,3244,Corynebacterium jeikeium,primary_food_source,organic_unspecified
+sqlite,3245,Microbacterium lacticum,energy_mode,respirator
+sqlite,3246,Helicobacter canis,energy_mode,mixed
+sqlite,3246,Helicobacter canis,primary_food_source,carbohydrates
+sqlite,3247,Megasphaera vaginalis (ex srinivasan et al. 2021),energy_mode,fermenter
+sqlite,3252,Collinsella provencensis,energy_mode,fermenter
+sqlite,3252,Collinsella provencensis,primary_food_source,carbohydrates
+sqlite,3254,Actinomyces haliotis,energy_mode,fermenter
+sqlite,3254,Actinomyces haliotis,primary_food_source,carbohydrates
+sqlite,3255,Tyzzerella sp. an114,energy_mode,fermenter
+sqlite,3255,Tyzzerella sp. an114,primary_food_source,carbohydrates
+sqlite,3256,Leuconostoc miyukkimchii,energy_mode,mixed
+sqlite,3258,Aggregatibacter sp. 2125159857,energy_mode,respirator
+sqlite,3260,Parvimonas sp. oral taxon 110,energy_mode,fermenter
+sqlite,3260,Parvimonas sp. oral taxon 110,primary_food_source,carbohydrates
+sqlite,3261,Actinomyces culturomici,energy_mode,fermenter
+sqlite,3261,Actinomyces culturomici,primary_food_source,carbohydrates
+sqlite,3263,Corynebacterium suicordis,primary_food_source,organic_unspecified
+sqlite,3264,Corynebacterium kefirresidentii,primary_food_source,organic_unspecified
+sqlite,3267,Actinomyces sp. hmsc065f12,energy_mode,fermenter
+sqlite,3267,Actinomyces sp. hmsc065f12,primary_food_source,carbohydrates
+sqlite,3268,Anaerococcus sp. marseille-p3625,energy_mode,fermenter
+sqlite,3269,Lactococcus laudensis,energy_mode,mixed
+sqlite,3269,Lactococcus laudensis,primary_food_source,carbohydrates
+sqlite,3270,Kocuria sp. 257,energy_mode,mixed
+sqlite,3270,Kocuria sp. 257,primary_food_source,carbohydrates
+sqlite,3273,Olsenella sp. kgmb02461,energy_mode,fermenter
+sqlite,3273,Olsenella sp. kgmb02461,primary_food_source,carbohydrates
+sqlite,3274,Alistipes sp. an66,energy_mode,fermenter
+sqlite,3275,Corynebacterium pyruviciproducens,primary_food_source,organic_unspecified
+sqlite,3276,Actinomyces mediterranea,energy_mode,fermenter
+sqlite,3276,Actinomyces mediterranea,primary_food_source,carbohydrates
+sqlite,3277,Actinomyces oricola,energy_mode,fermenter
+sqlite,3277,Actinomyces oricola,primary_food_source,carbohydrates
+sqlite,3278,Leptotrichia sp. oral taxon 498,energy_mode,fermenter
+sqlite,3281,Kluyvera cryocrescens,energy_mode,mixed
+sqlite,3285,Rikenella microfusus,energy_mode,fermenter
+sqlite,3286,Bacteroides gallinarum,energy_mode,fermenter
+sqlite,3288,Pseudoflavonifractor sp. msj-30,energy_mode,fermenter
+sqlite,3289,Adlercreutzia caecimuris,energy_mode,fermenter
+sqlite,3290,Lacrimispora sp. 210928-dfi.3.58,energy_mode,fermenter
+sqlite,3290,Lacrimispora sp. 210928-dfi.3.58,primary_food_source,organic_unspecified
+sqlite,3291,Coprococcus sp. af21-14lb,energy_mode,fermenter
+sqlite,3294,Bacteroides rodentium,energy_mode,fermenter
+sqlite,3295,Pseudomonas citronellolis,primary_food_source,organic_unspecified
+sqlite,3297,Proteus vulgaris,energy_mode,mixed
+sqlite,3299,Clostridium culturomicium,energy_mode,fermenter
+sqlite,3299,Clostridium culturomicium,primary_food_source,organic_unspecified
+sqlite,3300,Prevotella sp. dnf00663,energy_mode,fermenter
+sqlite,3301,Prevotella brunnea,energy_mode,fermenter
+sqlite,3303,Peptoniphilus raoultii,energy_mode,fermenter
+sqlite,3305,Moraxella osloensis,energy_mode,respirator
+sqlite,3315,Pantoea sp. ccbc3-3-1,energy_mode,mixed
+sqlite,3317,Parabacteroides chinchillae,energy_mode,fermenter
+sqlite,3317,Parabacteroides chinchillae,primary_food_source,carbohydrates
+sqlite,3320,Victivallis sp. marseille-q1083,energy_mode,fermenter
+sqlite,3322,Zoogloea dura,energy_mode,respirator
+sqlite,3323,Lachnoclostridium sp. an196,primary_food_source,organic_unspecified
+sqlite,3324,Mediterraneibacter hominis,energy_mode,fermenter
+sqlite,3324,Mediterraneibacter hominis,primary_food_source,carbohydrates
+sqlite,3326,Olsenella sp. an188,energy_mode,fermenter
+sqlite,3326,Olsenella sp. an188,primary_food_source,carbohydrates
+sqlite,3330,Allobaculum fili,energy_mode,fermenter
+sqlite,3334,Clostridium sp. chh4-2,energy_mode,fermenter
+sqlite,3334,Clostridium sp. chh4-2,primary_food_source,organic_unspecified
+sqlite,3340,Clostridium thermobutyricum,energy_mode,fermenter
+sqlite,3340,Clostridium thermobutyricum,primary_food_source,organic_unspecified
+sqlite,3344,Paracoccus aerius,energy_mode,respirator
+sqlite,3345,Peptoniphilus phoceensis,energy_mode,fermenter
+sqlite,3347,Turicibacter sp. tj11,energy_mode,fermenter
+sqlite,3348,Trueperella bernardiae,energy_mode,mixed
+sqlite,3348,Trueperella bernardiae,primary_food_source,carbohydrates
+sqlite,3350,Brevibacterium paucivorans,energy_mode,mixed
+sqlite,3352,Corynebacterium sp. p3-sid1056,primary_food_source,organic_unspecified
+sqlite,3354,Brevibacterium mcbrellneri,energy_mode,mixed
+sqlite,3355,Limosilactobacillus gastricus,energy_mode,mixed
+sqlite,3355,Limosilactobacillus gastricus,primary_food_source,carbohydrates
+sqlite,3356,Limosilactobacillus urinaemulieris,energy_mode,mixed
+sqlite,3356,Limosilactobacillus urinaemulieris,primary_food_source,carbohydrates
+sqlite,3357,Enterococcus mundtii,primary_food_source,organic_unspecified
+sqlite,3358,Adlercreutzia muris,energy_mode,fermenter
+sqlite,3367,Helicobacter typhlonius,energy_mode,mixed
+sqlite,3367,Helicobacter typhlonius,primary_food_source,carbohydrates
+sqlite,3371,Prevotella sp. mgm1,energy_mode,fermenter
+sqlite,3378,Bacteroides muris (ex fokt et al. 2023),energy_mode,fermenter
+sqlite,3381,Gordonibacter sp. marseille-p4307,energy_mode,fermenter
+sqlite,3383,Anaerococcus mediterraneensis,energy_mode,fermenter
+sqlite,3384,Helicobacter ganmani,energy_mode,mixed
+sqlite,3384,Helicobacter ganmani,primary_food_source,carbohydrates
+sqlite,3388,Turicibacter sp. 1e2,energy_mode,fermenter
+sqlite,3389,Ligilactobacillus murinus,energy_mode,mixed
+sqlite,3390,Enterococcus sp. zj1622,primary_food_source,organic_unspecified
+sqlite,3393,Lactiplantibacillus paraplantarum,energy_mode,mixed
+sqlite,3393,Lactiplantibacillus paraplantarum,primary_food_source,carbohydrates
+sqlite,3394,Parabacteroides bouchesdurhonensis,energy_mode,fermenter
+sqlite,3394,Parabacteroides bouchesdurhonensis,primary_food_source,carbohydrates
+sqlite,3395,Ligilactobacillus animalis,energy_mode,mixed
+sqlite,3399,Pseudomonas triclosanedens,primary_food_source,organic_unspecified
+sqlite,3401,Adlercreutzia aquisgranensis,energy_mode,fermenter
+sqlite,3405,Dysgonomonas capnocytophagoides,energy_mode,fermenter
+sqlite,3405,Dysgonomonas capnocytophagoides,primary_food_source,carbohydrates
+sqlite,3407,Clostridium ihumii,energy_mode,fermenter
+sqlite,3407,Clostridium ihumii,primary_food_source,organic_unspecified
+sqlite,3408,Eggerthella timonensis,energy_mode,fermenter
+sqlite,3408,Eggerthella timonensis,primary_food_source,carbohydrates
+sqlite,3410,Anaerostipes sp. 992a,energy_mode,fermenter
+sqlite,3411,Hungatella effluvii,energy_mode,fermenter
+sqlite,3411,Hungatella effluvii,primary_food_source,carbohydrates
+sqlite,3413,Parabacteroides acidifaciens,energy_mode,fermenter
+sqlite,3413,Parabacteroides acidifaciens,primary_food_source,carbohydrates
+sqlite,3416,Clostridium moniliforme,energy_mode,fermenter
+sqlite,3416,Clostridium moniliforme,primary_food_source,organic_unspecified
+sqlite,3417,Kluyvera intermedia,energy_mode,mixed
+sqlite,3423,Clostridium polynesiense,energy_mode,fermenter
+sqlite,3423,Clostridium polynesiense,primary_food_source,organic_unspecified
+sqlite,3427,Kocuria marina subsp. indica,energy_mode,mixed
+sqlite,3427,Kocuria marina subsp. indica,primary_food_source,carbohydrates
+sqlite,3428,Dorea sp. d27,energy_mode,fermenter
+sqlite,3428,Dorea sp. d27,primary_food_source,carbohydrates
+sqlite,3429,Anaerococcus jeddahensis,energy_mode,fermenter
+sqlite,3432,Selenomonas felix,energy_mode,fermenter
+sqlite,3435,Paraclostridium sordellii,energy_mode,fermenter
+sqlite,3435,Paraclostridium sordellii,primary_food_source,carbohydrates
+sqlite,3436,Corynebacterium pseudodiphtheriticum,primary_food_source,organic_unspecified
+sqlite,3438,Pantoea dispersa,energy_mode,mixed
+sqlite,3439,Enterococcus pseudoavium,primary_food_source,organic_unspecified
+sqlite,3442,Corynebacterium parakroppenstedtii,primary_food_source,organic_unspecified
+sqlite,3446,Lacrimispora celerecrescens,energy_mode,fermenter
+sqlite,3446,Lacrimispora celerecrescens,primary_food_source,organic_unspecified
+sqlite,3451,Acinetobacter soli,energy_mode,respirator
+sqlite,3451,Acinetobacter soli,primary_food_source,organic_unspecified
+sqlite,3460,Pseudomonas psychrophila,primary_food_source,organic_unspecified
+sqlite,3461,Pseudomonas weihenstephanensis,primary_food_source,organic_unspecified
+sqlite,3463,Parabacteroides pacaensis,energy_mode,fermenter
+sqlite,3463,Parabacteroides pacaensis,primary_food_source,carbohydrates
+sqlite,3470,Methanobrevibacter arboriphilus,energy_mode,respirator
+sqlite,3470,Methanobrevibacter arboriphilus,primary_food_source,inorganic
+sqlite,3476,Nitrosospira sp. nsp13,energy_mode,respirator
+sqlite,3476,Nitrosospira sp. nsp13,primary_food_source,inorganic
+sqlite,3480,Anaerostipes faecalis,energy_mode,fermenter
+sqlite,3481,Blautia liquoris,energy_mode,fermenter
+sqlite,3482,Moraxella canis,energy_mode,respirator
+sqlite,3483,Vibrio brasiliensis,primary_food_source,organic_unspecified
+sqlite,3484,Corynebacterium casei,primary_food_source,organic_unspecified
+sqlite,3487,Stutzerimonas nitrititolerans,energy_mode,respirator
+sqlite,3487,Stutzerimonas nitrititolerans,primary_food_source,organic_unspecified
+sqlite,3491,Pyramidobacter porci,energy_mode,fermenter
+sqlite,3491,Pyramidobacter porci,primary_food_source,carbohydrates
+sqlite,3493,Bacteroides neonati,energy_mode,fermenter
+sqlite,3494,Eubacterium pyruvativorans,energy_mode,fermenter
+sqlite,3496,Brevibacterium aurantiacum,energy_mode,mixed
+sqlite,3498,Limosilactobacillus balticus,energy_mode,mixed
+sqlite,3498,Limosilactobacillus balticus,primary_food_source,carbohydrates
+sqlite,3499,Prevotella lacticifex,energy_mode,fermenter
+sqlite,3501,Allobaculum stercoricanis,energy_mode,fermenter
+sqlite,3504,Mesorhizobium hungaricum,energy_mode,respirator
+sqlite,3507,Thermus scotoductus,energy_mode,respirator
+sqlite,3510,Acinetobacter albensis,energy_mode,respirator
+sqlite,3510,Acinetobacter albensis,primary_food_source,organic_unspecified
+sqlite,3514,Rhodococcus qingshengii,energy_mode,respirator
+sqlite,3517,Chryseobacterium gambrini,energy_mode,respirator
+sqlite,3518,Acidovorax temperans,energy_mode,respirator
+sqlite,3519,Agrobacterium tomkonis,energy_mode,respirator
+sqlite,3522,Prevotella sp. p2-180,energy_mode,fermenter
+sqlite,3523,Brevundimonas vesicularis,energy_mode,respirator
+sqlite,3524,Brevundimonas pondensis,energy_mode,respirator
+sqlite,3525,Comamonas thiooxydans,energy_mode,respirator
+sqlite,3526,Streptomyces hiroshimensis,energy_mode,respirator
+sqlite,3528,Chryseobacterium lacus,energy_mode,respirator
+sqlite,3529,Sphingobacterium alimentarium,energy_mode,respirator
+sqlite,3530,Acinetobacter schindleri,energy_mode,respirator
+sqlite,3530,Acinetobacter schindleri,primary_food_source,organic_unspecified
+sqlite,3533,Sphingobacterium humi,energy_mode,respirator
+sqlite,3537,Spirosoma terrae,energy_mode,respirator
+sqlite,3537,Spirosoma terrae,primary_food_source,organic_unspecified
+sqlite,3538,Micrococcus endophyticus,energy_mode,respirator
+sqlite,3539,Ralstonia insidiosa,energy_mode,respirator
+sqlite,3539,Ralstonia insidiosa,primary_food_source,organic_unspecified
+sqlite,3542,Enterococcus massiliensis,primary_food_source,organic_unspecified
+sqlite,3543,Pediococcus cellicola,energy_mode,mixed
+sqlite,3543,Pediococcus cellicola,primary_food_source,carbohydrates
+sqlite,3546,Alistipes muris,energy_mode,fermenter
+sqlite,3549,Leptotrichia hongkongensis,energy_mode,fermenter
+sqlite,3554,Ruminococcus sp. zg-921,energy_mode,fermenter
+sqlite,3555,Stutzerimonas degradans,energy_mode,respirator
+sqlite,3555,Stutzerimonas degradans,primary_food_source,organic_unspecified
+sqlite,3556,Barnesiella sp. wm24,energy_mode,fermenter
+sqlite,3556,Barnesiella sp. wm24,primary_food_source,carbohydrates
+sqlite,3557,Butyricicoccus porcorum,energy_mode,mixed
+sqlite,3557,Butyricicoccus porcorum,primary_food_source,carbohydrates
+sqlite,3562,Limosilactobacillus coleohominis,energy_mode,mixed
+sqlite,3562,Limosilactobacillus coleohominis,primary_food_source,carbohydrates
+sqlite,3567,Alistipes sp. chkci003,energy_mode,fermenter
+sqlite,3568,Anaerococcus marasmi,energy_mode,fermenter
+sqlite,3569,Sphingobium limneticum,energy_mode,respirator
+sqlite,3570,Gordonibacter massiliensis (ex traore et al. 2017),energy_mode,fermenter
+sqlite,3571,Kallipyga gabonensis,energy_mode,fermenter
+sqlite,3571,Kallipyga gabonensis,primary_food_source,carbohydrates
+sqlite,3572,Anaerococcus ihuae,energy_mode,fermenter
+sqlite,3574,Anaerococcus rubeinfantis,energy_mode,fermenter
+sqlite,3577,Clostridium massiliamazoniense,energy_mode,fermenter
+sqlite,3577,Clostridium massiliamazoniense,primary_food_source,organic_unspecified
+sqlite,3578,Microbacterium paulum,energy_mode,respirator
+sqlite,3579,Acinetobacter bereziniae,energy_mode,respirator
+sqlite,3579,Acinetobacter bereziniae,primary_food_source,organic_unspecified
+sqlite,3580,Microbacterium oxydans,energy_mode,respirator
+sqlite,3586,Selenomonas montiformis,energy_mode,fermenter
+sqlite,3587,Prevotella scopos,energy_mode,fermenter
+sqlite,3588,Staphylococcus borealis,energy_mode,mixed
+sqlite,3588,Staphylococcus borealis,primary_food_source,carbohydrates
+sqlite,3590,Rothia kristinae,energy_mode,mixed
+sqlite,3590,Rothia kristinae,primary_food_source,carbohydrates
+sqlite,3591,Aggregatibacter kilianii,energy_mode,respirator
+sqlite,3599,Actinomyces faecalis,energy_mode,fermenter
+sqlite,3599,Actinomyces faecalis,primary_food_source,carbohydrates
+sqlite,3601,Facklamia hominis,energy_mode,mixed
+sqlite,3602,Gordonia jacobaea,energy_mode,fermenter
+sqlite,3602,Gordonia jacobaea,primary_food_source,carbohydrates
+sqlite,3606,Lacrimispora xylanisolvens,energy_mode,fermenter
+sqlite,3606,Lacrimispora xylanisolvens,primary_food_source,organic_unspecified
+sqlite,3607,Clostridium bornimense,energy_mode,fermenter
+sqlite,3607,Clostridium bornimense,primary_food_source,organic_unspecified
+sqlite,3609,Bacteroides heparinolyticus,energy_mode,fermenter
+sqlite,3610,Bacteroides faecium,energy_mode,fermenter
+sqlite,3611,Enterococcus diestrammenae,primary_food_source,organic_unspecified
+sqlite,3612,Corynebacterium falsenii,primary_food_source,organic_unspecified
+sqlite,3613,Gordonia sputi,energy_mode,fermenter
+sqlite,3613,Gordonia sputi,primary_food_source,carbohydrates
+sqlite,3614,Corynebacterium neomassiliense,primary_food_source,organic_unspecified
+sqlite,3615,Barnesiella sp. an55,energy_mode,fermenter
+sqlite,3615,Barnesiella sp. an55,primary_food_source,carbohydrates
+sqlite,3616,Phocaeicola abscessus,energy_mode,fermenter
+sqlite,3616,Phocaeicola abscessus,primary_food_source,carbohydrates
+sqlite,3617,Clostridium sp. d53t1_180928_c8,energy_mode,fermenter
+sqlite,3617,Clostridium sp. d53t1_180928_c8,primary_food_source,organic_unspecified
+sqlite,3618,Clostridium gallinarum,energy_mode,fermenter
+sqlite,3618,Clostridium gallinarum,primary_food_source,organic_unspecified
+sqlite,3619,Pseudoflavonifractor sp. an85,energy_mode,fermenter
+sqlite,3620,Eikenella halliae,energy_mode,mixed
+sqlite,3621,Sphingomonas sp. 3f27f9,energy_mode,fermenter
+sqlite,3621,Sphingomonas sp. 3f27f9,primary_food_source,carbohydrates
+sqlite,3622,Fusobacterium perfoetens,energy_mode,fermenter
+sqlite,3624,Gordonibacter sp. 28c,energy_mode,fermenter
+sqlite,3625,Limosilactobacillus panis,energy_mode,mixed
+sqlite,3625,Limosilactobacillus panis,primary_food_source,carbohydrates
+sqlite,3626,Slackia faecicanis,energy_mode,mixed
+sqlite,3626,Slackia faecicanis,primary_food_source,carbohydrates
+sqlite,3627,Pseudomonas cremoris,primary_food_source,organic_unspecified
+sqlite,3629,Paracoccus jeotgali,energy_mode,respirator
+sqlite,3632,Paracoccus alkenifer,energy_mode,respirator
+sqlite,3635,Staphylococcus gallinarum,energy_mode,mixed
+sqlite,3635,Staphylococcus gallinarum,primary_food_source,carbohydrates
+sqlite,3636,Rothia aerolata,energy_mode,mixed
+sqlite,3636,Rothia aerolata,primary_food_source,carbohydrates
+sqlite,3637,Adlercreutzia faecimuris,energy_mode,fermenter
+sqlite,3638,Parabacteroides sp. am08-6,energy_mode,fermenter
+sqlite,3638,Parabacteroides sp. am08-6,primary_food_source,carbohydrates
+sqlite,3640,Methanobrevibacter oralis,energy_mode,respirator
+sqlite,3640,Methanobrevibacter oralis,primary_food_source,inorganic
+sqlite,3641,Comamonas denitrificans,energy_mode,respirator
+sqlite,3642,Dechloromonas sp. czr5,energy_mode,respirator
+sqlite,3644,Sharpea azabuensis,energy_mode,fermenter
+sqlite,3646,Pseudomonas simiae,primary_food_source,organic_unspecified
+sqlite,3647,Vagococcus salmoninarum,energy_mode,respirator
+sqlite,3648,Pseudomonas zeae,primary_food_source,organic_unspecified
+sqlite,3650,Pseudomonas lactis,primary_food_source,organic_unspecified
+sqlite,3652,Prevotella vespertina,energy_mode,fermenter
+sqlite,3654,Enterococcus devriesei,primary_food_source,organic_unspecified
+sqlite,3657,Peptoniphilus rachelemmaiella,energy_mode,fermenter
+sqlite,3659,Anaerobiospirillum thomasii,energy_mode,fermenter
+sqlite,3659,Anaerobiospirillum thomasii,primary_food_source,carbohydrates
+sqlite,3660,Capnocytophaga leadbetteri,energy_mode,fermenter
+sqlite,3660,Capnocytophaga leadbetteri,primary_food_source,carbohydrates
+sqlite,3662,Treponema vincentii,energy_mode,fermenter
+sqlite,3663,Treponema sp. marseille-q3903,energy_mode,fermenter
+sqlite,3665,Selenomonas massiliensis,energy_mode,fermenter
+sqlite,3666,Prevotella micans,energy_mode,fermenter
+sqlite,3667,Treponema maltophilum,energy_mode,fermenter
+sqlite,3668,Porphyromonas sp. oral taxon 278,energy_mode,fermenter
+sqlite,3668,Porphyromonas sp. oral taxon 278,primary_food_source,carbohydrates
+sqlite,3669,Capnocytophaga gingivalis,energy_mode,fermenter
+sqlite,3669,Capnocytophaga gingivalis,primary_food_source,carbohydrates
+sqlite,3670,Treponema socranskii,energy_mode,fermenter
+sqlite,3672,Treponema sp. marseille-q4130,energy_mode,fermenter
+sqlite,3674,Tannerella sp. oral taxon 808,energy_mode,fermenter
+sqlite,3674,Tannerella sp. oral taxon 808,primary_food_source,carbohydrates
+sqlite,3677,Prevotella sp. oral taxon 376,energy_mode,fermenter
+sqlite,3680,Alloprevotella sp. lung230,energy_mode,fermenter
+sqlite,3680,Alloprevotella sp. lung230,primary_food_source,carbohydrates
+sqlite,3681,Capnocytophaga sp. oral taxon 863,energy_mode,fermenter
+sqlite,3681,Capnocytophaga sp. oral taxon 863,primary_food_source,carbohydrates
+sqlite,3683,Desulfobulbus oralis,energy_mode,fermenter
+sqlite,3687,Leptotrichia massiliensis,energy_mode,fermenter
+sqlite,3688,Leptotrichia sp. oral taxon 212,energy_mode,fermenter
+sqlite,3689,Capnocytophaga bilenii,energy_mode,fermenter
+sqlite,3689,Capnocytophaga bilenii,primary_food_source,carbohydrates
+sqlite,3690,Prevotella koreensis,energy_mode,fermenter
+sqlite,3692,Cardiobacterium hominis,energy_mode,fermenter
+sqlite,3693,Porphyromonas catoniae,energy_mode,fermenter
+sqlite,3693,Porphyromonas catoniae,primary_food_source,carbohydrates
+sqlite,3694,Kingella bonacorsii,energy_mode,mixed
+sqlite,3694,Kingella bonacorsii,primary_food_source,carbohydrates
+sqlite,3695,Leptotrichia trevisanii,energy_mode,fermenter
+sqlite,3696,Porphyromonas bobii,energy_mode,fermenter
+sqlite,3696,Porphyromonas bobii,primary_food_source,carbohydrates
+sqlite,3697,Treponema parvum,energy_mode,fermenter
+sqlite,3698,Prevotella sp. hjm029,energy_mode,fermenter
+sqlite,3699,Kingella pumchi,energy_mode,mixed
+sqlite,3699,Kingella pumchi,primary_food_source,carbohydrates
+sqlite,3700,Lautropia dentalis,energy_mode,mixed
+sqlite,3700,Lautropia dentalis,primary_food_source,carbohydrates
+sqlite,3702,Anaerococcus murdochii,energy_mode,fermenter
+sqlite,3704,Chryseobacterium indologenes,energy_mode,respirator
+sqlite,3705,Acinetobacter ursingii,energy_mode,respirator
+sqlite,3705,Acinetobacter ursingii,primary_food_source,organic_unspecified
+sqlite,3708,Corynebacterium sp. acrqp,primary_food_source,organic_unspecified
+sqlite,3709,Roseburia porci,energy_mode,fermenter
+sqlite,3709,Roseburia porci,primary_food_source,carbohydrates
+sqlite,3710,Treponema peruense,energy_mode,fermenter
+sqlite,3711,Clostridium sp. ade.ty,energy_mode,fermenter
+sqlite,3711,Clostridium sp. ade.ty,primary_food_source,organic_unspecified
+sqlite,3712,Corynebacterium tuscaniense,primary_food_source,organic_unspecified
+sqlite,3713,Corynebacterium pseudogenitalium,primary_food_source,organic_unspecified
+sqlite,3715,Corynebacterium coyleae,primary_food_source,organic_unspecified
+sqlite,3717,Corynebacterium frankenforstense,primary_food_source,organic_unspecified
+sqlite,3718,Corynebacterium urealyticum,primary_food_source,organic_unspecified
+sqlite,3719,Corynebacterium imitans,primary_food_source,organic_unspecified
+sqlite,3720,Helcococcus sueciensis,energy_mode,fermenter
+sqlite,3722,Corynebacterium minutissimum,primary_food_source,organic_unspecified
+sqlite,3723,Corynebacterium afermentans,primary_food_source,organic_unspecified
+sqlite,3725,Blautia sp. marseille-p3201t,energy_mode,fermenter
+sqlite,3726,Mitsuokella sp. oral taxon 131,energy_mode,fermenter
+sqlite,3726,Mitsuokella sp. oral taxon 131,primary_food_source,carbohydrates
+sqlite,3728,Oligella ureolytica,energy_mode,respirator
+sqlite,3729,Psychrobacter faecalis,energy_mode,respirator
+sqlite,3730,Sphingobacterium sp. 1.a.4,energy_mode,respirator
+sqlite,3732,Arcanobacterium sp. s3pf19,energy_mode,mixed
+sqlite,3732,Arcanobacterium sp. s3pf19,primary_food_source,carbohydrates
+sqlite,3735,Acinetobacter towneri,energy_mode,respirator
+sqlite,3735,Acinetobacter towneri,primary_food_source,organic_unspecified
+sqlite,3736,Sphingobacterium mizutaii,energy_mode,respirator
+sqlite,3737,Megasphaera hutchinsoni,energy_mode,fermenter
+sqlite,3738,Staphylococcus piscifermentans,energy_mode,mixed
+sqlite,3738,Staphylococcus piscifermentans,primary_food_source,carbohydrates
+sqlite,3739,Corynebacterium vitaeruminis,primary_food_source,organic_unspecified
+sqlite,3740,Proteus hauseri,energy_mode,mixed
+sqlite,3742,Sphingobacterium cellulitidis,energy_mode,respirator
+sqlite,3743,Sphingobacterium nematocida,energy_mode,respirator
+sqlite,3744,Corynebacterium dentalis,primary_food_source,organic_unspecified
+sqlite,3747,Prevotella sp. p5-92,energy_mode,fermenter
+sqlite,3749,Pediococcus ethanolidurans,energy_mode,mixed
+sqlite,3749,Pediococcus ethanolidurans,primary_food_source,carbohydrates
+sqlite,3750,Prevotella sp. oral taxon 475,energy_mode,fermenter
+sqlite,3752,Oribacterium sp. oral taxon 102,energy_mode,fermenter
+sqlite,3752,Oribacterium sp. oral taxon 102,primary_food_source,carbohydrates
+sqlite,3754,Treponema pectinovorum,energy_mode,fermenter
+sqlite,3755,Leptotrichia sp. oral taxon 223,energy_mode,fermenter
+sqlite,3756,Fusobacterium hwasookii,energy_mode,fermenter
+sqlite,3758,Lachnoclostridium sp. marseille-p6806,primary_food_source,organic_unspecified
+sqlite,3760,Pseudomonas helleri,primary_food_source,organic_unspecified
+sqlite,3762,Lactococcus plantarum,energy_mode,mixed
+sqlite,3762,Lactococcus plantarum,primary_food_source,carbohydrates
+sqlite,3765,Fructobacillus durionis,energy_mode,respirator
+sqlite,3767,Photobacterium phosphoreum,energy_mode,mixed
+sqlite,3768,Lactiplantibacillus mudanjiangensis,energy_mode,mixed
+sqlite,3768,Lactiplantibacillus mudanjiangensis,primary_food_source,carbohydrates
+sqlite,3770,Lactococcus chungangensis,energy_mode,mixed
+sqlite,3770,Lactococcus chungangensis,primary_food_source,carbohydrates
+sqlite,3772,Selenomonas timonae,energy_mode,fermenter
+sqlite,3773,Selenomonas infelix,energy_mode,fermenter
+sqlite,3774,Parvimonas sp. oral taxon 393,energy_mode,fermenter
+sqlite,3774,Parvimonas sp. oral taxon 393,primary_food_source,carbohydrates
+sqlite,3778,Staphylococcus schweitzeri,energy_mode,mixed
+sqlite,3778,Staphylococcus schweitzeri,primary_food_source,carbohydrates
+sqlite,3780,Lacrimispora aerotolerans,energy_mode,fermenter
+sqlite,3780,Lacrimispora aerotolerans,primary_food_source,organic_unspecified
+sqlite,3782,Selenomonas sp. oral taxon 892,energy_mode,fermenter
+sqlite,3783,Gordonia otitidis,energy_mode,fermenter
+sqlite,3783,Gordonia otitidis,primary_food_source,carbohydrates
+sqlite,3786,Methyloversatilis discipulorum,energy_mode,fermenter
+sqlite,3787,Afipia broomeae,energy_mode,respirator
+sqlite,3789,Acinetobacter parvus,energy_mode,respirator
+sqlite,3789,Acinetobacter parvus,primary_food_source,organic_unspecified
+sqlite,3790,Methylobacillus glycogenes,energy_mode,respirator
+sqlite,3791,Brevibacterium sp. jcm 18882,energy_mode,mixed
+sqlite,3792,Pseudomonas oryzihabitans,primary_food_source,organic_unspecified
+sqlite,3793,Nocardioides rotundus,energy_mode,respirator
+sqlite,3800,Pseudomonas juntendi,primary_food_source,organic_unspecified
+sqlite,3801,Agrobacterium pusense,energy_mode,respirator
+sqlite,3802,Brachybacterium aquaticum,energy_mode,fermenter
+sqlite,3802,Brachybacterium aquaticum,primary_food_source,carbohydrates
+sqlite,3804,Sphingobium yanoikuyae,energy_mode,respirator
+sqlite,3814,Comamonas sp. b21-038,energy_mode,respirator
+sqlite,3815,Thauera terpenica,energy_mode,respirator
+sqlite,3816,Methanobrevibacter woesei,energy_mode,respirator
+sqlite,3816,Methanobrevibacter woesei,primary_food_source,inorganic
+sqlite,3822,Lysinibacillus capsici,energy_mode,respirator
+sqlite,3828,Fructobacillus fructosus,energy_mode,respirator
+sqlite,3830,Pantoea endophytica,energy_mode,mixed
+sqlite,3831,Aneurinibacillus migulanus,energy_mode,fermenter
+sqlite,3831,Aneurinibacillus migulanus,primary_food_source,carbohydrates
+sqlite,3832,Sporosarcina globispora,energy_mode,respirator
+sqlite,3833,Pseudomonas sp. kca11,primary_food_source,organic_unspecified
+sqlite,3834,Diaphorobacter nitroreducens,energy_mode,respirator
+sqlite,3835,Dechloromonas agitata,energy_mode,respirator
+sqlite,3837,Cloacibacterium caeni,energy_mode,respirator
+sqlite,3838,Psychrobacter immobilis,energy_mode,respirator
+sqlite,3842,Pseudomonas lundensis,primary_food_source,organic_unspecified
+sqlite,3843,Sphingomonas sp. pamc 26605,energy_mode,fermenter
+sqlite,3843,Sphingomonas sp. pamc 26605,primary_food_source,carbohydrates
+sqlite,3844,Leuconostoc fallax,energy_mode,mixed
+sqlite,3850,Blautia sp. msj-9,energy_mode,fermenter
+sqlite,3851,Pseudomonas sp. nkucc02_kpg,primary_food_source,organic_unspecified
+sqlite,3853,Corynebacterium jeddahense,primary_food_source,organic_unspecified
+sqlite,3858,Wohlfahrtiimonas chitiniclastica,energy_mode,respirator
+sqlite,3859,Staphylococcus saccharolyticus,energy_mode,mixed
+sqlite,3859,Staphylococcus saccharolyticus,primary_food_source,carbohydrates
+sqlite,3861,Lacrimispora sphenoides,energy_mode,fermenter
+sqlite,3861,Lacrimispora sphenoides,primary_food_source,organic_unspecified
+sqlite,3863,Micrococcus lylae,energy_mode,respirator
+sqlite,3865,Corynebacterium macginleyi,primary_food_source,organic_unspecified
+sqlite,3866,Corynebacterium oculi,primary_food_source,organic_unspecified
+sqlite,3867,Campylobacter massiliensis,primary_food_source,organic_unspecified
+sqlite,3868,Yersinia alsatica,energy_mode,respirator
+sqlite,3868,Yersinia alsatica,primary_food_source,organic_unspecified
+sqlite,3869,Enterococcus mediterraneensis,primary_food_source,organic_unspecified
+sqlite,3870,Nocardioides aquaticus,energy_mode,respirator
+sqlite,3871,Nocardioides kribbensis,energy_mode,respirator
+sqlite,3872,Paracoccus marinus,energy_mode,respirator
+sqlite,3873,Paracoccus aeridis,energy_mode,respirator
+sqlite,3876,Fusobacterium sp. dd14,energy_mode,fermenter
+sqlite,3880,Akkermansia glycaniphila,energy_mode,fermenter
+sqlite,3880,Akkermansia glycaniphila,primary_food_source,carbohydrates
+sqlite,3881,Dysgonomonas sp. hdw5a,energy_mode,fermenter
+sqlite,3881,Dysgonomonas sp. hdw5a,primary_food_source,carbohydrates
+sqlite,3882,Corynebacterium flavescens,primary_food_source,organic_unspecified
+sqlite,3888,Aeromonas bivalvium,energy_mode,fermenter
+sqlite,3888,Aeromonas bivalvium,primary_food_source,carbohydrates
+sqlite,3889,Pseudomonas qingdaonensis,primary_food_source,organic_unspecified
+sqlite,3890,Lactiplantibacillus garii,energy_mode,mixed
+sqlite,3890,Lactiplantibacillus garii,primary_food_source,carbohydrates
+sqlite,3892,Paracoccus sulfuroxidans,energy_mode,respirator
+sqlite,3896,Vagococcus fluvialis,energy_mode,respirator
+sqlite,3898,Pseudomonas sp. c27(2019),primary_food_source,organic_unspecified
+sqlite,3900,Lactiplantibacillus herbarum,energy_mode,mixed
+sqlite,3900,Lactiplantibacillus herbarum,primary_food_source,carbohydrates
+sqlite,3901,Limosilactobacillus frumenti,energy_mode,mixed
+sqlite,3901,Limosilactobacillus frumenti,primary_food_source,carbohydrates
+sqlite,3903,Blautia pseudococcoides,energy_mode,fermenter
+sqlite,3907,Pantoea eucrina,energy_mode,mixed
+sqlite,3914,Clostridium mediterraneense,energy_mode,fermenter
+sqlite,3914,Clostridium mediterraneense,primary_food_source,organic_unspecified
+sqlite,3916,Rothia sp. p100,energy_mode,mixed
+sqlite,3916,Rothia sp. p100,primary_food_source,carbohydrates
+sqlite,3917,Mycobacterium haemophilum,energy_mode,respirator
+sqlite,3917,Mycobacterium haemophilum,primary_food_source,organic_unspecified
+sqlite,3918,Leuconostoc suionicum,energy_mode,mixed
+sqlite,3919,Corynebacterium callunae,primary_food_source,organic_unspecified
+sqlite,3920,Enterococcus sulfureus,primary_food_source,organic_unspecified
+sqlite,3924,Clostridium sp. c105kso13,energy_mode,fermenter
+sqlite,3924,Clostridium sp. c105kso13,primary_food_source,organic_unspecified
+sqlite,3925,Lactococcus paracarnosus,energy_mode,mixed
+sqlite,3925,Lactococcus paracarnosus,primary_food_source,carbohydrates
+sqlite,3926,Treponema berlinense,energy_mode,fermenter
+sqlite,3928,Psychrobacter fulvigenes,energy_mode,respirator
+sqlite,3930,Anaerostipes sp. msj-23,energy_mode,fermenter
+sqlite,3931,Dechloromonas sp. h13,energy_mode,respirator
+sqlite,3932,Mitsuokella sp. af21-1ac,energy_mode,fermenter
+sqlite,3932,Mitsuokella sp. af21-1ac,primary_food_source,carbohydrates
+sqlite,3933,Peptoniphilus mikwangii,energy_mode,fermenter
+sqlite,3934,Psychrobacter maritimus,energy_mode,respirator
+sqlite,3936,Oceanisphaera profunda,energy_mode,respirator
+sqlite,3938,Clostridium sp. msj-8,energy_mode,fermenter
+sqlite,3938,Clostridium sp. msj-8,primary_food_source,organic_unspecified
+sqlite,3939,Prevotella sp. s7-1-8,energy_mode,fermenter
+sqlite,3940,Pediococcus stilesii,energy_mode,mixed
+sqlite,3940,Pediococcus stilesii,primary_food_source,carbohydrates
+sqlite,3942,Helicobacter sp. mit 99-5507,energy_mode,mixed
+sqlite,3942,Helicobacter sp. mit 99-5507,primary_food_source,carbohydrates
+sqlite,3943,Pseudomonas saxonica,primary_food_source,organic_unspecified
+sqlite,3944,Acinetobacter pullicarnis,energy_mode,respirator
+sqlite,3944,Acinetobacter pullicarnis,primary_food_source,organic_unspecified
+sqlite,3945,Vagococcus martis,energy_mode,respirator
+sqlite,3946,Pantoea deleyi,energy_mode,mixed
+sqlite,3947,Methylobacterium aerolatum,energy_mode,respirator
+sqlite,3947,Methylobacterium aerolatum,primary_food_source,c1_compounds
+sqlite,3948,Novosphingobium barchaimii,energy_mode,respirator
+sqlite,3952,Pseudoxanthomonas taiwanensis,energy_mode,respirator
+sqlite,3954,Tepidimicrobium xylanilyticum,energy_mode,fermenter
+sqlite,3955,Ureibacillus thermophilus,energy_mode,respirator
+sqlite,3956,Paracoccus sp. smma_5_tc,energy_mode,respirator
+sqlite,3957,Paracoccus solventivorans,energy_mode,respirator
+sqlite,3958,Bordetella bronchiseptica,energy_mode,respirator
+sqlite,3960,Thauera humireducens,energy_mode,respirator
+sqlite,3966,Clostridium thermosuccinogenes,energy_mode,fermenter
+sqlite,3966,Clostridium thermosuccinogenes,primary_food_source,organic_unspecified
+sqlite,3967,Roseburia sp. 831b,energy_mode,fermenter
+sqlite,3967,Roseburia sp. 831b,primary_food_source,carbohydrates
+sqlite,3970,Limosilactobacillus antri,energy_mode,mixed
+sqlite,3970,Limosilactobacillus antri,primary_food_source,carbohydrates
+sqlite,3973,Megasphaera lornae,energy_mode,fermenter
+sqlite,3974,Pyramidobacter sp. c12-8,energy_mode,fermenter
+sqlite,3974,Pyramidobacter sp. c12-8,primary_food_source,carbohydrates
+sqlite,3976,Janibacter anophelis,energy_mode,respirator
+sqlite,3980,Pantoea stewartii,energy_mode,mixed
+sqlite,3985,Brevibacterium epidermidis,energy_mode,mixed
+sqlite,3986,Brevibacterium iodinum,energy_mode,mixed
+sqlite,3987,Enterococcus viikkiensis,primary_food_source,organic_unspecified
+sqlite,3988,Enterococcus sp. rit-pi-f,primary_food_source,organic_unspecified
+sqlite,3989,Brevibacterium sp. cs2,energy_mode,mixed
+sqlite,3990,Brachybacterium squillarum,energy_mode,fermenter
+sqlite,3990,Brachybacterium squillarum,primary_food_source,carbohydrates
+sqlite,3992,Brevibacterium pigmentatum,energy_mode,mixed
+sqlite,3993,Microbacterium aurum,energy_mode,respirator
+sqlite,3997,Comamonas aquatica,energy_mode,respirator
+sqlite,3998,Chryseobacterium sp. vausw3,energy_mode,respirator
+sqlite,3999,Helcococcus massiliensis,energy_mode,fermenter
+sqlite,4000,Corynebacterium sp. nml130628,primary_food_source,organic_unspecified
+sqlite,4001,Alcaligenes aquatilis,energy_mode,respirator
+sqlite,4003,Alcaligenes sp. sort26,energy_mode,respirator
+sqlite,4006,Dickeya fangzhongdai,energy_mode,respirator
+sqlite,4007,Ligilactobacillus acidipiscis,energy_mode,mixed
+sqlite,4009,Corynebacterium xerosis,primary_food_source,organic_unspecified
+sqlite,4010,Acinetobacter indicus,energy_mode,respirator
+sqlite,4010,Acinetobacter indicus,primary_food_source,organic_unspecified
+sqlite,4012,Corynebacterium sputi,primary_food_source,organic_unspecified
+sqlite,4013,Jeotgalicoccus marinus,energy_mode,respirator
+sqlite,4015,Clostridium sp. sm-530-wt-3g,energy_mode,fermenter
+sqlite,4015,Clostridium sp. sm-530-wt-3g,primary_food_source,organic_unspecified
+sqlite,4016,Pantoea septica,energy_mode,mixed
+sqlite,4017,Fusobacterium necrogenes,energy_mode,fermenter
+sqlite,4019,Aeromonas sp. ru39b,energy_mode,fermenter
+sqlite,4019,Aeromonas sp. ru39b,primary_food_source,carbohydrates
+sqlite,4021,Methanobacterium formicicum,energy_mode,fermenter
+sqlite,4022,Flavobacterium lindanitolerans,energy_mode,respirator
+sqlite,4023,Achromobacter insuavis,energy_mode,respirator
+sqlite,4024,Acidovorax sp. kks102,energy_mode,respirator
+sqlite,4025,Pseudomonas asiatica,primary_food_source,organic_unspecified
+sqlite,4026,Azospira oryzae,energy_mode,respirator
+sqlite,4027,Achromobacter denitrificans,energy_mode,respirator
+sqlite,4029,Sphingobacterium spiritivorum,energy_mode,respirator
+sqlite,4030,Chryseobacterium nepalense,energy_mode,respirator
+sqlite,4031,Microbacterium algeriense,energy_mode,respirator
+sqlite,4032,Brevibacterium sediminis,energy_mode,mixed
+sqlite,4033,Acidovorax sp. nb1,energy_mode,respirator
+sqlite,4035,Methanobacterium sp. mb1,energy_mode,fermenter
+sqlite,4036,Rothia koreensis,energy_mode,mixed
+sqlite,4036,Rothia koreensis,primary_food_source,carbohydrates
+sqlite,4037,Corynebacterium sp. acrpr,primary_food_source,organic_unspecified
+sqlite,4039,Methylobacterium oryzae,energy_mode,respirator
+sqlite,4039,Methylobacterium oryzae,primary_food_source,c1_compounds
+sqlite,4040,Eubacterium minutum,energy_mode,fermenter
+sqlite,4041,Methylobacterium fujisawaense,energy_mode,respirator
+sqlite,4041,Methylobacterium fujisawaense,primary_food_source,c1_compounds
+sqlite,4042,Ruminococcus sp. oa3,energy_mode,fermenter
+sqlite,4044,Collinsella sp. ba40,energy_mode,fermenter
+sqlite,4044,Collinsella sp. ba40,primary_food_source,carbohydrates
+sqlite,4046,Bacteroides reticulotermitis,energy_mode,fermenter
+sqlite,4047,Vibrio campbellii,primary_food_source,organic_unspecified
+sqlite,4049,Acinetobacter sp. anc 4204,energy_mode,respirator
+sqlite,4049,Acinetobacter sp. anc 4204,primary_food_source,organic_unspecified
+sqlite,4050,Leuconostoc inhae,energy_mode,mixed
+sqlite,4051,Faecalibacterium gallinarum,energy_mode,fermenter
+sqlite,4058,Proteus alimentorum,energy_mode,mixed
+sqlite,4059,Alicyclobacillus acidoterrestris,energy_mode,respirator
+sqlite,4060,Actinomyces urinae,energy_mode,fermenter
+sqlite,4060,Actinomyces urinae,primary_food_source,carbohydrates
+sqlite,4061,Pseudomonas reactans,primary_food_source,organic_unspecified
+sqlite,4062,Pseudomonas lurida,primary_food_source,organic_unspecified
+sqlite,4063,Pseudomonas edaphica,primary_food_source,organic_unspecified
+sqlite,4065,Sharpea porci,energy_mode,fermenter
+sqlite,4068,Methanosarcina thermophila,energy_mode,respirator
+sqlite,4068,Methanosarcina thermophila,primary_food_source,inorganic
+sqlite,4070,Methanoculleus thermophilus,energy_mode,respirator
+sqlite,4070,Methanoculleus thermophilus,primary_food_source,inorganic
+sqlite,4074,Paracoccus sanguinis,energy_mode,respirator
+sqlite,4076,Staphylococcus condimenti,energy_mode,mixed
+sqlite,4076,Staphylococcus condimenti,primary_food_source,carbohydrates
+sqlite,4078,Brevibacterium rongguiense,energy_mode,mixed
+sqlite,4079,Brevibacterium sp. 50qc2o2,energy_mode,mixed
+sqlite,4089,Staphylococcus argenteus,energy_mode,mixed
+sqlite,4089,Staphylococcus argenteus,primary_food_source,carbohydrates
+sqlite,4090,Rhodococcus pyridinivorans,energy_mode,respirator
+sqlite,4091,Photobacterium damselae,energy_mode,mixed
+sqlite,4092,Clostridium chrysemydis,energy_mode,fermenter
+sqlite,4092,Clostridium chrysemydis,primary_food_source,organic_unspecified
+sqlite,4093,Proteus faecis,energy_mode,mixed
+sqlite,4095,Melissococcus sp. om08-11bh,energy_mode,fermenter
+sqlite,4096,Vagococcus lutrae,energy_mode,respirator
+sqlite,4099,Pseudomonas fluvialis,primary_food_source,organic_unspecified
+sqlite,4107,Brachybacterium nesterenkovii,energy_mode,fermenter
+sqlite,4107,Brachybacterium nesterenkovii,primary_food_source,carbohydrates
+sqlite,4108,Vagococcus fessus,energy_mode,respirator
+sqlite,4112,Parabacteroides sp. zj-118,energy_mode,fermenter
+sqlite,4112,Parabacteroides sp. zj-118,primary_food_source,carbohydrates
+sqlite,4115,Aerococcus christensenii,energy_mode,mixed
+sqlite,4115,Aerococcus christensenii,primary_food_source,carbohydrates
+sqlite,4116,Rothia endophytica,energy_mode,mixed
+sqlite,4116,Rothia endophytica,primary_food_source,carbohydrates
+sqlite,4119,Hydrogenophilus thermoluteolus,energy_mode,respirator
+sqlite,4120,Arthrobacter woluwensis,energy_mode,mixed
+sqlite,4120,Arthrobacter woluwensis,primary_food_source,carbohydrates
+sqlite,4121,Pseudoxanthomonas winnipegensis,energy_mode,respirator
+sqlite,4125,Trichococcus ilyis,energy_mode,respirator
+sqlite,4128,Helicobacter trogontum,energy_mode,mixed
+sqlite,4128,Helicobacter trogontum,primary_food_source,carbohydrates
+sqlite,4129,Clostridium nigeriense,energy_mode,fermenter
+sqlite,4129,Clostridium nigeriense,primary_food_source,organic_unspecified
+sqlite,4130,Dermacoccus abyssi,energy_mode,mixed
+sqlite,4130,Dermacoccus abyssi,primary_food_source,carbohydrates
+sqlite,4131,Moraxella lincolnii,energy_mode,respirator
+sqlite,4133,Corynebacterium testudinoris,primary_food_source,organic_unspecified
+sqlite,4134,Aerococcus urinaeequi,energy_mode,mixed
+sqlite,4134,Aerococcus urinaeequi,primary_food_source,carbohydrates
+sqlite,4136,Peptoniphilus vaginalis,energy_mode,fermenter
+sqlite,4137,Treponema medium,energy_mode,fermenter
+sqlite,4138,Sphingomonas melonis,energy_mode,fermenter
+sqlite,4138,Sphingomonas melonis,primary_food_source,carbohydrates
+sqlite,4139,Corynebacterium nuruki,primary_food_source,organic_unspecified
+sqlite,4142,Vagococcus bubulae,energy_mode,respirator
+sqlite,4145,Brevibacterium yomogidense,energy_mode,mixed
+sqlite,4147,Eubacterium sp. msj-13,energy_mode,fermenter
+sqlite,4148,Ruminococcus sp. marseille-p6503,energy_mode,fermenter
+sqlite,4150,Leuconostoc rapi,energy_mode,mixed
+sqlite,4151,Olsenella sp. an290,energy_mode,fermenter
+sqlite,4151,Olsenella sp. an290,primary_food_source,carbohydrates
+sqlite,4155,Nocardia seriolae,energy_mode,respirator
+sqlite,4156,Achromobacter aegrifaciens,energy_mode,respirator
+sqlite,4157,Acidovorax sp. mr-s7,energy_mode,respirator
+sqlite,4158,Microbacterium keratanolyticum,energy_mode,respirator
+sqlite,4159,Solibacillus silvestris,energy_mode,respirator
+sqlite,4161,Brevundimonas naejangsanensis,energy_mode,respirator
+sqlite,4162,Prevotella aurantiaca,energy_mode,fermenter
+sqlite,4164,Rummeliibacillus stabekisii,energy_mode,respirator
+sqlite,4167,Mediterraneibacter agrestimuris,energy_mode,fermenter
+sqlite,4167,Mediterraneibacter agrestimuris,primary_food_source,carbohydrates
+sqlite,4168,Enterococcus lemanii,primary_food_source,organic_unspecified
+sqlite,4169,Acinetobacter sp. wcha55,energy_mode,respirator
+sqlite,4169,Acinetobacter sp. wcha55,primary_food_source,organic_unspecified
+sqlite,4170,Anaerobiospirillum sp. nml120448,energy_mode,fermenter
+sqlite,4170,Anaerobiospirillum sp. nml120448,primary_food_source,carbohydrates
+sqlite,4173,Acinetobacter rongchengensis,energy_mode,respirator
+sqlite,4173,Acinetobacter rongchengensis,primary_food_source,organic_unspecified
+sqlite,4175,Lysinibacillus parviboronicapiens,energy_mode,respirator
+sqlite,4178,Cupriavidus pauculus,energy_mode,respirator
+sqlite,4179,Sphingomonas ginsenosidimutans,energy_mode,fermenter
+sqlite,4179,Sphingomonas ginsenosidimutans,primary_food_source,carbohydrates
+sqlite,4184,Microbacterium sp. 5k110,energy_mode,respirator
+sqlite,4185,Deinococcus soli (ex cha et al. 2016),energy_mode,respirator
+sqlite,4185,Deinococcus soli (ex cha et al. 2016),primary_food_source,organic_unspecified
+sqlite,4186,Trabulsiella odontotermitis,energy_mode,mixed
+sqlite,4187,Enterococcus dongliensis,primary_food_source,organic_unspecified
+sqlite,4190,Carnobacterium mobile,energy_mode,mixed
+sqlite,4191,Psychrobacter sp. gp33,energy_mode,respirator
+sqlite,4193,Jeotgalicoccus halotolerans,energy_mode,respirator
+sqlite,4195,Pediococcus inopinatus,energy_mode,mixed
+sqlite,4195,Pediococcus inopinatus,primary_food_source,carbohydrates
+sqlite,4196,Anaerococcus sp. marseille-p3915,energy_mode,fermenter
+sqlite,4198,Pseudomonas paraversuta,primary_food_source,organic_unspecified
+sqlite,4199,Pseudomonas versuta,primary_food_source,organic_unspecified
+sqlite,4200,Lactiplantibacillus xiangfangensis,energy_mode,mixed
+sqlite,4200,Lactiplantibacillus xiangfangensis,primary_food_source,carbohydrates
+sqlite,4204,Tepidimonas aquatica,energy_mode,respirator
+sqlite,4205,Corynebacterium genitalium,primary_food_source,organic_unspecified
+sqlite,4206,Corynebacterium atypicum,primary_food_source,organic_unspecified
+sqlite,4207,Fusobacterium massiliense,energy_mode,fermenter
+sqlite,4210,Brevibacterium sp. hmsc063g07,energy_mode,mixed
+sqlite,4212,Corynebacterium sp. marseille-p3884,primary_food_source,organic_unspecified
+sqlite,4214,Corynebacterium uberis,primary_food_source,organic_unspecified
+sqlite,4215,Facklamia languida,energy_mode,mixed
+sqlite,4217,Corynebacterium sp. hmsc036d02,primary_food_source,organic_unspecified
+sqlite,4218,Corynebacterium sp. nml140438,primary_food_source,organic_unspecified
+sqlite,4219,Peptoniphilus catoniae,energy_mode,fermenter
+sqlite,4221,Phenylobacterium sp. cch12-b4,energy_mode,respirator
+sqlite,4222,Corynebacterium otitidis,primary_food_source,organic_unspecified
+sqlite,4223,Corynebacterium lujinxingii,primary_food_source,organic_unspecified
+sqlite,4224,Corynebacterium yonathiae,primary_food_source,organic_unspecified
+sqlite,4225,Brachybacterium timonense,energy_mode,fermenter
+sqlite,4225,Brachybacterium timonense,primary_food_source,carbohydrates
+sqlite,4226,Arcanobacterium ihumii,energy_mode,mixed
+sqlite,4226,Arcanobacterium ihumii,primary_food_source,carbohydrates
+sqlite,4227,Corynebacterium sp. hmsc078h07,primary_food_source,organic_unspecified
+sqlite,4228,Helcococcus kunzii,energy_mode,fermenter
+sqlite,4229,Kingella negevensis,energy_mode,mixed
+sqlite,4229,Kingella negevensis,primary_food_source,carbohydrates
+sqlite,4230,Corynebacterium massiliense,primary_food_source,organic_unspecified
+sqlite,4231,Mycobacterium gordonae,energy_mode,respirator
+sqlite,4231,Mycobacterium gordonae,primary_food_source,organic_unspecified
+sqlite,4233,Bacteroides zoogleoformans,energy_mode,fermenter
+sqlite,4234,Treponema putidum,energy_mode,fermenter
+sqlite,4235,Prevotella fusca,energy_mode,fermenter
+sqlite,4236,Helicobacter colisuis,energy_mode,mixed
+sqlite,4236,Helicobacter colisuis,primary_food_source,carbohydrates
+sqlite,4238,Clostridium merdae,energy_mode,fermenter
+sqlite,4238,Clostridium merdae,primary_food_source,organic_unspecified
+sqlite,4239,Fructobacillus pseudoficulneus,energy_mode,respirator
+sqlite,4242,Pantoea anthophila,energy_mode,mixed
+sqlite,4243,Capnocytophaga sp. oral taxon 338,energy_mode,fermenter
+sqlite,4243,Capnocytophaga sp. oral taxon 338,primary_food_source,carbohydrates
+sqlite,4244,Sphingomonas beigongshangi,energy_mode,fermenter
+sqlite,4244,Sphingomonas beigongshangi,primary_food_source,carbohydrates
+sqlite,4246,Thauera aminoaromatica,energy_mode,respirator
+sqlite,4248,Saccharopolyspora rectivirgula,energy_mode,respirator
+sqlite,4250,Streptomyces diacarni,energy_mode,respirator
+sqlite,4251,Nocardia panacis,energy_mode,respirator
+sqlite,4252,Chryseobacterium sp. lam-krs1,energy_mode,respirator
+sqlite,4253,Lysinibacillus sp. cd3-6,energy_mode,respirator
+sqlite,4256,Rothia nasimurium,energy_mode,mixed
+sqlite,4256,Rothia nasimurium,primary_food_source,carbohydrates
+sqlite,4257,Enterococcus aquimarinus,primary_food_source,organic_unspecified
+sqlite,4259,Janibacter melonis,energy_mode,respirator
+sqlite,4261,Paracoccus lutimaris,energy_mode,respirator
+sqlite,4262,Aeromonas sanarellii,energy_mode,fermenter
+sqlite,4262,Aeromonas sanarellii,primary_food_source,carbohydrates
+sqlite,4263,Brevundimonas mediterranea,energy_mode,respirator
+sqlite,4265,Brevundimonas viscosa,energy_mode,respirator
+sqlite,4267,Paracoccus haematequi,energy_mode,respirator
+sqlite,4268,Trichococcus flocculiformis,energy_mode,respirator
+sqlite,4270,Pseudomonas guariconensis,primary_food_source,organic_unspecified
+sqlite,4271,Bradyrhizobium denitrificans,energy_mode,respirator
+sqlite,4273,Novosphingobium ginsenosidimutans,energy_mode,respirator
+sqlite,4274,Hydrogenophaga pseudoflava,energy_mode,respirator
+sqlite,4276,Kocuria varians,energy_mode,mixed
+sqlite,4276,Kocuria varians,primary_food_source,carbohydrates
+sqlite,4277,Enterococcus nangangensis,primary_food_source,organic_unspecified
+sqlite,4280,Kocuria subflava,energy_mode,mixed
+sqlite,4280,Kocuria subflava,primary_food_source,carbohydrates
+sqlite,4283,Kurthia gibsonii,energy_mode,mixed
+sqlite,4283,Kurthia gibsonii,primary_food_source,carbohydrates
+sqlite,4285,Clostridium sp. 1001275b_160808_h3,energy_mode,fermenter
+sqlite,4285,Clostridium sp. 1001275b_160808_h3,primary_food_source,organic_unspecified
+sqlite,4286,Micrococcus terreus,energy_mode,respirator
+sqlite,4287,Pseudomonas parasichuanensis,primary_food_source,organic_unspecified
+sqlite,4289,Enterococcus sp. csurq0835,primary_food_source,organic_unspecified
+sqlite,4290,Microbacterium sp. 8m,energy_mode,respirator
+sqlite,4292,Stutzerimonas kunmingensis,energy_mode,respirator
+sqlite,4292,Stutzerimonas kunmingensis,primary_food_source,organic_unspecified
+sqlite,4294,Oceanobacillus kimchii,energy_mode,mixed
+sqlite,4295,Methanobrevibacter boviskoreani,energy_mode,respirator
+sqlite,4295,Methanobrevibacter boviskoreani,primary_food_source,inorganic
+sqlite,4296,Micrococcus sp. eye_162,energy_mode,respirator
+sqlite,4297,Microbacterium maritypicum,energy_mode,respirator
+sqlite,4298,Kocuria carniphila,energy_mode,mixed
+sqlite,4298,Kocuria carniphila,primary_food_source,carbohydrates
+sqlite,4299,Deinococcus wulumuqiensis,energy_mode,respirator
+sqlite,4299,Deinococcus wulumuqiensis,primary_food_source,organic_unspecified
+sqlite,4301,Dietzia aerolata,energy_mode,fermenter
+sqlite,4301,Dietzia aerolata,primary_food_source,carbohydrates
+sqlite,4302,Salinicoccus halodurans,energy_mode,respirator
+sqlite,4304,Janibacter cremeus,energy_mode,respirator
+sqlite,4305,Salinicoccus sediminis,energy_mode,respirator
+sqlite,4306,Halococcus dombrowskii,energy_mode,fermenter
+sqlite,4306,Halococcus dombrowskii,primary_food_source,carbohydrates
+sqlite,4309,Cladosporium sphaerospermum,energy_mode,fermenter
+sqlite,4309,Cladosporium sphaerospermum,primary_food_source,complex_carbs_fiber
+sqlite,4315,Bacteroides sp. et71,energy_mode,fermenter
+sqlite,4316,Xanthomonas oryzae,energy_mode,respirator
+sqlite,4317,Ralstonia mannitolilytica,energy_mode,respirator
+sqlite,4317,Ralstonia mannitolilytica,primary_food_source,organic_unspecified
+sqlite,4318,Pseudomonas jilinensis,primary_food_source,organic_unspecified
+sqlite,4321,Corynebacterium mycetoides,primary_food_source,organic_unspecified
+sqlite,4322,Chryseobacterium suipulveris,energy_mode,respirator
+sqlite,4323,Methylobacterium persicinum,energy_mode,respirator
+sqlite,4323,Methylobacterium persicinum,primary_food_source,c1_compounds
+sqlite,4324,Roseateles asaccharophilus,energy_mode,respirator
+sqlite,4327,Xanthomonas citri,energy_mode,respirator
+sqlite,4329,Aurantimonas sp. hbx-1,energy_mode,respirator
+sqlite,4330,Sphingomonas pseudosanguinis,energy_mode,fermenter
+sqlite,4330,Sphingomonas pseudosanguinis,primary_food_source,carbohydrates
+sqlite,4331,Xanthomonas sontii,energy_mode,respirator
+sqlite,4332,Alloiococcus otitis,energy_mode,respirator
+sqlite,4333,Cetobacterium sp. zor0034,energy_mode,fermenter
+sqlite,4333,Cetobacterium sp. zor0034,primary_food_source,carbohydrates
+sqlite,4334,Cetobacterium sp. 8h,energy_mode,fermenter
+sqlite,4334,Cetobacterium sp. 8h,primary_food_source,carbohydrates
+sqlite,4335,Pediococcus damnosus,energy_mode,mixed
+sqlite,4335,Pediococcus damnosus,primary_food_source,carbohydrates
+sqlite,4338,Limosilactobacillus agrestis,energy_mode,mixed
+sqlite,4338,Limosilactobacillus agrestis,primary_food_source,carbohydrates
+sqlite,4339,Lactococcus hircilactis,energy_mode,mixed
+sqlite,4339,Lactococcus hircilactis,primary_food_source,carbohydrates
+sqlite,4341,Acinetobacter sp. wchac010034,energy_mode,respirator
+sqlite,4341,Acinetobacter sp. wchac010034,primary_food_source,organic_unspecified
+sqlite,4343,Pseudomonas carnis,primary_food_source,organic_unspecified
+sqlite,4348,Helicobacter equorum,energy_mode,mixed
+sqlite,4348,Helicobacter equorum,primary_food_source,carbohydrates
+sqlite,4351,Actinomyces polynesiensis,energy_mode,fermenter
+sqlite,4351,Actinomyces polynesiensis,primary_food_source,carbohydrates
+sqlite,4355,Corynebacterium riegelii,primary_food_source,organic_unspecified
+sqlite,4359,Pediococcus argentinicus,energy_mode,mixed
+sqlite,4359,Pediococcus argentinicus,primary_food_source,carbohydrates
+sqlite,4361,Geobacillus thermoleovorans,primary_food_source,organic_unspecified
+sqlite,4362,Exiguobacterium acetylicum,energy_mode,mixed
+sqlite,4362,Exiguobacterium acetylicum,primary_food_source,carbohydrates
+sqlite,4364,Zoogloea ramigera,energy_mode,respirator
+sqlite,4367,Deinococcus geothermalis,energy_mode,respirator
+sqlite,4367,Deinococcus geothermalis,primary_food_source,organic_unspecified
+sqlite,4368,Rhizobium rhizoryzae,energy_mode,respirator
+sqlite,4369,Sphingobium indicum,energy_mode,respirator
+sqlite,4371,Paracoccus aminovorans,energy_mode,respirator
+sqlite,4377,Papillibacter,energy_mode,fermenter
+sqlite,4378,Lysinibacillus,energy_mode,respirator
+sqlite,4383,Geobacillus,primary_food_source,organic_unspecified
+sqlite,4385,Trueperella,energy_mode,mixed
+sqlite,4385,Trueperella,primary_food_source,carbohydrates
+sqlite,4394,Pantoea,energy_mode,mixed
+sqlite,4397,Psychrobacter,energy_mode,respirator
+sqlite,4398,Samsonia,energy_mode,mixed
+sqlite,4400,Propionibacterium,energy_mode,fermenter
+sqlite,4400,Propionibacterium,primary_food_source,carbohydrates
+sqlite,4404,Cryptobacterium,energy_mode,fermenter
+sqlite,4414,Alkalihalobacillus,energy_mode,mixed
+sqlite,4414,Alkalihalobacillus,primary_food_source,carbohydrates
+sqlite,4416,Saccharomyces,energy_mode,fermenter
+sqlite,4425,Peptacetobacter,energy_mode,fermenter
+sqlite,4427,Eggerthia,energy_mode,fermenter
+sqlite,4427,Eggerthia,primary_food_source,carbohydrates
+sqlite,4430,Oceanobacillus,energy_mode,mixed
+sqlite,4433,Trichosporon,energy_mode,respirator
+sqlite,4433,Trichosporon,primary_food_source,organic_unspecified
+sqlite,4435,Pichia,energy_mode,mixed
+sqlite,4438,Tropheryma,energy_mode,fermenter
+sqlite,4441,Clavispora,energy_mode,mixed
+sqlite,4446,Leminorella,energy_mode,mixed
+sqlite,4452,Acidovorax,energy_mode,respirator
+sqlite,4459,Brachybacterium,energy_mode,fermenter
+sqlite,4459,Brachybacterium,primary_food_source,carbohydrates
+sqlite,4461,Methanobacterium,energy_mode,fermenter
+sqlite,4475,Afipia,energy_mode,respirator
+sqlite,4488,Myroides,energy_mode,respirator
+sqlite,4493,Deinococcus,energy_mode,respirator
+sqlite,4493,Deinococcus,primary_food_source,organic_unspecified
+sqlite,4499,Roseomonas,energy_mode,mixed
+sqlite,4499,Roseomonas,primary_food_source,carbohydrates
+sqlite,4507,Listeria,energy_mode,mixed
+sqlite,4507,Listeria,primary_food_source,carbohydrates
+sqlite,4523,Nitrosomonas,energy_mode,respirator
+sqlite,4523,Nitrosomonas,primary_food_source,inorganic
+sqlite,4524,Janthinobacterium,energy_mode,respirator
+sqlite,4530,Ureaplasma,energy_mode,mixed
+sqlite,4531,Pseudoalteromonas,energy_mode,respirator
+sqlite,4532,Legionella,energy_mode,respirator
+sqlite,4532,Legionella,primary_food_source,organic_unspecified
+sqlite,4546,Limnohabitans,energy_mode,respirator
+sqlite,4569,Nitrosospira,energy_mode,respirator
+sqlite,4569,Nitrosospira,primary_food_source,inorganic
+sqlite,4582,Thermus,energy_mode,respirator
+sqlite,4590,Spirosoma,energy_mode,respirator
+sqlite,4590,Spirosoma,primary_food_source,organic_unspecified
+sqlite,4592,Nevskia,energy_mode,fermenter
+sqlite,4595,Francisella,energy_mode,respirator
+sqlite,4606,Stutzerimonas,energy_mode,respirator
+sqlite,4606,Stutzerimonas,primary_food_source,organic_unspecified
+sqlite,4610,Kallipyga,energy_mode,fermenter
+sqlite,4610,Kallipyga,primary_food_source,carbohydrates
+sqlite,4620,Macrococcus,energy_mode,respirator
+sqlite,4641,Alicyclobacillus,energy_mode,respirator
+sqlite,4659,Kytococcus,energy_mode,respirator
+sqlite,4686,Acidothermus,energy_mode,respirator
+sqlite,4686,Acidothermus,primary_food_source,complex_carbs_fiber
+sqlite,4695,Gluconobacter,energy_mode,respirator
+sqlite,4699,Silanimonas,energy_mode,fermenter
+sqlite,4699,Silanimonas,primary_food_source,carbohydrates
+sqlite,4701,Gluconacetobacter,energy_mode,respirator
+sqlite,4704,Ilyobacter,energy_mode,fermenter
+sqlite,4704,Ilyobacter,primary_food_source,organic_unspecified
+sqlite,4706,Cedecea,energy_mode,respirator
+sqlite,4709,Laribacter,energy_mode,fermenter
+sqlite,4732,Bordetella,energy_mode,respirator
+sqlite,4735,Sphaerobacter,energy_mode,respirator
+sqlite,4748,Fibrobacter,energy_mode,fermenter
+sqlite,4748,Fibrobacter,primary_food_source,complex_carbs_fiber
+sqlite,4758,Methanosarcina,energy_mode,respirator
+sqlite,4758,Methanosarcina,primary_food_source,inorganic
+sqlite,4761,Methanoculleus,energy_mode,respirator
+sqlite,4761,Methanoculleus,primary_food_source,inorganic
+sqlite,4773,Acidiphilium,energy_mode,respirator
+sqlite,4773,Acidiphilium,primary_food_source,organic_unspecified
+sqlite,4774,Acidithiobacillus,energy_mode,respirator
+sqlite,4774,Acidithiobacillus,primary_food_source,inorganic
+sqlite,4796,Glaciecola,energy_mode,respirator
+sqlite,4809,Aquincola,energy_mode,respirator
+sqlite,4812,Methylocella,energy_mode,respirator
+sqlite,4812,Methylocella,primary_food_source,c1_compounds
+sqlite,4825,Cytophaga,energy_mode,respirator
+sqlite,4825,Cytophaga,primary_food_source,complex_carbs_fiber
+sqlite,4859,Owenweeksia,energy_mode,respirator
+sqlite,4860,Syntrophobacter,energy_mode,fermenter
+sqlite,4867,Rubrivivax,energy_mode,respirator
+sqlite,4870,Neptuniibacter,energy_mode,respirator
+sqlite,4883,Jonesia,energy_mode,mixed
+sqlite,4883,Jonesia,primary_food_source,organic_unspecified
+sqlite,4905,Hespellia,energy_mode,fermenter
+sqlite,4912,Sporomusa,energy_mode,fermenter
+sqlite,4914,Caldicellulosiruptor,energy_mode,fermenter
+sqlite,4952,Rhizobium,energy_mode,respirator
+sqlite,4957,Melissococcus,energy_mode,fermenter
+sqlite,4993,Methylotenera,energy_mode,fermenter
+sqlite,5006,Kandleria,energy_mode,fermenter
+sqlite,5006,Kandleria,primary_food_source,carbohydrates
+sqlite,5015,Haloferula,energy_mode,respirator
+sqlite,5019,Sulfurimonas,energy_mode,fermenter
+sqlite,5030,Rudanella,energy_mode,mixed
+sqlite,5048,Desulfosporosinus,energy_mode,fermenter
+sqlite,5058,Thalassospira,energy_mode,respirator
+sqlite,5075,Geobacter,energy_mode,respirator
+sqlite,5075,Geobacter,primary_food_source,inorganic
+sqlite,5086,Thermoflavimicrobium,energy_mode,respirator
+sqlite,5119,Hyphomonas,energy_mode,respirator
+sqlite,5133,Roseobacter,energy_mode,respirator
+sqlite,5145,Acetoanaerobium,energy_mode,fermenter
+sqlite,5145,Acetoanaerobium,primary_food_source,organic_unspecified
+sqlite,5148,Rhodopseudomonas,energy_mode,respirator
+sqlite,5190,Thermobacillus,energy_mode,respirator
+sqlite,5200,Xanthobacter,energy_mode,respirator
+sqlite,5200,Xanthobacter,primary_food_source,c1_compounds
+sqlite,5227,Alicycliphilus,energy_mode,mixed
+sqlite,5229,Salinispora,energy_mode,respirator
+sqlite,5293,Cladosporium,energy_mode,fermenter
+sqlite,5293,Cladosporium,primary_food_source,complex_carbs_fiber
+sqlite,5296,Pasteurella,energy_mode,mixed

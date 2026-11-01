@@ -1379,6 +1379,36 @@ simply absent.
 So the lesson lands twice: `exists()` is not a usability check, and the code that
 knows this still has to be written as though it does.
 
+### 'N/A' on rows whose own traits say otherwise
+
+`energy_mode` and `primary_food_source` are derived, not sourced:
+`_collapse_mimedb` calls `derive_energy_mode` and
+`derive_primary_food_source` while loading MiMeDB rows, and both default to
+`'N/A'` for anything arriving another way. `'N/A'` is a real member of the
+`energy_mode` enum, so this was never a stray sentinel to strip -- it was the
+column saying "not known" on rows where the row's own cells say otherwise.
+
+**477 cells in MySQL and 2,535 in the mirror held `'N/A'` while the project's
+own derivation returned a definite answer** from `oxygen_requirement`,
+`metabolism` and `energy_source` -- values already in the same row. `aerobe`
+gives respirator, `anaerobe` fermenter, `facultative anaerobe` mixed. They are
+filled now, by those functions, with nothing invented and nothing overwritten:
+only a cell reading `'N/A'` is written, and a derivation that returns `'N/A'`
+leaves the cell alone, so re-running changes nothing.
+
+**This widened a cross-store divergence, which is stated here rather than left
+to be discovered.** Measured before and after: `energy_mode` disagreements
+between the stores went from 196 to 1,235, and `primary_food_source` from 59 to
+802. That is not new wrongness. Before, both stores agreed by both saying
+`'N/A'` -- agreeing in ignorance. Now the mirror states what its own traits
+imply while MySQL still says "unknown", truthfully, because it does not hold
+those traits. The divergence *is* the trait back-fill gap recorded above,
+surfacing in a derived column instead of staying hidden behind a shared default.
+
+The mirror derives five times as many as MySQL for exactly that reason, and this
+does not prejudge the open question of whether MySQL's traits should be filled
+from it. Each store derives from what it actually holds.
+
 ## 4. Validate and query
 
 ```bash
