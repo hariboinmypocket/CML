@@ -1409,6 +1409,51 @@ The mirror derives five times as many as MySQL for exactly that reason, and this
 does not prejudge the open question of whether MySQL's traits should be filled
 from it. Each store derives from what it actually holds.
 
+### The safety improvement that would have destroyed data
+
+Sweeping both stores for referential orphans -- abundances and associations
+pointing at missing taxa, samples at missing studies, associations at missing
+diseases -- found **zero in either store**, so the taxa deletions earlier in
+this session were clean.
+
+What the sweep turned up instead was `PRAGMA foreign_keys`, which SQLite
+reports as **0** on a fresh connection. The mirror's foreign keys are declared
+in `schema_sqlite.sql` and enforced only by a connection that asks.
+`build_gutdb_sqlite.py` and `cleanup_gutdb.py` ask; of the 25 other scripts that
+write the mirror, **six can orphan a row** -- five that delete from `taxa` and
+one that rewrites a foreign-key column.
+
+Turning enforcement on in those six is the obvious hardening, and **it would have
+been a data-loss hazard.** `sample_taxon_abundances.taxon_id` and
+`taxon_disease_associations.taxon_id` both declare `ON DELETE CASCADE`.
+Deleting one taxon that held 16,815 abundance rows and 111 associations:
+
+| | result |
+| --- | --- |
+| `foreign_keys = OFF` | delete succeeds, leaves **16,815 orphan abundances and 111 orphan associations**; `orphan_abundances` and `orphan_associations` fire and the pre-push hook refuses the push |
+| `foreign_keys = ON` | delete succeeds, cascades, removes all **16,926 rows**; both counters read **0**, validate is clean, the data is gone |
+
+Both halves were measured in a transaction and rolled back, not reasoned about.
+So the configuration that looked accidental is the safer one: with enforcement
+off, a wrong delete is loud and gated; with it on, the same mistake is silent
+and the evidence of it is destroyed along with the data. It is the same
+mechanism the README records for MySQL, where foreign keys are always enforced
+and `fk_tma_taxon ... ON DELETE CASCADE` is how the adjudication lost a verdict
+with nothing noticing.
+
+The safety model of a repair script is: prove the row carries no evidence, then
+delete. If that proof is ever wrong, orphans are what make the mistake visible.
+`tests/test_mirror_delete_policy.py` pins it -- the cascade premise, the
+existence of the two counters the policy depends on, and that no script
+deleting `taxa` enables enforcement -- so the change cannot be made again
+without reading why it was reverted.
+
+**It is not a blanket rule, and the test is scoped accordingly.**
+`build_gutdb_sqlite.py` prunes `samples` and `cleanup_gutdb.py` de-duplicates
+`diseases`, both with enforcement on and both intending the cascade --
+`cleanup_gutdb` deletes the child associations itself first. The rule is about
+deleting `taxa` in a repair.
+
 ## 4. Validate and query
 
 ```bash
