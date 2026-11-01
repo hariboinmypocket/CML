@@ -54,6 +54,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from gutdb.transform import normalize_genus
 from gutdb.config import require_local
 from gutdb.config import Settings
 from gutdb.db import connect
@@ -118,7 +119,15 @@ def ensure_bracket_taxon(cur, name: str) -> int:
                              source_database)
            VALUES ('Bacteria', %s, %s, %s, '', %s, '', %s, 'genus', %s,
                    'species', 'GMrepo')""",
-        (phylum, family or None, name, name.casefold(), name, taxid))
+        # genus_key goes through normalize_genus like every other path in
+        # this project: it strips a leading '[', so name.casefold() produced
+        # '[clostridium] methylpentosum' where the canonical key -- and the
+        # mirror, which this docstring says these rows mirror -- is
+        # 'clostridium] methylpentosum'. One character, but genus_key is what
+        # every two-store repair matches on, so these three rows were
+        # unmatchable across the stores.
+        (phylum, family or None, name, normalize_genus(name).casefold(),
+         name, taxid))
     return cur.lastrowid
 
 

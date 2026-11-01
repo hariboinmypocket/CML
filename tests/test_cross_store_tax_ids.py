@@ -270,8 +270,19 @@ class KeySpellingTests(unittest.TestCase):
 
     @staticmethod
     def _squash(key):
+        """Punctuation the two stores have spelled differently.
+
+        Spaces and underscores came first (`sp. 1 1 14` against `sp. 1_1_14`).
+        Brackets were added after this test missed three rows: MySQL held
+        genus_key `[clostridium] methylpentosum` where the mirror held
+        `clostridium] methylpentosum`, because unwind_bracket_genus_repoint.py
+        built the key with name.casefold() instead of normalize_genus, which
+        strips a leading '['. One character, and genus_key is what every
+        two-store repair matches on.
+        """
         import re
-        return (key[0], re.sub(r"[ _]+", " ", key[1]))
+        return tuple(re.sub(r"[ _]+", " ", part.replace("[", "").replace("]", ""))
+                     for part in key)
 
     def test_no_key_is_a_punctuation_variant_of_the_other_stores(self):
         mysql_squashed = {self._squash(k) for k in self.mysql_keys}
@@ -282,7 +293,8 @@ class KeySpellingTests(unittest.TestCase):
                      if self._squash(k) in mirror_squashed]
         self.assertEqual(
             [], variants,
-            "%d key(s) differ between the stores only by spaces or underscores, "
+            "%d key(s) differ between the stores only by spaces, underscores "
+            "or brackets, "
             "so the same organism is keyed two ways:\n  %s"
             % (len(variants), "\n  ".join(repr(v) for v in variants[:20])))
 

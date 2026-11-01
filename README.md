@@ -1454,6 +1454,66 @@ without reading why it was reverted.
 `cleanup_gutdb` deletes the child associations itself first. The rule is about
 deleting `taxa` in a repair.
 
+### One character in a key, and nine comparisons that disagreed with themselves
+
+Sweeping the tables other than `taxa` -- the first time this comparison has been
+run on them -- found `diseases` sound (`name` and `name_key` agree on all 158
+shared MeSH ids) and turned up two things in the comparison layer.
+
+**`phenotype_comparisons` shares no keys at all between the stores**, 528 against
+378, because the two build `comparison_key` to different shapes: MySQL writes
+five fields lowercased (`pmid19043404|health|obesity|kruskal-wallis + bh
+fdr|genus`) and the mirror four with the PMID uppercased and no
+`taxonomic_level` (`PMID26852926|health|gout|reported`). That is recorded as a
+measured negative: **this table cannot be compared across the stores by key**,
+and the coarser grouping is deliberate -- `finalize_comparison_levels` labels a
+comparison `'mixed'` when its associations span both ranks, which is why the
+mirror holds 122 `'mixed'` rows and MySQL none. All 378 of the mirror's labels
+match the ranks their own associations span.
+
+**MySQL's do not: 9 comparisons claim a `taxonomic_level` their associations
+contradict.** Eight are `|genus` comparisons holding exactly one species-rank
+association, and all eight trace to just two taxa -- `[Clostridium]
+methylpentosum` and `[Bacteroides] pectinophilus`. The ninth, `pmid25432777`, is
+genuinely mixed (5 genus, 8 species) while labelled `genus`.
+
+The invariant is exactly expressible in portable SQL and reads 0 in the mirror
+and 9 in MySQL, **but no counter is added for it, deliberately.** One reading is
+that the label is wrong and all nine should say `'mixed'`, which is already a
+valid value in MySQL's enum and would make the column honest -- at the cost of
+disagreeing with a `comparison_key` that ends in `|genus`. The other is that the
+label is right and the stray association is misplaced: the mirror attaches those
+same findings to the genus-layer bracket row, not to the species-layer one. Both
+are defensible, and choosing between them moves either a label or a disease
+association, so it is a data decision rather than a cleanup. A counter reading 9
+would also block every push until that decision is made.
+
+Following those two taxa found the cause of something else. The bracketed
+genus-layer rows are deliberate -- `unwind_bracket_genus_repoint.py` explains
+that NCBI's brackets mean the name is misapplied, so those three organisms have
+no genus at all, and it reconciled 1,215 samples of mass before creating them.
+Its docstring says the new rows mirror what the SQLite store holds. **The
+`scientific_name` does; the key did not.** It built `genus_key` with
+`name.casefold()` rather than `normalize_genus(name).casefold()`, and
+`normalize_genus` strips a leading `[`:
+
+| | MySQL held | mirror holds | canonical |
+| --- | --- | --- | --- |
+| tax 84026 | `[clostridium] methylpentosum` | `clostridium] methylpentosum` | `clostridium] methylpentosum` |
+
+One character, on three rows, in the column every two-store repair matches on --
+so those three organisms were unmatchable across the stores, which is why they
+showed up among the mirror-only keys. The three keys are corrected and the
+script now goes through `normalize_genus`, so a re-run produces the canonical
+key rather than recreating the divergence.
+
+**The test written two rounds ago to catch exactly this missed it.** It
+normalised spaces and underscores, because that was the instance in front of me
+at the time; a bracket is neither. It now normalises brackets too, verified by
+re-introducing the leading `[` on one row and watching it fail. That is the
+third guard this session that needed widening after the next instance arrived in
+a shape the first one did not anticipate.
+
 ## 4. Validate and query
 
 ```bash
