@@ -2543,6 +2543,34 @@ def _validate_checks() -> dict[str, str]:
                 GROUP BY kegg_id, name HAVING COUNT(*) > 1
             ) duplicated
         """,
+        # sample_metabolite_levels is the largest table in either store and had
+        # no check at all: 521,825 rows, and the column that gives a level its
+        # meaning lives one join away in studies.metabolite_scale. A zero means
+        # ABSENT in the 11 non_negative cohorts and AVERAGE in the 2 centred
+        # ones, so the scale is not decoration -- it decides what the number
+        # says. Both of these are therefore about meaning, not range.
+        #
+        # A negative level is only interpretable in a centred cohort. All 71,703
+        # of them sit in the two studies marked centred, KIM_ADENOMAS_2020 and
+        # SINHA_CRC_2016; one anywhere else would be a level whose zero point is
+        # unknown.
+        "metabolite_level_negative_outside_a_centred_cohort": """
+            SELECT COUNT(*) FROM sample_metabolite_levels m
+            JOIN samples s ON s.id = m.sample_id
+            JOIN studies st ON st.id = s.study_id
+            WHERE m.level < 0
+              AND (st.metabolite_scale IS NULL OR st.metabolite_scale <> 'centred')
+        """,
+        # And a level whose cohort declares no scale cannot be read at all --
+        # its zero means neither absent nor average. 334 of the 347 studies
+        # carry no scale because they hold no metabolite data; a level landing
+        # under one of them is a loader fault, not a judgement call.
+        "metabolite_level_in_a_cohort_with_no_declared_scale": """
+            SELECT COUNT(*) FROM sample_metabolite_levels m
+            JOIN samples s ON s.id = m.sample_id
+            JOIN studies st ON st.id = s.study_id
+            WHERE st.metabolite_scale IS NULL
+        """,
         "taxon_metabolite_rho_out_of_range": """
             SELECT COUNT(*) FROM taxon_metabolite_associations
             WHERE rho < -1 OR rho > 1
@@ -2939,6 +2967,8 @@ _MYSQL_ONLY_CHECKS = frozenset({
     "replicated_pair_with_no_adjudication",
     "adjudication_without_replicated_evidence",
     "metabolite_kegg_id_and_name_duplicated",
+    "metabolite_level_negative_outside_a_centred_cohort",
+    "metabolite_level_in_a_cohort_with_no_declared_scale",
     "taxon_metabolite_rho_out_of_range",
     "taxon_metabolite_q_below_p",
     "taxon_metabolite_support_below_floor",

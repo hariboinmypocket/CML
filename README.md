@@ -1514,6 +1514,52 @@ re-introducing the leading `[` on one row and watching it fail. That is the
 third guard this session that needed widening after the next instance arrived in
 a shape the first one did not anticipate.
 
+### The largest table had no check at all
+
+Asking which tables validate actually mentions, rather than which ones felt
+covered, found four it does not: `ingestion_runs`, the two small alias tables --
+and **`sample_metabolite_levels`, 521,825 rows, the largest table in either
+store.** It appears nowhere in `gutdb/pipeline.py`. The metabolite counters
+added earlier all guard `metabolites` or `taxon_metabolite_associations`; the
+levels themselves were never checked.
+
+Its structure already prevents the obvious faults: `(sample_id, metabolite_id)`
+is the primary key so a duplicate cannot exist, `level` is NOT NULL, and MySQL
+enforces both foreign keys. `high_confidence_annotation` holds nothing outside
+{0,1} and no metabolite is without levels. **What is not structural is what a
+number means,** and that lives one join away in `studies.metabolite_scale`: a
+zero means ABSENT in the 11 cohorts marked `non_negative` and AVERAGE in the 2
+marked `centred`. The scale is not decoration -- it decides what the value says.
+
+So both new counters are about meaning rather than range:
+
+- `metabolite_level_negative_outside_a_centred_cohort` -- a negative level is
+  only interpretable where zero is the centre. All **71,703** negatives sit in
+  the two `centred` studies, `KIM_ADENOMAS_2020` (47,620) and `SINHA_CRC_2016`
+  (24,083); the other 11 cohorts hold none. One anywhere else would be a level
+  whose zero point is unknown.
+- `metabolite_level_in_a_cohort_with_no_declared_scale` -- a level under a study
+  with no scale cannot be read at all. 334 of the 347 studies carry no scale
+  because they hold no metabolite data, so a level landing under one is a loader
+  fault rather than a judgement call.
+
+A third candidate was dropped rather than added: negatives in a `non_negative`
+cohort is a strict subset of the first counter, and a counter that cannot fire
+on its own gates nothing.
+
+Both are listed in `_MYSQL_ONLY_CHECKS`, since the mirror carries no metabolite
+tables, and both were proven to fire separately: re-labelling
+`KIM_ADENOMAS_2020` as `non_negative` moves the first to 47,620 and leaves the
+second at zero, while clearing `YACHIDA_CRC_2019`'s scale moves the second to
+131,124 and leaves the first at zero. Rolled back both times.
+
+An earlier attempt at a tidier invariant was wrong and is worth recording: "no
+cohort holds both negatives and zeros" would need no list of accessions, but it
+is false -- the two centred cohorts hold 524 and 294 zeros, and those zeros are
+the *average*, which is the very ambiguity the scale column exists to resolve.
+`metabolite_scale` is the honest discriminator because it is the one the data
+already carries.
+
 ## 4. Validate and query
 
 ```bash
