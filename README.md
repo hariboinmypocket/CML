@@ -1560,6 +1560,70 @@ the *average*, which is the very ambiguity the scale column exists to resolve.
 `metabolite_scale` is the honest discriminator because it is the one the data
 already carries.
 
+### Finishing that list: the audit trail did not add up
+
+Of the four unmentioned tables, the two alias tables turned out to need nothing,
+which is worth recording as a measured negative rather than leaving as a gap:
+all **31** keys are used by some sample, all **41** value rows decode a value
+that actually occurs under that key, every one of the 13 `boolean` keys has a
+decoding, no non-decoding kind (`quantity`, `interval`, `date`, `agent`,
+`free_text`) carries one, and the boolean vocabulary is exactly {`yes`, `no`}.
+
+`ingestion_runs` is the only permanent record of what a load did, and the
+subtraction an auditor performs on it -- `rows_read` minus inserted, updated and
+skipped -- is non-zero in **14 of the 92 runs**. Three causes, one defect:
+
+| cause | runs | rows | verdict |
+|---|---|---|---|
+| `NCBI_Taxonomy` dropped rows it counted nowhere | 5 | 443 / 244 / 239 / 236 / 5 | **defect, fixed** |
+| `MiMeDB` counts `rows_read` in source rows, outcomes in taxa | 7 | always 905 | correct, left alone |
+| a `BioSample` run that died mid-way | 1 | 150 | correct, that is a snapshot |
+
+`enrich_taxonomy` drops a row on three paths -- no name match, no tax ID with
+resolution switched off, no lineage returned for its tax ID -- and counted all
+three in a local dict the CLI prints once and **discards**. The rows were read,
+nothing was done with them, and the permanent record mentioned only what had
+been written. Each path now increments `rows_skipped`, so `rows_read` equals
+updated plus skipped exactly.
+
+MiMeDB is the instructive one. `load_mimedb` reads 2,584 MiMeDB records and
+collapses them onto 1,679 organisms, counting `rows_read` in **source rows** and
+its outcomes in **taxa**, so the residual 905 is what the collapse absorbed and
+the subtraction mixes two units. Recording it honestly needs a column this table
+has not got, and calling those records `skipped` would be false -- they were
+read, merged, and their traits kept.
+
+**So the identity itself is not asserted.** A counter on it would fire 14 times
+forever and gate nothing, and the five stored `NCBI_Taxonomy` rows are left as
+they stand, because back-filling an audit trail from a guess is worse than one
+that admits a gap. A test pins that decision so the next round does not
+helpfully add the counter.
+
+Two counters instead, both portable across the stores:
+
+- `run_accounted_for_more_rows_than_it_read` -- the half of the identity that
+  holds everywhere, all 92 MySQL runs and all 21 mirror runs. It catches double
+  counting.
+- `run_abandoned_in_the_running_state` -- the hole nobody was watching. A loader
+  that dies before `_finish_run` leaves `status = 'running'` forever, its counts
+  at zero and its partial writes committed. Phrased against the table's own
+  clock rather than `NOW()`, so it needs no invented threshold **and a load in
+  flight cannot trip it**: an abandoned row dated July reads 1, a row started
+  now reads 0. An age cutoff would have had to be guessed; the longest run on
+  record is 2 h 31 m.
+
+Each of the three accounting paths is pinned by its own test and verified by
+mutation. The one that matters is counting a missing lineage per tax ID instead
+of per row: one tax ID can stand for several taxa rows, and `rows_read` counted
+rows.
+
+**A methodological slip worth recording.** The first mutation run reported
+`errors=1` for all three mutations, which I nearly read as proof that the tests
+caught them. It was the stripped subprocess environment failing the import, not
+the tests failing -- and a test that errors has not tested anything. Re-run with
+a full environment, the three mutations produce real assertion failures naming
+the right tests.
+
 ## 4. Validate and query
 
 ```bash

@@ -1,3 +1,33 @@
+-- The load audit trail: one row per loader invocation, and the only permanent
+-- record of what a load did. 92 runs over four months across 10 sources.
+--
+-- THE FOUR ROW COUNTERS DO NOT ALL ADD UP, and two of the reasons are correct.
+-- rows_read - (rows_inserted + rows_updated + rows_skipped) is zero in 78 runs
+-- and non-zero in 14:
+--
+--   MiMeDB, 7 runs, residual always exactly 905. load_mimedb counts rows_read
+--   in SOURCE ROWS and its outcomes in TAXA -- 2,584 MiMeDB records collapse
+--   onto 1,679 organisms -- so the subtraction mixes two units and its result
+--   describes nothing. Recording the absorbed records honestly needs a column
+--   this table does not have; calling them `skipped` would be false, since they
+--   were read and their traits merged.
+--
+--   NCBI_Taxonomy, 5 completed runs, 443 / 244 / 239 / 236 / 5 rows. These were
+--   genuinely unaccounted: enrich_taxonomy dropped a row on three paths (no
+--   name match, no tax ID with resolution switched off, no lineage returned for
+--   its tax ID) and counted them only in a local dict the CLI printed once and
+--   discarded. Fixed in gutdb/pipeline.py so future runs balance;
+--   tests/test_ingestion_run_accounting.py pins each path. The stored rows are
+--   left as they stand, because back-filling an audit trail from a guess is
+--   worse than an audit trail that admits a gap.
+--
+--   NCBI_BioSample_demographics run 16, 150 rows: a FAILED run, whose counts
+--   are a snapshot from wherever it died. That is what they should be.
+--
+-- So validate asserts the half that holds everywhere -- nothing may account for
+-- more rows than it read -- plus the hole nobody was watching: a run left in
+-- `running` after a later run has finished, which is a loader that died before
+-- _finish_run while its partial writes stayed committed.
 CREATE TABLE IF NOT EXISTS ingestion_runs (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     source_name VARCHAR(100) NOT NULL,

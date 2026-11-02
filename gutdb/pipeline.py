@@ -2162,6 +2162,15 @@ def enrich_taxonomy(
     names are folded to the classic vocabulary already used in this table, so a
     phylum stays one groupable value rather than splitting across the pre- and
     post-2021 names.
+
+    Every row read is accounted for in the run's own row: rows_read equals
+    rows_updated plus rows_skipped, because each pending row either gets a
+    lineage or falls out of one of three paths (no name match, no tax ID and no
+    resolution asked for, no lineage returned for its tax ID). Those three were
+    counted in `counters` -- printed once and discarded -- while ingestion_runs
+    recorded only what was written, so the five runs before this fix read 2,148
+    / 1,246 / 487 / 380 / 30 rows and report 443 / 244 / 236 / 239 / 5 of them
+    nowhere. Their stored rows are left as they are; history is not rewritten.
     """
     stats = LoadStats()
     run_id = _start_run(
@@ -2171,6 +2180,7 @@ def enrich_taxonomy(
     counters = {
         "with_taxid": 0, "names_resolved": 0, "names_unresolved": 0,
         "lineage_filled": 0, "taxid_filled": 0, "no_lineage_returned": 0,
+        "no_taxid_unresolved": 0,
     }
     try:
         cursor = connection.cursor()
@@ -2202,6 +2212,14 @@ def enrich_taxonomy(
                     counters["names_resolved"] += 1
                 else:
                     counters["names_unresolved"] += 1
+                    stats.skipped += 1
+            else:
+                # Called with --no-name-resolution, so a row without a tax ID
+                # cannot be looked up. It was read and nothing was done with it,
+                # which is what skipped means; before this it was counted
+                # nowhere at all.
+                counters["no_taxid_unresolved"] += 1
+                stats.skipped += 1
 
         by_taxid: dict[str, list[int]] = defaultdict(list)
         for taxon_id, taxid in resolved.items():
@@ -2216,6 +2234,9 @@ def enrich_taxonomy(
                 record = lineages.get(taxid)
                 if not record:
                     counters["no_lineage_returned"] += 1
+                    # Per taxon ROW, not per tax ID: one tax ID can stand for
+                    # several rows, and it is rows that rows_read counted.
+                    stats.skipped += len(by_taxid[taxid])
                     continue
                 superkingdom = record.get("superkingdom") or record.get("domain") or None
                 phylum = normalize_phylum(record.get("phylum")) or None
@@ -2943,6 +2964,53 @@ def _validate_checks() -> dict[str, str]:
             SELECT COUNT(*) FROM v_taxon_specificity
             WHERE depleted_fraction IS NOT NULL
               AND (depleted_fraction < 0 OR depleted_fraction > 1)
+        """,
+        # --- ingestion_runs --------------------------------------------------
+        #
+        # The audit trail, and the last table validate did not mention at all.
+        # 92 runs over four months across 10 sources; every one carries a
+        # completed_at, every failed run carries an error message, no completed
+        # run carries one, and none finished before it started.
+        #
+        # THE IDENTITY AN AUDITOR WOULD ASSUME IS DELIBERATELY NOT ASSERTED.
+        # rows_read = rows_inserted + rows_updated + rows_skipped holds in 78 of
+        # the 92 and fails in 14, for two reasons, neither of them lost data:
+        #
+        #   MiMeDB -- 7 runs, the residual always exactly 905 -- counts
+        #   rows_read in SOURCE ROWS and its outcomes in TAXA. load_mimedb reads
+        #   2,584 MiMeDB records and collapses them onto 1,679 organisms, so the
+        #   difference is the number of records absorbed by the collapse, and the
+        #   subtraction mixes two units. Recording it properly needs a column
+        #   this table does not have, and 'skipped' would be a lie: those records
+        #   were read, merged, and their traits kept.
+        #
+        #   NCBI_Taxonomy (5 completed runs) dropped rows without counting them
+        #   anywhere -- see enrich_taxonomy, fixed so future runs balance -- and
+        #   one failed BioSample run holds a partial snapshot, which is what a
+        #   failed run's counts are. The stored rows are left as they stand;
+        #   back-filling them would be inventing an audit trail.
+        #
+        # A counter on the identity would fire 14 times forever and gate nothing,
+        # so what is asserted is the half that holds in both stores.
+        "run_accounted_for_more_rows_than_it_read": """
+            SELECT COUNT(*) FROM ingestion_runs
+            WHERE rows_inserted + rows_updated + rows_skipped > rows_read
+        """,
+        # A run still marked `running` although a later run has already
+        # finished: a loader that died before reaching _finish_run, leaving its
+        # counts at zero while whatever it had already committed stays in the
+        # tables. Nothing noticed such a row before.
+        #
+        # Phrased against the table's own clock, not NOW(), so it is portable to
+        # the mirror and needs no invented threshold -- and so a load IN FLIGHT
+        # cannot trip it, its started_at being later than every completed run.
+        # Two loads running at once could; they are run in sequence. The
+        # alternative, an age cutoff, would have had to be guessed: the longest
+        # run on record is 2 h 31 m.
+        "run_abandoned_in_the_running_state": """
+            SELECT COUNT(*) FROM ingestion_runs
+            WHERE status = 'running'
+              AND started_at < (SELECT MAX(completed_at) FROM ingestion_runs)
         """,
     }
     # One check per trait a genus constrains, generated from the same list the

@@ -329,7 +329,8 @@ def main(argv: list[str] | None = None) -> int:
                     f"names_unresolved={counters['names_unresolved']:,}, "
                     f"lineage_filled={counters['lineage_filled']:,}, "
                     f"taxid_filled={counters['taxid_filled']:,}, "
-                    f"no_lineage={counters['no_lineage_returned']:,}"
+                    f"no_lineage={counters['no_lineage_returned']:,}, "
+                    f"no_taxid_unresolved={counters['no_taxid_unresolved']:,}"
                 )
             elif args.command == "enrich-cmd-demographics":
                 stats, counters = enrich_cmd_demographics(
